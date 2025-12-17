@@ -8,7 +8,7 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      max-width: 900px;
+      max-width: 950px;
       margin: auto;
       padding: 20px;
     }
@@ -36,8 +36,15 @@
       margin-top: 10px;
       border-radius: 4px;
     }
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 15px;
+      justify-content: center;
+    }
 
-    /* LOCK OVERLAY */
+    /* LOCK */
     #lockScreen {
       position: fixed;
       inset: 0;
@@ -45,24 +52,20 @@
       display: none;
       align-items: center;
       justify-content: center;
-      padding: 20px;
       z-index: 9999;
+      padding: 20px;
     }
     #lockCard {
-      width: 100%;
       max-width: 420px;
+      width: 100%;
       border: 1px solid #ccc;
       border-radius: 8px;
       padding: 18px;
     }
-    #lockCard p { color: #444; }
-    .row { display: flex; gap: 10px; }
-    .row button { flex: 1; }
 
     @media print {
       button, input, textarea { display: none; }
       section { page-break-inside: avoid; }
-      body { max-width: 100%; }
       #lockScreen { display: none !important; }
     }
   </style>
@@ -70,314 +73,226 @@
 
 <body>
 
-  <!-- LOCK SCREEN -->
-  <div id="lockScreen">
-    <div id="lockCard">
-      <h2>Locked</h2>
-      <p id="lockMsg">Enter your PIN to unlock.</p>
-      <input id="pinInput" placeholder="PIN" inputmode="numeric" />
-      <div class="row">
-        <button onclick="unlock()">Unlock</button>
-        <button onclick="resetPin()">Reset PIN</button>
-      </div>
-      <p style="font-size: 12px; color:#666; margin-top:10px;">
-        Note: This is basic privacy (local PIN). Don’t store real passwords in this app.
-      </p>
-    </div>
+<!-- LOCK -->
+<div id="lockScreen">
+  <div id="lockCard">
+    <h2>Locked</h2>
+    <p id="lockMsg">Enter your PIN</p>
+    <input id="pinInput" inputmode="numeric" placeholder="PIN">
+    <button onclick="unlock()">Unlock</button>
+    <button onclick="resetPin()">Reset PIN</button>
+    <p style="font-size:12px;color:#666">
+      Basic local privacy only. Don’t store real passwords.
+    </p>
   </div>
+</div>
 
-  <div id="appContent">
-    <h1>Will & Estate Planner</h1>
-    <p><strong>Important:</strong> This tool helps organize wishes. It is not a legal will or medical directive.</p>
+<h1>Will & Estate Planner</h1>
+<p><strong>Important:</strong> Planning tool only. Not a legal document.</p>
 
-    <button onclick="exportPlan()">🖨️ Print / Export Summary</button>
-    <button onclick="changePin()">🔒 Change PIN</button>
+<div class="toolbar">
+  <button onclick="exportPlan()">🖨️ Print / PDF</button>
+  <button onclick="changePin()">🔒 Change PIN</button>
+  <button onclick="downloadBackup()">💾 Backup</button>
+  <label style="border:1px solid #ccc;padding:8px;cursor:pointer">
+    📤 Restore
+    <input type="file" hidden onchange="restoreBackup(this)">
+  </label>
+</div>
 
-    <!-- PRIMARY -->
-    <section>
-      <h2>Primary Person</h2>
-      <input id="name" placeholder="Full name">
-      <input id="address" placeholder="Address">
-      <input id="dob" placeholder="Date of birth">
-    </section>
+<!-- SECTIONS -->
+<section><h2>Primary Person</h2>
+  <input id="name" placeholder="Full name">
+  <input id="address" placeholder="Address">
+  <input id="dob" placeholder="Date of birth">
+</section>
 
-    <!-- SPOUSE -->
-    <section>
-      <h2>Spouse / Partner</h2>
-      <input id="spouseName" placeholder="Full name">
-      <input id="spouseAddress" placeholder="Address">
-      <input id="spouseDob" placeholder="Date of birth">
-      <textarea id="spouseNotes" placeholder="Marriage details, separation, special notes"></textarea>
-    </section>
+<section><h2>Spouse / Partner</h2>
+  <input id="spouseName" placeholder="Full name">
+  <input id="spouseAddress" placeholder="Address">
+  <input id="spouseDob" placeholder="Date of birth">
+  <textarea id="spouseNotes" placeholder="Notes"></textarea>
+</section>
 
-    <!-- HEALTH -->
-    <section>
-      <h2>Health & Medical Directives</h2>
-      <input id="healthDecisionMaker" placeholder="Primary medical decision-maker">
-      <input id="healthBackup" placeholder="Backup decision-maker">
-      <textarea id="lifeSupport" placeholder="Life support wishes"></textarea>
-      <textarea id="dnr" placeholder="Resuscitation wishes (DNR / CPR)"></textarea>
-      <textarea id="comfortCare" placeholder="Pain & comfort care wishes"></textarea>
-      <textarea id="healthNotes" placeholder="Other medical instructions"></textarea>
-    </section>
+<section><h2>Health & Medical Directives</h2>
+  <input id="healthDecisionMaker" placeholder="Primary decision-maker">
+  <input id="healthBackup" placeholder="Backup decision-maker">
+  <textarea id="lifeSupport" placeholder="Life support wishes"></textarea>
+  <textarea id="dnr" placeholder="DNR / CPR wishes"></textarea>
+  <textarea id="comfortCare" placeholder="Comfort care"></textarea>
+  <textarea id="healthNotes" placeholder="Other medical notes"></textarea>
+</section>
 
-    <!-- EMERGENCY CONTACTS -->
-    <section>
-      <h2>Emergency Contacts</h2>
-      <input id="emName" placeholder="Contact name">
-      <input id="emRelation" placeholder="Relationship">
-      <input id="emPhone" placeholder="Phone number">
-      <textarea id="emNotes" placeholder="Notes (availability, priority)"></textarea>
-      <button onclick="addEmergency()">Add Contact</button>
-      <div id="emergencyList"></div>
-    </section>
+<section><h2>Emergency Contacts</h2>
+  <input id="emName" placeholder="Name">
+  <input id="emRelation" placeholder="Relationship">
+  <input id="emPhone" placeholder="Phone">
+  <textarea id="emNotes" placeholder="Notes"></textarea>
+  <button onclick="addEmergency()">Add Contact</button>
+  <div id="emergencyList"></div>
+</section>
 
-    <!-- DOCUMENT LOCATIONS -->
-    <section>
-      <h2>Important Document Locations</h2>
-      <textarea id="docLocations" placeholder="Where are wills, insurance, bank info, titles, key documents stored?"></textarea>
-    </section>
+<section><h2>Document Locations</h2>
+  <textarea id="docLocations" placeholder="Where documents are stored"></textarea>
+</section>
 
-    <!-- EXECUTOR -->
-    <section>
-      <h2>Executor</h2>
-      <input id="executor" placeholder="Executor name">
-      <textarea id="executorNotes" placeholder="Executor instructions"></textarea>
-    </section>
+<section><h2>Executor</h2>
+  <input id="executor" placeholder="Executor name">
+  <textarea id="executorNotes" placeholder="Executor notes"></textarea>
+</section>
 
-    <!-- BENEFICIARIES -->
-    <section>
-      <h2>Beneficiaries</h2>
-      <input id="benName" placeholder="Beneficiary name">
-      <input id="benRelation" placeholder="Relationship">
-      <textarea id="benNotes" placeholder="What they receive / notes"></textarea>
-      <button onclick="addBeneficiary()">Add Beneficiary</button>
-      <div id="beneficiaryList"></div>
-    </section>
+<section><h2>Beneficiaries</h2>
+  <input id="benName" placeholder="Name">
+  <input id="benRelation" placeholder="Relationship">
+  <textarea id="benNotes" placeholder="Notes"></textarea>
+  <button onclick="addBeneficiary()">Add Beneficiary</button>
+  <div id="beneficiaryList"></div>
+</section>
 
-    <!-- ASSETS -->
-    <section>
-      <h2>Assets</h2>
-      <input id="assetType" placeholder="Asset type">
-      <textarea id="assetDesc" placeholder="Description / details"></textarea>
-      <button onclick="addAsset()">Add Asset</button>
-      <div id="assetList"></div>
-    </section>
+<section><h2>Assets</h2>
+  <input id="assetType" placeholder="Asset type">
+  <textarea id="assetDesc" placeholder="Details"></textarea>
+  <button onclick="addAsset()">Add Asset</button>
+  <div id="assetList"></div>
+</section>
 
-    <!-- DEBTS -->
-    <section>
-      <h2>Debts</h2>
-      <textarea id="debts" placeholder="Mortgage, loans, credit cards"></textarea>
-    </section>
+<section><h2>Debts</h2>
+  <textarea id="debts"></textarea>
+</section>
 
-    <!-- FINAL -->
-    <section>
-      <h2>Final Wishes</h2>
-      <textarea id="wishes" placeholder="Funeral, burial, cremation wishes"></textarea>
-    </section>
+<section><h2>Final Wishes</h2>
+  <textarea id="wishes"></textarea>
+</section>
 
-    <!-- NOTES -->
-    <section>
-      <h2>Notes</h2>
-      <textarea id="notes" placeholder="Anything else important"></textarea>
-    </section>
-  </div>
+<section><h2>Notes</h2>
+  <textarea id="notes"></textarea>
+</section>
 
-  <script>
-    /* ---------- BASIC PIN LOCK (LOCAL) ---------- */
-    const lockScreen = document.getElementById("lockScreen");
-    const pinInput = document.getElementById("pinInput");
-    const lockMsg = document.getElementById("lockMsg");
+<script>
+/* ---------- PIN ---------- */
+const lockScreen = document.getElementById("lockScreen");
+const pinInput = document.getElementById("pinInput");
 
-    function getPin() {
-      return localStorage.getItem("plannerPIN");
-    }
+function getPin(){ return localStorage.getItem("plannerPIN"); }
 
-    function requirePinOnLoad() {
-      const pin = getPin();
-      if (!pin) {
-        // First time: set a new PIN
-        const newPin = prompt("Create a PIN (4–8 digits):");
-        if (newPin && /^[0-9]{4,8}$/.test(newPin)) {
-          localStorage.setItem("plannerPIN", newPin);
-          lockMsg.textContent = "PIN set. Enter it to unlock.";
-        } else {
-          alert("PIN not set. You can set it later with Change PIN. App will stay unlocked for now.");
-          return;
-        }
-      }
-      lockScreen.style.display = "flex";
-      pinInput.value = "";
-      pinInput.focus();
-    }
+function requirePin(){
+  if(!getPin()){
+    const p = prompt("Create a 4–8 digit PIN:");
+    if(p && /^[0-9]{4,8}$/.test(p)) localStorage.setItem("plannerPIN", p);
+  }
+  lockScreen.style.display = "flex";
+}
 
-    function unlock() {
-      const pin = getPin();
-      if (!pin) {
-        lockScreen.style.display = "none";
-        return;
-      }
-      if (pinInput.value === pin) {
-        lockScreen.style.display = "none";
-        pinInput.value = "";
-      } else {
-        alert("Incorrect PIN.");
-        pinInput.value = "";
-        pinInput.focus();
-      }
-    }
+function unlock(){
+  if(pinInput.value === getPin()){
+    lockScreen.style.display = "none";
+    pinInput.value="";
+  } else alert("Wrong PIN");
+}
 
-    function changePin() {
-      const current = prompt("Enter current PIN:");
-      if (current !== getPin()) return alert("Incorrect PIN.");
-      const newPin = prompt("New PIN (4–8 digits):");
-      if (!newPin || !/^[0-9]{4,8}$/.test(newPin)) return alert("PIN must be 4–8 digits.");
-      localStorage.setItem("plannerPIN", newPin);
-      alert("PIN updated.");
-    }
+function changePin(){
+  if(prompt("Current PIN") !== getPin()) return alert("Wrong PIN");
+  const p = prompt("New PIN (4–8 digits)");
+  if(/^[0-9]{4,8}$/.test(p)) localStorage.setItem("plannerPIN", p);
+}
 
-    function resetPin() {
-      // Light safety: require the user to type RESET (prevents accidental wipe)
-      const confirmText = prompt('Type RESET to remove the PIN lock (does NOT delete your data):');
-      if (confirmText === "RESET") {
-        localStorage.removeItem("plannerPIN");
-        alert("PIN removed. App will open unlocked.");
-        lockScreen.style.display = "none";
-      }
-    }
+function resetPin(){
+  if(prompt('Type RESET')==="RESET"){
+    localStorage.removeItem("plannerPIN");
+    lockScreen.style.display="none";
+  }
+}
 
-    /* ---------- SIMPLE FIELDS ---------- */
-    const simpleFields = [
-      "name","address","dob",
-      "spouseName","spouseAddress","spouseDob","spouseNotes",
-      "healthDecisionMaker","healthBackup","lifeSupport","dnr","comfortCare","healthNotes",
-      "docLocations","executor","executorNotes","debts","wishes","notes"
-    ];
+/* ---------- DATA ---------- */
+const simple = [
+"name","address","dob","spouseName","spouseAddress","spouseDob","spouseNotes",
+"healthDecisionMaker","healthBackup","lifeSupport","dnr","comfortCare","healthNotes",
+"docLocations","executor","executorNotes","debts","wishes","notes"
+];
+simple.forEach(id=>{
+  const el=document.getElementById(id);
+  el.value=localStorage.getItem(id)||"";
+  el.oninput=()=>localStorage.setItem(id,el.value);
+});
 
-    simpleFields.forEach(id => {
-      const el = document.getElementById(id);
-      el.value = localStorage.getItem(id) || "";
-      el.addEventListener("input", () => localStorage.setItem(id, el.value));
-    });
+/* LISTS */
+let emergency=JSON.parse(localStorage.getItem("emergency"))||[];
+let beneficiaries=JSON.parse(localStorage.getItem("beneficiaries"))||[];
+let assets=JSON.parse(localStorage.getItem("assets"))||[];
 
-    /* ---------- EMERGENCY CONTACTS ---------- */
-    let emergency = JSON.parse(localStorage.getItem("emergency")) || [];
+function render(list,el,fn){
+  el.innerHTML="";
+  list.forEach((x,i)=>el.innerHTML+=fn(x,i));
+}
 
-    function saveEmergency() {
-      localStorage.setItem("emergency", JSON.stringify(emergency));
-      renderEmergency();
-    }
+/* Emergency */
+function addEmergency(){
+  emergency.push({name:emName.value,relation:emRelation.value,phone:emPhone.value,notes:emNotes.value});
+  localStorage.setItem("emergency",JSON.stringify(emergency));
+  renderEmergency();
+}
+function renderEmergency(){
+  render(emergency,emergencyList,(e,i)=>`
+    <div class="item"><b>${e.name}</b> (${e.relation})<br>${e.phone}<br>${e.notes}
+    <button onclick="emergency.splice(${i},1);localStorage.setItem('emergency',JSON.stringify(emergency));renderEmergency()">Remove</button></div>`);
+}
+renderEmergency();
 
-    function addEmergency() {
-      if (!emName.value.trim()) return;
-      emergency.push({
-        name: emName.value,
-        relation: emRelation.value,
-        phone: emPhone.value,
-        notes: emNotes.value
-      });
-      emName.value = emRelation.value = emPhone.value = emNotes.value = "";
-      saveEmergency();
-    }
+/* Beneficiaries */
+function addBeneficiary(){
+  beneficiaries.push({name:benName.value,relation:benRelation.value,notes:benNotes.value});
+  localStorage.setItem("beneficiaries",JSON.stringify(beneficiaries));
+  renderBeneficiaries();
+}
+function renderBeneficiaries(){
+  render(beneficiaries,beneficiaryList,(b,i)=>`
+    <div class="item"><b>${b.name}</b> (${b.relation})<br>${b.notes}
+    <button onclick="beneficiaries.splice(${i},1);localStorage.setItem('beneficiaries',JSON.stringify(beneficiaries));renderBeneficiaries()">Remove</button></div>`);
+}
+renderBeneficiaries();
 
-    function removeEmergency(i) {
-      emergency.splice(i, 1);
-      saveEmergency();
-    }
+/* Assets */
+function addAsset(){
+  assets.push({type:assetType.value,desc:assetDesc.value});
+  localStorage.setItem("assets",JSON.stringify(assets));
+  renderAssets();
+}
+function renderAssets(){
+  render(assets,assetList,(a,i)=>`
+    <div class="item"><b>${a.type}</b><br>${a.desc}
+    <button onclick="assets.splice(${i},1);localStorage.setItem('assets',JSON.stringify(assets));renderAssets()">Remove</button></div>`);
+}
+renderAssets();
 
-    function renderEmergency() {
-      emergencyList.innerHTML = "";
-      emergency.forEach((e, i) => {
-        emergencyList.innerHTML += `
-          <div class="item">
-            <strong>${e.name}</strong> (${e.relation})<br>
-            📞 ${e.phone}<br>
-            ${e.notes}<br>
-            <button onclick="removeEmergency(${i})">Remove</button>
-          </div>`;
-      });
-    }
-    renderEmergency();
+/* EXPORT */
+function exportPlan(){ window.print(); }
 
-    /* ---------- BENEFICIARIES ---------- */
-    let beneficiaries = JSON.parse(localStorage.getItem("beneficiaries")) || [];
+/* BACKUP */
+function downloadBackup(){
+  const data={};
+  Object.keys(localStorage).forEach(k=>data[k]=localStorage.getItem(k));
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="estate-planner-backup.json";
+  a.click();
+}
 
-    function saveBeneficiaries() {
-      localStorage.setItem("beneficiaries", JSON.stringify(beneficiaries));
-      renderBeneficiaries();
-    }
+/* RESTORE */
+function restoreBackup(input){
+  const file=input.files[0];
+  if(!file) return;
+  const r=new FileReader();
+  r.onload=()=>{
+    if(!confirm("Restore will overwrite current data. Continue?")) return;
+    const data=JSON.parse(r.result);
+    Object.keys(data).forEach(k=>localStorage.setItem(k,data[k]));
+    location.reload();
+  };
+  r.readAsText(file);
+}
 
-    function addBeneficiary() {
-      if (!benName.value.trim()) return;
-      beneficiaries.push({
-        name: benName.value,
-        relation: benRelation.value,
-        notes: benNotes.value
-      });
-      benName.value = benRelation.value = benNotes.value = "";
-      saveBeneficiaries();
-    }
-
-    function removeBeneficiary(i) {
-      beneficiaries.splice(i, 1);
-      saveBeneficiaries();
-    }
-
-    function renderBeneficiaries() {
-      beneficiaryList.innerHTML = "";
-      beneficiaries.forEach((b, i) => {
-        beneficiaryList.innerHTML += `
-          <div class="item">
-            <strong>${b.name}</strong> (${b.relation})<br>
-            ${b.notes}<br>
-            <button onclick="removeBeneficiary(${i})">Remove</button>
-          </div>`;
-      });
-    }
-    renderBeneficiaries();
-
-    /* ---------- ASSETS ---------- */
-    let assets = JSON.parse(localStorage.getItem("assets")) || [];
-
-    function saveAssets() {
-      localStorage.setItem("assets", JSON.stringify(assets));
-      renderAssets();
-    }
-
-    function addAsset() {
-      if (!assetType.value.trim()) return;
-      assets.push({
-        type: assetType.value,
-        desc: assetDesc.value
-      });
-      assetType.value = assetDesc.value = "";
-      saveAssets();
-    }
-
-    function removeAsset(i) {
-      assets.splice(i, 1);
-      saveAssets();
-    }
-
-    function renderAssets() {
-      assetList.innerHTML = "";
-      assets.forEach((a, i) => {
-        assetList.innerHTML += `
-          <div class="item">
-            <strong>${a.type}</strong><br>
-            ${a.desc}<br>
-            <button onclick="removeAsset(${i})">Remove</button>
-          </div>`;
-      });
-    }
-    renderAssets();
-
-    function exportPlan() {
-      window.print();
-    }
-
-    // Lock on load
-    requirePinOnLoad();
-  </script>
+requirePin();
+</script>
 </body>
 </html>
