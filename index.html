@@ -1,281 +1,365 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Will & Estate Planner</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Estate Plan</title>
 
-  <style>
-    :root {
-      --bg: #f6f7f8;
-      --card: #ffffff;
-      --border: #dcdcdc;
-      --primary: #2f4f4f;
-      --muted: #666;
-    }
+<style>
+:root{
+  --bg:#f6f7f8;
+  --card:#fff;
+  --border:#dcdcdc;
+  --primary:#2f4f4f;
+  --muted:#666;
+}
 
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-      background: var(--bg);
-      color: #222;
-    }
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  background:var(--bg);
+}
 
-    .container {
-      max-width: 980px;
-      margin: auto;
-      padding: 24px 16px 60px;
-    }
+.container{
+  max-width:1000px;
+  margin:auto;
+  padding:24px 16px 80px;
+}
 
-    h1 {
-      text-align: center;
-      color: var(--primary);
-      margin-bottom: 6px;
-    }
+h1{
+  text-align:center;
+  color:var(--primary);
+  margin-bottom:4px;
+}
 
-    .subtitle {
-      text-align: center;
-      color: var(--muted);
-      margin-bottom: 24px;
-      font-size: 15px;
-    }
+.subtitle{
+  text-align:center;
+  color:var(--muted);
+  margin-bottom:20px;
+  font-size:14px;
+}
 
-    .toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-      margin-bottom: 24px;
-    }
+.toolbar{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:center;
+  margin-bottom:20px;
+}
 
-    button {
-      padding: 10px 16px;
-      font-size: 15px;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-      background: var(--card);
-      cursor: pointer;
-    }
+button{
+  padding:10px 16px;
+  border-radius:6px;
+  border:1px solid var(--border);
+  background:var(--card);
+  cursor:pointer;
+  font-size:14px;
+}
 
-    button:hover {
-      background: #f0f0f0;
-    }
+section{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:10px;
+  margin-bottom:14px;
+}
 
-    section {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 18px;
-      margin-bottom: 20px;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
-    }
+.section-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  cursor:pointer;
+  padding:14px 16px;
+  border-bottom:1px solid var(--border);
+}
 
-    section h2 {
-      margin-top: 0;
-      color: var(--primary);
-      font-size: 18px;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 6px;
-    }
+.section-header span{
+  font-size:18px;
+  margin-right:8px;
+}
 
-    input, textarea {
-      width: 100%;
-      box-sizing: border-box;
-      padding: 10px;
-      margin-top: 8px;
-      margin-bottom: 8px;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-      font-size: 14px;
-      background: #fafafa;
-    }
+.section-header h2{
+  margin:0;
+  font-size:17px;
+  color:var(--primary);
+}
 
-    textarea {
-      min-height: 80px;
-      resize: vertical;
-    }
+.section-content{
+  padding:16px;
+  display:none;
+}
 
-    .item {
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 10px;
-      margin-top: 10px;
-      background: #fcfcfc;
-    }
+section.open .section-content{
+  display:block;
+}
 
-    .item button {
-      margin-top: 8px;
-    }
+input,textarea{
+  width:100%;
+  padding:10px;
+  margin-top:8px;
+  margin-bottom:8px;
+  border-radius:6px;
+  border:1px solid var(--border);
+  background:#fafafa;
+  font-size:14px;
+}
 
-    /* LOCK SCREEN */
-    #lockScreen {
-      position: fixed;
-      inset: 0;
-      background: #ffffff;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-    }
+textarea{min-height:70px}
 
-    #lockCard {
-      width: 100%;
-      max-width: 420px;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 20px;
-      background: var(--card);
-    }
+.item{
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:10px;
+  margin-top:10px;
+  background:#fcfcfc;
+}
 
-    #lockCard h2 {
-      text-align: center;
-      margin-top: 0;
-    }
+.progress{
+  text-align:center;
+  margin-bottom:20px;
+  font-size:14px;
+  color:var(--muted);
+}
 
-    #lockCard p {
-      text-align: center;
-      color: var(--muted);
-    }
+#lockScreen{
+  position:fixed;
+  inset:0;
+  background:#fff;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
 
-    @media print {
-      body { background: #fff; }
-      button, input, textarea { display: none; }
-      section { page-break-inside: avoid; box-shadow: none; }
-      #lockScreen { display: none !important; }
-    }
-  </style>
+#lockCard{
+  max-width:420px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:20px;
+}
+
+@media print{
+  button,input,textarea{display:none}
+  .section-content{display:block!important}
+  section{page-break-inside:avoid}
+  #lockScreen{display:none!important}
+}
+</style>
 </head>
 
 <body>
 
 <div id="lockScreen">
   <div id="lockCard">
-    <h2>Locked</h2>
-    <p>Enter your PIN to continue</p>
-    <input id="pinInput" inputmode="numeric" placeholder="PIN">
+    <h2>🔒 Locked</h2>
+    <p>Enter your PIN</p>
+    <input id="pinInput" inputmode="numeric">
     <button onclick="unlock()">Unlock</button>
     <button onclick="resetPin()">Reset PIN</button>
   </div>
 </div>
 
 <div class="container">
-
-<h1>Will & Estate Planner</h1>
+<h1>My Estate Plan</h1>
 <p class="subtitle">Private planning tool · Not a legal document</p>
 
 <div class="toolbar">
   <button onclick="exportPlan()">🖨️ Print / PDF</button>
-  <button onclick="changePin()">🔒 Change PIN</button>
+  <button onclick="changePin()">🔐 Change PIN</button>
   <button onclick="downloadBackup()">💾 Backup</button>
   <label style="border:1px solid var(--border);padding:10px 16px;border-radius:6px;cursor:pointer">
-    📤 Restore
-    <input type="file" hidden onchange="restoreBackup(this)">
+    📤 Restore <input type="file" hidden onchange="restoreBackup(this)">
   </label>
 </div>
 
-<!-- ALL SECTIONS (content unchanged) -->
+<div class="progress" id="progressText">Progress: 0%</div>
 
-<section><h2>Primary Person</h2>
-<input id="name" placeholder="Full name">
-<input id="address" placeholder="Address">
-<input id="dob" placeholder="Date of birth">
+<!-- SECTIONS -->
+<section>
+  <div class="section-header" onclick="toggle(this)">
+    <div><span>👤</span><h2>Primary Person</h2></div><span>▾</span>
+  </div>
+  <div class="section-content">
+    <input id="name" placeholder="Full name">
+    <input id="address" placeholder="Address">
+    <input id="dob" placeholder="Date of birth">
+  </div>
 </section>
 
-<section><h2>Spouse / Partner</h2>
-<input id="spouseName" placeholder="Full name">
-<input id="spouseAddress" placeholder="Address">
-<input id="spouseDob" placeholder="Date of birth">
-<textarea id="spouseNotes" placeholder="Notes"></textarea>
+<section>
+  <div class="section-header" onclick="toggle(this)">
+    <div><span>❤️</span><h2>Spouse / Partner</h2></div><span>▾</span>
+  </div>
+  <div class="section-content">
+    <input id="spouseName" placeholder="Full name">
+    <input id="spouseAddress" placeholder="Address">
+    <input id="spouseDob" placeholder="Date of birth">
+    <textarea id="spouseNotes" placeholder="Notes"></textarea>
+  </div>
 </section>
 
-<section><h2>Health & Medical Directives</h2>
-<input id="healthDecisionMaker" placeholder="Primary decision-maker">
-<input id="healthBackup" placeholder="Backup decision-maker">
-<textarea id="lifeSupport" placeholder="Life support wishes"></textarea>
-<textarea id="dnr" placeholder="DNR / CPR wishes"></textarea>
-<textarea id="comfortCare" placeholder="Comfort care wishes"></textarea>
-<textarea id="healthNotes" placeholder="Other medical notes"></textarea>
+<section>
+  <div class="section-header" onclick="toggle(this)">
+    <div><span>🩺</span><h2>Health Directives</h2></div><span>▾</span>
+  </div>
+  <div class="section-content">
+    <input id="healthDecisionMaker" placeholder="Primary decision-maker">
+    <input id="healthBackup" placeholder="Backup decision-maker">
+    <textarea id="lifeSupport" placeholder="Life support wishes"></textarea>
+    <textarea id="dnr" placeholder="DNR / CPR wishes"></textarea>
+    <textarea id="comfortCare" placeholder="Comfort care wishes"></textarea>
+  </div>
 </section>
 
-<section><h2>Emergency Contacts</h2>
-<input id="emName" placeholder="Name">
-<input id="emRelation" placeholder="Relationship">
-<input id="emPhone" placeholder="Phone">
-<textarea id="emNotes" placeholder="Notes"></textarea>
-<button onclick="addEmergency()">Add Contact</button>
-<div id="emergencyList"></div>
+<section>
+  <div class="section-header" onclick="toggle(this)">
+    <div><span>🚨</span><h2>Emergency Contacts</h2></div><span>▾</span>
+  </div>
+  <div class="section-content">
+    <input id="emName" placeholder="Name">
+    <input id="emRelation" placeholder="Relationship">
+    <input id="emPhone" placeholder="Phone">
+    <textarea id="emNotes" placeholder="Notes"></textarea>
+    <button onclick="addEmergency()">Add Contact</button>
+    <div id="emergencyList"></div>
+  </div>
 </section>
 
-<section><h2>Document Locations</h2>
-<textarea id="docLocations" placeholder="Where important documents are stored"></textarea>
+<section>
+  <div class="section-header" onclick="toggle(this)">
+    <div><span>📁</span><h2>Document Locations</h2></div><span>▾</span>
+  </div>
+  <div class="section-content">
+    <textarea id="docLocations" placeholder="Where important documents are stored"></textarea>
+  </div>
 </section>
 
-<section><h2>Executor</h2>
-<input id="executor" placeholder="Executor name">
-<textarea id="executorNotes" placeholder="Executor notes"></textarea>
+<section>
+  <div class="section-header" onclick="toggle(this)">
+    <div><span>👥</span><h2>Beneficiaries</h2></div><span>▾</span>
+  </div>
+  <div class="section-content">
+    <input id="benName" placeholder="Name">
+    <input id="benRelation" placeholder="Relationship">
+    <textarea id="benNotes" placeholder="Notes"></textarea>
+    <button onclick="addBeneficiary()">Add Beneficiary</button>
+    <div id="beneficiaryList"></div>
+  </div>
 </section>
 
-<section><h2>Beneficiaries</h2>
-<input id="benName" placeholder="Name">
-<input id="benRelation" placeholder="Relationship">
-<textarea id="benNotes" placeholder="Notes"></textarea>
-<button onclick="addBeneficiary()">Add Beneficiary</button>
-<div id="beneficiaryList"></div>
+<section>
+  <div class="section-header" onclick="toggle(this)">
+    <div><span>🏠</span><h2>Assets</h2></div><span>▾</span>
+  </div>
+  <div class="section-content">
+    <input id="assetType" placeholder="Asset type">
+    <textarea id="assetDesc" placeholder="Details"></textarea>
+    <button onclick="addAsset()">Add Asset</button>
+    <div id="assetList"></div>
+  </div>
 </section>
 
-<section><h2>Assets</h2>
-<input id="assetType" placeholder="Asset type">
-<textarea id="assetDesc" placeholder="Details"></textarea>
-<button onclick="addAsset()">Add Asset</button>
-<div id="assetList"></div>
-</section>
-
-<section><h2>Debts</h2>
-<textarea id="debts"></textarea>
-</section>
-
-<section><h2>Final Wishes</h2>
-<textarea id="wishes"></textarea>
-</section>
-
-<section><h2>Notes</h2>
-<textarea id="notes"></textarea>
+<section>
+  <div class="section-header" onclick="toggle(this)">
+    <div><span>📝</span><h2>Final Wishes & Notes</h2></div><span>▾</span>
+  </div>
+  <div class="section-content">
+    <textarea id="wishes" placeholder="Final wishes"></textarea>
+    <textarea id="notes" placeholder="Additional notes"></textarea>
+  </div>
 </section>
 
 </div>
 
 <script>
-/* === CORE LOGIC UNCHANGED === */
+/* COLLAPSE */
+function toggle(h){ h.parentElement.classList.toggle("open"); }
+
+/* PIN */
 const pinInput=document.getElementById("pinInput");
 function getPin(){return localStorage.getItem("plannerPIN");}
-function requirePin(){ if(!getPin()){const p=prompt("Create a 4–8 digit PIN:"); if(/^[0-9]{4,8}$/.test(p)) localStorage.setItem("plannerPIN",p);} document.getElementById("lockScreen").style.display="flex";}
-function unlock(){ if(pinInput.value===getPin()){document.getElementById("lockScreen").style.display="none"; pinInput.value="";} else alert("Wrong PIN");}
-function changePin(){ if(prompt("Current PIN")!==getPin()) return alert("Wrong PIN"); const p=prompt("New PIN (4–8 digits)"); if(/^[0-9]{4,8}$/.test(p)) localStorage.setItem("plannerPIN",p);}
-function resetPin(){ if(prompt("Type RESET")==="RESET"){localStorage.removeItem("plannerPIN");document.getElementById("lockScreen").style.display="none";}}
+function requirePin(){
+  if(!getPin()){
+    const p=prompt("Create a 4–8 digit PIN:");
+    if(/^[0-9]{4,8}$/.test(p)) localStorage.setItem("plannerPIN",p);
+  }
+  document.getElementById("lockScreen").style.display="flex";
+}
+function unlock(){ if(pinInput.value===getPin()){lockScreen.style.display="none";} }
+function changePin(){ if(prompt("Current PIN")!==getPin())return; const p=prompt("New PIN"); if(/^[0-9]{4,8}$/.test(p))localStorage.setItem("plannerPIN",p);}
+function resetPin(){ if(prompt("Type RESET")==="RESET"){localStorage.removeItem("plannerPIN");lockScreen.style.display="none";}}
 
-const simple=["name","address","dob","spouseName","spouseAddress","spouseDob","spouseNotes","healthDecisionMaker","healthBackup","lifeSupport","dnr","comfortCare","healthNotes","docLocations","executor","executorNotes","debts","wishes","notes"];
-simple.forEach(id=>{const el=document.getElementById(id); el.value=localStorage.getItem(id)||""; el.oninput=()=>localStorage.setItem(id,el.value);});
+/* SAVE FIELDS */
+const fields=["name","address","dob","spouseName","spouseAddress","spouseDob","spouseNotes","healthDecisionMaker","healthBackup","lifeSupport","dnr","comfortCare","docLocations","wishes","notes"];
+fields.forEach(id=>{
+  const el=document.getElementById(id);
+  el.value=localStorage.getItem(id)||"";
+  el.oninput=()=>{localStorage.setItem(id,el.value);updateProgress();}
+});
 
+/* LISTS */
 let emergency=JSON.parse(localStorage.getItem("emergency"))||[];
 let beneficiaries=JSON.parse(localStorage.getItem("beneficiaries"))||[];
 let assets=JSON.parse(localStorage.getItem("assets"))||[];
 
-function render(list,el,fn){el.innerHTML=""; list.forEach((x,i)=>el.innerHTML+=fn(x,i));}
-function addEmergency(){emergency.push({name:emName.value,relation:emRelation.value,phone:emPhone.value,notes:emNotes.value}); localStorage.setItem("emergency",JSON.stringify(emergency)); renderEmergency();}
-function renderEmergency(){render(emergency,emergencyList,(e,i)=>`<div class="item"><b>${e.name}</b> (${e.relation})<br>${e.phone}<br>${e.notes}<br><button onclick="emergency.splice(${i},1);localStorage.setItem('emergency',JSON.stringify(emergency));renderEmergency()">Remove</button></div>`);}
+function render(list,el,fn){el.innerHTML="";list.forEach((x,i)=>el.innerHTML+=fn(x,i));}
+
+function addEmergency(){
+  emergency.push({name:emName.value,relation:emRelation.value,phone:emPhone.value,notes:emNotes.value});
+  localStorage.setItem("emergency",JSON.stringify(emergency));
+  renderEmergency();updateProgress();
+}
+function renderEmergency(){
+  render(emergency,emergencyList,(e,i)=>`<div class="item">${e.name} (${e.relation})<br>${e.phone}<br>${e.notes}</div>`);
+}
 renderEmergency();
 
-function addBeneficiary(){beneficiaries.push({name:benName.value,relation:benRelation.value,notes:benNotes.value}); localStorage.setItem("beneficiaries",JSON.stringify(beneficiaries)); renderBeneficiaries();}
-function renderBeneficiaries(){render(beneficiaries,beneficiaryList,(b,i)=>`<div class="item"><b>${b.name}</b> (${b.relation})<br>${b.notes}<br><button onclick="beneficiaries.splice(${i},1);localStorage.setItem('beneficiaries',JSON.stringify(beneficiaries));renderBeneficiaries()">Remove</button></div>`);}
+function addBeneficiary(){
+  beneficiaries.push({name:benName.value,relation:benRelation.value,notes:benNotes.value});
+  localStorage.setItem("beneficiaries",JSON.stringify(beneficiaries));
+  renderBeneficiaries();updateProgress();
+}
+function renderBeneficiaries(){
+  render(beneficiaries,beneficiaryList,(b,i)=>`<div class="item">${b.name} (${b.relation})<br>${b.notes}</div>`);
+}
 renderBeneficiaries();
 
-function addAsset(){assets.push({type:assetType.value,desc:assetDesc.value}); localStorage.setItem("assets",JSON.stringify(assets)); renderAssets();}
-function renderAssets(){render(assets,assetList,(a,i)=>`<div class="item"><b>${a.type}</b><br>${a.desc}<br><button onclick="assets.splice(${i},1);localStorage.setItem('assets',JSON.stringify(assets));renderAssets()">Remove</button></div>`);}
+function addAsset(){
+  assets.push({type:assetType.value,desc:assetDesc.value});
+  localStorage.setItem("assets",JSON.stringify(assets));
+  renderAssets();updateProgress();
+}
+function renderAssets(){
+  render(assets,assetList,(a,i)=>`<div class="item">${a.type}<br>${a.desc}</div>`);
+}
 renderAssets();
 
+/* PROGRESS */
+function updateProgress(){
+  let filled=0;
+  fields.forEach(id=>{ if(localStorage.getItem(id)) filled++; });
+  const total=fields.length;
+  const pct=Math.round((filled/total)*100);
+  document.getElementById("progressText").textContent=`Progress: ${pct}%`;
+}
+updateProgress();
+
+/* EXPORT + BACKUP */
 function exportPlan(){window.print();}
-function downloadBackup(){const d={};Object.keys(localStorage).forEach(k=>d[k]=localStorage.getItem(k)); const b=new Blob([JSON.stringify(d,null,2)],{type:"application/json"}); const a=document.createElement("a"); a.href=URL.createObjectURL(b); a.download="estate-planner-backup.json"; a.click();}
-function restoreBackup(i){const f=i.files[0]; if(!f) return; const r=new FileReader(); r.onload=()=>{if(confirm("Restore will overwrite current data.")){const d=JSON.parse(r.result); Object.keys(d).forEach(k=>localStorage.setItem(k,d[k])); location.reload();}}; r.readAsText(f);}
+function downloadBackup(){
+  const d={};Object.keys(localStorage).forEach(k=>d[k]=localStorage.getItem(k));
+  const b=new Blob([JSON.stringify(d,null,2)],{type:"application/json"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(b);
+  a.download="my-estate-plan-backup.json";
+  a.click();
+}
+function restoreBackup(i){
+  const f=i.files[0]; if(!f)return;
+  const r=new FileReader();
+  r.onload=()=>{ if(confirm("Restore will overwrite current data.")){ const d=JSON.parse(r.result); Object.keys(d).forEach(k=>localStorage.setItem(k,d[k])); location.reload(); } };
+  r.readAsText(f);
+}
+
 requirePin();
 </script>
 
