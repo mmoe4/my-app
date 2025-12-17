@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Estate Plan</title>
+<title>My Estate Plan – Template</title>
 
 <style>
 :root{
   --bg:#f6f7f8;
-  --card:#fff;
+  --card:#ffffff;
   --border:#dcdcdc;
   --primary:#2f4f4f;
   --muted:#666;
@@ -72,11 +72,6 @@ section{
   border-bottom:1px solid var(--border);
 }
 
-.section-header span{
-  font-size:18px;
-  margin-right:8px;
-}
-
 .section-header h2{
   margin:0;
   font-size:17px;
@@ -120,99 +115,66 @@ textarea{min-height:70px}
   color:var(--muted);
 }
 
-#lockScreen{
-  position:fixed;
-  inset:0;
-  background:#fff;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:9999;
-}
-
-#lockCard{
-  max-width:420px;
-  border:1px solid var(--border);
-  border-radius:10px;
-  padding:20px;
-}
-
 @media print{
   button,input,textarea{display:none}
   .section-content{display:block!important}
   section{page-break-inside:avoid}
-  #lockScreen{display:none!important}
 }
 </style>
 </head>
 
 <body>
 
-<div id="lockScreen">
-  <div id="lockCard">
-    <h2>🔒 Locked</h2>
-    <p>Enter your PIN</p>
-    <input id="pinInput" inputmode="numeric">
-    <button onclick="unlock()">Unlock</button>
-    <button onclick="resetPin()">Reset PIN</button>
-  </div>
-</div>
-
 <div class="container">
 <h1>My Estate Plan</h1>
-<p class="subtitle">Private planning tool · Not a legal document</p>
+<p class="subtitle">Free personal planning template · Not a legal document</p>
 
 <div class="toolbar">
   <button onclick="exportPlan()">🖨️ Print / PDF</button>
-  <button onclick="changePin()">🔐 Change PIN</button>
-  <button onclick="downloadBackup()">💾 Backup</button>
-  <label style="border:1px solid var(--border);padding:10px 16px;border-radius:6px;cursor:pointer">
-    📤 Restore <input type="file" hidden onchange="restoreBackup(this)">
-  </label>
+  <button onclick="downloadBackup()">💾 Download Copy</button>
 </div>
 
 <div class="progress" id="progressText">Progress: 0%</div>
 
-<!-- SECTIONS -->
 <section>
   <div class="section-header" onclick="toggle(this)">
-    <div><span>👤</span><h2>Primary Person</h2></div><span>▾</span>
+    <h2>👤 Personal Information</h2>
   </div>
   <div class="section-content">
-    <input id="name" placeholder="Full name">
-    <input id="address" placeholder="Address">
+    <input id="name" placeholder="Full legal name">
+    <input id="address" placeholder="Current address">
     <input id="dob" placeholder="Date of birth">
   </div>
 </section>
 
 <section>
   <div class="section-header" onclick="toggle(this)">
-    <div><span>❤️</span><h2>Spouse / Partner</h2></div><span>▾</span>
+    <h2>❤️ Spouse / Partner</h2>
   </div>
   <div class="section-content">
     <input id="spouseName" placeholder="Full name">
     <input id="spouseAddress" placeholder="Address">
     <input id="spouseDob" placeholder="Date of birth">
-    <textarea id="spouseNotes" placeholder="Notes"></textarea>
+    <textarea id="spouseNotes" placeholder="Marriage, separation, or other notes"></textarea>
   </div>
 </section>
 
 <section>
   <div class="section-header" onclick="toggle(this)">
-    <div><span>🩺</span><h2>Health Directives</h2></div><span>▾</span>
+    <h2>🩺 Health & Medical Wishes</h2>
   </div>
   <div class="section-content">
-    <input id="healthDecisionMaker" placeholder="Primary decision-maker">
+    <input id="healthDecisionMaker" placeholder="Primary medical decision-maker">
     <input id="healthBackup" placeholder="Backup decision-maker">
     <textarea id="lifeSupport" placeholder="Life support wishes"></textarea>
-    <textarea id="dnr" placeholder="DNR / CPR wishes"></textarea>
-    <textarea id="comfortCare" placeholder="Comfort care wishes"></textarea>
+    <textarea id="dnr" placeholder="Resuscitation wishes (DNR / CPR)"></textarea>
+    <textarea id="comfortCare" placeholder="Comfort and pain management wishes"></textarea>
   </div>
 </section>
 
 <section>
   <div class="section-header" onclick="toggle(this)">
-    <div><span>🚨</span><h2>Emergency Contacts</h2></div><span>▾</span>
+    <h2>🚨 Emergency Contacts</h2>
   </div>
   <div class="section-content">
     <input id="emName" placeholder="Name">
@@ -226,21 +188,21 @@ textarea{min-height:70px}
 
 <section>
   <div class="section-header" onclick="toggle(this)">
-    <div><span>📁</span><h2>Document Locations</h2></div><span>▾</span>
+    <h2>📁 Important Document Locations</h2>
   </div>
   <div class="section-content">
-    <textarea id="docLocations" placeholder="Where important documents are stored"></textarea>
+    <textarea id="docLocations" placeholder="Where are wills, insurance, bank info, titles stored?"></textarea>
   </div>
 </section>
 
 <section>
   <div class="section-header" onclick="toggle(this)">
-    <div><span>👥</span><h2>Beneficiaries</h2></div><span>▾</span>
+    <h2>👥 Beneficiaries</h2>
   </div>
   <div class="section-content">
     <input id="benName" placeholder="Name">
     <input id="benRelation" placeholder="Relationship">
-    <textarea id="benNotes" placeholder="Notes"></textarea>
+    <textarea id="benNotes" placeholder="What they receive / notes"></textarea>
     <button onclick="addBeneficiary()">Add Beneficiary</button>
     <div id="beneficiaryList"></div>
   </div>
@@ -248,11 +210,11 @@ textarea{min-height:70px}
 
 <section>
   <div class="section-header" onclick="toggle(this)">
-    <div><span>🏠</span><h2>Assets</h2></div><span>▾</span>
+    <h2>🏠 Assets</h2>
   </div>
   <div class="section-content">
-    <input id="assetType" placeholder="Asset type">
-    <textarea id="assetDesc" placeholder="Details"></textarea>
+    <input id="assetType" placeholder="Asset type (Home, Bank, Vehicle)">
+    <textarea id="assetDesc" placeholder="Description"></textarea>
     <button onclick="addAsset()">Add Asset</button>
     <div id="assetList"></div>
   </div>
@@ -260,10 +222,10 @@ textarea{min-height:70px}
 
 <section>
   <div class="section-header" onclick="toggle(this)">
-    <div><span>📝</span><h2>Final Wishes & Notes</h2></div><span>▾</span>
+    <h2>📝 Final Wishes & Notes</h2>
   </div>
   <div class="section-content">
-    <textarea id="wishes" placeholder="Final wishes"></textarea>
+    <textarea id="wishes" placeholder="Funeral, burial, cremation wishes"></textarea>
     <textarea id="notes" placeholder="Additional notes"></textarea>
   </div>
 </section>
@@ -271,24 +233,9 @@ textarea{min-height:70px}
 </div>
 
 <script>
-/* COLLAPSE */
-function toggle(h){ h.parentElement.classList.toggle("open"); }
+function toggle(h){h.parentElement.classList.toggle("open");}
+function exportPlan(){window.print();}
 
-/* PIN */
-const pinInput=document.getElementById("pinInput");
-function getPin(){return localStorage.getItem("plannerPIN");}
-function requirePin(){
-  if(!getPin()){
-    const p=prompt("Create a 4–8 digit PIN:");
-    if(/^[0-9]{4,8}$/.test(p)) localStorage.setItem("plannerPIN",p);
-  }
-  document.getElementById("lockScreen").style.display="flex";
-}
-function unlock(){ if(pinInput.value===getPin()){lockScreen.style.display="none";} }
-function changePin(){ if(prompt("Current PIN")!==getPin())return; const p=prompt("New PIN"); if(/^[0-9]{4,8}$/.test(p))localStorage.setItem("plannerPIN",p);}
-function resetPin(){ if(prompt("Type RESET")==="RESET"){localStorage.removeItem("plannerPIN");lockScreen.style.display="none";}}
-
-/* SAVE FIELDS */
 const fields=["name","address","dob","spouseName","spouseAddress","spouseDob","spouseNotes","healthDecisionMaker","healthBackup","lifeSupport","dnr","comfortCare","docLocations","wishes","notes"];
 fields.forEach(id=>{
   const el=document.getElementById(id);
@@ -296,7 +243,6 @@ fields.forEach(id=>{
   el.oninput=()=>{localStorage.setItem(id,el.value);updateProgress();}
 });
 
-/* LISTS */
 let emergency=JSON.parse(localStorage.getItem("emergency"))||[];
 let beneficiaries=JSON.parse(localStorage.getItem("beneficiaries"))||[];
 let assets=JSON.parse(localStorage.getItem("assets"))||[];
@@ -333,34 +279,22 @@ function renderAssets(){
 }
 renderAssets();
 
-/* PROGRESS */
 function updateProgress(){
   let filled=0;
-  fields.forEach(id=>{ if(localStorage.getItem(id)) filled++; });
-  const total=fields.length;
-  const pct=Math.round((filled/total)*100);
+  fields.forEach(id=>{if(localStorage.getItem(id))filled++;});
+  const pct=Math.round((filled/fields.length)*100);
   document.getElementById("progressText").textContent=`Progress: ${pct}%`;
 }
 updateProgress();
 
-/* EXPORT + BACKUP */
-function exportPlan(){window.print();}
 function downloadBackup(){
   const d={};Object.keys(localStorage).forEach(k=>d[k]=localStorage.getItem(k));
   const b=new Blob([JSON.stringify(d,null,2)],{type:"application/json"});
   const a=document.createElement("a");
   a.href=URL.createObjectURL(b);
-  a.download="my-estate-plan-backup.json";
+  a.download="my-estate-plan-template.json";
   a.click();
 }
-function restoreBackup(i){
-  const f=i.files[0]; if(!f)return;
-  const r=new FileReader();
-  r.onload=()=>{ if(confirm("Restore will overwrite current data.")){ const d=JSON.parse(r.result); Object.keys(d).forEach(k=>localStorage.setItem(k,d[k])); location.reload(); } };
-  r.readAsText(f);
-}
-
-requirePin();
 </script>
 
 </body>
