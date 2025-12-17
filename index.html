@@ -7,24 +7,28 @@
 
 <style>
 :root{
-  --bg:#f4f6f7;
-  --card:#ffffff;
-  --border:#d8d8d8;
+  --page-bg:#eef1f3;
+  --card-bg:#ffffff;
+  --border:#d5d8db;
   --primary:#2f4f4f;
-  --muted:#555;
+  --muted:#4f5b66;
 }
 
 body{
   margin:0;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
-  background:var(--bg);
-  color:#222;
+  background:var(--page-bg);
+  color:#1f2a33;
 }
 
 .container{
-  max-width:1050px;
-  margin:auto;
-  padding:28px 18px 80px;
+  max-width:1100px;
+  margin:40px auto;
+  padding:32px 22px 90px;
+  background:var(--card-bg);
+  border:1px solid var(--border);
+  border-radius:14px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.05);
 }
 
 h1{
@@ -32,37 +36,42 @@ h1{
   color:var(--primary);
   margin-bottom:6px;
   font-weight:600;
+  letter-spacing:0.3px;
 }
 
 .subtitle{
   text-align:center;
   color:var(--muted);
-  margin-bottom:26px;
+  margin-bottom:28px;
   font-size:14px;
 }
 
 .toolbar{
   display:flex;
-  gap:10px;
+  gap:12px;
   flex-wrap:wrap;
   justify-content:center;
-  margin-bottom:24px;
+  margin-bottom:26px;
 }
 
 button{
-  padding:10px 18px;
+  padding:10px 20px;
   border-radius:6px;
   border:1px solid var(--border);
-  background:var(--card);
+  background:#f9fafb;
   cursor:pointer;
   font-size:14px;
 }
 
+button:hover{
+  background:#f1f3f5;
+}
+
 section{
-  background:var(--card);
   border:1px solid var(--border);
   border-radius:10px;
-  margin-bottom:16px;
+  margin-bottom:18px;
+  background:#ffffff;
 }
 
 .section-header{
@@ -70,7 +79,7 @@ section{
   align-items:center;
   justify-content:space-between;
   cursor:pointer;
-  padding:16px 18px;
+  padding:18px 20px;
   border-bottom:1px solid var(--border);
 }
 
@@ -82,7 +91,7 @@ section{
 }
 
 .section-content{
-  padding:18px;
+  padding:20px;
   display:none;
 }
 
@@ -94,44 +103,45 @@ input,textarea{
   width:100%;
   padding:10px;
   margin-top:8px;
-  margin-bottom:10px;
+  margin-bottom:12px;
   border-radius:6px;
   border:1px solid var(--border);
   background:#fafafa;
   font-size:14px;
 }
 
-textarea{min-height:80px}
+textarea{min-height:90px}
 
 .item{
   border:1px solid var(--border);
   border-radius:6px;
-  padding:10px;
+  padding:12px;
   margin-top:10px;
-  background:#fcfcfc;
+  background:#fcfcfd;
 }
 
 .progress{
   text-align:center;
-  margin-bottom:22px;
+  margin-bottom:26px;
   font-size:14px;
   color:var(--muted);
 }
 
 .instructions{
   font-size:14px;
-  line-height:1.6;
+  line-height:1.65;
 }
 
 .instructions ul{
-  margin-left:18px;
+  margin-left:20px;
 }
 
 @media print{
+  body{background:#fff}
+  .container{box-shadow:none;border:none;margin:0}
   button,input,textarea{display:none}
   .section-content{display:block!important}
   section{page-break-inside:avoid}
-  body{background:#fff}
 }
 </style>
 </head>
@@ -142,100 +152,98 @@ textarea{min-height:80px}
 
 <h1>My Estate Plan</h1>
 <p class="subtitle">
-A private family planning document · Not a legal will or medical directive
+A personal estate and care planning record for family and executors  
+<br>Not a legal will or substitute for professional advice
 </p>
 
 <div class="toolbar">
-  <button onclick="exportPlan()">🖨️ Print / Save as PDF</button>
-  <button onclick="downloadBackup()">💾 Download a Copy</button>
+  <button onclick="exportPlan()">Print or Save as PDF</button>
+  <button onclick="downloadBackup()">Download Personal Copy</button>
 </div>
 
-<div class="progress" id="progressText">Completion: 0%</div>
+<div class="progress" id="progressText">Completion Status: 0%</div>
 
 <!-- INSTRUCTIONS -->
 <section class="open">
   <div class="section-header" onclick="toggle(this)">
-    <h2>📘 Instructions for You & Your Family</h2>
+    <h2>Instructions for Family and Executors</h2>
   </div>
   <div class="section-content instructions">
-    <p><strong>Purpose of this document</strong></p>
     <p>
-      This planner is designed to help you organize important personal, medical,
-      and estate-related information in one place. It is intended as a
-      <em>planning and communication tool</em> for you, your family, and your
-      executor.
+      This document has been prepared to record important personal, medical,
+      and estate-related information in one organized location.
+      It is intended to assist family members, executors, and advisors
+      in understanding the individual’s wishes.
     </p>
 
-    <p><strong>How to use this planner</strong></p>
+    <p><strong>Guidance for completion</strong></p>
     <ul>
-      <li>Complete each section as thoroughly as possible.</li>
-      <li>You do not need to finish everything in one sitting.</li>
-      <li>Your information is stored only on your device.</li>
-      <li>Use the “Print / Save as PDF” button when complete.</li>
+      <li>Complete each section carefully and accurately.</li>
+      <li>This document may be updated at any time.</li>
+      <li>Information entered is stored locally on the device being used.</li>
     </ul>
 
-    <p><strong>What to do after completing</strong></p>
+    <p><strong>After completion</strong></p>
     <ul>
-      <li>Review this document with your spouse or trusted family member.</li>
-      <li>Share a printed or PDF copy with your executor.</li>
-      <li>Bring a copy to your lawyer or financial advisor.</li>
-      <li>Update this document whenever circumstances change.</li>
+      <li>Review the contents with a spouse or trusted family member.</li>
+      <li>Provide a copy to the appointed executor.</li>
+      <li>Share with legal and financial advisors as appropriate.</li>
+      <li>Retain both a printed and digital copy in a secure location.</li>
     </ul>
 
-    <p><strong>Important notes</strong></p>
+    <p><strong>Important notice</strong></p>
     <ul>
-      <li>This document does <strong>not</strong> replace a legally valid will.</li>
-      <li>Medical wishes may require formal advance directives depending on jurisdiction.</li>
-      <li>A lawyer should be consulted to create legally binding documents.</li>
+      <li>This document does not create legal rights or obligations.</li>
+      <li>Formal wills, powers of attorney, and medical directives
+          should be prepared with qualified professionals.</li>
     </ul>
   </div>
 </section>
 
-<!-- PERSONAL -->
 <section>
   <div class="section-header" onclick="toggle(this)">
-    <h2>👤 Personal Information</h2>
+    <h2>Personal Information</h2>
   </div>
   <div class="section-content">
     <input id="name" placeholder="Full legal name">
-    <input id="address" placeholder="Current address">
+    <input id="address" placeholder="Primary residence address">
     <input id="dob" placeholder="Date of birth">
   </div>
 </section>
 
 <section>
   <div class="section-header" onclick="toggle(this)">
-    <h2>❤️ Spouse / Partner</h2>
+    <h2>Spouse or Partner Information</h2>
   </div>
   <div class="section-content">
-    <input id="spouseName" placeholder="Full name">
+    <input id="spouseName" placeholder="Full legal name">
     <input id="spouseAddress" placeholder="Address">
     <input id="spouseDob" placeholder="Date of birth">
-    <textarea id="spouseNotes" placeholder="Marriage details, separation, or special considerations"></textarea>
+    <textarea id="spouseNotes" placeholder="Marital status, agreements, or special considerations"></textarea>
   </div>
 </section>
 
 <section>
   <div class="section-header" onclick="toggle(this)">
-    <h2>🩺 Health & Medical Wishes</h2>
+    <h2>Health and Medical Care Preferences</h2>
   </div>
   <div class="section-content">
     <input id="healthDecisionMaker" placeholder="Primary medical decision-maker">
-    <input id="healthBackup" placeholder="Backup decision-maker">
-    <textarea id="lifeSupport" placeholder="Life support wishes"></textarea>
+    <input id="healthBackup" placeholder="Alternate decision-maker">
+    <textarea id="lifeSupport" placeholder="Life-sustaining treatment preferences"></textarea>
     <textarea id="dnr" placeholder="Resuscitation preferences (DNR / CPR)"></textarea>
-    <textarea id="comfortCare" placeholder="Comfort and pain management wishes"></textarea>
+    <textarea id="comfortCare" placeholder="Comfort, pain management, and palliative care wishes"></textarea>
   </div>
 </section>
 
 <section>
   <div class="section-header" onclick="toggle(this)">
-    <h2>🚨 Emergency Contacts</h2>
+    <h2>Emergency Contacts</h2>
   </div>
   <div class="section-content">
-    <input id="emName" placeholder="Name">
+    <input id="emName" placeholder="Contact name">
     <input id="emRelation" placeholder="Relationship">
-    <input id="emPhone" placeholder="Phone number">
+    <input id="emPhone" placeholder="Telephone number">
     <textarea id="emNotes" placeholder="Availability or priority notes"></textarea>
     <button onclick="addEmergency()">Add Contact</button>
     <div id="emergencyList"></div>
@@ -244,21 +252,21 @@ A private family planning document · Not a legal will or medical directive
 
 <section>
   <div class="section-header" onclick="toggle(this)">
-    <h2>📁 Location of Important Documents</h2>
+    <h2>Location of Important Documents</h2>
   </div>
   <div class="section-content">
-    <textarea id="docLocations" placeholder="Where wills, insurance policies, bank information, titles, and digital access details are stored"></textarea>
+    <textarea id="docLocations" placeholder="Storage location of wills, insurance policies, financial records, titles, and digital access information"></textarea>
   </div>
 </section>
 
 <section>
   <div class="section-header" onclick="toggle(this)">
-    <h2>👥 Beneficiaries</h2>
+    <h2>Beneficiaries</h2>
   </div>
   <div class="section-content">
-    <input id="benName" placeholder="Name">
+    <input id="benName" placeholder="Beneficiary name">
     <input id="benRelation" placeholder="Relationship">
-    <textarea id="benNotes" placeholder="What they receive or other notes"></textarea>
+    <textarea id="benNotes" placeholder="Distribution notes or special instructions"></textarea>
     <button onclick="addBeneficiary()">Add Beneficiary</button>
     <div id="beneficiaryList"></div>
   </div>
@@ -266,10 +274,10 @@ A private family planning document · Not a legal will or medical directive
 
 <section>
   <div class="section-header" onclick="toggle(this)">
-    <h2>🏠 Assets</h2>
+    <h2>Assets</h2>
   </div>
   <div class="section-content">
-    <input id="assetType" placeholder="Asset type (home, bank account, vehicle)">
+    <input id="assetType" placeholder="Asset category">
     <textarea id="assetDesc" placeholder="Description or identifying details"></textarea>
     <button onclick="addAsset()">Add Asset</button>
     <div id="assetList"></div>
@@ -278,11 +286,11 @@ A private family planning document · Not a legal will or medical directive
 
 <section>
   <div class="section-header" onclick="toggle(this)">
-    <h2>📝 Final Wishes & Notes</h2>
+    <h2>Final Wishes and Additional Notes</h2>
   </div>
   <div class="section-content">
-    <textarea id="wishes" placeholder="Funeral, burial, or cremation wishes"></textarea>
-    <textarea id="notes" placeholder="Any additional notes or guidance"></textarea>
+    <textarea id="wishes" placeholder="Funeral, burial, or cremation preferences"></textarea>
+    <textarea id="notes" placeholder="Additional guidance or personal notes"></textarea>
   </div>
 </section>
 
@@ -303,7 +311,7 @@ let emergency=JSON.parse(localStorage.getItem("emergency"))||[];
 let beneficiaries=JSON.parse(localStorage.getItem("beneficiaries"))||[];
 let assets=JSON.parse(localStorage.getItem("assets"))||[];
 
-function render(list,el,fn){el.innerHTML="";list.forEach((x,i)=>el.innerHTML+=fn(x,i));}
+function render(list,el,fn){el.innerHTML="";list.forEach(x=>el.innerHTML+=fn(x));}
 
 function addEmergency(){
   emergency.push({name:emName.value,relation:emRelation.value,phone:emPhone.value,notes:emNotes.value});
@@ -339,7 +347,7 @@ function updateProgress(){
   let filled=0;
   fields.forEach(id=>{if(localStorage.getItem(id))filled++;});
   const pct=Math.round((filled/fields.length)*100);
-  document.getElementById("progressText").textContent=`Completion: ${pct}%`;
+  document.getElementById("progressText").textContent=`Completion Status: ${pct}%`;
 }
 updateProgress();
 
@@ -348,7 +356,7 @@ function downloadBackup(){
   const b=new Blob([JSON.stringify(d,null,2)],{type:"application/json"});
   const a=document.createElement("a");
   a.href=URL.createObjectURL(b);
-  a.download="my-estate-plan.json";
+  a.download="my-estate-plan-record.json";
   a.click();
 }
 </script>
