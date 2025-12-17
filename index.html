@@ -8,7 +8,7 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      max-width: 820px;
+      max-width: 850px;
       margin: auto;
       padding: 20px;
     }
@@ -54,162 +54,11 @@
 
 <body>
   <h1>Will & Estate Planner</h1>
-  <p><strong>Important:</strong> This tool helps you organize wishes. It is not a legal will.</p>
+  <p><strong>Important:</strong> This tool helps you organize wishes. It is not a legal will or medical directive.</p>
 
   <button onclick="exportPlan()">🖨️ Print / Export Summary</button>
 
   <!-- PRIMARY PERSON -->
   <section>
     <h2>Primary Person</h2>
-    <input id="name" placeholder="Full name">
-    <input id="address" placeholder="Address">
-    <input id="dob" placeholder="Date of birth">
-  </section>
-
-  <!-- SPOUSE / PARTNER -->
-  <section>
-    <h2>Spouse / Partner</h2>
-    <input id="spouseName" placeholder="Full name">
-    <input id="spouseAddress" placeholder="Address">
-    <input id="spouseDob" placeholder="Date of birth">
-    <textarea id="spouseNotes" placeholder="Marriage details, separation, special notes"></textarea>
-  </section>
-
-  <!-- EXECUTOR -->
-  <section>
-    <h2>Executor</h2>
-    <input id="executor" placeholder="Executor name">
-    <textarea id="executorNotes" placeholder="Executor instructions"></textarea>
-  </section>
-
-  <!-- BENEFICIARIES -->
-  <section>
-    <h2>Beneficiaries</h2>
-    <input id="benName" placeholder="Beneficiary name">
-    <input id="benRelation" placeholder="Relationship">
-    <textarea id="benNotes" placeholder="What they receive / notes"></textarea>
-    <button onclick="addBeneficiary()">Add Beneficiary</button>
-    <div id="beneficiaryList"></div>
-  </section>
-
-  <!-- ASSETS -->
-  <section>
-    <h2>Assets</h2>
-    <input id="assetType" placeholder="Asset type (Home, Bank, Vehicle)">
-    <textarea id="assetDesc" placeholder="Description / details"></textarea>
-    <button onclick="addAsset()">Add Asset</button>
-    <div id="assetList"></div>
-  </section>
-
-  <!-- DEBTS -->
-  <section>
-    <h2>Debts</h2>
-    <textarea id="debts" placeholder="Mortgage, loans, credit cards"></textarea>
-  </section>
-
-  <!-- FINAL WISHES -->
-  <section>
-    <h2>Final Wishes</h2>
-    <textarea id="wishes" placeholder="Funeral, burial, cremation, special wishes"></textarea>
-  </section>
-
-  <!-- NOTES -->
-  <section>
-    <h2>Notes</h2>
-    <textarea id="notes" placeholder="Anything else important"></textarea>
-  </section>
-
-  <script>
-    /* SIMPLE FIELDS */
-    const simpleFields = [
-      "name","address","dob",
-      "spouseName","spouseAddress","spouseDob","spouseNotes",
-      "executor","executorNotes",
-      "debts","wishes","notes"
-    ];
-
-    simpleFields.forEach(id => {
-      const el = document.getElementById(id);
-      el.value = localStorage.getItem(id) || "";
-      el.addEventListener("input", () => localStorage.setItem(id, el.value));
-    });
-
-    /* BENEFICIARIES */
-    let beneficiaries = JSON.parse(localStorage.getItem("beneficiaries")) || [];
-
-    function saveBeneficiaries() {
-      localStorage.setItem("beneficiaries", JSON.stringify(beneficiaries));
-      renderBeneficiaries();
-    }
-
-    function addBeneficiary() {
-      if (!benName.value.trim()) return;
-      beneficiaries.push({
-        name: benName.value,
-        relation: benRelation.value,
-        notes: benNotes.value
-      });
-      benName.value = benRelation.value = benNotes.value = "";
-      saveBeneficiaries();
-    }
-
-    function removeBeneficiary(i) {
-      beneficiaries.splice(i, 1);
-      saveBeneficiaries();
-    }
-
-    function renderBeneficiaries() {
-      beneficiaryList.innerHTML = "";
-      beneficiaries.forEach((b, i) => {
-        beneficiaryList.innerHTML += `
-          <div class="item">
-            <strong>${b.name}</strong> (${b.relation})<br>
-            ${b.notes}<br>
-            <button onclick="removeBeneficiary(${i})">Remove</button>
-          </div>`;
-      });
-    }
-    renderBeneficiaries();
-
-    /* ASSETS */
-    let assets = JSON.parse(localStorage.getItem("assets")) || [];
-
-    function saveAssets() {
-      localStorage.setItem("assets", JSON.stringify(assets));
-      renderAssets();
-    }
-
-    function addAsset() {
-      if (!assetType.value.trim()) return;
-      assets.push({
-        type: assetType.value,
-        desc: assetDesc.value
-      });
-      assetType.value = assetDesc.value = "";
-      saveAssets();
-    }
-
-    function removeAsset(i) {
-      assets.splice(i, 1);
-      saveAssets();
-    }
-
-    function renderAssets() {
-      assetList.innerHTML = "";
-      assets.forEach((a, i) => {
-        assetList.innerHTML += `
-          <div class="item">
-            <strong>${a.type}</strong><br>
-            ${a.desc}<br>
-            <button onclick="removeAsset(${i})">Remove</button>
-          </div>`;
-      });
-    }
-    renderAssets();
-
-    function exportPlan() {
-      window.print();
-    }
-  </script>
-</body>
-</html>
+    <input id="name" pla
