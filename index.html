@@ -8,7 +8,7 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      max-width: 700px;
+      max-width: 750px;
       margin: auto;
       padding: 20px;
     }
@@ -21,10 +21,20 @@
       margin-bottom: 20px;
       border-radius: 6px;
     }
-    textarea, input {
+    input, textarea {
       width: 100%;
       padding: 8px;
       margin-top: 6px;
+    }
+    button {
+      margin-top: 10px;
+      padding: 8px 12px;
+    }
+    .item {
+      border: 1px solid #ddd;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 4px;
     }
   </style>
 </head>
@@ -33,6 +43,7 @@
   <h1>Will & Estate Planner</h1>
   <p><strong>Important:</strong> This tool helps you organize wishes. It is not a legal will.</p>
 
+  <!-- PERSONAL INFO -->
   <section>
     <h2>Personal Information</h2>
     <input id="name" placeholder="Full name">
@@ -40,46 +51,139 @@
     <input id="dob" placeholder="Date of birth">
   </section>
 
+  <!-- EXECUTOR -->
   <section>
     <h2>Executor</h2>
     <input id="executor" placeholder="Executor name">
     <textarea id="executorNotes" placeholder="Executor instructions"></textarea>
   </section>
 
+  <!-- BENEFICIARIES -->
   <section>
     <h2>Beneficiaries</h2>
-    <textarea id="beneficiaries" placeholder="List beneficiaries and what they receive"></textarea>
+
+    <input id="benName" placeholder="Beneficiary name">
+    <input id="benRelation" placeholder="Relationship">
+    <textarea id="benNotes" placeholder="What they receive / notes"></textarea>
+    <button onclick="addBeneficiary()">Add Beneficiary</button>
+
+    <div id="beneficiaryList"></div>
   </section>
 
+  <!-- ASSETS -->
   <section>
     <h2>Assets</h2>
-    <textarea id="assets" placeholder="Home, bank accounts, vehicles, valuables"></textarea>
+
+    <input id="assetType" placeholder="Asset type (Home, Bank, Vehicle)">
+    <textarea id="assetDesc" placeholder="Description / details"></textarea>
+    <button onclick="addAsset()">Add Asset</button>
+
+    <div id="assetList"></div>
   </section>
 
+  <!-- DEBTS -->
   <section>
     <h2>Debts</h2>
     <textarea id="debts" placeholder="Mortgage, loans, credit cards"></textarea>
   </section>
 
+  <!-- FINAL WISHES -->
   <section>
     <h2>Final Wishes</h2>
     <textarea id="wishes" placeholder="Funeral, burial, cremation, special wishes"></textarea>
   </section>
 
+  <!-- NOTES -->
   <section>
     <h2>Notes</h2>
     <textarea id="notes" placeholder="Anything else important"></textarea>
   </section>
 
   <script>
-    const fields = document.querySelectorAll("input, textarea");
-
-    fields.forEach(field => {
-      field.value = localStorage.getItem(field.id) || "";
-      field.addEventListener("input", () => {
-        localStorage.setItem(field.id, field.value);
-      });
+    /* SIMPLE FIELDS */
+    const simpleFields = ["name","address","dob","executor","executorNotes","debts","wishes","notes"];
+    simpleFields.forEach(id => {
+      const el = document.getElementById(id);
+      el.value = localStorage.getItem(id) || "";
+      el.addEventListener("input", () => localStorage.setItem(id, el.value));
     });
+
+    /* BENEFICIARIES */
+    let beneficiaries = JSON.parse(localStorage.getItem("beneficiaries")) || [];
+
+    function saveBeneficiaries() {
+      localStorage.setItem("beneficiaries", JSON.stringify(beneficiaries));
+      renderBeneficiaries();
+    }
+
+    function addBeneficiary() {
+      const name = benName.value.trim();
+      if (!name) return;
+      beneficiaries.push({
+        name,
+        relation: benRelation.value,
+        notes: benNotes.value
+      });
+      benName.value = benRelation.value = benNotes.value = "";
+      saveBeneficiaries();
+    }
+
+    function removeBeneficiary(i) {
+      beneficiaries.splice(i, 1);
+      saveBeneficiaries();
+    }
+
+    function renderBeneficiaries() {
+      beneficiaryList.innerHTML = "";
+      beneficiaries.forEach((b, i) => {
+        beneficiaryList.innerHTML += `
+          <div class="item">
+            <strong>${b.name}</strong> (${b.relation})<br>
+            ${b.notes}<br>
+            <button onclick="removeBeneficiary(${i})">Remove</button>
+          </div>`;
+      });
+    }
+
+    renderBeneficiaries();
+
+    /* ASSETS */
+    let assets = JSON.parse(localStorage.getItem("assets")) || [];
+
+    function saveAssets() {
+      localStorage.setItem("assets", JSON.stringify(assets));
+      renderAssets();
+    }
+
+    function addAsset() {
+      const type = assetType.value.trim();
+      if (!type) return;
+      assets.push({
+        type,
+        desc: assetDesc.value
+      });
+      assetType.value = assetDesc.value = "";
+      saveAssets();
+    }
+
+    function removeAsset(i) {
+      assets.splice(i, 1);
+      saveAssets();
+    }
+
+    function renderAssets() {
+      assetList.innerHTML = "";
+      assets.forEach((a, i) => {
+        assetList.innerHTML += `
+          <div class="item">
+            <strong>${a.type}</strong><br>
+            ${a.desc}<br>
+            <button onclick="removeAsset(${i})">Remove</button>
+          </div>`;
+      });
+    }
+
+    renderAssets();
   </script>
 </body>
 </html>
