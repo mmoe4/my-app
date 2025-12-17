@@ -14,9 +14,10 @@
   --muted:#4f5b66;
 }
 
+/* FORMAL DOCUMENT FONT */
 body{
   margin:0;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  font-family: "Times New Roman", Georgia, serif;
   background:var(--page-bg);
   color:#1f2a33;
 }
@@ -31,12 +32,13 @@ body{
   box-shadow:0 8px 20px rgba(0,0,0,0.05);
 }
 
+/* HEADINGS */
 h1{
   text-align:center;
   color:var(--primary);
   margin-bottom:6px;
   font-weight:600;
-  letter-spacing:0.3px;
+  letter-spacing:0.4px;
 }
 
 .subtitle{
@@ -61,12 +63,10 @@ button{
   background:#f9fafb;
   cursor:pointer;
   font-size:14px;
+  font-family: inherit;
 }
 
-button:hover{
-  background:#f1f3f5;
-}
-
+/* SECTIONS */
 section{
   border:1px solid var(--border);
   border-radius:10px;
@@ -108,6 +108,7 @@ input,textarea{
   border:1px solid var(--border);
   background:#fafafa;
   font-size:14px;
+  font-family: inherit;
 }
 
 textarea{min-height:90px}
@@ -127,26 +128,58 @@ textarea{min-height:90px}
   color:var(--muted);
 }
 
-.instructions{
-  font-size:14px;
-  line-height:1.65;
+/* COVER PAGE (PRINT ONLY) */
+#coverPage{
+  display:none;
 }
 
-.instructions ul{
-  margin-left:20px;
-}
-
+/* PRINT STYLES */
 @media print{
   body{background:#fff}
   .container{box-shadow:none;border:none;margin:0}
   button,input,textarea{display:none}
   .section-content{display:block!important}
   section{page-break-inside:avoid}
+  #coverPage{
+    display:block;
+    page-break-after:always;
+  }
+  footer{
+    position:fixed;
+    bottom:10px;
+    left:0;
+    right:0;
+    text-align:center;
+    font-size:12px;
+    color:#666;
+  }
 }
 </style>
 </head>
 
 <body>
+
+<!-- COVER PAGE -->
+<div id="coverPage">
+  <div style="text-align:center;margin-top:180px;">
+    <h1 style="font-size:32px;">My Estate Plan</h1>
+    <p style="margin-top:40px;font-size:16px;">
+      Prepared for:
+    </p>
+    <p style="font-size:20px;font-weight:bold;" id="coverName">________________________</p>
+
+    <p style="margin-top:40px;">
+      Date Prepared: <span id="coverDate"></span><br>
+      Document Version: <span id="coverVersion"></span>
+    </p>
+
+    <p style="margin-top:60px;font-size:13px;color:#555;max-width:600px;margin-left:auto;margin-right:auto;">
+      This document is provided for personal planning purposes only.
+      It does not constitute a legal will, medical directive, or substitute
+      for professional legal or financial advice.
+    </p>
+  </div>
+</div>
 
 <div class="container">
 
@@ -163,39 +196,20 @@ A personal estate and care planning record for family and executors
 
 <div class="progress" id="progressText">Completion Status: 0%</div>
 
-<!-- INSTRUCTIONS -->
 <section class="open">
   <div class="section-header" onclick="toggle(this)">
     <h2>Instructions for Family and Executors</h2>
   </div>
-  <div class="section-content instructions">
+  <div class="section-content">
     <p>
-      This document has been prepared to record important personal, medical,
-      and estate-related information in one organized location.
-      It is intended to assist family members, executors, and advisors
-      in understanding the individual’s wishes.
+      This document records important personal, medical, and estate-related
+      information to assist family members, executors, and advisors.
     </p>
-
-    <p><strong>Guidance for completion</strong></p>
     <ul>
-      <li>Complete each section carefully and accurately.</li>
-      <li>This document may be updated at any time.</li>
-      <li>Information entered is stored locally on the device being used.</li>
-    </ul>
-
-    <p><strong>After completion</strong></p>
-    <ul>
-      <li>Review the contents with a spouse or trusted family member.</li>
-      <li>Provide a copy to the appointed executor.</li>
-      <li>Share with legal and financial advisors as appropriate.</li>
-      <li>Retain both a printed and digital copy in a secure location.</li>
-    </ul>
-
-    <p><strong>Important notice</strong></p>
-    <ul>
-      <li>This document does not create legal rights or obligations.</li>
-      <li>Formal wills, powers of attorney, and medical directives
-          should be prepared with qualified professionals.</li>
+      <li>Complete each section carefully.</li>
+      <li>Review and update regularly.</li>
+      <li>Provide copies to trusted parties.</li>
+      <li>Consult qualified professionals for legal documents.</li>
     </ul>
   </div>
 </section>
@@ -219,7 +233,7 @@ A personal estate and care planning record for family and executors
     <input id="spouseName" placeholder="Full legal name">
     <input id="spouseAddress" placeholder="Address">
     <input id="spouseDob" placeholder="Date of birth">
-    <textarea id="spouseNotes" placeholder="Marital status, agreements, or special considerations"></textarea>
+    <textarea id="spouseNotes" placeholder="Marital status, agreements, or considerations"></textarea>
   </div>
 </section>
 
@@ -232,124 +246,74 @@ A personal estate and care planning record for family and executors
     <input id="healthBackup" placeholder="Alternate decision-maker">
     <textarea id="lifeSupport" placeholder="Life-sustaining treatment preferences"></textarea>
     <textarea id="dnr" placeholder="Resuscitation preferences (DNR / CPR)"></textarea>
-    <textarea id="comfortCare" placeholder="Comfort, pain management, and palliative care wishes"></textarea>
+    <textarea id="comfortCare" placeholder="Comfort and palliative care wishes"></textarea>
   </div>
 </section>
 
 <section>
   <div class="section-header" onclick="toggle(this)">
-    <h2>Emergency Contacts</h2>
-  </div>
-  <div class="section-content">
-    <input id="emName" placeholder="Contact name">
-    <input id="emRelation" placeholder="Relationship">
-    <input id="emPhone" placeholder="Telephone number">
-    <textarea id="emNotes" placeholder="Availability or priority notes"></textarea>
-    <button onclick="addEmergency()">Add Contact</button>
-    <div id="emergencyList"></div>
-  </div>
-</section>
-
-<section>
-  <div class="section-header" onclick="toggle(this)">
-    <h2>Location of Important Documents</h2>
-  </div>
-  <div class="section-content">
-    <textarea id="docLocations" placeholder="Storage location of wills, insurance policies, financial records, titles, and digital access information"></textarea>
-  </div>
-</section>
-
-<section>
-  <div class="section-header" onclick="toggle(this)">
-    <h2>Beneficiaries</h2>
-  </div>
-  <div class="section-content">
-    <input id="benName" placeholder="Beneficiary name">
-    <input id="benRelation" placeholder="Relationship">
-    <textarea id="benNotes" placeholder="Distribution notes or special instructions"></textarea>
-    <button onclick="addBeneficiary()">Add Beneficiary</button>
-    <div id="beneficiaryList"></div>
-  </div>
-</section>
-
-<section>
-  <div class="section-header" onclick="toggle(this)">
-    <h2>Assets</h2>
-  </div>
-  <div class="section-content">
-    <input id="assetType" placeholder="Asset category">
-    <textarea id="assetDesc" placeholder="Description or identifying details"></textarea>
-    <button onclick="addAsset()">Add Asset</button>
-    <div id="assetList"></div>
-  </div>
-</section>
-
-<section>
-  <div class="section-header" onclick="toggle(this)">
-    <h2>Final Wishes and Additional Notes</h2>
+    <h2>Final Wishes and Notes</h2>
   </div>
   <div class="section-content">
     <textarea id="wishes" placeholder="Funeral, burial, or cremation preferences"></textarea>
-    <textarea id="notes" placeholder="Additional guidance or personal notes"></textarea>
+    <textarea id="notes" placeholder="Additional guidance or notes"></textarea>
   </div>
 </section>
 
 </div>
 
+<footer>
+  My Estate Plan · Version <span id="versionFooter"></span> · Last updated <span id="updatedFooter"></span>
+</footer>
+
 <script>
+/* VERSIONING */
+const VERSION = "1.0";
+
+/* COLLAPSE */
 function toggle(h){h.parentElement.classList.toggle("open");}
 function exportPlan(){window.print();}
 
-const fields=["name","address","dob","spouseName","spouseAddress","spouseDob","spouseNotes","healthDecisionMaker","healthBackup","lifeSupport","dnr","comfortCare","docLocations","wishes","notes"];
+/* DATE TRACKING */
+function today(){
+  return new Date().toISOString().split("T")[0];
+}
+
+/* SAVE FIELDS */
+const fields=["name","address","dob","spouseName","spouseAddress","spouseDob","spouseNotes","healthDecisionMaker","healthBackup","lifeSupport","dnr","comfortCare","wishes","notes"];
 fields.forEach(id=>{
   const el=document.getElementById(id);
   el.value=localStorage.getItem(id)||"";
-  el.oninput=()=>{localStorage.setItem(id,el.value);updateProgress();}
+  el.oninput=()=>{
+    localStorage.setItem(id,el.value);
+    localStorage.setItem("lastUpdated", today());
+    updateProgress();
+    updateCover();
+  };
 });
 
-let emergency=JSON.parse(localStorage.getItem("emergency"))||[];
-let beneficiaries=JSON.parse(localStorage.getItem("beneficiaries"))||[];
-let assets=JSON.parse(localStorage.getItem("assets"))||[];
-
-function render(list,el,fn){el.innerHTML="";list.forEach(x=>el.innerHTML+=fn(x));}
-
-function addEmergency(){
-  emergency.push({name:emName.value,relation:emRelation.value,phone:emPhone.value,notes:emNotes.value});
-  localStorage.setItem("emergency",JSON.stringify(emergency));
-  renderEmergency();updateProgress();
-}
-function renderEmergency(){
-  render(emergency,emergencyList,(e)=>`<div class="item">${e.name} (${e.relation})<br>${e.phone}<br>${e.notes}</div>`);
-}
-renderEmergency();
-
-function addBeneficiary(){
-  beneficiaries.push({name:benName.value,relation:benRelation.value,notes:benNotes.value});
-  localStorage.setItem("beneficiaries",JSON.stringify(beneficiaries));
-  renderBeneficiaries();updateProgress();
-}
-function renderBeneficiaries(){
-  render(beneficiaries,beneficiaryList,(b)=>`<div class="item">${b.name} (${b.relation})<br>${b.notes}</div>`);
-}
-renderBeneficiaries();
-
-function addAsset(){
-  assets.push({type:assetType.value,desc:assetDesc.value});
-  localStorage.setItem("assets",JSON.stringify(assets));
-  renderAssets();updateProgress();
-}
-function renderAssets(){
-  render(assets,assetList,(a)=>`<div class="item">${a.type}<br>${a.desc}</div>`);
-}
-renderAssets();
-
+/* PROGRESS */
 function updateProgress(){
   let filled=0;
   fields.forEach(id=>{if(localStorage.getItem(id))filled++;});
-  const pct=Math.round((filled/fields.length)*100);
-  document.getElementById("progressText").textContent=`Completion Status: ${pct}%`;
+  document.getElementById("progressText").textContent=
+    `Completion Status: ${Math.round((filled/fields.length)*100)}%`;
 }
+
+/* COVER + FOOTER */
+function updateCover(){
+  document.getElementById("coverName").textContent =
+    localStorage.getItem("name") || "________________________";
+  document.getElementById("coverDate").textContent =
+    localStorage.getItem("lastUpdated") || today();
+  document.getElementById("coverVersion").textContent = VERSION;
+  document.getElementById("versionFooter").textContent = VERSION;
+  document.getElementById("updatedFooter").textContent =
+    localStorage.getItem("lastUpdated") || today();
+}
+
 updateProgress();
+updateCover();
 
 function downloadBackup(){
   const d={};Object.keys(localStorage).forEach(k=>d[k]=localStorage.getItem(k));
