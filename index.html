@@ -7,14 +7,13 @@
 
 <style>
 :root{
-  --page-bg:#2b1b1f;     /* DARK JAM BACKGROUND */
+  --page-bg:#2b1b1f;
   --card-bg:#ffffff;
   --border:#cfd3d6;
   --primary:#2f4f4f;
   --muted:#4f5b66;
 }
 
-/* FORMAL DOCUMENT FONT */
 body{
   margin:0;
   font-family:"Times New Roman", Georgia, serif;
@@ -22,7 +21,6 @@ body{
   color:#1f2a33;
 }
 
-/* WATERMARK */
 #watermark{
   position:fixed;
   top:50%;
@@ -32,18 +30,13 @@ body{
   font-weight:700;
   color:rgba(0,0,0,0.08);
   pointer-events:none;
-  z-index:0;
-  user-select:none;
 }
 
 .container{
-  position:relative;
-  z-index:1;
   max-width:1100px;
   margin:40px auto;
   padding:32px 22px 90px;
   background:var(--card-bg);
-  border:1px solid var(--border);
   border-radius:14px;
   box-shadow:0 12px 30px rgba(0,0,0,0.35);
 }
@@ -51,67 +44,44 @@ body{
 h1{
   text-align:center;
   color:var(--primary);
-  margin-bottom:6px;
-  font-weight:600;
-  letter-spacing:0.4px;
 }
 
 .subtitle{
   text-align:center;
   color:var(--muted);
-  margin-bottom:28px;
-  font-size:14px;
+  margin-bottom:30px;
 }
 
 .toolbar{
   display:flex;
   gap:12px;
-  flex-wrap:wrap;
   justify-content:center;
-  margin-bottom:26px;
+  margin-bottom:25px;
 }
 
 button{
-  padding:10px 20px;
-  border-radius:6px;
+  padding:10px 18px;
   border:1px solid var(--border);
   background:#f4f6f8;
+  border-radius:6px;
   cursor:pointer;
-  font-size:14px;
-  font-family:inherit;
 }
 
-button:hover{ background:#e9edf1; }
-
-.progress{
-  text-align:center;
-  margin-bottom:26px;
-  font-size:14px;
-  color:var(--muted);
-}
-
-/* SECTIONS */
 section{
   border:1px solid var(--border);
   border-radius:10px;
   margin-bottom:18px;
-  background:#ffffff;
 }
 
 .section-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
+  padding:16px 20px;
   cursor:pointer;
-  padding:18px 20px;
   border-bottom:1px solid var(--border);
 }
 
 .section-header h2{
   margin:0;
-  font-size:17px;
   color:var(--primary);
-  font-weight:600;
 }
 
 .section-content{
@@ -124,13 +94,9 @@ section.open .section-content{ display:block; }
 input,textarea{
   width:100%;
   padding:10px;
-  margin-top:8px;
   margin-bottom:12px;
   border-radius:6px;
   border:1px solid var(--border);
-  background:#fafafa;
-  font-size:14px;
-  font-family:inherit;
 }
 
 textarea{ min-height:90px; }
@@ -140,31 +106,18 @@ textarea{ min-height:90px; }
   border-radius:6px;
   padding:12px;
   margin-top:10px;
-  background:#fcfcfd;
 }
 
-/* COVER PAGE (PRINT ONLY) */
-#coverPage{ display:none; }
+.progress{
+  text-align:center;
+  margin-bottom:25px;
+  color:var(--muted);
+}
 
-/* PRINT */
 @media print{
   body{ background:#fff; }
-  .container{ box-shadow:none; border:none; margin:0; }
   button,input,textarea{ display:none; }
   .section-content{ display:block!important; }
-  section{ page-break-inside:avoid; }
-  #coverPage{ display:block; page-break-after:always; }
-  #watermark{ color:rgba(0,0,0,0.12); }
-
-  footer{
-    position:fixed;
-    bottom:10px;
-    left:0;
-    right:0;
-    text-align:center;
-    font-size:12px;
-    color:#666;
-  }
 }
 </style>
 </head>
@@ -173,144 +126,114 @@ textarea{ min-height:90px; }
 
 <div id="watermark">DRAFT</div>
 
-<!-- PRINT COVER PAGE -->
-<div id="coverPage">
-  <div style="text-align:center;margin-top:180px;">
-    <h1 style="font-size:32px;">My Estate Plan</h1>
-
-    <p style="margin-top:40px;">Prepared for:</p>
-    <p style="font-size:20px;font-weight:bold;" id="coverName">
-      ________________________
-    </p>
-
-    <p style="margin-top:40px;">
-      Date Prepared: <span id="coverDate"></span><br>
-      Document Version: <span id="coverVersion"></span><br>
-      Status: <span id="coverStatus"></span>
-    </p>
-
-    <p style="margin-top:60px;font-size:13px;color:#555;max-width:600px;margin:auto;">
-      This document is provided for personal planning purposes only and does not
-      constitute a legal will, medical directive, or professional advice.
-    </p>
-  </div>
-</div>
-
 <div class="container">
-
 <h1>My Estate Plan</h1>
 <p class="subtitle">
-A personal estate and care planning record for family and executors  
-<br>Not a legal will or substitute for professional advice
+Personal estate and care planning record<br>
+Not a legal will
 </p>
 
 <div class="toolbar">
-  <button onclick="exportPlan()">Print or Save as PDF</button>
-  <button onclick="toggleStatus()">Mark as Draft / Final</button>
-  <button onclick="downloadBackup()">Download Personal Copy</button>
+  <button onclick="window.print()">Print / PDF</button>
+  <button onclick="toggleStatus()">Draft / Final</button>
 </div>
 
 <div class="progress" id="progressText">Completion Status: 0%</div>
 
-<!-- EXAMPLE SECTION (you can add all your others below) -->
 <section class="open">
-  <div class="section-header" onclick="toggle(this)">
-    <h2>Personal Information</h2>
-  </div>
-  <div class="section-content">
-    <input id="name" placeholder="Full legal name">
-    <input id="address" placeholder="Primary residence address">
-    <input id="dob" placeholder="Date of birth">
-  </div>
+<div class="section-header" onclick="toggle(this)"><h2>Personal Information</h2></div>
+<div class="section-content">
+<input id="name" placeholder="Full legal name">
+<input id="address" placeholder="Address">
+<input id="dob" placeholder="Date of birth">
+</div>
+</section>
+
+<section>
+<div class="section-header" onclick="toggle(this)"><h2>Spouse / Partner</h2></div>
+<div class="section-content">
+<input id="spouse" placeholder="Name">
+<textarea id="spouseNotes" placeholder="Notes"></textarea>
+</div>
+</section>
+
+<section>
+<div class="section-header" onclick="toggle(this)"><h2>Executor</h2></div>
+<div class="section-content">
+<input id="executor" placeholder="Executor name">
+<textarea id="executorNotes" placeholder="Instructions"></textarea>
+</div>
+</section>
+
+<section>
+<div class="section-header" onclick="toggle(this)"><h2>Beneficiaries</h2></div>
+<div class="section-content">
+<textarea id="beneficiaries" placeholder="Names, relationship, distribution"></textarea>
+</div>
+</section>
+
+<section>
+<div class="section-header" onclick="toggle(this)"><h2>Assets</h2></div>
+<div class="section-content">
+<textarea id="assets" placeholder="Property, accounts, valuables"></textarea>
+</div>
+</section>
+
+<section>
+<div class="section-header" onclick="toggle(this)"><h2>Debts</h2></div>
+<div class="section-content">
+<textarea id="debts" placeholder="Mortgages, loans, credit cards"></textarea>
+</div>
+</section>
+
+<section>
+<div class="section-header" onclick="toggle(this)"><h2>Health & Care Preferences</h2></div>
+<div class="section-content">
+<textarea id="health" placeholder="Medical wishes, DNR, care instructions"></textarea>
+</div>
+</section>
+
+<section>
+<div class="section-header" onclick="toggle(this)"><h2>Document Locations</h2></div>
+<div class="section-content">
+<textarea id="documents" placeholder="Where important documents are stored"></textarea>
+</div>
+</section>
+
+<section>
+<div class="section-header" onclick="toggle(this)"><h2>Final Wishes & Notes</h2></div>
+<div class="section-content">
+<textarea id="notes" placeholder="Funeral wishes, messages, other notes"></textarea>
+</div>
 </section>
 
 </div>
 
-<footer>
-  My Estate Plan · Version <span id="versionFooter"></span> ·
-  Status <span id="statusFooter"></span> ·
-  Last updated <span id="updatedFooter"></span>
-</footer>
-
 <script>
-/* VERSION */
-const VERSION = "1.0";
-
-/* COLLAPSE */
 function toggle(h){ h.parentElement.classList.toggle("open"); }
-function exportPlan(){ window.print(); }
-
-/* DATE */
-function today(){
-  return new Date().toISOString().split("T")[0];
-}
-
-/* STATUS */
-function getStatus(){
-  return localStorage.getItem("docStatus") || "DRAFT";
-}
 
 function toggleStatus(){
-  const s = getStatus()==="DRAFT" ? "FINAL" : "DRAFT";
-  localStorage.setItem("docStatus", s);
-  updateStatus();
+  const wm=document.getElementById("watermark");
+  wm.textContent = wm.textContent==="DRAFT" ? "FINAL" : "DRAFT";
 }
 
-function updateStatus(){
-  const s = getStatus();
-  document.getElementById("watermark").textContent = s;
-  document.getElementById("coverStatus").textContent = s;
-  document.getElementById("statusFooter").textContent = s;
-}
-
-/* SAVE FIELDS */
-const fields=["name","address","dob"];
+const fields=[
+"name","address","dob","spouse","spouseNotes","executor","executorNotes",
+"beneficiaries","assets","debts","health","documents","notes"
+];
 
 fields.forEach(id=>{
   const el=document.getElementById(id);
-  if(!el) return;
   el.value=localStorage.getItem(id)||"";
-  el.oninput=()=>{
-    localStorage.setItem(id,el.value);
-    localStorage.setItem("lastUpdated", today());
-    updateProgress();
-    updateCover();
-  };
+  el.oninput=()=>{localStorage.setItem(id,el.value);updateProgress();};
 });
 
-/* PROGRESS */
 function updateProgress(){
   let filled=0;
   fields.forEach(id=>{ if(localStorage.getItem(id)) filled++; });
   document.getElementById("progressText").textContent =
     `Completion Status: ${Math.round((filled/fields.length)*100)}%`;
 }
-
-/* COVER + FOOTER */
-function updateCover(){
-  document.getElementById("coverName").textContent =
-    localStorage.getItem("name") || "________________________";
-  document.getElementById("coverDate").textContent =
-    localStorage.getItem("lastUpdated") || today();
-  document.getElementById("coverVersion").textContent = VERSION;
-  document.getElementById("versionFooter").textContent = VERSION;
-  document.getElementById("updatedFooter").textContent =
-    localStorage.getItem("lastUpdated") || today();
-}
-
-/* BACKUP */
-function downloadBackup(){
-  const d={}; Object.keys(localStorage).forEach(k=>d[k]=localStorage.getItem(k));
-  const b=new Blob([JSON.stringify(d,null,2)],{type:"application/json"});
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(b);
-  a.download="my-estate-plan-record.json";
-  a.click();
-}
-
-/* INIT */
-updateStatus();
-updateCover();
 updateProgress();
 </script>
 
