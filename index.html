@@ -1,12 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My App</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Will & Estate Planner</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 700px;
+      margin: auto;
+      padding: 20px;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    section {
+      border: 1px solid #ccc;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 6px;
+    }
+    textarea, input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 6px;
+    }
+  </style>
 </head>
+
 <body>
-  <h1>My Free Web App</h1>
-  <p>If you can read this, it’s working.</p>
+  <h1>Will & Estate Planner</h1>
+  <p><strong>Important:</strong> This tool helps you organize wishes. It is not a legal will.</p>
+
+  <section>
+    <h2>Personal Information</h2>
+    <input id="name" placeholder="Full name">
+    <input id="address" placeholder="Address">
+    <input id="dob" placeholder="Date of birth">
+  </section>
+
+  <section>
+    <h2>Executor</h2>
+    <input id="executor" placeholder="Executor name">
+    <textarea id="executorNotes" placeholder="Executor instructions"></textarea>
+  </section>
+
+  <section>
+    <h2>Beneficiaries</h2>
+    <textarea id="beneficiaries" placeholder="List beneficiaries and what they receive"></textarea>
+  </section>
+
+  <section>
+    <h2>Assets</h2>
+    <textarea id="assets" placeholder="Home, bank accounts, vehicles, valuables"></textarea>
+  </section>
+
+  <section>
+    <h2>Debts</h2>
+    <textarea id="debts" placeholder="Mortgage, loans, credit cards"></textarea>
+  </section>
+
+  <section>
+    <h2>Final Wishes</h2>
+    <textarea id="wishes" placeholder="Funeral, burial, cremation, special wishes"></textarea>
+  </section>
+
+  <section>
+    <h2>Notes</h2>
+    <textarea id="notes" placeholder="Anything else important"></textarea>
+  </section>
+
+  <script>
+    const fields = document.querySelectorAll("input, textarea");
+
+    fields.forEach(field => {
+      field.value = localStorage.getItem(field.id) || "";
+      field.addEventListener("input", () => {
+        localStorage.setItem(field.id, field.value);
+      });
+    });
+  </script>
 </body>
 </html>
