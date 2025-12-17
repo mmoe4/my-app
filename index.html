@@ -42,7 +42,7 @@ body{
 }
 
 h1{text-align:center;color:var(--primary);}
-.subtitle{text-align:center;color:var(--muted);margin-bottom:30px;}
+.subtitle{text-align:center;color:var(--muted);margin-bottom:20px;}
 
 .toolbar{
   display:flex;
@@ -51,18 +51,12 @@ h1{text-align:center;color:var(--primary);}
   margin-bottom:20px;
 }
 
-button{
-  padding:8px 16px;
+button,select{
+  padding:8px 14px;
   border:1px solid var(--border);
   background:#f4f6f8;
   border-radius:6px;
-  cursor:pointer;
   font-family:inherit;
-}
-
-button:disabled{
-  opacity:0.5;
-  cursor:not-allowed;
 }
 
 .progress{text-align:center;color:var(--muted);margin-bottom:20px;}
@@ -80,7 +74,6 @@ section{
 }
 
 .section-header h2{margin:0;color:var(--primary);}
-
 .section-content{padding:20px;display:none;}
 section.open .section-content{display:block;}
 
@@ -114,137 +107,131 @@ input{
 
 <div class="container">
 <h1>My Estate Plan</h1>
-<p class="subtitle">Personal estate planning record · Not a legal will</p>
+<p class="subtitle">Personal estate planning record · Not a legal document</p>
 
 <div class="toolbar">
+  <select id="countrySelect"></select>
   <button onclick="toggleStatus()">Draft / Final</button>
   <button onclick="window.print()">Print / PDF</button>
 </div>
 
 <div class="progress" id="progressText">Completion Status: 0%</div>
 
-<!-- PERSONAL INFO -->
 <section class="open">
-<div class="section-header" onclick="toggle(this)"><h2>Personal Information</h2></div>
+<div class="section-header" onclick="toggle(this)">
+  <h2>Jurisdiction</h2>
+</div>
 <div class="section-content">
-<div class="help">Legal identification details used by executors and advisors.</div>
-<input id="fullName" placeholder="Full legal name">
-<input id="dob" placeholder="Date of birth">
-<input id="address" placeholder="Primary address">
+  <div class="help" id="jurisdictionHelp"></div>
 </div>
 </section>
 
-<!-- BENEFICIARIES -->
 <section>
-<div class="section-header" onclick="toggle(this)"><h2>Beneficiaries</h2></div>
+<div class="section-header" onclick="toggle(this)">
+  <h2 id="executorTitle">Executor</h2>
+</div>
 <div class="section-content">
-<div class="help">List individuals or organizations and what they are to receive.</div>
-<div id="beneficiaries"></div>
-<button onclick="addRow('beneficiaries',['Name','Relationship','Share or Item'])">Add Beneficiary</button>
+  <div class="help" id="executorHelp"></div>
+  <input placeholder="Primary contact">
+  <input placeholder="Alternate contact">
 </div>
 </section>
 
-<!-- ASSETS -->
 <section>
-<div class="section-header" onclick="toggle(this)"><h2>Assets</h2></div>
-<div class="section-content">
-<div class="help">Include property, accounts, vehicles, businesses, or valuables.</div>
-<div id="assets"></div>
-<button onclick="addRow('assets',['Category','Institution','Approx. Value'])">Add Asset</button>
+<div class="section-header" onclick="toggle(this)">
+  <h2 id="healthTitle">Health & Care Preferences</h2>
 </div>
-</section>
-
-<!-- DEBTS -->
-<section>
-<div class="section-header" onclick="toggle(this)"><h2>Debts & Obligations</h2></div>
 <div class="section-content">
-<div class="help">Outstanding obligations to be settled by the estate.</div>
-<div id="debts"></div>
-<button onclick="addRow('debts',['Creditor','Type','Approx. Balance'])">Add Debt</button>
+  <div class="help" id="healthHelp"></div>
+  <input placeholder="Primary decision-maker">
+  <input placeholder="Alternate decision-maker">
 </div>
 </section>
 
 </div>
 
 <script>
-const isTemplate = new URLSearchParams(window.location.search).get("template")==="true";
-const STATUS_KEY="docStatus";
-const dataKeys=["beneficiaries","assets","debts"];
+const countryData={
+  "Canada":{
+    exec:"Executor / Estate Trustee",
+    execHelp:"The executor (also called an estate trustee) is responsible for administering the estate in accordance with applicable provincial law.",
+    health:"Personal Directive / Advance Care Planning",
+    healthHelp:"Health and personal care wishes are typically documented through a Personal Directive or similar instrument.",
+    tax:"Canada Revenue Agency (CRA)"
+  },
+  "United States":{
+    exec:"Executor / Personal Representative",
+    execHelp:"The executor or personal representative administers the estate through probate or applicable court process.",
+    health:"Advance Directive / Living Will",
+    healthHelp:"Medical wishes are often documented through an advance directive or living will.",
+    tax:"Internal Revenue Service (IRS)"
+  },
+  "United Kingdom":{
+    exec:"Executor",
+    execHelp:"Executors are responsible for administering the estate under UK probate rules.",
+    health:"Advance Decision",
+    healthHelp:"Health preferences may be recorded as an advance decision or similar document.",
+    tax:"HM Revenue & Customs (HMRC)"
+  },
+  "Australia":{
+    exec:"Executor",
+    execHelp:"Executors administer the estate under state or territory succession law.",
+    health:"Advance Care Directive",
+    healthHelp:"Health and medical wishes may be documented through an advance care directive.",
+    tax:"Australian Taxation Office (ATO)"
+  },
+  "New Zealand":{
+    exec:"Executor",
+    execHelp:"Executors are responsible for administering the estate in accordance with New Zealand law.",
+    health:"Advance Care Plan",
+    healthHelp:"Health preferences may be recorded in an advance care plan.",
+    tax:"Inland Revenue (IRD)"
+  },
+  "Ireland":{
+    exec:"Executor",
+    execHelp:"Executors administer estates under Irish probate law.",
+    health:"Advance Healthcare Directive",
+    healthHelp:"Health wishes may be recorded in an advance healthcare directive.",
+    tax:"Revenue Commissioners"
+  },
+  "Other / Not listed":{
+    exec:"Executor / Administrator",
+    execHelp:"Terminology and legal requirements vary by country. Consult a qualified professional.",
+    health:"Health Directive",
+    healthHelp:"Health and care preferences may be documented through local legal instruments.",
+    tax:"Local tax authority"
+  }
+};
+
+const select=document.getElementById("countrySelect");
+Object.keys(countryData).forEach(c=>{
+  const o=document.createElement("option");
+  o.value=o.textContent=c;
+  select.appendChild(o);
+});
+
+function applyCountry(){
+  const c=select.value;
+  const d=countryData[c];
+  document.getElementById("executorTitle").textContent=d.exec;
+  document.getElementById("executorHelp").textContent=d.execHelp;
+  document.getElementById("healthTitle").textContent=d.health;
+  document.getElementById("healthHelp").textContent=d.healthHelp;
+  document.getElementById("jurisdictionHelp").textContent=
+    `This plan is intended for use in ${c}. Estate and health laws vary by jurisdiction.`;
+  localStorage.setItem("country",c);
+}
+
+select.value=localStorage.getItem("country")||"Canada";
+applyCountry();
+select.onchange=applyCountry;
 
 function toggle(h){h.parentElement.classList.toggle("open");}
 
-function getStatus(){
-  return localStorage.getItem(STATUS_KEY)||"DRAFT";
-}
-
 function toggleStatus(){
-  if(isTemplate) return;
-  localStorage.setItem(STATUS_KEY,getStatus()==="DRAFT"?"FINAL":"DRAFT");
-  applyStatus();
+  const wm=document.getElementById("watermark");
+  wm.textContent=wm.textContent==="DRAFT"?"FINAL":"DRAFT";
 }
-
-function applyStatus(){
-  const final=getStatus()==="FINAL";
-  document.getElementById("watermark").textContent=getStatus();
-  document.querySelectorAll("input,button").forEach(el=>{
-    if(el.textContent?.includes("Add")) el.disabled=final;
-    if(el.tagName==="INPUT") el.readOnly=final;
-  });
-}
-
-function addRow(key,fields){
-  if(getStatus()==="FINAL") return;
-  const list=JSON.parse(localStorage.getItem(key)||"[]");
-  list.push({});
-  localStorage.setItem(key,JSON.stringify(list));
-  renderRows(key,fields);
-}
-
-function renderRows(key,fields){
-  const wrap=document.getElementById(key);
-  wrap.innerHTML="";
-  const list=JSON.parse(localStorage.getItem(key)||"[]");
-  list.forEach((row,i)=>{
-    const d=document.createElement("div");
-    d.className="row";
-    fields.forEach(f=>{
-      const inp=document.createElement("input");
-      inp.placeholder=f;
-      inp.value=row[f]||"";
-      inp.oninput=()=>{
-        row[f]=inp.value;
-        list[i]=row;
-        localStorage.setItem(key,JSON.stringify(list));
-        updateProgress();
-      };
-      if(getStatus()==="FINAL") inp.readOnly=true;
-      d.appendChild(inp);
-    });
-    wrap.appendChild(d);
-  });
-}
-
-dataKeys.forEach(k=>{
-  if(!isTemplate) renderRows(k,k==="beneficiaries"?["Name","Relationship","Share or Item"]:
-    k==="assets"?["Category","Institution","Approx. Value"]:
-    ["Creditor","Type","Approx. Balance"]);
-});
-
-function updateProgress(){
-  let filled=0;
-  document.querySelectorAll("input").forEach(i=>{if(i.value) filled++;});
-  const total=document.querySelectorAll("input").length;
-  document.getElementById("progressText").textContent=
-    `Completion Status: ${Math.round((filled/total)*100)}%`;
-}
-
-if(isTemplate){
-  localStorage.clear();
-  document.getElementById("watermark").textContent="TEMPLATE";
-}
-
-applyStatus();
-updateProgress();
 </script>
 
 </body>
