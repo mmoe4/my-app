@@ -8,7 +8,7 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      max-width: 850px;
+      max-width: 900px;
       margin: auto;
       padding: 20px;
     }
@@ -54,11 +54,11 @@
 
 <body>
   <h1>Will & Estate Planner</h1>
-  <p><strong>Important:</strong> This tool helps you organize wishes. It is not a legal will or medical directive.</p>
+  <p><strong>Important:</strong> This tool helps organize wishes. It is not a legal will or medical directive.</p>
 
   <button onclick="exportPlan()">🖨️ Print / Export Summary</button>
 
-  <!-- PRIMARY PERSON -->
+  <!-- PRIMARY -->
   <section>
     <h2>Primary Person</h2>
     <input id="name" placeholder="Full name">
@@ -75,20 +75,32 @@
     <textarea id="spouseNotes" placeholder="Marriage details, separation, special notes"></textarea>
   </section>
 
-  <!-- HEALTH DIRECTIVES -->
+  <!-- HEALTH -->
   <section>
     <h2>Health & Medical Directives</h2>
-
     <input id="healthDecisionMaker" placeholder="Primary medical decision-maker">
     <input id="healthBackup" placeholder="Backup decision-maker">
+    <textarea id="lifeSupport" placeholder="Life support wishes"></textarea>
+    <textarea id="dnr" placeholder="Resuscitation wishes (DNR / CPR)"></textarea>
+    <textarea id="comfortCare" placeholder="Pain & comfort care wishes"></textarea>
+    <textarea id="healthNotes" placeholder="Other medical instructions"></textarea>
+  </section>
 
-    <textarea id="lifeSupport" placeholder="Life support wishes (ventilator, feeding tube, etc.)"></textarea>
+  <!-- EMERGENCY CONTACTS -->
+  <section>
+    <h2>Emergency Contacts</h2>
+    <input id="emName" placeholder="Contact name">
+    <input id="emRelation" placeholder="Relationship">
+    <input id="emPhone" placeholder="Phone number">
+    <textarea id="emNotes" placeholder="Notes (availability, priority)"></textarea>
+    <button onclick="addEmergency()">Add Contact</button>
+    <div id="emergencyList"></div>
+  </section>
 
-    <textarea id="dnr" placeholder="Resuscitation wishes (DNR / CPR preferences)"></textarea>
-
-    <textarea id="comfortCare" placeholder="Pain management & comfort care wishes"></textarea>
-
-    <textarea id="healthNotes" placeholder="Other medical wishes or instructions"></textarea>
+  <!-- DOCUMENT LOCATIONS -->
+  <section>
+    <h2>Important Document Locations</h2>
+    <textarea id="docLocations" placeholder="Where are wills, insurance, bank info, titles, passwords stored?"></textarea>
   </section>
 
   <!-- EXECUTOR -->
@@ -111,7 +123,7 @@
   <!-- ASSETS -->
   <section>
     <h2>Assets</h2>
-    <input id="assetType" placeholder="Asset type (Home, Bank, Vehicle)">
+    <input id="assetType" placeholder="Asset type">
     <textarea id="assetDesc" placeholder="Description / details"></textarea>
     <button onclick="addAsset()">Add Asset</button>
     <div id="assetList"></div>
@@ -123,10 +135,10 @@
     <textarea id="debts" placeholder="Mortgage, loans, credit cards"></textarea>
   </section>
 
-  <!-- FINAL WISHES -->
+  <!-- FINAL -->
   <section>
     <h2>Final Wishes</h2>
-    <textarea id="wishes" placeholder="Funeral, burial, cremation, special wishes"></textarea>
+    <textarea id="wishes" placeholder="Funeral, burial, cremation wishes"></textarea>
   </section>
 
   <!-- NOTES -->
@@ -136,12 +148,11 @@
   </section>
 
   <script>
-    /* SIMPLE FIELDS */
     const simpleFields = [
       "name","address","dob",
       "spouseName","spouseAddress","spouseDob","spouseNotes",
       "healthDecisionMaker","healthBackup","lifeSupport","dnr","comfortCare","healthNotes",
-      "executor","executorNotes","debts","wishes","notes"
+      "docLocations","executor","executorNotes","debts","wishes","notes"
     ];
 
     simpleFields.forEach(id => {
@@ -149,6 +160,45 @@
       el.value = localStorage.getItem(id) || "";
       el.addEventListener("input", () => localStorage.setItem(id, el.value));
     });
+
+    /* EMERGENCY CONTACTS */
+    let emergency = JSON.parse(localStorage.getItem("emergency")) || [];
+
+    function saveEmergency() {
+      localStorage.setItem("emergency", JSON.stringify(emergency));
+      renderEmergency();
+    }
+
+    function addEmergency() {
+      if (!emName.value.trim()) return;
+      emergency.push({
+        name: emName.value,
+        relation: emRelation.value,
+        phone: emPhone.value,
+        notes: emNotes.value
+      });
+      emName.value = emRelation.value = emPhone.value = emNotes.value = "";
+      saveEmergency();
+    }
+
+    function removeEmergency(i) {
+      emergency.splice(i, 1);
+      saveEmergency();
+    }
+
+    function renderEmergency() {
+      emergencyList.innerHTML = "";
+      emergency.forEach((e, i) => {
+        emergencyList.innerHTML += `
+          <div class="item">
+            <strong>${e.name}</strong> (${e.relation})<br>
+            📞 ${e.phone}<br>
+            ${e.notes}<br>
+            <button onclick="removeEmergency(${i})">Remove</button>
+          </div>`;
+      });
+    }
+    renderEmergency();
 
     /* BENEFICIARIES */
     let beneficiaries = JSON.parse(localStorage.getItem("beneficiaries")) || [];
