@@ -41,31 +41,8 @@ body{
   box-shadow:0 12px 30px rgba(0,0,0,0.35);
 }
 
-h1{
-  text-align:center;
-  color:var(--primary);
-}
-
-.subtitle{
-  text-align:center;
-  color:var(--muted);
-  margin-bottom:30px;
-}
-
-.toolbar{
-  display:flex;
-  gap:12px;
-  justify-content:center;
-  margin-bottom:25px;
-}
-
-button{
-  padding:10px 18px;
-  border:1px solid var(--border);
-  background:#f4f6f8;
-  border-radius:6px;
-  cursor:pointer;
-}
+h1{text-align:center;color:var(--primary);}
+.subtitle{text-align:center;color:var(--muted);margin-bottom:30px;}
 
 section{
   border:1px solid var(--border);
@@ -79,17 +56,10 @@ section{
   border-bottom:1px solid var(--border);
 }
 
-.section-header h2{
-  margin:0;
-  color:var(--primary);
-}
+.section-header h2{margin:0;color:var(--primary);}
 
-.section-content{
-  padding:20px;
-  display:none;
-}
-
-section.open .section-content{ display:block; }
+.section-content{padding:20px;display:none;}
+section.open .section-content{display:block;}
 
 input,textarea{
   width:100%;
@@ -97,27 +67,19 @@ input,textarea{
   margin-bottom:12px;
   border-radius:6px;
   border:1px solid var(--border);
+  font-family:inherit;
 }
 
-textarea{ min-height:90px; }
+textarea{min-height:90px;}
 
-.item{
+.progress{text-align:center;margin-bottom:25px;color:var(--muted);}
+
+button{
+  padding:10px 18px;
   border:1px solid var(--border);
+  background:#f4f6f8;
   border-radius:6px;
-  padding:12px;
-  margin-top:10px;
-}
-
-.progress{
-  text-align:center;
-  margin-bottom:25px;
-  color:var(--muted);
-}
-
-@media print{
-  body{ background:#fff; }
-  button,input,textarea{ display:none; }
-  .section-content{ display:block!important; }
+  cursor:pointer;
 }
 </style>
 </head>
@@ -128,99 +90,105 @@ textarea{ min-height:90px; }
 
 <div class="container">
 <h1>My Estate Plan</h1>
-<p class="subtitle">
-Personal estate and care planning record<br>
-Not a legal will
-</p>
-
-<div class="toolbar">
-  <button onclick="window.print()">Print / PDF</button>
-  <button onclick="toggleStatus()">Draft / Final</button>
-</div>
+<p class="subtitle">Personal estate planning record · Not a legal will</p>
 
 <div class="progress" id="progressText">Completion Status: 0%</div>
 
+<!-- PERSONAL INFO -->
 <section class="open">
 <div class="section-header" onclick="toggle(this)"><h2>Personal Information</h2></div>
 <div class="section-content">
-<input id="name" placeholder="Full legal name">
-<input id="address" placeholder="Address">
+<input id="fullName" placeholder="Full legal name">
+<input id="previousNames" placeholder="Previous or maiden names">
 <input id="dob" placeholder="Date of birth">
+<input id="birthPlace" placeholder="Place of birth">
+<input id="citizenship" placeholder="Citizenship(s)">
+<input id="sin" placeholder="SIN / SSN (optional)">
+<input id="address" placeholder="Primary residence address">
+<input id="contact" placeholder="Phone and email">
 </div>
 </section>
 
+<!-- SPOUSE -->
 <section>
-<div class="section-header" onclick="toggle(this)"><h2>Spouse / Partner</h2></div>
+<div class="section-header" onclick="toggle(this)"><h2>Spouse or Partner</h2></div>
 <div class="section-content">
-<input id="spouse" placeholder="Name">
-<textarea id="spouseNotes" placeholder="Notes"></textarea>
+<input id="spouseName" placeholder="Full legal name">
+<input id="maritalStatus" placeholder="Marital status">
+<input id="marriageDate" placeholder="Marriage or partnership date">
+<textarea id="spouseNotes" placeholder="Prenuptial agreements, dependents, special considerations"></textarea>
 </div>
 </section>
 
+<!-- EXECUTOR -->
 <section>
-<div class="section-header" onclick="toggle(this)"><h2>Executor</h2></div>
+<div class="section-header" onclick="toggle(this)"><h2>Executor & Advisors</h2></div>
 <div class="section-content">
-<input id="executor" placeholder="Executor name">
-<textarea id="executorNotes" placeholder="Instructions"></textarea>
+<input id="executorPrimary" placeholder="Primary executor (name & contact)">
+<input id="executorAlternate" placeholder="Alternate executor">
+<textarea id="executorPowers" placeholder="Instructions, powers, compensation guidance"></textarea>
+<textarea id="professionalAdvisors" placeholder="Lawyer, accountant, financial advisor (names & contacts)"></textarea>
 </div>
 </section>
 
+<!-- BENEFICIARIES -->
 <section>
 <div class="section-header" onclick="toggle(this)"><h2>Beneficiaries</h2></div>
 <div class="section-content">
-<textarea id="beneficiaries" placeholder="Names, relationship, distribution"></textarea>
+<textarea id="beneficiaries" placeholder="Name · Relationship · Share or item · Conditions · Alternates"></textarea>
 </div>
 </section>
 
+<!-- ASSETS -->
 <section>
 <div class="section-header" onclick="toggle(this)"><h2>Assets</h2></div>
 <div class="section-content">
-<textarea id="assets" placeholder="Property, accounts, valuables"></textarea>
+<textarea id="assets" placeholder="Category · Institution · Identifier · Approx. value · Ownership · Notes"></textarea>
 </div>
 </section>
 
+<!-- DEBTS -->
 <section>
-<div class="section-header" onclick="toggle(this)"><h2>Debts</h2></div>
+<div class="section-header" onclick="toggle(this)"><h2>Debts & Obligations</h2></div>
 <div class="section-content">
-<textarea id="debts" placeholder="Mortgages, loans, credit cards"></textarea>
+<textarea id="debts" placeholder="Creditor · Type · Balance · Secured/Unsecured · Notes"></textarea>
 </div>
 </section>
 
+<!-- HEALTH -->
 <section>
 <div class="section-header" onclick="toggle(this)"><h2>Health & Care Preferences</h2></div>
 <div class="section-content">
-<textarea id="health" placeholder="Medical wishes, DNR, care instructions"></textarea>
+<input id="medicalDecisionMaker" placeholder="Primary medical decision-maker">
+<input id="medicalAlternate" placeholder="Alternate decision-maker">
+<textarea id="lifeSupport" placeholder="Life-sustaining treatment preferences"></textarea>
+<textarea id="dnr" placeholder="DNR / resuscitation wishes"></textarea>
+<textarea id="palliative" placeholder="Comfort and palliative care preferences"></textarea>
 </div>
 </section>
 
+<!-- DOCUMENTS -->
 <section>
-<div class="section-header" onclick="toggle(this)"><h2>Document Locations</h2></div>
+<div class="section-header" onclick="toggle(this)"><h2>Important Documents & Digital Access</h2></div>
 <div class="section-content">
-<textarea id="documents" placeholder="Where important documents are stored"></textarea>
+<textarea id="documents" placeholder="Location of will, POA, insurance, passwords, digital assets"></textarea>
 </div>
 </section>
 
+<!-- FINAL -->
 <section>
-<div class="section-header" onclick="toggle(this)"><h2>Final Wishes & Notes</h2></div>
+<div class="section-header" onclick="toggle(this)"><h2>Final Wishes & Personal Notes</h2></div>
 <div class="section-content">
-<textarea id="notes" placeholder="Funeral wishes, messages, other notes"></textarea>
+<textarea id="finalWishes" placeholder="Funeral wishes, messages, cultural or religious preferences"></textarea>
 </div>
 </section>
 
 </div>
 
 <script>
-function toggle(h){ h.parentElement.classList.toggle("open"); }
+function toggle(h){h.parentElement.classList.toggle("open");}
 
-function toggleStatus(){
-  const wm=document.getElementById("watermark");
-  wm.textContent = wm.textContent==="DRAFT" ? "FINAL" : "DRAFT";
-}
-
-const fields=[
-"name","address","dob","spouse","spouseNotes","executor","executorNotes",
-"beneficiaries","assets","debts","health","documents","notes"
-];
+const fields=[...document.querySelectorAll("input,textarea")].map(e=>e.id);
 
 fields.forEach(id=>{
   const el=document.getElementById(id);
