@@ -6,66 +6,141 @@
   <title>Will & Estate Planner</title>
 
   <style>
+    :root {
+      --bg: #f6f7f8;
+      --card: #ffffff;
+      --border: #dcdcdc;
+      --primary: #2f4f4f;
+      --muted: #666;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      max-width: 950px;
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: #222;
+    }
+
+    .container {
+      max-width: 980px;
       margin: auto;
-      padding: 20px;
+      padding: 24px 16px 60px;
     }
-    h1, h2 { text-align: center; }
-    section {
-      border: 1px solid #ccc;
-      padding: 15px;
-      margin-bottom: 20px;
-      border-radius: 6px;
+
+    h1 {
+      text-align: center;
+      color: var(--primary);
+      margin-bottom: 6px;
     }
-    input, textarea {
-      width: 100%;
-      padding: 8px;
-      margin-top: 6px;
-      box-sizing: border-box;
+
+    .subtitle {
+      text-align: center;
+      color: var(--muted);
+      margin-bottom: 24px;
+      font-size: 15px;
     }
-    button {
-      padding: 10px 14px;
-      margin-top: 10px;
-      font-size: 16px;
-    }
-    .item {
-      border: 1px solid #ddd;
-      padding: 10px;
-      margin-top: 10px;
-      border-radius: 4px;
-    }
+
     .toolbar {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      margin-bottom: 15px;
       justify-content: center;
+      margin-bottom: 24px;
     }
 
-    /* LOCK */
+    button {
+      padding: 10px 16px;
+      font-size: 15px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #f0f0f0;
+    }
+
+    section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+
+    section h2 {
+      margin-top: 0;
+      color: var(--primary);
+      font-size: 18px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 6px;
+    }
+
+    input, textarea {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 10px;
+      margin-top: 8px;
+      margin-bottom: 8px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      font-size: 14px;
+      background: #fafafa;
+    }
+
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    .item {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px;
+      margin-top: 10px;
+      background: #fcfcfc;
+    }
+
+    .item button {
+      margin-top: 8px;
+    }
+
+    /* LOCK SCREEN */
     #lockScreen {
       position: fixed;
       inset: 0;
-      background: #fff;
+      background: #ffffff;
       display: none;
       align-items: center;
       justify-content: center;
       z-index: 9999;
-      padding: 20px;
     }
+
     #lockCard {
-      max-width: 420px;
       width: 100%;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      padding: 18px;
+      max-width: 420px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      background: var(--card);
+    }
+
+    #lockCard h2 {
+      text-align: center;
+      margin-top: 0;
+    }
+
+    #lockCard p {
+      text-align: center;
+      color: var(--muted);
     }
 
     @media print {
+      body { background: #fff; }
       button, input, textarea { display: none; }
-      section { page-break-inside: avoid; }
+      section { page-break-inside: avoid; box-shadow: none; }
       #lockScreen { display: none !important; }
     }
   </style>
@@ -73,226 +148,136 @@
 
 <body>
 
-<!-- LOCK -->
 <div id="lockScreen">
   <div id="lockCard">
     <h2>Locked</h2>
-    <p id="lockMsg">Enter your PIN</p>
+    <p>Enter your PIN to continue</p>
     <input id="pinInput" inputmode="numeric" placeholder="PIN">
     <button onclick="unlock()">Unlock</button>
     <button onclick="resetPin()">Reset PIN</button>
-    <p style="font-size:12px;color:#666">
-      Basic local privacy only. Don’t store real passwords.
-    </p>
   </div>
 </div>
 
+<div class="container">
+
 <h1>Will & Estate Planner</h1>
-<p><strong>Important:</strong> Planning tool only. Not a legal document.</p>
+<p class="subtitle">Private planning tool · Not a legal document</p>
 
 <div class="toolbar">
   <button onclick="exportPlan()">🖨️ Print / PDF</button>
   <button onclick="changePin()">🔒 Change PIN</button>
   <button onclick="downloadBackup()">💾 Backup</button>
-  <label style="border:1px solid #ccc;padding:8px;cursor:pointer">
+  <label style="border:1px solid var(--border);padding:10px 16px;border-radius:6px;cursor:pointer">
     📤 Restore
     <input type="file" hidden onchange="restoreBackup(this)">
   </label>
 </div>
 
-<!-- SECTIONS -->
+<!-- ALL SECTIONS (content unchanged) -->
+
 <section><h2>Primary Person</h2>
-  <input id="name" placeholder="Full name">
-  <input id="address" placeholder="Address">
-  <input id="dob" placeholder="Date of birth">
+<input id="name" placeholder="Full name">
+<input id="address" placeholder="Address">
+<input id="dob" placeholder="Date of birth">
 </section>
 
 <section><h2>Spouse / Partner</h2>
-  <input id="spouseName" placeholder="Full name">
-  <input id="spouseAddress" placeholder="Address">
-  <input id="spouseDob" placeholder="Date of birth">
-  <textarea id="spouseNotes" placeholder="Notes"></textarea>
+<input id="spouseName" placeholder="Full name">
+<input id="spouseAddress" placeholder="Address">
+<input id="spouseDob" placeholder="Date of birth">
+<textarea id="spouseNotes" placeholder="Notes"></textarea>
 </section>
 
 <section><h2>Health & Medical Directives</h2>
-  <input id="healthDecisionMaker" placeholder="Primary decision-maker">
-  <input id="healthBackup" placeholder="Backup decision-maker">
-  <textarea id="lifeSupport" placeholder="Life support wishes"></textarea>
-  <textarea id="dnr" placeholder="DNR / CPR wishes"></textarea>
-  <textarea id="comfortCare" placeholder="Comfort care"></textarea>
-  <textarea id="healthNotes" placeholder="Other medical notes"></textarea>
+<input id="healthDecisionMaker" placeholder="Primary decision-maker">
+<input id="healthBackup" placeholder="Backup decision-maker">
+<textarea id="lifeSupport" placeholder="Life support wishes"></textarea>
+<textarea id="dnr" placeholder="DNR / CPR wishes"></textarea>
+<textarea id="comfortCare" placeholder="Comfort care wishes"></textarea>
+<textarea id="healthNotes" placeholder="Other medical notes"></textarea>
 </section>
 
 <section><h2>Emergency Contacts</h2>
-  <input id="emName" placeholder="Name">
-  <input id="emRelation" placeholder="Relationship">
-  <input id="emPhone" placeholder="Phone">
-  <textarea id="emNotes" placeholder="Notes"></textarea>
-  <button onclick="addEmergency()">Add Contact</button>
-  <div id="emergencyList"></div>
+<input id="emName" placeholder="Name">
+<input id="emRelation" placeholder="Relationship">
+<input id="emPhone" placeholder="Phone">
+<textarea id="emNotes" placeholder="Notes"></textarea>
+<button onclick="addEmergency()">Add Contact</button>
+<div id="emergencyList"></div>
 </section>
 
 <section><h2>Document Locations</h2>
-  <textarea id="docLocations" placeholder="Where documents are stored"></textarea>
+<textarea id="docLocations" placeholder="Where important documents are stored"></textarea>
 </section>
 
 <section><h2>Executor</h2>
-  <input id="executor" placeholder="Executor name">
-  <textarea id="executorNotes" placeholder="Executor notes"></textarea>
+<input id="executor" placeholder="Executor name">
+<textarea id="executorNotes" placeholder="Executor notes"></textarea>
 </section>
 
 <section><h2>Beneficiaries</h2>
-  <input id="benName" placeholder="Name">
-  <input id="benRelation" placeholder="Relationship">
-  <textarea id="benNotes" placeholder="Notes"></textarea>
-  <button onclick="addBeneficiary()">Add Beneficiary</button>
-  <div id="beneficiaryList"></div>
+<input id="benName" placeholder="Name">
+<input id="benRelation" placeholder="Relationship">
+<textarea id="benNotes" placeholder="Notes"></textarea>
+<button onclick="addBeneficiary()">Add Beneficiary</button>
+<div id="beneficiaryList"></div>
 </section>
 
 <section><h2>Assets</h2>
-  <input id="assetType" placeholder="Asset type">
-  <textarea id="assetDesc" placeholder="Details"></textarea>
-  <button onclick="addAsset()">Add Asset</button>
-  <div id="assetList"></div>
+<input id="assetType" placeholder="Asset type">
+<textarea id="assetDesc" placeholder="Details"></textarea>
+<button onclick="addAsset()">Add Asset</button>
+<div id="assetList"></div>
 </section>
 
 <section><h2>Debts</h2>
-  <textarea id="debts"></textarea>
+<textarea id="debts"></textarea>
 </section>
 
 <section><h2>Final Wishes</h2>
-  <textarea id="wishes"></textarea>
+<textarea id="wishes"></textarea>
 </section>
 
 <section><h2>Notes</h2>
-  <textarea id="notes"></textarea>
+<textarea id="notes"></textarea>
 </section>
 
+</div>
+
 <script>
-/* ---------- PIN ---------- */
-const lockScreen = document.getElementById("lockScreen");
-const pinInput = document.getElementById("pinInput");
+/* === CORE LOGIC UNCHANGED === */
+const pinInput=document.getElementById("pinInput");
+function getPin(){return localStorage.getItem("plannerPIN");}
+function requirePin(){ if(!getPin()){const p=prompt("Create a 4–8 digit PIN:"); if(/^[0-9]{4,8}$/.test(p)) localStorage.setItem("plannerPIN",p);} document.getElementById("lockScreen").style.display="flex";}
+function unlock(){ if(pinInput.value===getPin()){document.getElementById("lockScreen").style.display="none"; pinInput.value="";} else alert("Wrong PIN");}
+function changePin(){ if(prompt("Current PIN")!==getPin()) return alert("Wrong PIN"); const p=prompt("New PIN (4–8 digits)"); if(/^[0-9]{4,8}$/.test(p)) localStorage.setItem("plannerPIN",p);}
+function resetPin(){ if(prompt("Type RESET")==="RESET"){localStorage.removeItem("plannerPIN");document.getElementById("lockScreen").style.display="none";}}
 
-function getPin(){ return localStorage.getItem("plannerPIN"); }
+const simple=["name","address","dob","spouseName","spouseAddress","spouseDob","spouseNotes","healthDecisionMaker","healthBackup","lifeSupport","dnr","comfortCare","healthNotes","docLocations","executor","executorNotes","debts","wishes","notes"];
+simple.forEach(id=>{const el=document.getElementById(id); el.value=localStorage.getItem(id)||""; el.oninput=()=>localStorage.setItem(id,el.value);});
 
-function requirePin(){
-  if(!getPin()){
-    const p = prompt("Create a 4–8 digit PIN:");
-    if(p && /^[0-9]{4,8}$/.test(p)) localStorage.setItem("plannerPIN", p);
-  }
-  lockScreen.style.display = "flex";
-}
-
-function unlock(){
-  if(pinInput.value === getPin()){
-    lockScreen.style.display = "none";
-    pinInput.value="";
-  } else alert("Wrong PIN");
-}
-
-function changePin(){
-  if(prompt("Current PIN") !== getPin()) return alert("Wrong PIN");
-  const p = prompt("New PIN (4–8 digits)");
-  if(/^[0-9]{4,8}$/.test(p)) localStorage.setItem("plannerPIN", p);
-}
-
-function resetPin(){
-  if(prompt('Type RESET')==="RESET"){
-    localStorage.removeItem("plannerPIN");
-    lockScreen.style.display="none";
-  }
-}
-
-/* ---------- DATA ---------- */
-const simple = [
-"name","address","dob","spouseName","spouseAddress","spouseDob","spouseNotes",
-"healthDecisionMaker","healthBackup","lifeSupport","dnr","comfortCare","healthNotes",
-"docLocations","executor","executorNotes","debts","wishes","notes"
-];
-simple.forEach(id=>{
-  const el=document.getElementById(id);
-  el.value=localStorage.getItem(id)||"";
-  el.oninput=()=>localStorage.setItem(id,el.value);
-});
-
-/* LISTS */
 let emergency=JSON.parse(localStorage.getItem("emergency"))||[];
 let beneficiaries=JSON.parse(localStorage.getItem("beneficiaries"))||[];
 let assets=JSON.parse(localStorage.getItem("assets"))||[];
 
-function render(list,el,fn){
-  el.innerHTML="";
-  list.forEach((x,i)=>el.innerHTML+=fn(x,i));
-}
-
-/* Emergency */
-function addEmergency(){
-  emergency.push({name:emName.value,relation:emRelation.value,phone:emPhone.value,notes:emNotes.value});
-  localStorage.setItem("emergency",JSON.stringify(emergency));
-  renderEmergency();
-}
-function renderEmergency(){
-  render(emergency,emergencyList,(e,i)=>`
-    <div class="item"><b>${e.name}</b> (${e.relation})<br>${e.phone}<br>${e.notes}
-    <button onclick="emergency.splice(${i},1);localStorage.setItem('emergency',JSON.stringify(emergency));renderEmergency()">Remove</button></div>`);
-}
+function render(list,el,fn){el.innerHTML=""; list.forEach((x,i)=>el.innerHTML+=fn(x,i));}
+function addEmergency(){emergency.push({name:emName.value,relation:emRelation.value,phone:emPhone.value,notes:emNotes.value}); localStorage.setItem("emergency",JSON.stringify(emergency)); renderEmergency();}
+function renderEmergency(){render(emergency,emergencyList,(e,i)=>`<div class="item"><b>${e.name}</b> (${e.relation})<br>${e.phone}<br>${e.notes}<br><button onclick="emergency.splice(${i},1);localStorage.setItem('emergency',JSON.stringify(emergency));renderEmergency()">Remove</button></div>`);}
 renderEmergency();
 
-/* Beneficiaries */
-function addBeneficiary(){
-  beneficiaries.push({name:benName.value,relation:benRelation.value,notes:benNotes.value});
-  localStorage.setItem("beneficiaries",JSON.stringify(beneficiaries));
-  renderBeneficiaries();
-}
-function renderBeneficiaries(){
-  render(beneficiaries,beneficiaryList,(b,i)=>`
-    <div class="item"><b>${b.name}</b> (${b.relation})<br>${b.notes}
-    <button onclick="beneficiaries.splice(${i},1);localStorage.setItem('beneficiaries',JSON.stringify(beneficiaries));renderBeneficiaries()">Remove</button></div>`);
-}
+function addBeneficiary(){beneficiaries.push({name:benName.value,relation:benRelation.value,notes:benNotes.value}); localStorage.setItem("beneficiaries",JSON.stringify(beneficiaries)); renderBeneficiaries();}
+function renderBeneficiaries(){render(beneficiaries,beneficiaryList,(b,i)=>`<div class="item"><b>${b.name}</b> (${b.relation})<br>${b.notes}<br><button onclick="beneficiaries.splice(${i},1);localStorage.setItem('beneficiaries',JSON.stringify(beneficiaries));renderBeneficiaries()">Remove</button></div>`);}
 renderBeneficiaries();
 
-/* Assets */
-function addAsset(){
-  assets.push({type:assetType.value,desc:assetDesc.value});
-  localStorage.setItem("assets",JSON.stringify(assets));
-  renderAssets();
-}
-function renderAssets(){
-  render(assets,assetList,(a,i)=>`
-    <div class="item"><b>${a.type}</b><br>${a.desc}
-    <button onclick="assets.splice(${i},1);localStorage.setItem('assets',JSON.stringify(assets));renderAssets()">Remove</button></div>`);
-}
+function addAsset(){assets.push({type:assetType.value,desc:assetDesc.value}); localStorage.setItem("assets",JSON.stringify(assets)); renderAssets();}
+function renderAssets(){render(assets,assetList,(a,i)=>`<div class="item"><b>${a.type}</b><br>${a.desc}<br><button onclick="assets.splice(${i},1);localStorage.setItem('assets',JSON.stringify(assets));renderAssets()">Remove</button></div>`);}
 renderAssets();
 
-/* EXPORT */
-function exportPlan(){ window.print(); }
-
-/* BACKUP */
-function downloadBackup(){
-  const data={};
-  Object.keys(localStorage).forEach(k=>data[k]=localStorage.getItem(k));
-  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
-  a.download="estate-planner-backup.json";
-  a.click();
-}
-
-/* RESTORE */
-function restoreBackup(input){
-  const file=input.files[0];
-  if(!file) return;
-  const r=new FileReader();
-  r.onload=()=>{
-    if(!confirm("Restore will overwrite current data. Continue?")) return;
-    const data=JSON.parse(r.result);
-    Object.keys(data).forEach(k=>localStorage.setItem(k,data[k]));
-    location.reload();
-  };
-  r.readAsText(file);
-}
-
+function exportPlan(){window.print();}
+function downloadBackup(){const d={};Object.keys(localStorage).forEach(k=>d[k]=localStorage.getItem(k)); const b=new Blob([JSON.stringify(d,null,2)],{type:"application/json"}); const a=document.createElement("a"); a.href=URL.createObjectURL(b); a.download="estate-planner-backup.json"; a.click();}
+function restoreBackup(i){const f=i.files[0]; if(!f) return; const r=new FileReader(); r.onload=()=>{if(confirm("Restore will overwrite current data.")){const d=JSON.parse(r.result); Object.keys(d).forEach(k=>localStorage.setItem(k,d[k])); location.reload();}}; r.readAsText(f);}
 requirePin();
 </script>
+
 </body>
 </html>
