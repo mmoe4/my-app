@@ -11,7 +11,7 @@
   --card-bg:#ffffff;
   --border:#cfd3d6;
   --primary:#2f4f4f;
-  --muted:#4f5b66;
+  --muted:#6a737d;
 }
 
 body{
@@ -44,6 +44,29 @@ body{
 h1{text-align:center;color:var(--primary);}
 .subtitle{text-align:center;color:var(--muted);margin-bottom:30px;}
 
+.toolbar{
+  display:flex;
+  gap:12px;
+  justify-content:center;
+  margin-bottom:20px;
+}
+
+button{
+  padding:8px 16px;
+  border:1px solid var(--border);
+  background:#f4f6f8;
+  border-radius:6px;
+  cursor:pointer;
+  font-family:inherit;
+}
+
+button:disabled{
+  opacity:0.5;
+  cursor:not-allowed;
+}
+
+.progress{text-align:center;color:var(--muted);margin-bottom:20px;}
+
 section{
   border:1px solid var(--border);
   border-radius:10px;
@@ -61,25 +84,26 @@ section{
 .section-content{padding:20px;display:none;}
 section.open .section-content{display:block;}
 
-input,textarea{
-  width:100%;
-  padding:10px;
+.help{
+  font-size:13px;
+  color:var(--muted);
   margin-bottom:12px;
+}
+
+input{
+  width:100%;
+  padding:8px;
+  margin-bottom:8px;
   border-radius:6px;
   border:1px solid var(--border);
   font-family:inherit;
 }
 
-textarea{min-height:90px;}
-
-.progress{text-align:center;margin-bottom:25px;color:var(--muted);}
-
-button{
-  padding:10px 18px;
+.row{
   border:1px solid var(--border);
-  background:#f4f6f8;
   border-radius:6px;
-  cursor:pointer;
+  padding:10px;
+  margin-bottom:10px;
 }
 </style>
 </head>
@@ -92,42 +116,21 @@ button{
 <h1>My Estate Plan</h1>
 <p class="subtitle">Personal estate planning record · Not a legal will</p>
 
+<div class="toolbar">
+  <button onclick="toggleStatus()">Draft / Final</button>
+  <button onclick="window.print()">Print / PDF</button>
+</div>
+
 <div class="progress" id="progressText">Completion Status: 0%</div>
 
 <!-- PERSONAL INFO -->
 <section class="open">
 <div class="section-header" onclick="toggle(this)"><h2>Personal Information</h2></div>
 <div class="section-content">
+<div class="help">Legal identification details used by executors and advisors.</div>
 <input id="fullName" placeholder="Full legal name">
-<input id="previousNames" placeholder="Previous or maiden names">
 <input id="dob" placeholder="Date of birth">
-<input id="birthPlace" placeholder="Place of birth">
-<input id="citizenship" placeholder="Citizenship(s)">
-<input id="sin" placeholder="SIN / SSN (optional)">
-<input id="address" placeholder="Primary residence address">
-<input id="contact" placeholder="Phone and email">
-</div>
-</section>
-
-<!-- SPOUSE -->
-<section>
-<div class="section-header" onclick="toggle(this)"><h2>Spouse or Partner</h2></div>
-<div class="section-content">
-<input id="spouseName" placeholder="Full legal name">
-<input id="maritalStatus" placeholder="Marital status">
-<input id="marriageDate" placeholder="Marriage or partnership date">
-<textarea id="spouseNotes" placeholder="Prenuptial agreements, dependents, special considerations"></textarea>
-</div>
-</section>
-
-<!-- EXECUTOR -->
-<section>
-<div class="section-header" onclick="toggle(this)"><h2>Executor & Advisors</h2></div>
-<div class="section-content">
-<input id="executorPrimary" placeholder="Primary executor (name & contact)">
-<input id="executorAlternate" placeholder="Alternate executor">
-<textarea id="executorPowers" placeholder="Instructions, powers, compensation guidance"></textarea>
-<textarea id="professionalAdvisors" placeholder="Lawyer, accountant, financial advisor (names & contacts)"></textarea>
+<input id="address" placeholder="Primary address">
 </div>
 </section>
 
@@ -135,7 +138,9 @@ button{
 <section>
 <div class="section-header" onclick="toggle(this)"><h2>Beneficiaries</h2></div>
 <div class="section-content">
-<textarea id="beneficiaries" placeholder="Name · Relationship · Share or item · Conditions · Alternates"></textarea>
+<div class="help">List individuals or organizations and what they are to receive.</div>
+<div id="beneficiaries"></div>
+<button onclick="addRow('beneficiaries',['Name','Relationship','Share or Item'])">Add Beneficiary</button>
 </div>
 </section>
 
@@ -143,7 +148,9 @@ button{
 <section>
 <div class="section-header" onclick="toggle(this)"><h2>Assets</h2></div>
 <div class="section-content">
-<textarea id="assets" placeholder="Category · Institution · Identifier · Approx. value · Ownership · Notes"></textarea>
+<div class="help">Include property, accounts, vehicles, businesses, or valuables.</div>
+<div id="assets"></div>
+<button onclick="addRow('assets',['Category','Institution','Approx. Value'])">Add Asset</button>
 </div>
 </section>
 
@@ -151,57 +158,92 @@ button{
 <section>
 <div class="section-header" onclick="toggle(this)"><h2>Debts & Obligations</h2></div>
 <div class="section-content">
-<textarea id="debts" placeholder="Creditor · Type · Balance · Secured/Unsecured · Notes"></textarea>
-</div>
-</section>
-
-<!-- HEALTH -->
-<section>
-<div class="section-header" onclick="toggle(this)"><h2>Health & Care Preferences</h2></div>
-<div class="section-content">
-<input id="medicalDecisionMaker" placeholder="Primary medical decision-maker">
-<input id="medicalAlternate" placeholder="Alternate decision-maker">
-<textarea id="lifeSupport" placeholder="Life-sustaining treatment preferences"></textarea>
-<textarea id="dnr" placeholder="DNR / resuscitation wishes"></textarea>
-<textarea id="palliative" placeholder="Comfort and palliative care preferences"></textarea>
-</div>
-</section>
-
-<!-- DOCUMENTS -->
-<section>
-<div class="section-header" onclick="toggle(this)"><h2>Important Documents & Digital Access</h2></div>
-<div class="section-content">
-<textarea id="documents" placeholder="Location of will, POA, insurance, passwords, digital assets"></textarea>
-</div>
-</section>
-
-<!-- FINAL -->
-<section>
-<div class="section-header" onclick="toggle(this)"><h2>Final Wishes & Personal Notes</h2></div>
-<div class="section-content">
-<textarea id="finalWishes" placeholder="Funeral wishes, messages, cultural or religious preferences"></textarea>
+<div class="help">Outstanding obligations to be settled by the estate.</div>
+<div id="debts"></div>
+<button onclick="addRow('debts',['Creditor','Type','Approx. Balance'])">Add Debt</button>
 </div>
 </section>
 
 </div>
 
 <script>
+const isTemplate = new URLSearchParams(window.location.search).get("template")==="true";
+const STATUS_KEY="docStatus";
+const dataKeys=["beneficiaries","assets","debts"];
+
 function toggle(h){h.parentElement.classList.toggle("open");}
 
-const fields=[...document.querySelectorAll("input,textarea")].map(e=>e.id);
+function getStatus(){
+  return localStorage.getItem(STATUS_KEY)||"DRAFT";
+}
 
-fields.forEach(id=>{
-  const el=document.getElementById(id);
-  el.value=localStorage.getItem(id)||"";
-  el.oninput=()=>{localStorage.setItem(id,el.value);updateProgress();};
+function toggleStatus(){
+  if(isTemplate) return;
+  localStorage.setItem(STATUS_KEY,getStatus()==="DRAFT"?"FINAL":"DRAFT");
+  applyStatus();
+}
+
+function applyStatus(){
+  const final=getStatus()==="FINAL";
+  document.getElementById("watermark").textContent=getStatus();
+  document.querySelectorAll("input,button").forEach(el=>{
+    if(el.textContent?.includes("Add")) el.disabled=final;
+    if(el.tagName==="INPUT") el.readOnly=final;
+  });
+}
+
+function addRow(key,fields){
+  if(getStatus()==="FINAL") return;
+  const list=JSON.parse(localStorage.getItem(key)||"[]");
+  list.push({});
+  localStorage.setItem(key,JSON.stringify(list));
+  renderRows(key,fields);
+}
+
+function renderRows(key,fields){
+  const wrap=document.getElementById(key);
+  wrap.innerHTML="";
+  const list=JSON.parse(localStorage.getItem(key)||"[]");
+  list.forEach((row,i)=>{
+    const d=document.createElement("div");
+    d.className="row";
+    fields.forEach(f=>{
+      const inp=document.createElement("input");
+      inp.placeholder=f;
+      inp.value=row[f]||"";
+      inp.oninput=()=>{
+        row[f]=inp.value;
+        list[i]=row;
+        localStorage.setItem(key,JSON.stringify(list));
+        updateProgress();
+      };
+      if(getStatus()==="FINAL") inp.readOnly=true;
+      d.appendChild(inp);
+    });
+    wrap.appendChild(d);
+  });
+}
+
+dataKeys.forEach(k=>{
+  if(!isTemplate) renderRows(k,k==="beneficiaries"?["Name","Relationship","Share or Item"]:
+    k==="assets"?["Category","Institution","Approx. Value"]:
+    ["Creditor","Type","Approx. Balance"]);
 });
 
 function updateProgress(){
   let filled=0;
-  fields.forEach(id=>{ if(localStorage.getItem(id)) filled++; });
-  document.getElementById("progressText").textContent =
-    `Completion Status: ${Math.round((filled/fields.length)*100)}%`;
+  document.querySelectorAll("input").forEach(i=>{if(i.value) filled++;});
+  const total=document.querySelectorAll("input").length;
+  document.getElementById("progressText").textContent=
+    `Completion Status: ${Math.round((filled/total)*100)}%`;
 }
+
+if(isTemplate){
+  localStorage.clear();
+  document.getElementById("watermark").textContent="TEMPLATE";
+}
+
+applyStatus();
 updateProgress();
 </script>
 
