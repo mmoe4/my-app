@@ -12,9 +12,7 @@
       margin: auto;
       padding: 20px;
     }
-    h1, h2 {
-      text-align: center;
-    }
+    h1, h2 { text-align: center; }
     section {
       border: 1px solid #ccc;
       padding: 15px;
@@ -25,6 +23,7 @@
       width: 100%;
       padding: 8px;
       margin-top: 6px;
+      box-sizing: border-box;
     }
     button {
       padding: 10px 14px;
@@ -38,116 +37,216 @@
       border-radius: 4px;
     }
 
+    /* LOCK OVERLAY */
+    #lockScreen {
+      position: fixed;
+      inset: 0;
+      background: #fff;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 9999;
+    }
+    #lockCard {
+      width: 100%;
+      max-width: 420px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 18px;
+    }
+    #lockCard p { color: #444; }
+    .row { display: flex; gap: 10px; }
+    .row button { flex: 1; }
+
     @media print {
-      button, input, textarea {
-        display: none;
-      }
-      section {
-        page-break-inside: avoid;
-      }
-      body {
-        max-width: 100%;
-      }
+      button, input, textarea { display: none; }
+      section { page-break-inside: avoid; }
+      body { max-width: 100%; }
+      #lockScreen { display: none !important; }
     }
   </style>
 </head>
 
 <body>
-  <h1>Will & Estate Planner</h1>
-  <p><strong>Important:</strong> This tool helps organize wishes. It is not a legal will or medical directive.</p>
 
-  <button onclick="exportPlan()">🖨️ Print / Export Summary</button>
+  <!-- LOCK SCREEN -->
+  <div id="lockScreen">
+    <div id="lockCard">
+      <h2>Locked</h2>
+      <p id="lockMsg">Enter your PIN to unlock.</p>
+      <input id="pinInput" placeholder="PIN" inputmode="numeric" />
+      <div class="row">
+        <button onclick="unlock()">Unlock</button>
+        <button onclick="resetPin()">Reset PIN</button>
+      </div>
+      <p style="font-size: 12px; color:#666; margin-top:10px;">
+        Note: This is basic privacy (local PIN). Don’t store real passwords in this app.
+      </p>
+    </div>
+  </div>
 
-  <!-- PRIMARY -->
-  <section>
-    <h2>Primary Person</h2>
-    <input id="name" placeholder="Full name">
-    <input id="address" placeholder="Address">
-    <input id="dob" placeholder="Date of birth">
-  </section>
+  <div id="appContent">
+    <h1>Will & Estate Planner</h1>
+    <p><strong>Important:</strong> This tool helps organize wishes. It is not a legal will or medical directive.</p>
 
-  <!-- SPOUSE -->
-  <section>
-    <h2>Spouse / Partner</h2>
-    <input id="spouseName" placeholder="Full name">
-    <input id="spouseAddress" placeholder="Address">
-    <input id="spouseDob" placeholder="Date of birth">
-    <textarea id="spouseNotes" placeholder="Marriage details, separation, special notes"></textarea>
-  </section>
+    <button onclick="exportPlan()">🖨️ Print / Export Summary</button>
+    <button onclick="changePin()">🔒 Change PIN</button>
 
-  <!-- HEALTH -->
-  <section>
-    <h2>Health & Medical Directives</h2>
-    <input id="healthDecisionMaker" placeholder="Primary medical decision-maker">
-    <input id="healthBackup" placeholder="Backup decision-maker">
-    <textarea id="lifeSupport" placeholder="Life support wishes"></textarea>
-    <textarea id="dnr" placeholder="Resuscitation wishes (DNR / CPR)"></textarea>
-    <textarea id="comfortCare" placeholder="Pain & comfort care wishes"></textarea>
-    <textarea id="healthNotes" placeholder="Other medical instructions"></textarea>
-  </section>
+    <!-- PRIMARY -->
+    <section>
+      <h2>Primary Person</h2>
+      <input id="name" placeholder="Full name">
+      <input id="address" placeholder="Address">
+      <input id="dob" placeholder="Date of birth">
+    </section>
 
-  <!-- EMERGENCY CONTACTS -->
-  <section>
-    <h2>Emergency Contacts</h2>
-    <input id="emName" placeholder="Contact name">
-    <input id="emRelation" placeholder="Relationship">
-    <input id="emPhone" placeholder="Phone number">
-    <textarea id="emNotes" placeholder="Notes (availability, priority)"></textarea>
-    <button onclick="addEmergency()">Add Contact</button>
-    <div id="emergencyList"></div>
-  </section>
+    <!-- SPOUSE -->
+    <section>
+      <h2>Spouse / Partner</h2>
+      <input id="spouseName" placeholder="Full name">
+      <input id="spouseAddress" placeholder="Address">
+      <input id="spouseDob" placeholder="Date of birth">
+      <textarea id="spouseNotes" placeholder="Marriage details, separation, special notes"></textarea>
+    </section>
 
-  <!-- DOCUMENT LOCATIONS -->
-  <section>
-    <h2>Important Document Locations</h2>
-    <textarea id="docLocations" placeholder="Where are wills, insurance, bank info, titles, passwords stored?"></textarea>
-  </section>
+    <!-- HEALTH -->
+    <section>
+      <h2>Health & Medical Directives</h2>
+      <input id="healthDecisionMaker" placeholder="Primary medical decision-maker">
+      <input id="healthBackup" placeholder="Backup decision-maker">
+      <textarea id="lifeSupport" placeholder="Life support wishes"></textarea>
+      <textarea id="dnr" placeholder="Resuscitation wishes (DNR / CPR)"></textarea>
+      <textarea id="comfortCare" placeholder="Pain & comfort care wishes"></textarea>
+      <textarea id="healthNotes" placeholder="Other medical instructions"></textarea>
+    </section>
 
-  <!-- EXECUTOR -->
-  <section>
-    <h2>Executor</h2>
-    <input id="executor" placeholder="Executor name">
-    <textarea id="executorNotes" placeholder="Executor instructions"></textarea>
-  </section>
+    <!-- EMERGENCY CONTACTS -->
+    <section>
+      <h2>Emergency Contacts</h2>
+      <input id="emName" placeholder="Contact name">
+      <input id="emRelation" placeholder="Relationship">
+      <input id="emPhone" placeholder="Phone number">
+      <textarea id="emNotes" placeholder="Notes (availability, priority)"></textarea>
+      <button onclick="addEmergency()">Add Contact</button>
+      <div id="emergencyList"></div>
+    </section>
 
-  <!-- BENEFICIARIES -->
-  <section>
-    <h2>Beneficiaries</h2>
-    <input id="benName" placeholder="Beneficiary name">
-    <input id="benRelation" placeholder="Relationship">
-    <textarea id="benNotes" placeholder="What they receive / notes"></textarea>
-    <button onclick="addBeneficiary()">Add Beneficiary</button>
-    <div id="beneficiaryList"></div>
-  </section>
+    <!-- DOCUMENT LOCATIONS -->
+    <section>
+      <h2>Important Document Locations</h2>
+      <textarea id="docLocations" placeholder="Where are wills, insurance, bank info, titles, key documents stored?"></textarea>
+    </section>
 
-  <!-- ASSETS -->
-  <section>
-    <h2>Assets</h2>
-    <input id="assetType" placeholder="Asset type">
-    <textarea id="assetDesc" placeholder="Description / details"></textarea>
-    <button onclick="addAsset()">Add Asset</button>
-    <div id="assetList"></div>
-  </section>
+    <!-- EXECUTOR -->
+    <section>
+      <h2>Executor</h2>
+      <input id="executor" placeholder="Executor name">
+      <textarea id="executorNotes" placeholder="Executor instructions"></textarea>
+    </section>
 
-  <!-- DEBTS -->
-  <section>
-    <h2>Debts</h2>
-    <textarea id="debts" placeholder="Mortgage, loans, credit cards"></textarea>
-  </section>
+    <!-- BENEFICIARIES -->
+    <section>
+      <h2>Beneficiaries</h2>
+      <input id="benName" placeholder="Beneficiary name">
+      <input id="benRelation" placeholder="Relationship">
+      <textarea id="benNotes" placeholder="What they receive / notes"></textarea>
+      <button onclick="addBeneficiary()">Add Beneficiary</button>
+      <div id="beneficiaryList"></div>
+    </section>
 
-  <!-- FINAL -->
-  <section>
-    <h2>Final Wishes</h2>
-    <textarea id="wishes" placeholder="Funeral, burial, cremation wishes"></textarea>
-  </section>
+    <!-- ASSETS -->
+    <section>
+      <h2>Assets</h2>
+      <input id="assetType" placeholder="Asset type">
+      <textarea id="assetDesc" placeholder="Description / details"></textarea>
+      <button onclick="addAsset()">Add Asset</button>
+      <div id="assetList"></div>
+    </section>
 
-  <!-- NOTES -->
-  <section>
-    <h2>Notes</h2>
-    <textarea id="notes" placeholder="Anything else important"></textarea>
-  </section>
+    <!-- DEBTS -->
+    <section>
+      <h2>Debts</h2>
+      <textarea id="debts" placeholder="Mortgage, loans, credit cards"></textarea>
+    </section>
+
+    <!-- FINAL -->
+    <section>
+      <h2>Final Wishes</h2>
+      <textarea id="wishes" placeholder="Funeral, burial, cremation wishes"></textarea>
+    </section>
+
+    <!-- NOTES -->
+    <section>
+      <h2>Notes</h2>
+      <textarea id="notes" placeholder="Anything else important"></textarea>
+    </section>
+  </div>
 
   <script>
+    /* ---------- BASIC PIN LOCK (LOCAL) ---------- */
+    const lockScreen = document.getElementById("lockScreen");
+    const pinInput = document.getElementById("pinInput");
+    const lockMsg = document.getElementById("lockMsg");
+
+    function getPin() {
+      return localStorage.getItem("plannerPIN");
+    }
+
+    function requirePinOnLoad() {
+      const pin = getPin();
+      if (!pin) {
+        // First time: set a new PIN
+        const newPin = prompt("Create a PIN (4–8 digits):");
+        if (newPin && /^[0-9]{4,8}$/.test(newPin)) {
+          localStorage.setItem("plannerPIN", newPin);
+          lockMsg.textContent = "PIN set. Enter it to unlock.";
+        } else {
+          alert("PIN not set. You can set it later with Change PIN. App will stay unlocked for now.");
+          return;
+        }
+      }
+      lockScreen.style.display = "flex";
+      pinInput.value = "";
+      pinInput.focus();
+    }
+
+    function unlock() {
+      const pin = getPin();
+      if (!pin) {
+        lockScreen.style.display = "none";
+        return;
+      }
+      if (pinInput.value === pin) {
+        lockScreen.style.display = "none";
+        pinInput.value = "";
+      } else {
+        alert("Incorrect PIN.");
+        pinInput.value = "";
+        pinInput.focus();
+      }
+    }
+
+    function changePin() {
+      const current = prompt("Enter current PIN:");
+      if (current !== getPin()) return alert("Incorrect PIN.");
+      const newPin = prompt("New PIN (4–8 digits):");
+      if (!newPin || !/^[0-9]{4,8}$/.test(newPin)) return alert("PIN must be 4–8 digits.");
+      localStorage.setItem("plannerPIN", newPin);
+      alert("PIN updated.");
+    }
+
+    function resetPin() {
+      // Light safety: require the user to type RESET (prevents accidental wipe)
+      const confirmText = prompt('Type RESET to remove the PIN lock (does NOT delete your data):');
+      if (confirmText === "RESET") {
+        localStorage.removeItem("plannerPIN");
+        alert("PIN removed. App will open unlocked.");
+        lockScreen.style.display = "none";
+      }
+    }
+
+    /* ---------- SIMPLE FIELDS ---------- */
     const simpleFields = [
       "name","address","dob",
       "spouseName","spouseAddress","spouseDob","spouseNotes",
@@ -161,7 +260,7 @@
       el.addEventListener("input", () => localStorage.setItem(id, el.value));
     });
 
-    /* EMERGENCY CONTACTS */
+    /* ---------- EMERGENCY CONTACTS ---------- */
     let emergency = JSON.parse(localStorage.getItem("emergency")) || [];
 
     function saveEmergency() {
@@ -200,7 +299,7 @@
     }
     renderEmergency();
 
-    /* BENEFICIARIES */
+    /* ---------- BENEFICIARIES ---------- */
     let beneficiaries = JSON.parse(localStorage.getItem("beneficiaries")) || [];
 
     function saveBeneficiaries() {
@@ -237,7 +336,7 @@
     }
     renderBeneficiaries();
 
-    /* ASSETS */
+    /* ---------- ASSETS ---------- */
     let assets = JSON.parse(localStorage.getItem("assets")) || [];
 
     function saveAssets() {
@@ -276,6 +375,9 @@
     function exportPlan() {
       window.print();
     }
+
+    // Lock on load
+    requirePinOnLoad();
   </script>
 </body>
 </html>
