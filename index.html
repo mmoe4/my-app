@@ -8,7 +8,7 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      max-width: 800px;
+      max-width: 820px;
       margin: auto;
       padding: 20px;
     }
@@ -38,7 +38,6 @@
       border-radius: 4px;
     }
 
-    /* PRINT STYLES */
     @media print {
       button, input, textarea {
         display: none;
@@ -59,12 +58,21 @@
 
   <button onclick="exportPlan()">🖨️ Print / Export Summary</button>
 
-  <!-- PERSONAL INFO -->
+  <!-- PRIMARY PERSON -->
   <section>
-    <h2>Personal Information</h2>
+    <h2>Primary Person</h2>
     <input id="name" placeholder="Full name">
     <input id="address" placeholder="Address">
     <input id="dob" placeholder="Date of birth">
+  </section>
+
+  <!-- SPOUSE / PARTNER -->
+  <section>
+    <h2>Spouse / Partner</h2>
+    <input id="spouseName" placeholder="Full name">
+    <input id="spouseAddress" placeholder="Address">
+    <input id="spouseDob" placeholder="Date of birth">
+    <textarea id="spouseNotes" placeholder="Marriage details, separation, special notes"></textarea>
   </section>
 
   <!-- EXECUTOR -->
@@ -77,23 +85,19 @@
   <!-- BENEFICIARIES -->
   <section>
     <h2>Beneficiaries</h2>
-
     <input id="benName" placeholder="Beneficiary name">
     <input id="benRelation" placeholder="Relationship">
     <textarea id="benNotes" placeholder="What they receive / notes"></textarea>
     <button onclick="addBeneficiary()">Add Beneficiary</button>
-
     <div id="beneficiaryList"></div>
   </section>
 
   <!-- ASSETS -->
   <section>
     <h2>Assets</h2>
-
     <input id="assetType" placeholder="Asset type (Home, Bank, Vehicle)">
     <textarea id="assetDesc" placeholder="Description / details"></textarea>
     <button onclick="addAsset()">Add Asset</button>
-
     <div id="assetList"></div>
   </section>
 
@@ -117,7 +121,13 @@
 
   <script>
     /* SIMPLE FIELDS */
-    const simpleFields = ["name","address","dob","executor","executorNotes","debts","wishes","notes"];
+    const simpleFields = [
+      "name","address","dob",
+      "spouseName","spouseAddress","spouseDob","spouseNotes",
+      "executor","executorNotes",
+      "debts","wishes","notes"
+    ];
+
     simpleFields.forEach(id => {
       const el = document.getElementById(id);
       el.value = localStorage.getItem(id) || "";
@@ -197,7 +207,6 @@
     }
     renderAssets();
 
-    /* EXPORT */
     function exportPlan() {
       window.print();
     }
