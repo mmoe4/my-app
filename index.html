@@ -8,7 +8,7 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      max-width: 750px;
+      max-width: 800px;
       margin: auto;
       padding: 20px;
     }
@@ -27,8 +27,9 @@
       margin-top: 6px;
     }
     button {
+      padding: 10px 14px;
       margin-top: 10px;
-      padding: 8px 12px;
+      font-size: 16px;
     }
     .item {
       border: 1px solid #ddd;
@@ -36,12 +37,27 @@
       margin-top: 10px;
       border-radius: 4px;
     }
+
+    /* PRINT STYLES */
+    @media print {
+      button, input, textarea {
+        display: none;
+      }
+      section {
+        page-break-inside: avoid;
+      }
+      body {
+        max-width: 100%;
+      }
+    }
   </style>
 </head>
 
 <body>
   <h1>Will & Estate Planner</h1>
   <p><strong>Important:</strong> This tool helps you organize wishes. It is not a legal will.</p>
+
+  <button onclick="exportPlan()">🖨️ Print / Export Summary</button>
 
   <!-- PERSONAL INFO -->
   <section>
@@ -117,10 +133,9 @@
     }
 
     function addBeneficiary() {
-      const name = benName.value.trim();
-      if (!name) return;
+      if (!benName.value.trim()) return;
       beneficiaries.push({
-        name,
+        name: benName.value,
         relation: benRelation.value,
         notes: benNotes.value
       });
@@ -144,7 +159,6 @@
           </div>`;
       });
     }
-
     renderBeneficiaries();
 
     /* ASSETS */
@@ -156,10 +170,9 @@
     }
 
     function addAsset() {
-      const type = assetType.value.trim();
-      if (!type) return;
+      if (!assetType.value.trim()) return;
       assets.push({
-        type,
+        type: assetType.value,
         desc: assetDesc.value
       });
       assetType.value = assetDesc.value = "";
@@ -182,8 +195,12 @@
           </div>`;
       });
     }
-
     renderAssets();
+
+    /* EXPORT */
+    function exportPlan() {
+      window.print();
+    }
   </script>
 </body>
 </html>
