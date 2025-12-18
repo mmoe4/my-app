@@ -7,163 +7,149 @@
 
 <style>
 :root{
-  --jam-dark:#2b1518;
-  --jam-mid:#3a1f23;
+  --jam-dark:#2b1417;
+  --jam-mid:#4a1f26;
   --paper:#ffffff;
-  --border:#d5d8db;
-  --primary:#2f4f4f;
-  --muted:#5c6b75;
+  --border:#d2d6da;
+  --heading:#2f4f4f;
+  --muted:#6b7280;
 }
 
+/* PAGE */
 body{
   margin:0;
   font-family:"Times New Roman", Georgia, serif;
   background:radial-gradient(circle at top, var(--jam-mid), var(--jam-dark));
-  color:#1f2a33;
+  color:#1f2933;
 }
 
+/* CONTAINER */
 .container{
   max-width:1100px;
   margin:50px auto;
   padding:40px 30px 120px;
   background:var(--paper);
-  border-radius:18px;
-  box-shadow:0 30px 80px rgba(0,0,0,.35);
+  border-radius:16px;
+  box-shadow:0 20px 45px rgba(0,0,0,0.35);
   position:relative;
 }
 
+/* WATERMARK */
+#watermark{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%) rotate(-30deg);
+  font-size:110px;
+  color:rgba(0,0,0,0.06);
+  z-index:0;
+  pointer-events:none;
+}
+
+/* HEADINGS */
 h1{
   text-align:center;
-  color:var(--primary);
-  font-size:30px;
-  margin-bottom:6px;
+  margin:0;
+  color:var(--heading);
+  letter-spacing:0.4px;
 }
 
 .subtitle{
   text-align:center;
   font-size:14px;
   color:var(--muted);
-  margin-bottom:25px;
+  margin-top:6px;
 }
 
+/* TOOLBAR */
 .toolbar{
   display:flex;
   justify-content:center;
-  gap:12px;
+  gap:10px;
+  margin:26px 0;
   flex-wrap:wrap;
-  margin-bottom:25px;
 }
 
 button, select{
   padding:9px 16px;
+  font-family:inherit;
+  font-size:14px;
   border-radius:6px;
   border:1px solid var(--border);
   background:#f9fafb;
-  font-family:inherit;
   cursor:pointer;
 }
 
-button:hover{ background:#eef1f3; }
+button:hover{ background:#eef2f5; }
 
+/* PROGRESS */
 .progress{
   text-align:center;
   font-size:14px;
   color:var(--muted);
-  margin-bottom:25px;
+  margin-bottom:28px;
 }
 
+/* SECTIONS */
 section{
   border:1px solid var(--border);
   border-radius:10px;
-  margin-bottom:20px;
+  margin-bottom:18px;
   background:#fff;
 }
 
 .section-header{
-  padding:18px 22px;
+  padding:16px 20px;
   border-bottom:1px solid var(--border);
 }
 
 .section-header h2{
   margin:0;
-  font-size:18px;
-  color:var(--primary);
+  font-size:17px;
+  color:var(--heading);
 }
 
 .section-content{
-  padding:22px;
+  padding:20px;
 }
 
-h3{
-  margin-top:22px;
-  font-size:16px;
-  color:#344b4b;
-}
-
+/* INPUTS */
 input, textarea{
   width:100%;
   padding:10px;
-  margin:8px 0 14px;
+  margin-bottom:14px;
   border-radius:6px;
   border:1px solid var(--border);
+  background:#fafafa;
   font-family:inherit;
   font-size:14px;
-  background:#fafafa;
 }
 
-textarea{ min-height:120px; }
-
-.item{
-  border:1px solid var(--border);
-  padding:12px;
-  border-radius:6px;
-  background:#fcfcfd;
-  margin-top:10px;
+.large-note{
+  min-height:240px;
 }
 
-/* WATERMARK */
-#watermark{
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%) rotate(-28deg);
-  font-size:120px;
-  color:rgba(0,0,0,.06);
-  pointer-events:none;
-  user-select:none;
+/* PRINT TEXT */
+.print-text{
+  white-space:pre-wrap;
+  font-size:12pt;
+  margin-bottom:14px;
 }
 
-/* PRINT FIXES */
+/* PRINT */
 @media print{
   body{ background:#fff; }
-  .container{ box-shadow:none; margin:0; padding:0; }
-  button, select{ display:none; }
-
-  textarea, input{
-    border:none !important;
-    background:transparent !important;
-    padding:0 !important;
-    margin-bottom:12px;
-    font-size:12pt;
-  }
-
-  textarea{
-    height:auto !important;
-    overflow:visible !important;
-  }
-
-  section{
-    page-break-inside:avoid;
-  }
+  .container{ box-shadow:none; margin:0; }
+  button, select, input, textarea{ display:none; }
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
-
 <div id="watermark">DRAFT</div>
+
+<div class="container">
 
 <h1>My Estate Plan</h1>
 <p class="subtitle">
@@ -172,8 +158,8 @@ Not a legal document
 </p>
 
 <div class="toolbar">
-  <select>
-    <option>Select country</option>
+  <select id="country">
+    <option value="">Select country</option>
     <option>United States</option>
     <option>Canada</option>
     <option>United Kingdom</option>
@@ -182,15 +168,36 @@ Not a legal document
     <option>India</option>
     <option>Germany</option>
     <option>France</option>
+    <option>Italy</option>
+    <option>Spain</option>
+    <option>Netherlands</option>
+    <option>Belgium</option>
+    <option>Sweden</option>
+    <option>Norway</option>
+    <option>Denmark</option>
+    <option>Finland</option>
+    <option>Japan</option>
+    <option>South Africa</option>
+    <option>Brazil</option>
+    <option>Mexico</option>
     <option>Other</option>
   </select>
+
   <button onclick="toggleFinal()">Draft / Final</button>
-  <button onclick="window.print()">Print / PDF</button>
+  <button onclick="window.print()">Print / Save PDF</button>
 </div>
 
-<div class="progress">Completion Status: Manual</div>
+<div class="progress" id="progress">Completion Status: 0%</div>
 
-<!-- PERSONAL INFORMATION -->
+<!-- EXTRA NOTES / APPENDIX -->
+<section>
+  <div class="section-header"><h2>Extra Notes / Appendix</h2></div>
+  <div class="section-content">
+    <textarea class="large-note" placeholder="Additional notes, explanations, family guidance, or messages..."></textarea>
+    <textarea class="large-note" placeholder="Additional page (optional)"></textarea>
+  </div>
+</section>
+
 <section>
   <div class="section-header"><h2>Personal Information</h2></div>
   <div class="section-content">
@@ -202,116 +209,84 @@ Not a legal document
   </div>
 </section>
 
-<!-- FAMILY -->
 <section>
   <div class="section-header"><h2>Family / Dependants</h2></div>
   <div class="section-content">
-
-    <h3>Spouse / Partner</h3>
-    <input placeholder="Full legal name">
-    <input placeholder="Relationship">
-    <input placeholder="Date of birth">
-    <textarea placeholder="Marriage agreements or notes"></textarea>
-
-    <h3>Children</h3>
-    <div class="item">
-      <input placeholder="Child full name">
-      <input placeholder="Date of birth">
-      <input placeholder="Proposed guardian">
-      <textarea placeholder="Notes or special needs"></textarea>
-    </div>
-
-    <h3>Other Dependants</h3>
-    <div class="item">
-      <input placeholder="Name">
-      <input placeholder="Relationship">
-      <textarea placeholder="Dependency details"></textarea>
-    </div>
-
+    <textarea class="large-note" placeholder="Spouse, partner, children, dependants, or relevant family details"></textarea>
   </div>
 </section>
 
-<!-- EXECUTOR -->
 <section>
   <div class="section-header"><h2>Executor / Estate Administrator</h2></div>
   <div class="section-content">
-
-    <h3>Primary Executor</h3>
-    <input placeholder="Full legal name">
+    <input placeholder="Primary executor full legal name">
     <input placeholder="Relationship to you">
     <input placeholder="Telephone number">
     <input placeholder="Email address">
     <input placeholder="Address">
 
-    <h3>Alternate / Backup Executor</h3>
-    <input placeholder="Full legal name">
+    <hr>
+
+    <input placeholder="Alternate executor full legal name">
     <input placeholder="Relationship to you">
     <input placeholder="Telephone number">
     <input placeholder="Email address">
     <input placeholder="Address">
 
-    <h3>Executor Authority & Instructions</h3>
-    <textarea placeholder="Special instructions, authority limits, compensation, or notes"></textarea>
-
-    <h3>Professional Advisors</h3>
-    <input placeholder="Lawyer or law firm">
-    <input placeholder="Accountant or tax advisor">
-    <input placeholder="Financial advisor">
-    <textarea placeholder="Additional professional contacts or notes"></textarea>
-
+    <textarea class="large-note" placeholder="Executor authority, powers, and special instructions"></textarea>
   </div>
 </section>
 
-<!-- GUARDIANSHIP -->
 <section>
   <div class="section-header"><h2>Guardianship</h2></div>
   <div class="section-content">
-    <input placeholder="Primary guardian name">
-    <input placeholder="Alternate guardian name">
-    <textarea placeholder="Guardianship instructions or preferences"></textarea>
+    <textarea class="large-note" placeholder="Guardianship preferences for minor or dependent persons"></textarea>
   </div>
 </section>
 
-<!-- ASSETS -->
 <section>
   <div class="section-header"><h2>Assets</h2></div>
   <div class="section-content">
-    <div class="item">
-      <input placeholder="Asset type (property, bank, investment, vehicle)">
-      <textarea placeholder="Description / identifying details"></textarea>
-      <input placeholder="Location">
-      <textarea placeholder="Distribution notes"></textarea>
-    </div>
+    <textarea class="large-note" placeholder="Property, bank accounts, investments, vehicles, valuables"></textarea>
   </div>
 </section>
 
-<!-- FINAL WISHES -->
 <section>
   <div class="section-header"><h2>Final Wishes</h2></div>
   <div class="section-content">
-    <textarea placeholder="Funeral, burial, or cremation preferences"></textarea>
-    <textarea placeholder="Personal messages or additional instructions"></textarea>
+    <textarea class="large-note" placeholder="Funeral, burial, cremation preferences and special wishes"></textarea>
   </div>
 </section>
 
 </div>
 
 <script>
-/* Expand all textareas before printing */
-function expandTextareas(){
-  document.querySelectorAll("textarea").forEach(t=>{
-    t.style.height="auto";
-    t.style.height=(t.scrollHeight+2)+"px";
+let finalMode=false;
+
+function toggleFinal(){
+  finalMode=!finalMode;
+  document.getElementById("watermark").textContent = finalMode ? "FINAL" : "DRAFT";
+}
+
+/* PRINT FIX — prevents clipped text */
+function preparePrint(){
+  document.querySelectorAll("textarea,input").forEach(f=>{
+    const d=document.createElement("div");
+    d.className="print-text";
+    d.textContent=f.value;
+    d.dataset.print="1";
+    f.style.display="none";
+    f.parentNode.insertBefore(d,f);
   });
 }
 
-window.addEventListener("beforeprint", expandTextareas);
-
-let isFinal=false;
-function toggleFinal(){
-  isFinal=!isFinal;
-  document.getElementById("watermark").textContent = isFinal ? "FINAL" : "DRAFT";
+function restore(){
+  document.querySelectorAll("[data-print]").forEach(d=>d.remove());
+  document.querySelectorAll("textarea,input").forEach(f=>f.style.display="");
 }
+
+window.addEventListener("beforeprint",preparePrint);
+window.addEventListener("afterprint",restore);
 </script>
 
 </body>
