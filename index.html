@@ -82,7 +82,6 @@ section{
 .section-header{
   padding:18px 22px;
   border-bottom:1px solid var(--border);
-  cursor:pointer;
 }
 
 .section-header h2{
@@ -93,13 +92,11 @@ section{
 
 .section-content{
   padding:22px;
-  display:none;
+  display:block;
 }
 
-section.open .section-content{ display:block; }
-
 h3{
-  margin-top:20px;
+  margin-top:22px;
   font-size:16px;
   color:#344b4b;
 }
@@ -134,6 +131,12 @@ textarea{ min-height:90px; }
   color:rgba(0,0,0,.06);
   pointer-events:none;
 }
+
+@media print{
+  body{ background:#fff; }
+  .container{ box-shadow:none; margin:0; }
+  button,select{ display:none; }
+}
 </style>
 </head>
 
@@ -156,6 +159,10 @@ Not a legal document
     <option>Canada</option>
     <option>United Kingdom</option>
     <option>Australia</option>
+    <option>New Zealand</option>
+    <option>India</option>
+    <option>Germany</option>
+    <option>France</option>
     <option>Other</option>
   </select>
   <button onclick="toggleFinal()">Draft / Final</button>
@@ -164,8 +171,54 @@ Not a legal document
 
 <div class="progress">Completion Status: Manual</div>
 
+<!-- PERSONAL INFORMATION -->
 <section class="open">
-  <div class="section-header" onclick="toggle(this)">
+  <div class="section-header">
+    <h2>Personal Information</h2>
+  </div>
+  <div class="section-content">
+    <input placeholder="Full legal name">
+    <input placeholder="Date of birth">
+    <input placeholder="Primary address">
+    <input placeholder="Telephone number">
+    <input placeholder="Email address">
+  </div>
+</section>
+
+<!-- FAMILY / DEPENDANTS -->
+<section class="open">
+  <div class="section-header">
+    <h2>Family / Dependants</h2>
+  </div>
+  <div class="section-content">
+
+    <h3>Spouse / Partner</h3>
+    <input placeholder="Full legal name">
+    <input placeholder="Relationship">
+    <input placeholder="Date of birth">
+    <textarea placeholder="Marriage agreements or notes"></textarea>
+
+    <h3>Children</h3>
+    <div class="item">
+      <input placeholder="Child full name">
+      <input placeholder="Date of birth">
+      <input placeholder="Proposed guardian">
+      <textarea placeholder="Notes or special needs"></textarea>
+    </div>
+
+    <h3>Other Dependants</h3>
+    <div class="item">
+      <input placeholder="Name">
+      <input placeholder="Relationship">
+      <textarea placeholder="Dependency details"></textarea>
+    </div>
+
+  </div>
+</section>
+
+<!-- EXECUTOR -->
+<section class="open">
+  <div class="section-header">
     <h2>Executor / Estate Administrator</h2>
   </div>
   <div class="section-content">
@@ -196,15 +249,51 @@ Not a legal document
   </div>
 </section>
 
+<!-- GUARDIANSHIP -->
+<section class="open">
+  <div class="section-header">
+    <h2>Guardianship</h2>
+  </div>
+  <div class="section-content">
+    <input placeholder="Primary guardian name">
+    <input placeholder="Alternate guardian name">
+    <textarea placeholder="Guardianship instructions or preferences"></textarea>
+  </div>
+</section>
+
+<!-- ASSETS -->
+<section class="open">
+  <div class="section-header">
+    <h2>Assets</h2>
+  </div>
+  <div class="section-content">
+    <div class="item">
+      <input placeholder="Asset type (property, bank, investment, vehicle)">
+      <textarea placeholder="Description / identifying details"></textarea>
+      <input placeholder="Location">
+      <textarea placeholder="Distribution notes"></textarea>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL WISHES -->
+<section class="open">
+  <div class="section-header">
+    <h2>Final Wishes</h2>
+  </div>
+  <div class="section-content">
+    <textarea placeholder="Funeral, burial, or cremation preferences"></textarea>
+    <textarea placeholder="Personal messages or additional instructions"></textarea>
+  </div>
+</section>
+
 </div>
 
 <script>
-function toggle(h){ h.parentElement.classList.toggle("open"); }
-
 let isFinal=false;
 function toggleFinal(){
   isFinal=!isFinal;
-  document.getElementById("watermark").textContent=isFinal?"FINAL":"DRAFT";
+  document.getElementById("watermark").textContent = isFinal ? "FINAL" : "DRAFT";
 }
 </script>
 
