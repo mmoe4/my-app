@@ -32,13 +32,23 @@ body{
   box-shadow:0 20px 45px rgba(0,0,0,0.35);
 }
 
-h1,h2{ color:var(--heading); margin-top:0; }
+h1,h2,h3{
+  color:var(--heading);
+  margin-top:0;
+}
+
+.subtitle{
+  text-align:center;
+  color:var(--muted);
+  font-size:14px;
+  margin-top:6px;
+}
 
 .toolbar{
   display:flex;
   justify-content:center;
   gap:10px;
-  margin:20px 0;
+  margin:22px 0;
   flex-wrap:wrap;
 }
 
@@ -64,9 +74,11 @@ section{
   border-bottom:1px solid var(--border);
 }
 
-.section-content{ padding:20px; }
+.section-content{
+  padding:20px;
+}
 
-textarea, input{
+input, textarea{
   width:100%;
   padding:10px;
   margin-bottom:12px;
@@ -76,10 +88,16 @@ textarea, input{
   font-family:inherit;
 }
 
-.large-note{ min-height:200px; }
+.large-note{ min-height:220px; }
 
 /* ===== PRINT ===== */
 .print-only{ display:none; }
+
+.print-text{
+  white-space:pre-wrap;
+  font-size:12pt;
+  margin-bottom:12px;
+}
 
 @media print{
   body{ background:#fff; }
@@ -104,24 +122,24 @@ textarea, input{
     content:"Page " counter(page);
   }
 }
-
-/* Word export formatting */
-.word h1{ font-size:26px; }
-.word h2{ font-size:18px; margin-top:20px; }
-.word p, .word div{ font-size:12pt; }
 </style>
 </head>
 
 <body>
 
-<!-- ===== PRINT COVER ===== -->
+<!-- ================= PRINT: COVER ================= -->
 <div class="print-only">
-  <h1 style="text-align:center;margin-top:100px;">My Estate Plan</h1>
-  <p style="text-align:center;">
-    Prepared for: <span id="coverName">—</span><br>
-    Jurisdiction: <span id="coverCountry">—</span><br>
-    Date: <span id="coverDate">—</span>
-  </p>
+  <div style="text-align:center;margin-top:120px;">
+    <h1>My Estate Plan</h1>
+    <p>
+      Prepared for: <span id="coverName">—</span><br>
+      Jurisdiction: <span id="coverCountry">—</span><br>
+      Date: <span id="coverDate">—</span>
+    </p>
+    <p style="font-size:13px;color:#555;">
+      This document is a personal planning record only and is not a legal will.
+    </p>
+  </div>
   <div style="page-break-after:always;"></div>
 
   <!-- TOC -->
@@ -141,7 +159,7 @@ textarea, input{
   </ol>
 
   <h3>Family Notes</h3>
-  <div id="familyNotesPrint"></div>
+  <div id="familyNotesPrint" class="print-text"></div>
 
   <div style="page-break-after:always;"></div>
 </div>
@@ -150,13 +168,14 @@ textarea, input{
   My Estate Plan ·
 </footer>
 
-<!-- ===== SCREEN ===== -->
+<!-- ================= SCREEN ================= -->
 <div class="container" id="doc">
 
-<h1>My Estate Plan</h1>
+<h1 style="text-align:center;">My Estate Plan</h1>
+<p class="subtitle">Personal planning record · Not a legal document</p>
 
 <div class="toolbar">
-  <button onclick="window.print()">Print / PDF</button>
+  <button onclick="window.print()">Print / Save PDF</button>
   <button onclick="exportWord()">Download Word</button>
 </div>
 
@@ -165,6 +184,8 @@ textarea, input{
   <div class="section-content">
     <input id="name" placeholder="Full legal name">
     <input id="country" placeholder="Country / jurisdiction">
+    <input placeholder="Date of birth">
+    <input placeholder="Address">
   </div>
 </section>
 
@@ -172,21 +193,21 @@ textarea, input{
   <div class="section-header"><h2>Executor</h2></div>
   <div class="section-content">
     <input placeholder="Executor name">
-    <textarea class="large-note"></textarea>
+    <textarea class="large-note" placeholder="Executor instructions"></textarea>
   </div>
 </section>
 
 <section data-section>
   <div class="section-header"><h2>Assets</h2></div>
   <div class="section-content">
-    <textarea class="large-note"></textarea>
+    <textarea class="large-note" placeholder="List assets and notes"></textarea>
   </div>
 </section>
 
 <section data-section>
   <div class="section-header"><h2>Final Wishes</h2></div>
   <div class="section-content">
-    <textarea class="large-note"></textarea>
+    <textarea class="large-note" placeholder="Funeral, burial, memorial wishes"></textarea>
   </div>
 </section>
 
@@ -224,19 +245,14 @@ window.addEventListener("beforeprint",()=>{
 
 /* WORD EXPORT */
 function exportWord(){
-  const content = document.getElementById("doc").innerHTML;
-  const html = `
-  <html><head><meta charset="UTF-8"></head>
-  <body class="word">${content}</body></html>`;
+  const content=document.getElementById("doc").innerHTML;
+  const html=`<html><head><meta charset="UTF-8"></head>
+  <body>${content}</body></html>`;
 
-  const blob = new Blob(
-    ['\ufeff', html],
-    { type: 'application/msword' }
-  );
-
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "My_Estate_Plan.doc";
+  const blob=new Blob(['\ufeff',html],{type:'application/msword'});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="My_Estate_Plan.doc";
   a.click();
 }
 </script>
