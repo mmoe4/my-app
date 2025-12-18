@@ -21,27 +21,28 @@ body{
   color:#1f2a33;
 }
 
+#watermark{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%) rotate(-30deg);
+  font-size:110px;
+  font-weight:700;
+  color:rgba(0,0,0,0.08);
+  pointer-events:none;
+}
+
 .container{
   max-width:1100px;
   margin:40px auto;
-  padding:40px 28px 80px;
+  padding:40px 30px 80px;
   background:var(--card-bg);
   border-radius:16px;
   box-shadow:0 14px 40px rgba(0,0,0,0.45);
 }
 
-h1{
-  text-align:center;
-  color:var(--primary);
-  margin-bottom:6px;
-}
-
-.subtitle{
-  text-align:center;
-  font-size:14px;
-  color:var(--muted);
-  margin-bottom:24px;
-}
+h1{text-align:center;color:var(--primary);}
+.subtitle{text-align:center;font-size:14px;color:var(--muted);margin-bottom:26px;}
 
 .toolbar{
   display:flex;
@@ -51,7 +52,7 @@ h1{
   margin-bottom:20px;
 }
 
-button, select{
+button,select{
   padding:8px 14px;
   border-radius:6px;
   border:1px solid var(--border);
@@ -59,13 +60,6 @@ button, select{
   font-family:inherit;
   font-size:14px;
   cursor:pointer;
-}
-
-.progress{
-  text-align:center;
-  font-size:14px;
-  color:var(--muted);
-  margin-bottom:28px;
 }
 
 section{
@@ -81,8 +75,8 @@ section{
 
 .section-header h2{
   margin:0;
-  color:var(--primary);
   font-size:18px;
+  color:var(--primary);
 }
 
 .section-content{
@@ -96,33 +90,29 @@ section{
   line-height:1.6;
 }
 
-input, textarea{
+input,textarea{
   width:100%;
   padding:10px;
   margin-bottom:10px;
   border-radius:6px;
   border:1px solid var(--border);
   font-family:inherit;
-  font-size:14px;
   background:#fafafa;
 }
 
-textarea{ min-height:90px; }
+textarea{min-height:90px;}
 
-#watermark{
-  position:fixed;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%) rotate(-30deg);
-  font-size:110px;
-  font-weight:700;
-  color:rgba(0,0,0,0.08);
-  pointer-events:none;
+.row{
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:12px;
+  margin-bottom:10px;
+  background:#fcfcfd;
 }
 
 @media print{
   body{background:#fff}
-  .container{box-shadow:none;margin:0;border:none}
+  .container{box-shadow:none;border:none;margin:0}
   button,select{display:none}
 }
 </style>
@@ -146,8 +136,7 @@ Not a legal document
   <button onclick="window.print()">Print / PDF</button>
 </div>
 
-<div class="progress">Completion Status: Manual</div>
-
+<!-- JURISDICTION -->
 <section>
   <div class="section-header"><h2>Jurisdiction</h2></div>
   <div class="section-content">
@@ -157,49 +146,99 @@ Not a legal document
   </div>
 </section>
 
+<!-- PERSONAL INFO -->
+<section>
+  <div class="section-header"><h2>Personal Information</h2></div>
+  <div class="section-content">
+    <input placeholder="Full legal name">
+    <input placeholder="Date of birth">
+    <input placeholder="Primary residence address">
+    <input placeholder="Phone number">
+    <input placeholder="Email address">
+  </div>
+</section>
+
+<!-- FAMILY -->
+<section>
+  <div class="section-header"><h2>Family / Dependants</h2></div>
+  <div class="section-content">
+    <textarea placeholder="Spouse, partner, children, dependants, or other relevant family details"></textarea>
+  </div>
+</section>
+
+<!-- EXECUTOR -->
 <section>
   <div class="section-header"><h2>Executor / Estate Administrator</h2></div>
   <div class="section-content">
-    <div class="help">
-      The individual responsible for administering the estate in accordance
-      with applicable local law.
-    </div>
-    <input placeholder="Primary executor / administrator">
-    <input placeholder="Alternate executor / administrator">
+    <input placeholder="Primary executor name">
+    <input placeholder="Alternate executor name">
     <textarea placeholder="Executor instructions or notes"></textarea>
   </div>
 </section>
 
+<!-- GUARDIANSHIP -->
+<section>
+  <div class="section-header"><h2>Guardianship</h2></div>
+  <div class="section-content">
+    <textarea placeholder="Guardianship wishes for minor children or dependants"></textarea>
+  </div>
+</section>
+
+<!-- HEALTH -->
 <section>
   <div class="section-header"><h2>Health & Care Preferences</h2></div>
   <div class="section-content">
-    <div class="help">
-      Health and personal care wishes, subject to local legal requirements.
-    </div>
-    <input placeholder="Primary decision-maker">
+    <input placeholder="Primary health decision-maker">
     <input placeholder="Alternate decision-maker">
     <textarea placeholder="Life-sustaining treatment preferences"></textarea>
     <textarea placeholder="Comfort and palliative care wishes"></textarea>
   </div>
 </section>
 
+<!-- BENEFICIARIES -->
 <section>
   <div class="section-header"><h2>Beneficiaries</h2></div>
   <div class="section-content">
-    <input placeholder="Name">
-    <input placeholder="Relationship">
-    <input placeholder="Share or description">
+    <div id="beneficiaries"></div>
+    <button onclick="addRow('beneficiaries',['Name','Relationship','Share / Item'])">Add Beneficiary</button>
   </div>
 </section>
 
+<!-- ASSETS -->
 <section>
   <div class="section-header"><h2>Assets</h2></div>
   <div class="section-content">
-    <input placeholder="Asset type">
-    <textarea placeholder="Description and identifying details"></textarea>
+    <div id="assets"></div>
+    <button onclick="addRow('assets',['Asset type','Description','Approx. value'])">Add Asset</button>
   </div>
 </section>
 
+<!-- DEBTS -->
+<section>
+  <div class="section-header"><h2>Debts & Liabilities</h2></div>
+  <div class="section-content">
+    <div id="debts"></div>
+    <button onclick="addRow('debts',['Creditor','Type','Approx. balance'])">Add Debt</button>
+  </div>
+</section>
+
+<!-- DOCUMENTS -->
+<section>
+  <div class="section-header"><h2>Important Documents</h2></div>
+  <div class="section-content">
+    <textarea placeholder="Location of wills, insurance policies, titles, financial records"></textarea>
+  </div>
+</section>
+
+<!-- DIGITAL -->
+<section>
+  <div class="section-header"><h2>Digital Assets</h2></div>
+  <div class="section-content">
+    <textarea placeholder="Online accounts, devices, passwords, digital instructions"></textarea>
+  </div>
+</section>
+
+<!-- FINAL -->
 <section>
   <div class="section-header"><h2>Final Wishes & Notes</h2></div>
   <div class="section-content">
@@ -211,32 +250,15 @@ Not a legal document
 </div>
 
 <script>
-/* ALL COUNTRIES LIST (ISO-style, readable) */
-const countries = [
-"Select country",
-"Afghanistan","Albania","Algeria","Andorra","Angola","Antigua and Barbuda","Argentina","Armenia",
-"Australia","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium",
-"Belize","Benin","Bhutan","Bolivia","Bosnia and Herzegovina","Botswana","Brazil","Brunei","Bulgaria",
-"Burkina Faso","Burundi","Cambodia","Cameroon","Cape Verde","Central African Republic","Chad","Chile",
-"China","Colombia","Comoros","Congo","Costa Rica","Croatia","Cuba","Cyprus","Czech Republic",
-"Denmark","Djibouti","Dominica","Dominican Republic","Ecuador","Egypt","El Salvador","Estonia",
-"Eswatini","Ethiopia","Fiji","Finland","France","Gabon","Gambia","Georgia","Germany","Ghana","Greece",
-"Grenada","Guatemala","Guinea","Guyana","Haiti","Honduras","Hungary","Iceland","India","Indonesia",
-"Iran","Iraq","Ireland","Israel","Italy","Jamaica","Japan","Jordan","Kazakhstan","Kenya","Kuwait",
-"Kyrgyzstan","Laos","Latvia","Lebanon","Lesotho","Liberia","Libya","Liechtenstein","Lithuania",
-"Luxembourg","Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Mauritania","Mauritius",
-"Mexico","Moldova","Monaco","Mongolia","Montenegro","Morocco","Mozambique","Myanmar","Namibia",
-"Nepal","Netherlands","New Zealand","Nicaragua","Niger","Nigeria","North Macedonia","Norway","Oman",
-"Pakistan","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Poland","Portugal","Qatar",
-"Romania","Russia","Rwanda","Saint Lucia","Samoa","San Marino","Saudi Arabia","Senegal","Serbia",
-"Seychelles","Sierra Leone","Singapore","Slovakia","Slovenia","Somalia","South Africa","South Korea",
-"Spain","Sri Lanka","Sudan","Suriname","Sweden","Switzerland","Syria","Taiwan","Tajikistan","Tanzania",
-"Thailand","Togo","Tonga","Trinidad and Tobago","Tunisia","Turkey","Turkmenistan","Uganda",
-"Ukraine","United Arab Emirates","United Kingdom","United States","Uruguay","Uzbekistan","Vanuatu",
-"Vatican City","Venezuela","Vietnam","Yemen","Zambia","Zimbabwe"
+const countries=[
+"Select country","Afghanistan","Albania","Algeria","Andorra","Angola","Argentina","Australia","Austria",
+"Bangladesh","Belgium","Brazil","Canada","Chile","China","Colombia","Denmark","Egypt","Finland","France",
+"Germany","Greece","India","Ireland","Israel","Italy","Japan","Mexico","Netherlands","New Zealand",
+"Norway","Pakistan","Philippines","Poland","Portugal","Saudi Arabia","Singapore","South Africa","Spain",
+"Sweden","Switzerland","Turkey","United Arab Emirates","United Kingdom","United States","Vietnam","Zimbabwe"
 ];
 
-const select = document.getElementById("countrySelect");
+const select=document.getElementById("countrySelect");
 countries.forEach(c=>{
   const o=document.createElement("option");
   o.textContent=o.value=c;
@@ -247,13 +269,25 @@ select.onchange=()=>{
   document.getElementById("jurisdictionText").textContent =
     select.value==="Select country"
       ? "Select the country this plan is intended for."
-      : `This plan is intended for use in ${select.value}. Laws and requirements vary by jurisdiction.`;
+      : `This plan is intended for use in ${select.value}. Laws vary by jurisdiction.`;
 };
 
 let status="DRAFT";
 function toggleStatus(){
-  status = status==="DRAFT" ? "FINAL" : "DRAFT";
-  document.getElementById("watermark").textContent = status;
+  status=status==="DRAFT"?"FINAL":"DRAFT";
+  document.getElementById("watermark").textContent=status;
+}
+
+function addRow(id,fields){
+  const wrap=document.getElementById(id);
+  const row=document.createElement("div");
+  row.className="row";
+  fields.forEach(f=>{
+    const i=document.createElement("input");
+    i.placeholder=f;
+    row.appendChild(i);
+  });
+  wrap.appendChild(row);
 }
 </script>
 
