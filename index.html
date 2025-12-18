@@ -7,7 +7,7 @@
 
 <style>
 :root{
-  --page-bg:#2b1b1f;
+  --page-bg:#2b1b1f; /* default jam */
   --card-bg:#ffffff;
   --border:#d5d8db;
   --primary:#2f4f4f;
@@ -87,7 +87,7 @@ section{
 
 .section-content{
   padding:20px;
-  display:block; /* FORCE OPEN */
+  display:block;
 }
 
 .help{
@@ -108,9 +108,7 @@ input, textarea{
   background:#fafafa;
 }
 
-textarea{
-  min-height:90px;
-}
+textarea{ min-height:90px; }
 
 .row{
   border:1px solid var(--border);
@@ -153,43 +151,36 @@ Not a legal document
 
 <div class="toolbar">
   <select id="country"></select>
+  <select id="theme" onchange="setTheme(this.value)">
+    <option value="jam">Classic Jam</option>
+    <option value="plum">Plum Ink</option>
+    <option value="forest">Forest Jam</option>
+  </select>
   <button onclick="toggleStatus()">Draft / Final</button>
   <button onclick="window.print()">Print / PDF</button>
 </div>
 
-<div class="progress" id="progress">Completion Status: 0%</div>
+<div class="progress">Completion Status: Manual</div>
 
-<!-- JURISDICTION -->
 <section>
   <div class="section-header"><h2>Jurisdiction</h2></div>
   <div class="section-content">
-    <div class="help" id="jurisdictionText"></div>
+    <div class="help" id="jurisdictionText">
+      Select the country or jurisdiction this plan is intended for.
+    </div>
   </div>
 </section>
 
-<!-- PERSONAL INFO -->
-<section>
-  <div class="section-header"><h2>Personal Information</h2></div>
-  <div class="section-content">
-    <div class="help">Legal identifying information.</div>
-    <input placeholder="Full legal name">
-    <input placeholder="Date of birth">
-    <input placeholder="Primary residence address">
-  </div>
-</section>
-
-<!-- EXECUTOR -->
 <section>
   <div class="section-header"><h2 id="executorTitle">Executor</h2></div>
   <div class="section-content">
     <div class="help" id="executorHelp"></div>
     <input placeholder="Primary executor name">
     <input placeholder="Alternate executor name">
-    <textarea placeholder="Special instructions or notes"></textarea>
+    <textarea placeholder="Executor instructions or notes"></textarea>
   </div>
 </section>
 
-<!-- HEALTH -->
 <section>
   <div class="section-header"><h2 id="healthTitle">Health & Care Preferences</h2></div>
   <div class="section-content">
@@ -201,55 +192,20 @@ Not a legal document
   </div>
 </section>
 
-<!-- BENEFICIARIES -->
-<section>
-  <div class="section-header"><h2>Beneficiaries</h2></div>
-  <div class="section-content">
-    <div class="help">Individuals or organizations receiving estate assets.</div>
-    <div id="beneficiaries"></div>
-    <button onclick="addRow('beneficiaries',['Name','Relationship','Share or Item'])">Add Beneficiary</button>
-  </div>
-</section>
-
-<!-- ASSETS -->
-<section>
-  <div class="section-header"><h2>Assets</h2></div>
-  <div class="section-content">
-    <div class="help">Property, accounts, valuables, or business interests.</div>
-    <div id="assets"></div>
-    <button onclick="addRow('assets',['Category','Description','Approximate Value'])">Add Asset</button>
-  </div>
-</section>
-
-<!-- DEBTS -->
-<section>
-  <div class="section-header"><h2>Debts & Obligations</h2></div>
-  <div class="section-content">
-    <div class="help">Outstanding financial obligations.</div>
-    <div id="debts"></div>
-    <button onclick="addRow('debts',['Creditor','Type','Approximate Balance'])">Add Debt</button>
-  </div>
-</section>
-
-<!-- FINAL -->
-<section>
-  <div class="section-header"><h2>Final Wishes & Notes</h2></div>
-  <div class="section-content">
-    <textarea placeholder="Funeral, burial, cremation, or memorial wishes"></textarea>
-    <textarea placeholder="Additional personal notes"></textarea>
-  </div>
-</section>
-
 </div>
 
 <script>
+/* THEMES */
+function setTheme(t){
+  const root=document.documentElement;
+  if(t==="jam") root.style.setProperty("--page-bg","#2b1b1f");
+  if(t==="plum") root.style.setProperty("--page-bg","#1f1d2b");
+  if(t==="forest") root.style.setProperty("--page-bg","#1c2622");
+}
+
+/* COUNTRIES */
 const countryData={
-  "Canada":{
-    exec:"Executor / Estate Trustee",
-    execHelp:"The executor (also known as an estate trustee) administers the estate under applicable provincial law.",
-    health:"Personal Directive / Advance Care Planning",
-    healthHelp:"Health and personal care wishes are typically documented through a personal directive or similar instrument."
-  },
+  "Select country / jurisdiction":{},
   "United States":{
     exec:"Executor / Personal Representative",
     execHelp:"The executor or personal representative administers the estate through probate or court process.",
@@ -262,9 +218,27 @@ const countryData={
     health:"Advance Decision",
     healthHelp:"Health preferences may be recorded as an advance decision."
   },
+  "Australia":{
+    exec:"Executor",
+    execHelp:"Executors administer estates under state or territory law.",
+    health:"Advance Care Directive",
+    healthHelp:"Health preferences may be recorded through an advance care directive."
+  },
+  "New Zealand":{
+    exec:"Executor",
+    execHelp:"Executors administer estates under New Zealand law.",
+    health:"Advance Care Plan",
+    healthHelp:"Health preferences may be recorded through an advance care plan."
+  },
+  "Ireland":{
+    exec:"Executor",
+    execHelp:"Executors administer estates under Irish probate law.",
+    health:"Advance Healthcare Directive",
+    healthHelp:"Health wishes may be recorded through an advance healthcare directive."
+  },
   "Other / Not listed":{
     exec:"Executor / Administrator",
-    execHelp:"Terminology varies by country. Consult a qualified professional.",
+    execHelp:"Terminology varies by jurisdiction. Consult a qualified professional.",
     health:"Health Directive",
     healthHelp:"Health preferences are governed by local law."
   }
@@ -277,36 +251,22 @@ Object.keys(countryData).forEach(c=>{
   select.appendChild(o);
 });
 
-function applyCountry(){
-  const d=countryData[select.value];
-  document.getElementById("executorTitle").textContent=d.exec;
-  document.getElementById("executorHelp").textContent=d.execHelp;
-  document.getElementById("healthTitle").textContent=d.health;
-  document.getElementById("healthHelp").textContent=d.healthHelp;
+select.onchange=()=>{
+  const d=countryData[select.value]||{};
+  document.getElementById("executorTitle").textContent=d.exec||"Executor";
+  document.getElementById("executorHelp").textContent=d.execHelp||"";
+  document.getElementById("healthTitle").textContent=d.health||"Health & Care Preferences";
+  document.getElementById("healthHelp").textContent=d.healthHelp||"";
   document.getElementById("jurisdictionText").textContent=
-    `This plan is intended for use in ${select.value}. Estate and health laws vary by jurisdiction.`;
-}
-
-select.value="Canada";
-select.onchange=applyCountry;
-applyCountry();
+    select.value==="Select country / jurisdiction"
+      ? "Select the country or jurisdiction this plan is intended for."
+      : `This plan is intended for use in ${select.value}. Laws vary by jurisdiction.`;
+};
 
 let status="DRAFT";
 function toggleStatus(){
   status=status==="DRAFT"?"FINAL":"DRAFT";
   document.getElementById("watermark").textContent=status;
-}
-
-function addRow(id,fields){
-  const wrap=document.getElementById(id);
-  const row=document.createElement("div");
-  row.className="row";
-  fields.forEach(f=>{
-    const i=document.createElement("input");
-    i.placeholder=f;
-    row.appendChild(i);
-  });
-  wrap.appendChild(row);
 }
 </script>
 
