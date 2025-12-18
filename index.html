@@ -1,295 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Estate Plan</title>
-
-<style>
-:root{
-  --page-bg:#2b1b1f;
-  --card-bg:#ffffff;
-  --border:#d5d8db;
-  --primary:#2f4f4f;
-  --muted:#5c6670;
-}
-
-body{
-  margin:0;
-  font-family:"Times New Roman", Georgia, serif;
-  background:var(--page-bg);
-  color:#1f2a33;
-}
-
-#watermark{
-  position:fixed;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%) rotate(-30deg);
-  font-size:110px;
-  font-weight:700;
-  color:rgba(0,0,0,0.08);
-  pointer-events:none;
-}
-
-.container{
-  max-width:1100px;
-  margin:40px auto;
-  padding:40px 30px 80px;
-  background:var(--card-bg);
-  border-radius:16px;
-  box-shadow:0 14px 40px rgba(0,0,0,0.45);
-}
-
-h1{text-align:center;color:var(--primary);}
-.subtitle{text-align:center;font-size:14px;color:var(--muted);margin-bottom:26px;}
-
-.toolbar{
-  display:flex;
-  justify-content:center;
-  gap:12px;
-  flex-wrap:wrap;
-  margin-bottom:20px;
-}
-
-button,select{
-  padding:8px 14px;
-  border-radius:6px;
-  border:1px solid var(--border);
-  background:#f7f8f9;
-  font-family:inherit;
-  font-size:14px;
-  cursor:pointer;
-}
-
-section{
-  border:1px solid var(--border);
-  border-radius:10px;
-  margin-bottom:22px;
-}
-
-.section-header{
-  padding:16px 20px;
-  border-bottom:1px solid var(--border);
-}
-
-.section-header h2{
-  margin:0;
-  font-size:18px;
-  color:var(--primary);
-}
-
-.section-content{
-  padding:20px;
-}
-
-.help{
-  font-size:13px;
-  color:var(--muted);
-  margin-bottom:12px;
-  line-height:1.6;
-}
-
-input,textarea{
-  width:100%;
-  padding:10px;
-  margin-bottom:10px;
-  border-radius:6px;
-  border:1px solid var(--border);
-  font-family:inherit;
-  background:#fafafa;
-}
-
-textarea{min-height:90px;}
-
-.row{
-  border:1px solid var(--border);
-  border-radius:6px;
-  padding:12px;
-  margin-bottom:10px;
-  background:#fcfcfd;
-}
-
-@media print{
-  body{background:#fff}
-  .container{box-shadow:none;border:none;margin:0}
-  button,select{display:none}
-}
-</style>
-</head>
-
-<body>
-
-<div id="watermark">DRAFT</div>
-
-<div class="container">
-
-<h1>My Estate Plan</h1>
-<p class="subtitle">
-Personal estate planning record for family and executors<br>
-Not a legal document
-</p>
-
-<div class="toolbar">
-  <select id="countrySelect"></select>
-  <button onclick="toggleStatus()">Draft / Final</button>
-  <button onclick="window.print()">Print / PDF</button>
-</div>
-
-<!-- JURISDICTION -->
 <section>
-  <div class="section-header"><h2>Jurisdiction</h2></div>
+  <div class="section-header">
+    <h2>Executor / Estate Administrator</h2>
+  </div>
+
   <div class="section-content">
-    <div class="help" id="jurisdictionText">
-      Select the country this plan is intended for.
+
+    <div class="help">
+      The executor (also called estate administrator or personal representative)
+      is responsible for carrying out the instructions of this estate plan and
+      managing the estate after death.
     </div>
-  </div>
-</section>
 
-<!-- PERSONAL INFO -->
-<section>
-  <div class="section-header"><h2>Personal Information</h2></div>
-  <div class="section-content">
+    <h3>Primary Executor</h3>
     <input placeholder="Full legal name">
-    <input placeholder="Date of birth">
-    <input placeholder="Primary residence address">
-    <input placeholder="Phone number">
+    <input placeholder="Relationship to you">
+    <input placeholder="Telephone number">
     <input placeholder="Email address">
+    <input placeholder="Address">
+
+    <h3>Alternate / Backup Executor</h3>
+    <input placeholder="Full legal name">
+    <input placeholder="Relationship to you">
+    <input placeholder="Telephone number">
+    <input placeholder="Email address">
+    <input placeholder="Address">
+
+    <h3>Executor Authority & Instructions</h3>
+    <textarea placeholder="Special instructions, powers, compensation expectations, or guidance for the executor"></textarea>
+
+    <h3>Professional Advisors</h3>
+    <input placeholder="Lawyer or law firm (name & contact)">
+    <input placeholder="Accountant or tax advisor">
+    <input placeholder="Financial advisor">
+    <textarea placeholder="Additional professional contacts or notes"></textarea>
+
   </div>
 </section>
-
-<!-- FAMILY -->
-<section>
-  <div class="section-header"><h2>Family / Dependants</h2></div>
-  <div class="section-content">
-    <textarea placeholder="Spouse, partner, children, dependants, or other relevant family details"></textarea>
-  </div>
-</section>
-
-<!-- EXECUTOR -->
-<section>
-  <div class="section-header"><h2>Executor / Estate Administrator</h2></div>
-  <div class="section-content">
-    <input placeholder="Primary executor name">
-    <input placeholder="Alternate executor name">
-    <textarea placeholder="Executor instructions or notes"></textarea>
-  </div>
-</section>
-
-<!-- GUARDIANSHIP -->
-<section>
-  <div class="section-header"><h2>Guardianship</h2></div>
-  <div class="section-content">
-    <textarea placeholder="Guardianship wishes for minor children or dependants"></textarea>
-  </div>
-</section>
-
-<!-- HEALTH -->
-<section>
-  <div class="section-header"><h2>Health & Care Preferences</h2></div>
-  <div class="section-content">
-    <input placeholder="Primary health decision-maker">
-    <input placeholder="Alternate decision-maker">
-    <textarea placeholder="Life-sustaining treatment preferences"></textarea>
-    <textarea placeholder="Comfort and palliative care wishes"></textarea>
-  </div>
-</section>
-
-<!-- BENEFICIARIES -->
-<section>
-  <div class="section-header"><h2>Beneficiaries</h2></div>
-  <div class="section-content">
-    <div id="beneficiaries"></div>
-    <button onclick="addRow('beneficiaries',['Name','Relationship','Share / Item'])">Add Beneficiary</button>
-  </div>
-</section>
-
-<!-- ASSETS -->
-<section>
-  <div class="section-header"><h2>Assets</h2></div>
-  <div class="section-content">
-    <div id="assets"></div>
-    <button onclick="addRow('assets',['Asset type','Description','Approx. value'])">Add Asset</button>
-  </div>
-</section>
-
-<!-- DEBTS -->
-<section>
-  <div class="section-header"><h2>Debts & Liabilities</h2></div>
-  <div class="section-content">
-    <div id="debts"></div>
-    <button onclick="addRow('debts',['Creditor','Type','Approx. balance'])">Add Debt</button>
-  </div>
-</section>
-
-<!-- DOCUMENTS -->
-<section>
-  <div class="section-header"><h2>Important Documents</h2></div>
-  <div class="section-content">
-    <textarea placeholder="Location of wills, insurance policies, titles, financial records"></textarea>
-  </div>
-</section>
-
-<!-- DIGITAL -->
-<section>
-  <div class="section-header"><h2>Digital Assets</h2></div>
-  <div class="section-content">
-    <textarea placeholder="Online accounts, devices, passwords, digital instructions"></textarea>
-  </div>
-</section>
-
-<!-- FINAL -->
-<section>
-  <div class="section-header"><h2>Final Wishes & Notes</h2></div>
-  <div class="section-content">
-    <textarea placeholder="Funeral, burial, cremation, or memorial wishes"></textarea>
-    <textarea placeholder="Additional personal notes"></textarea>
-  </div>
-</section>
-
-</div>
-
-<script>
-const countries=[
-"Select country","Afghanistan","Albania","Algeria","Andorra","Angola","Argentina","Australia","Austria",
-"Bangladesh","Belgium","Brazil","Canada","Chile","China","Colombia","Denmark","Egypt","Finland","France",
-"Germany","Greece","India","Ireland","Israel","Italy","Japan","Mexico","Netherlands","New Zealand",
-"Norway","Pakistan","Philippines","Poland","Portugal","Saudi Arabia","Singapore","South Africa","Spain",
-"Sweden","Switzerland","Turkey","United Arab Emirates","United Kingdom","United States","Vietnam","Zimbabwe"
-];
-
-const select=document.getElementById("countrySelect");
-countries.forEach(c=>{
-  const o=document.createElement("option");
-  o.textContent=o.value=c;
-  select.appendChild(o);
-});
-
-select.onchange=()=>{
-  document.getElementById("jurisdictionText").textContent =
-    select.value==="Select country"
-      ? "Select the country this plan is intended for."
-      : `This plan is intended for use in ${select.value}. Laws vary by jurisdiction.`;
-};
-
-let status="DRAFT";
-function toggleStatus(){
-  status=status==="DRAFT"?"FINAL":"DRAFT";
-  document.getElementById("watermark").textContent=status;
-}
-
-function addRow(id,fields){
-  const wrap=document.getElementById(id);
-  const row=document.createElement("div");
-  row.className="row";
-  fields.forEach(f=>{
-    const i=document.createElement("input");
-    i.placeholder=f;
-    row.appendChild(i);
-  });
-  wrap.appendChild(row);
-}
-</script>
-
-</body>
-</html>
