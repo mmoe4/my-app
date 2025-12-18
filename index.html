@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My Estate Plan</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 :root{
@@ -13,7 +13,6 @@
   --border:#d2d6da;
   --heading:#2f4f4f;
   --muted:#6b7280;
-  --soft:#f7f8fa;
 }
 
 /* ===== SCREEN ===== */
@@ -31,42 +30,19 @@ body{
   background:var(--paper);
   border-radius:16px;
   box-shadow:0 20px 45px rgba(0,0,0,0.35);
-  position:relative;
 }
 
-#watermark{
-  position:fixed;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%) rotate(-30deg);
-  font-size:110px;
-  color:rgba(0,0,0,0.06);
-  pointer-events:none;
-  user-select:none;
-}
-
-h1{
-  text-align:center;
-  margin:0;
-  color:var(--heading);
-}
-
-.subtitle{
-  text-align:center;
-  font-size:14px;
-  color:var(--muted);
-  margin-top:6px;
-}
+h1,h2{ color:var(--heading); margin-top:0; }
 
 .toolbar{
   display:flex;
   justify-content:center;
   gap:10px;
-  margin:26px 0 18px;
+  margin:20px 0;
   flex-wrap:wrap;
 }
 
-button, select{
+button{
   padding:9px 14px;
   font-family:inherit;
   font-size:14px;
@@ -75,8 +51,6 @@ button, select{
   background:#f9fafb;
   cursor:pointer;
 }
-
-button:hover{ background:#eef2f5; }
 
 section{
   border:1px solid var(--border);
@@ -90,15 +64,9 @@ section{
   border-bottom:1px solid var(--border);
 }
 
-.section-header h2{
-  margin:0;
-  font-size:17px;
-  color:var(--heading);
-}
-
 .section-content{ padding:20px; }
 
-input, textarea{
+textarea, input{
   width:100%;
   padding:10px;
   margin-bottom:12px;
@@ -106,151 +74,97 @@ input, textarea{
   border:1px solid var(--border);
   background:#fafafa;
   font-family:inherit;
-  font-size:14px;
 }
 
-.large-note{ min-height:220px; }
+.large-note{ min-height:200px; }
 
-/* ===== PRINT ONLY ===== */
+/* ===== PRINT ===== */
 .print-only{ display:none; }
-
-.print-page{
-  page-break-after:always;
-  padding:60px;
-}
-
-.print-title{
-  text-align:center;
-  margin-top:120px;
-}
-
-.print-title h1{
-  font-size:36px;
-}
-
-.print-sub{
-  text-align:center;
-  margin-top:20px;
-  font-size:14px;
-}
-
-.toc ul{
-  list-style:none;
-  padding:0;
-  font-size:14px;
-}
-
-.toc li{
-  margin:8px 0;
-}
-
-.family-box{
-  border:1px solid #ccc;
-  padding:16px;
-  margin-bottom:14px;
-  font-size:14px;
-}
-
-.print-text{
-  white-space:pre-wrap;
-  font-size:12pt;
-  margin-bottom:12px;
-}
 
 @media print{
   body{ background:#fff; }
-  .container, .toolbar, #watermark{ display:none; }
+  .container, .toolbar{ display:none; }
   .print-only{ display:block; }
-  input, textarea, select, button{ display:none !important; }
+
+  @page{
+    margin:20mm;
+  }
+
+  footer{
+    position:fixed;
+    bottom:10mm;
+    left:0;
+    right:0;
+    text-align:center;
+    font-size:11px;
+    color:#555;
+  }
+
+  footer:after{
+    content:"Page " counter(page);
+  }
 }
+
+/* Word export formatting */
+.word h1{ font-size:26px; }
+.word h2{ font-size:18px; margin-top:20px; }
+.word p, .word div{ font-size:12pt; }
 </style>
 </head>
 
 <body>
 
-<div id="watermark">DRAFT</div>
-
-<!-- ================= PRINT: COVER ================= -->
-<div class="print-only print-page">
-  <div class="print-title">
-    <h1>Estate Plan</h1>
-    <p><b>Name:</b> <span id="coverName"></span></p>
-    <p><b>Jurisdiction:</b> <span id="coverCountry"></span></p>
-    <p><b>Version:</b> 1.0</p>
-    <p><b>Last Updated:</b> <span id="coverDate"></span></p>
-  </div>
-  <p class="print-sub">
-    This document is a personal planning record intended to assist family and executors.
-    It is not a legal will.
+<!-- ===== PRINT COVER ===== -->
+<div class="print-only">
+  <h1 style="text-align:center;margin-top:100px;">My Estate Plan</h1>
+  <p style="text-align:center;">
+    Prepared for: <span id="coverName">—</span><br>
+    Jurisdiction: <span id="coverCountry">—</span><br>
+    Date: <span id="coverDate">—</span>
   </p>
-</div>
+  <div style="page-break-after:always;"></div>
 
-<!-- ================= PRINT: TOC ================= -->
-<div class="print-only print-page toc">
+  <!-- TOC -->
   <h2>Table of Contents</h2>
-  <ul id="tocList"></ul>
-</div>
+  <ol id="toc"></ol>
+  <div style="page-break-after:always;"></div>
 
-<!-- ================= PRINT: FAMILY SUMMARY ================= -->
-<div class="print-only print-page">
+  <!-- FAMILY SUMMARY -->
   <h2>What To Do First</h2>
+  <ol>
+    <li>Do not rush. Take time.</li>
+    <li>Locate important documents.</li>
+    <li>Contact the executor.</li>
+    <li>Secure property, pets, and valuables.</li>
+    <li>Do not distribute assets prematurely.</li>
+    <li>Seek professional advice.</li>
+  </ol>
 
-  <div class="family-box">
-    <b>1. Do not rush.</b><br>
-    Take time. Nothing must be decided immediately.
-  </div>
+  <h3>Family Notes</h3>
+  <div id="familyNotesPrint"></div>
 
-  <div class="family-box">
-    <b>2. Locate key documents.</b><br>
-    Use the “Important Documents” section in this binder.
-  </div>
-
-  <div class="family-box">
-    <b>3. Contact the executor.</b><br>
-    The executor named in this document should guide next steps.
-  </div>
-
-  <div class="family-box">
-    <b>4. Secure property & valuables.</b><br>
-    Homes, vehicles, pets, and important items should be protected.
-  </div>
-
-  <div class="family-box">
-    <b>5. Do not distribute assets early.</b><br>
-    Wait for proper legal guidance.
-  </div>
-
-  <div class="family-box">
-    <b>6. Seek professional advice.</b><br>
-    Laws vary by country. A lawyer or advisor may be required.
-  </div>
+  <div style="page-break-after:always;"></div>
 </div>
 
-<!-- ================= SCREEN CONTENT ================= -->
-<div class="container">
+<footer class="print-only">
+  My Estate Plan ·
+</footer>
+
+<!-- ===== SCREEN ===== -->
+<div class="container" id="doc">
 
 <h1>My Estate Plan</h1>
-<p class="subtitle">Personal planning record · Not a legal document</p>
 
 <div class="toolbar">
-  <select id="country">
-    <option>Select country</option>
-    <option>United States</option>
-    <option>Canada</option>
-    <option>United Kingdom</option>
-    <option>Australia</option>
-    <option>Other</option>
-  </select>
-  <button onclick="toggleFinal()">Draft / Final</button>
-  <button onclick="window.print()">Print / Save PDF</button>
+  <button onclick="window.print()">Print / PDF</button>
+  <button onclick="exportWord()">Download Word</button>
 </div>
 
 <section data-section>
   <div class="section-header"><h2>Personal Information</h2></div>
   <div class="section-content">
     <input id="name" placeholder="Full legal name">
-    <input placeholder="Date of birth">
-    <input placeholder="Address">
+    <input id="country" placeholder="Country / jurisdiction">
   </div>
 </section>
 
@@ -258,7 +172,7 @@ input, textarea{
   <div class="section-header"><h2>Executor</h2></div>
   <div class="section-content">
     <input placeholder="Executor name">
-    <textarea class="large-note" placeholder="Executor instructions"></textarea>
+    <textarea class="large-note"></textarea>
   </div>
 </section>
 
@@ -276,24 +190,18 @@ input, textarea{
   </div>
 </section>
 
-<section data-section>
-  <div class="section-header"><h2>Additional Notes / Appendix</h2></div>
+<section>
+  <div class="section-header"><h2>Family “What To Do First” – Notes</h2></div>
   <div class="section-content">
-    <textarea class="large-note"></textarea>
+    <textarea id="familyNotes" class="large-note"
+      placeholder="Keys, pets, urgent contacts, immediate instructions for family"></textarea>
   </div>
 </section>
 
 </div>
 
 <script>
-let finalMode=false;
-
-function toggleFinal(){
-  finalMode=!finalMode;
-  document.getElementById("watermark").textContent=finalMode?"FINAL":"DRAFT";
-}
-
-/* Populate cover + TOC before print */
+/* PREPARE PRINT */
 window.addEventListener("beforeprint",()=>{
   document.getElementById("coverName").textContent =
     document.getElementById("name").value || "—";
@@ -302,14 +210,35 @@ window.addEventListener("beforeprint",()=>{
   document.getElementById("coverDate").textContent =
     new Date().toLocaleDateString();
 
-  const toc=document.getElementById("tocList");
+  const toc=document.getElementById("toc");
   toc.innerHTML="";
-  document.querySelectorAll("[data-section] h2").forEach((h,i)=>{
+  document.querySelectorAll("[data-section] h2").forEach(h=>{
     const li=document.createElement("li");
-    li.textContent=`${i+1}. ${h.textContent}`;
+    li.textContent=h.textContent;
     toc.appendChild(li);
   });
+
+  document.getElementById("familyNotesPrint").textContent =
+    document.getElementById("familyNotes").value || "";
 });
+
+/* WORD EXPORT */
+function exportWord(){
+  const content = document.getElementById("doc").innerHTML;
+  const html = `
+  <html><head><meta charset="UTF-8"></head>
+  <body class="word">${content}</body></html>`;
+
+  const blob = new Blob(
+    ['\ufeff', html],
+    { type: 'application/msword' }
+  );
+
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "My_Estate_Plan.doc";
+  a.click();
+}
 </script>
 
 </body>
