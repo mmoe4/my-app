@@ -16,6 +16,7 @@
   --soft:#f7f8fa;
 }
 
+/* ===== SCREEN ===== */
 body{
   margin:0;
   font-family:"Times New Roman", Georgia, serif;
@@ -48,7 +49,6 @@ h1{
   text-align:center;
   margin:0;
   color:var(--heading);
-  letter-spacing:0.4px;
 }
 
 .subtitle{
@@ -56,14 +56,6 @@ h1{
   font-size:14px;
   color:var(--muted);
   margin-top:6px;
-  line-height:1.5;
-}
-
-.meta{
-  text-align:center;
-  font-size:13px;
-  color:var(--muted);
-  margin-top:8px;
 }
 
 .toolbar{
@@ -85,24 +77,6 @@ button, select{
 }
 
 button:hover{ background:#eef2f5; }
-button.small-btn{ font-size:13px; padding:6px 10px; }
-
-.progress{
-  text-align:center;
-  font-size:14px;
-  color:var(--muted);
-  margin-bottom:24px;
-}
-
-.notice{
-  background:var(--soft);
-  border:1px solid var(--border);
-  border-radius:10px;
-  padding:14px 16px;
-  font-size:14px;
-  line-height:1.6;
-  margin:18px 0 24px;
-}
 
 section{
   border:1px solid var(--border);
@@ -124,26 +98,6 @@ section{
 
 .section-content{ padding:20px; }
 
-.help{
-  font-size:13.5px;
-  color:var(--muted);
-  line-height:1.6;
-  margin-bottom:12px;
-}
-
-h3{
-  margin:18px 0 10px;
-  font-size:15.5px;
-  color:#344b4b;
-}
-
-.grid-2{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-}
-@media(max-width:800px){ .grid-2{grid-template-columns:1fr;} }
-
 input, textarea{
   width:100%;
   padding:10px;
@@ -155,23 +109,46 @@ input, textarea{
   font-size:14px;
 }
 
-.medium-note{ min-height:150px; }
-.large-note{ min-height:260px; }
+.large-note{ min-height:220px; }
 
-.item{
-  border:1px solid var(--border);
-  border-radius:8px;
-  background:#fcfcfd;
-  padding:12px;
-  margin-bottom:12px;
+/* ===== PRINT ONLY ===== */
+.print-only{ display:none; }
+
+.print-page{
+  page-break-after:always;
+  padding:60px;
 }
 
-.item-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:8px;
-  font-weight:700;
+.print-title{
+  text-align:center;
+  margin-top:120px;
+}
+
+.print-title h1{
+  font-size:36px;
+}
+
+.print-sub{
+  text-align:center;
+  margin-top:20px;
+  font-size:14px;
+}
+
+.toc ul{
+  list-style:none;
+  padding:0;
+  font-size:14px;
+}
+
+.toc li{
+  margin:8px 0;
+}
+
+.family-box{
+  border:1px solid #ccc;
+  padding:16px;
+  margin-bottom:14px;
+  font-size:14px;
 }
 
 .print-text{
@@ -182,8 +159,9 @@ input, textarea{
 
 @media print{
   body{ background:#fff; }
-  .container{ box-shadow:none; margin:0; padding:0; }
-  button, select, input, textarea{ display:none !important; }
+  .container, .toolbar, #watermark{ display:none; }
+  .print-only{ display:block; }
+  input, textarea, select, button{ display:none !important; }
 }
 </style>
 </head>
@@ -192,324 +170,146 @@ input, textarea{
 
 <div id="watermark">DRAFT</div>
 
+<!-- ================= PRINT: COVER ================= -->
+<div class="print-only print-page">
+  <div class="print-title">
+    <h1>Estate Plan</h1>
+    <p><b>Name:</b> <span id="coverName"></span></p>
+    <p><b>Jurisdiction:</b> <span id="coverCountry"></span></p>
+    <p><b>Version:</b> 1.0</p>
+    <p><b>Last Updated:</b> <span id="coverDate"></span></p>
+  </div>
+  <p class="print-sub">
+    This document is a personal planning record intended to assist family and executors.
+    It is not a legal will.
+  </p>
+</div>
+
+<!-- ================= PRINT: TOC ================= -->
+<div class="print-only print-page toc">
+  <h2>Table of Contents</h2>
+  <ul id="tocList"></ul>
+</div>
+
+<!-- ================= PRINT: FAMILY SUMMARY ================= -->
+<div class="print-only print-page">
+  <h2>What To Do First</h2>
+
+  <div class="family-box">
+    <b>1. Do not rush.</b><br>
+    Take time. Nothing must be decided immediately.
+  </div>
+
+  <div class="family-box">
+    <b>2. Locate key documents.</b><br>
+    Use the “Important Documents” section in this binder.
+  </div>
+
+  <div class="family-box">
+    <b>3. Contact the executor.</b><br>
+    The executor named in this document should guide next steps.
+  </div>
+
+  <div class="family-box">
+    <b>4. Secure property & valuables.</b><br>
+    Homes, vehicles, pets, and important items should be protected.
+  </div>
+
+  <div class="family-box">
+    <b>5. Do not distribute assets early.</b><br>
+    Wait for proper legal guidance.
+  </div>
+
+  <div class="family-box">
+    <b>6. Seek professional advice.</b><br>
+    Laws vary by country. A lawyer or advisor may be required.
+  </div>
+</div>
+
+<!-- ================= SCREEN CONTENT ================= -->
 <div class="container">
 
 <h1>My Estate Plan</h1>
-<p class="subtitle">
-Personal estate planning record for family and executors<br>
-Not a legal will or professional advice
-</p>
-
-<div class="meta">
-Version 1.0 · Last Updated <span id="lastUpdated">—</span>
-</div>
+<p class="subtitle">Personal planning record · Not a legal document</p>
 
 <div class="toolbar">
-  <select id="country"></select>
+  <select id="country">
+    <option>Select country</option>
+    <option>United States</option>
+    <option>Canada</option>
+    <option>United Kingdom</option>
+    <option>Australia</option>
+    <option>Other</option>
+  </select>
   <button onclick="toggleFinal()">Draft / Final</button>
-  <button onclick="window.print()">Print / PDF</button>
-  <button onclick="downloadBackup()">Backup</button>
-  <button onclick="importBackup()">Restore</button>
+  <button onclick="window.print()">Print / Save PDF</button>
 </div>
 
-<div class="progress" id="progress">Completion Status: 0%</div>
-
-<div class="notice">
-<b>Privacy:</b> All data is stored locally on this device.
-FINAL mode locks editing and is recommended before printing or sharing.
-</div>
-
-<!-- INSTRUCTIONS -->
-<section>
-  <div class="section-header">
-    <h2>Instructions for Family and Executors</h2>
-  </div>
+<section data-section>
+  <div class="section-header"><h2>Personal Information</h2></div>
   <div class="section-content">
-    <textarea class="medium-note" data-key="instructions"
-      placeholder="Optional message explaining how this document should be used"></textarea>
+    <input id="name" placeholder="Full legal name">
+    <input placeholder="Date of birth">
+    <input placeholder="Address">
   </div>
 </section>
 
-<!-- PERSONAL -->
-<section>
-  <div class="section-header">
-    <h2>Personal Information</h2>
-  </div>
+<section data-section>
+  <div class="section-header"><h2>Executor</h2></div>
   <div class="section-content">
-    <div class="grid-2">
-      <input data-key="name" placeholder="Full legal name">
-      <input data-key="dob" placeholder="Date of birth">
-    </div>
-    <input data-key="address" placeholder="Primary address">
-    <div class="grid-2">
-      <input data-key="phone" placeholder="Telephone">
-      <input data-key="email" placeholder="Email">
-    </div>
+    <input placeholder="Executor name">
+    <textarea class="large-note" placeholder="Executor instructions"></textarea>
   </div>
 </section>
 
-<!-- EXECUTOR -->
-<section>
-  <div class="section-header">
-    <h2 data-title="executor">Executor / Estate Administrator</h2>
-  </div>
+<section data-section>
+  <div class="section-header"><h2>Assets</h2></div>
   <div class="section-content">
-    <div class="grid-2">
-      <input data-key="ex_name" placeholder="Primary executor name">
-      <input data-key="ex_relation" placeholder="Relationship">
-    </div>
-    <div class="grid-2">
-      <input data-key="ex_phone" placeholder="Telephone">
-      <input data-key="ex_email" placeholder="Email">
-    </div>
-    <textarea class="large-note" data-key="ex_notes"
-      placeholder="Executor authority and instructions"></textarea>
+    <textarea class="large-note"></textarea>
   </div>
 </section>
 
-<!-- GUARDIANSHIP -->
-<section>
-  <div class="section-header">
-    <h2 data-title="guardianship">Guardianship</h2>
-  </div>
+<section data-section>
+  <div class="section-header"><h2>Final Wishes</h2></div>
   <div class="section-content">
-    <textarea class="large-note" data-key="guardian_notes"
-      placeholder="Guardian preferences and instructions"></textarea>
+    <textarea class="large-note"></textarea>
   </div>
 </section>
 
-<!-- ASSETS -->
-<section>
-  <div class="section-header">
-    <h2>Assets</h2>
-  </div>
+<section data-section>
+  <div class="section-header"><h2>Additional Notes / Appendix</h2></div>
   <div class="section-content">
-    <div id="assetsList"></div>
-    <button class="small-btn" onclick="addItem('assets')">➕ Add Asset</button>
-  </div>
-</section>
-
-<!-- BENEFICIARIES -->
-<section>
-  <div class="section-header">
-    <h2>Beneficiaries</h2>
-  </div>
-  <div class="section-content">
-    <div id="beneficiariesList"></div>
-    <button class="small-btn" onclick="addItem('beneficiaries')">➕ Add Beneficiary</button>
-  </div>
-</section>
-
-<!-- FINAL WISHES -->
-<section>
-  <div class="section-header">
-    <h2>Final Wishes</h2>
-  </div>
-  <div class="section-content">
-    <textarea class="large-note" data-key="final_wishes"
-      placeholder="Funeral, burial, cremation, memorial wishes"></textarea>
-  </div>
-</section>
-
-<!-- APPENDIX -->
-<section>
-  <div class="section-header">
-    <h2>Additional Notes / Appendix</h2>
-  </div>
-  <div class="section-content">
-    <div id="appendixList"></div>
-    <button class="small-btn" onclick="addAppendix()">➕ Add Notes Page</button>
+    <textarea class="large-note"></textarea>
   </div>
 </section>
 
 </div>
 
 <script>
-const VERSION="1.0";
-const STORE="estatePlanner_v1";
-const data={ simple:{}, assets:[], beneficiaries:[], appendix:[] };
 let finalMode=false;
 
-/* COUNTRIES */
-const countries=["Select country","United States","Canada","United Kingdom","Australia","New Zealand","Other"];
-const countrySel=document.getElementById("country");
-countries.forEach(c=>{ const o=document.createElement("option");o.textContent=c;o.value=c;countrySel.appendChild(o); });
-
-/* JURISDICTION LANGUAGE */
-function applyJurisdictionLanguage(country){
-  const map={
-    "United States":"Executor (Personal Representative)",
-    "Canada":"Executor / Estate Trustee",
-    "United Kingdom":"Executor",
-    "Australia":"Executor"
-  };
-  document.querySelector('[data-title="executor"]').textContent =
-    map[country] || "Executor / Estate Administrator";
-}
-
-/* SIMPLE FIELDS */
-document.querySelectorAll("[data-key]").forEach(el=>{
-  el.addEventListener("input",()=>{
-    data.simple[el.dataset.key]=el.value;
-    save();
-  });
-});
-
-countrySel.addEventListener("change",()=>{
-  applyJurisdictionLanguage(countrySel.value);
-  save();
-});
-
-/* REPEATABLE ITEMS */
-function addItem(type){
-  const template={
-    assets:{label:"Asset",fields:["Description","Location","Notes"]},
-    beneficiaries:{label:"Beneficiary",fields:["Name","Relationship","Notes"]}
-  };
-  const t=template[type];
-  data[type].push({id:crypto.randomUUID(),fields:{}});
-  render();
-  save();
-}
-
-function removeItem(type,id){
-  data[type]=data[type].filter(x=>x.id!==id);
-  render();
-  save();
-}
-
-function renderList(type,elId,label,fields){
-  const wrap=document.getElementById(elId);
-  wrap.innerHTML="";
-  data[type].forEach((row,i)=>{
-    const card=document.createElement("div");
-    card.className="item";
-    card.innerHTML=`<div class="item-head">${label} ${i+1}
-      <button class="small-btn" onclick="removeItem('${type}','${row.id}')">Remove</button>
-    </div>`;
-    fields.forEach(f=>{
-      const ta=document.createElement("textarea");
-      ta.className="medium-note";
-      ta.placeholder=f;
-      ta.value=row.fields[f]||"";
-      ta.oninput=()=>{ row.fields[f]=ta.value; save(); };
-      card.appendChild(ta);
-    });
-    wrap.appendChild(card);
-  });
-}
-
-function addAppendix(){
-  data.appendix.push({id:crypto.randomUUID(),text:""});
-  render();
-  save();
-}
-
-function renderAppendix(){
-  const wrap=document.getElementById("appendixList");
-  wrap.innerHTML="";
-  data.appendix.forEach((p,i)=>{
-    const card=document.createElement("div");
-    card.className="item";
-    card.innerHTML=`<div class="item-head">Notes Page ${i+1}
-      <button class="small-btn" onclick="removeAppendix('${p.id}')">Remove</button></div>`;
-    const ta=document.createElement("textarea");
-    ta.className="large-note";
-    ta.value=p.text;
-    ta.oninput=()=>{ p.text=ta.value; save(); };
-    card.appendChild(ta);
-    wrap.appendChild(card);
-  });
-}
-function removeAppendix(id){
-  data.appendix=data.appendix.filter(p=>p.id!==id);
-  render();
-  save();
-}
-
-/* FINAL MODE */
 function toggleFinal(){
   finalMode=!finalMode;
   document.getElementById("watermark").textContent=finalMode?"FINAL":"DRAFT";
-  document.querySelectorAll("input,textarea,select,button.small-btn").forEach(el=>{
-    if(el!==countrySel) el.disabled=finalMode;
-  });
-  save();
 }
 
-/* SAVE / LOAD */
-function save(){
-  localStorage.setItem(STORE,JSON.stringify({data,finalMode,country:countrySel.value,date:new Date().toISOString()}));
-  document.getElementById("lastUpdated").textContent=new Date().toLocaleDateString();
-  updateProgress();
-}
-
-function load(){
-  const raw=localStorage.getItem(STORE);
-  if(!raw) return;
-  const s=JSON.parse(raw);
-  Object.assign(data,s.data||{});
-  finalMode=!!s.finalMode;
-  countrySel.value=s.country||"Select country";
-  applyJurisdictionLanguage(countrySel.value);
-  document.querySelectorAll("[data-key]").forEach(el=>{
-    el.value=data.simple[el.dataset.key]||"";
-  });
-  document.getElementById("lastUpdated").textContent=new Date(s.date).toLocaleDateString();
-  render();
-  toggleFinal(); toggleFinal();
-}
-
-function updateProgress(){
-  let filled=Object.values(data.simple).filter(v=>v).length;
-  let total=document.querySelectorAll("[data-key]").length;
-  document.getElementById("progress").textContent=
-    `Completion Status: ${Math.round((filled/total)*100)}%`;
-}
-
-function render(){
-  renderList("assets","assetsList","Asset",["Description","Location","Notes"]);
-  renderList("beneficiaries","beneficiariesList","Beneficiary",["Name","Relationship","Notes"]);
-  renderAppendix();
-}
-
-function downloadBackup(){
-  const blob=new Blob([JSON.stringify({data,finalMode},null,2)],{type:"application/json"});
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
-  a.download="estate-plan-backup.json";
-  a.click();
-}
-
-function importBackup(){
-  const i=document.createElement("input");
-  i.type="file"; i.accept=".json";
-  i.onchange=()=>{ const f=i.files[0]; if(!f)return;
-    f.text().then(t=>{
-      const b=JSON.parse(t);
-      Object.assign(data,b.data||{});
-      finalMode=b.finalMode||false;
-      render(); save();
-    });
-  };
-  i.click();
-}
-
-/* PRINT FIX */
+/* Populate cover + TOC before print */
 window.addEventListener("beforeprint",()=>{
-  document.querySelectorAll("input,textarea,select").forEach(f=>{
-    const d=document.createElement("div");
-    d.className="print-text";
-    d.textContent=f.value||"";
-    d.dataset.p="1";
-    f.parentNode.insertBefore(d,f);
+  document.getElementById("coverName").textContent =
+    document.getElementById("name").value || "—";
+  document.getElementById("coverCountry").textContent =
+    document.getElementById("country").value || "—";
+  document.getElementById("coverDate").textContent =
+    new Date().toLocaleDateString();
+
+  const toc=document.getElementById("tocList");
+  toc.innerHTML="";
+  document.querySelectorAll("[data-section] h2").forEach((h,i)=>{
+    const li=document.createElement("li");
+    li.textContent=`${i+1}. ${h.textContent}`;
+    toc.appendChild(li);
   });
 });
-window.addEventListener("afterprint",()=>{
-  document.querySelectorAll("[data-p]").forEach(d=>d.remove());
-});
-
-load();
 </script>
 
 </body>
