@@ -15,7 +15,6 @@
   --muted:#6b7280;
 }
 
-/* PAGE */
 body{
   margin:0;
   font-family:"Times New Roman", Georgia, serif;
@@ -23,7 +22,6 @@ body{
   color:#1f2933;
 }
 
-/* CONTAINER */
 .container{
   max-width:1100px;
   margin:50px auto;
@@ -34,7 +32,6 @@ body{
   position:relative;
 }
 
-/* WATERMARK */
 #watermark{
   position:fixed;
   top:50%;
@@ -42,16 +39,13 @@ body{
   transform:translate(-50%,-50%) rotate(-30deg);
   font-size:110px;
   color:rgba(0,0,0,0.06);
-  z-index:0;
   pointer-events:none;
 }
 
-/* HEADINGS */
 h1{
   text-align:center;
   margin:0;
   color:var(--heading);
-  letter-spacing:0.4px;
 }
 
 .subtitle{
@@ -61,7 +55,6 @@ h1{
   margin-top:6px;
 }
 
-/* TOOLBAR */
 .toolbar{
   display:flex;
   justify-content:center;
@@ -82,7 +75,6 @@ button, select{
 
 button:hover{ background:#eef2f5; }
 
-/* PROGRESS */
 .progress{
   text-align:center;
   font-size:14px;
@@ -90,7 +82,6 @@ button:hover{ background:#eef2f5; }
   margin-bottom:28px;
 }
 
-/* SECTIONS */
 section{
   border:1px solid var(--border);
   border-radius:10px;
@@ -113,7 +104,6 @@ section{
   padding:20px;
 }
 
-/* INPUTS */
 input, textarea{
   width:100%;
   padding:10px;
@@ -129,14 +119,12 @@ input, textarea{
   min-height:240px;
 }
 
-/* PRINT TEXT */
 .print-text{
   white-space:pre-wrap;
   font-size:12pt;
   margin-bottom:14px;
 }
 
-/* PRINT */
 @media print{
   body{ background:#fff; }
   .container{ box-shadow:none; margin:0; }
@@ -158,46 +146,22 @@ Not a legal document
 </p>
 
 <div class="toolbar">
-  <select id="country">
-    <option value="">Select country</option>
+  <select>
+    <option>Select country</option>
     <option>United States</option>
     <option>Canada</option>
     <option>United Kingdom</option>
     <option>Australia</option>
     <option>New Zealand</option>
-    <option>India</option>
-    <option>Germany</option>
-    <option>France</option>
-    <option>Italy</option>
-    <option>Spain</option>
-    <option>Netherlands</option>
-    <option>Belgium</option>
-    <option>Sweden</option>
-    <option>Norway</option>
-    <option>Denmark</option>
-    <option>Finland</option>
-    <option>Japan</option>
-    <option>South Africa</option>
-    <option>Brazil</option>
-    <option>Mexico</option>
     <option>Other</option>
   </select>
-
   <button onclick="toggleFinal()">Draft / Final</button>
   <button onclick="window.print()">Print / Save PDF</button>
 </div>
 
-<div class="progress" id="progress">Completion Status: 0%</div>
+<div class="progress">Completion Status: Manual</div>
 
-<!-- EXTRA NOTES / APPENDIX -->
-<section>
-  <div class="section-header"><h2>Extra Notes / Appendix</h2></div>
-  <div class="section-content">
-    <textarea class="large-note" placeholder="Additional notes, explanations, family guidance, or messages..."></textarea>
-    <textarea class="large-note" placeholder="Additional page (optional)"></textarea>
-  </div>
-</section>
-
+<!-- PERSONAL INFO -->
 <section>
   <div class="section-header"><h2>Personal Information</h2></div>
   <div class="section-content">
@@ -209,6 +173,7 @@ Not a legal document
   </div>
 </section>
 
+<!-- FAMILY -->
 <section>
   <div class="section-header"><h2>Family / Dependants</h2></div>
   <div class="section-content">
@@ -216,45 +181,48 @@ Not a legal document
   </div>
 </section>
 
+<!-- EXECUTOR -->
 <section>
   <div class="section-header"><h2>Executor / Estate Administrator</h2></div>
   <div class="section-content">
     <input placeholder="Primary executor full legal name">
-    <input placeholder="Relationship to you">
+    <input placeholder="Relationship">
     <input placeholder="Telephone number">
     <input placeholder="Email address">
-    <input placeholder="Address">
-
-    <hr>
-
-    <input placeholder="Alternate executor full legal name">
-    <input placeholder="Relationship to you">
-    <input placeholder="Telephone number">
-    <input placeholder="Email address">
-    <input placeholder="Address">
-
-    <textarea class="large-note" placeholder="Executor authority, powers, and special instructions"></textarea>
+    <textarea class="large-note" placeholder="Executor authority and instructions"></textarea>
   </div>
 </section>
 
+<!-- GUARDIANSHIP -->
 <section>
   <div class="section-header"><h2>Guardianship</h2></div>
   <div class="section-content">
-    <textarea class="large-note" placeholder="Guardianship preferences for minor or dependent persons"></textarea>
+    <textarea class="large-note" placeholder="Guardianship preferences for minors or dependants"></textarea>
   </div>
 </section>
 
+<!-- ASSETS -->
 <section>
   <div class="section-header"><h2>Assets</h2></div>
   <div class="section-content">
-    <textarea class="large-note" placeholder="Property, bank accounts, investments, vehicles, valuables"></textarea>
+    <textarea class="large-note" placeholder="Property, financial accounts, investments, vehicles, valuables"></textarea>
   </div>
 </section>
 
+<!-- FINAL WISHES -->
 <section>
   <div class="section-header"><h2>Final Wishes</h2></div>
   <div class="section-content">
-    <textarea class="large-note" placeholder="Funeral, burial, cremation preferences and special wishes"></textarea>
+    <textarea class="large-note" placeholder="Funeral, burial, cremation, or memorial wishes"></textarea>
+  </div>
+</section>
+
+<!-- ADDITIONAL NOTES / APPENDIX (NOW AT END) -->
+<section>
+  <div class="section-header"><h2>Additional Notes / Appendix</h2></div>
+  <div class="section-content">
+    <textarea class="large-note" placeholder="Additional notes, explanations, family guidance, or personal messages"></textarea>
+    <textarea class="large-note" placeholder="Additional page (optional)"></textarea>
   </div>
 </section>
 
@@ -268,7 +236,7 @@ function toggleFinal(){
   document.getElementById("watermark").textContent = finalMode ? "FINAL" : "DRAFT";
 }
 
-/* PRINT FIX — prevents clipped text */
+/* PRINT FIX — converts inputs to flowing text */
 function preparePrint(){
   document.querySelectorAll("textarea,input").forEach(f=>{
     const d=document.createElement("div");
