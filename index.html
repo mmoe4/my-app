@@ -25,7 +25,7 @@ body{
 .container{
   max-width:1100px;
   margin:50px auto;
-  padding:40px 30px 100px;
+  padding:40px 30px 120px;
   background:var(--paper);
   border-radius:18px;
   box-shadow:0 30px 80px rgba(0,0,0,.35);
@@ -92,7 +92,6 @@ section{
 
 .section-content{
   padding:22px;
-  display:block;
 }
 
 h3{
@@ -112,7 +111,7 @@ input, textarea{
   background:#fafafa;
 }
 
-textarea{ min-height:90px; }
+textarea{ min-height:120px; }
 
 .item{
   border:1px solid var(--border);
@@ -122,6 +121,7 @@ textarea{ min-height:90px; }
   margin-top:10px;
 }
 
+/* WATERMARK */
 #watermark{
   position:absolute;
   top:50%;
@@ -130,12 +130,31 @@ textarea{ min-height:90px; }
   font-size:120px;
   color:rgba(0,0,0,.06);
   pointer-events:none;
+  user-select:none;
 }
 
+/* PRINT FIXES */
 @media print{
   body{ background:#fff; }
-  .container{ box-shadow:none; margin:0; }
-  button,select{ display:none; }
+  .container{ box-shadow:none; margin:0; padding:0; }
+  button, select{ display:none; }
+
+  textarea, input{
+    border:none !important;
+    background:transparent !important;
+    padding:0 !important;
+    margin-bottom:12px;
+    font-size:12pt;
+  }
+
+  textarea{
+    height:auto !important;
+    overflow:visible !important;
+  }
+
+  section{
+    page-break-inside:avoid;
+  }
 }
 </style>
 </head>
@@ -172,10 +191,8 @@ Not a legal document
 <div class="progress">Completion Status: Manual</div>
 
 <!-- PERSONAL INFORMATION -->
-<section class="open">
-  <div class="section-header">
-    <h2>Personal Information</h2>
-  </div>
+<section>
+  <div class="section-header"><h2>Personal Information</h2></div>
   <div class="section-content">
     <input placeholder="Full legal name">
     <input placeholder="Date of birth">
@@ -185,11 +202,9 @@ Not a legal document
   </div>
 </section>
 
-<!-- FAMILY / DEPENDANTS -->
-<section class="open">
-  <div class="section-header">
-    <h2>Family / Dependants</h2>
-  </div>
+<!-- FAMILY -->
+<section>
+  <div class="section-header"><h2>Family / Dependants</h2></div>
   <div class="section-content">
 
     <h3>Spouse / Partner</h3>
@@ -217,10 +232,8 @@ Not a legal document
 </section>
 
 <!-- EXECUTOR -->
-<section class="open">
-  <div class="section-header">
-    <h2>Executor / Estate Administrator</h2>
-  </div>
+<section>
+  <div class="section-header"><h2>Executor / Estate Administrator</h2></div>
   <div class="section-content">
 
     <h3>Primary Executor</h3>
@@ -250,10 +263,8 @@ Not a legal document
 </section>
 
 <!-- GUARDIANSHIP -->
-<section class="open">
-  <div class="section-header">
-    <h2>Guardianship</h2>
-  </div>
+<section>
+  <div class="section-header"><h2>Guardianship</h2></div>
   <div class="section-content">
     <input placeholder="Primary guardian name">
     <input placeholder="Alternate guardian name">
@@ -262,10 +273,8 @@ Not a legal document
 </section>
 
 <!-- ASSETS -->
-<section class="open">
-  <div class="section-header">
-    <h2>Assets</h2>
-  </div>
+<section>
+  <div class="section-header"><h2>Assets</h2></div>
   <div class="section-content">
     <div class="item">
       <input placeholder="Asset type (property, bank, investment, vehicle)">
@@ -277,10 +286,8 @@ Not a legal document
 </section>
 
 <!-- FINAL WISHES -->
-<section class="open">
-  <div class="section-header">
-    <h2>Final Wishes</h2>
-  </div>
+<section>
+  <div class="section-header"><h2>Final Wishes</h2></div>
   <div class="section-content">
     <textarea placeholder="Funeral, burial, or cremation preferences"></textarea>
     <textarea placeholder="Personal messages or additional instructions"></textarea>
@@ -290,6 +297,16 @@ Not a legal document
 </div>
 
 <script>
+/* Expand all textareas before printing */
+function expandTextareas(){
+  document.querySelectorAll("textarea").forEach(t=>{
+    t.style.height="auto";
+    t.style.height=(t.scrollHeight+2)+"px";
+  });
+}
+
+window.addEventListener("beforeprint", expandTextareas);
+
 let isFinal=false;
 function toggleFinal(){
   isFinal=!isFinal;
