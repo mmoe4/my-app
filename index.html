@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My Estate Plan</title>
 
 <style>
@@ -16,182 +16,169 @@
   --soft:#f7f8fa;
 }
 
-/* ===== SCREEN ===== */
+/* ================= SCREEN ================= */
 body{
   margin:0;
   font-family:"Times New Roman", Georgia, serif;
+  font-size:18px;
+  line-height:1.6;
   background:radial-gradient(circle at top, var(--jam-mid), var(--jam-dark));
   color:#1f2933;
 }
 
 .container{
-  max-width:1100px;
+  max-width:1150px;
   margin:50px auto;
-  padding:40px 30px 120px;
+  padding:48px 36px 140px;
   background:var(--paper);
-  border-radius:16px;
-  box-shadow:0 20px 45px rgba(0,0,0,0.35);
-  position:relative;
+  border-radius:18px;
+  box-shadow:0 22px 50px rgba(0,0,0,0.35);
 }
 
+/* Headings */
 h1{
   text-align:center;
   margin:0;
+  font-size:36px;
   color:var(--heading);
-  letter-spacing:0.4px;
+  letter-spacing:0.6px;
 }
 
 .subtitle{
   text-align:center;
-  font-size:14px;
+  font-size:16px;
   color:var(--muted);
-  margin:8px 0 0;
-  line-height:1.5;
+  margin:10px 0 0;
 }
 
 .notice{
   background:var(--soft);
   border:1px solid var(--border);
-  border-radius:10px;
-  padding:14px 16px;
-  font-size:14px;
+  border-radius:12px;
+  padding:18px 20px;
+  font-size:16px;
   line-height:1.6;
-  margin:18px 0 24px;
-  color:#374151;
+  margin:24px 0 28px;
 }
 
 .toolbar{
   display:flex;
   justify-content:center;
-  gap:10px;
-  margin:22px 0 18px;
+  gap:12px;
+  margin:26px 0 22px;
   flex-wrap:wrap;
 }
 
 button{
-  padding:9px 14px;
+  padding:12px 18px;
   font-family:inherit;
-  font-size:14px;
-  border-radius:6px;
+  font-size:16px;
+  border-radius:8px;
   border:1px solid var(--border);
   background:#f9fafb;
   cursor:pointer;
 }
 button:hover{ background:#eef2f5; }
 
+/* Sections */
 section{
   border:1px solid var(--border);
-  border-radius:10px;
-  margin-bottom:18px;
+  border-radius:12px;
+  margin-bottom:22px;
   background:#fff;
 }
 
 .section-header{
-  padding:16px 20px;
+  padding:20px 24px;
   border-bottom:1px solid var(--border);
 }
 
 .section-header h2{
   margin:0;
-  font-size:17px;
+  font-size:24px;
   color:var(--heading);
 }
 
-.section-content{ padding:20px; }
+.section-content{
+  padding:24px;
+}
 
 .help{
-  font-size:13.5px;
+  font-size:15.5px;
   color:var(--muted);
-  line-height:1.6;
-  margin:0 0 12px;
+  margin-bottom:14px;
+}
+
+/* Inputs */
+input, textarea{
+  width:100%;
+  padding:16px;
+  margin-bottom:18px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:#fafafa;
+  font-family:inherit;
+  font-size:18px;
+  box-sizing:border-box;
 }
 
 .grid-2{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:12px;
+  gap:16px;
 }
-@media (max-width:820px){
+@media(max-width:900px){
   .grid-2{ grid-template-columns:1fr; }
 }
 
-input, textarea{
-  width:100%;
-  padding:10px;
-  margin-bottom:12px;
-  border-radius:6px;
-  border:1px solid var(--border);
-  background:#fafafa;
-  font-family:inherit;
-  font-size:14px;
-  box-sizing:border-box;
-}
+/* Notes */
+.large-note{ min-height:420px; }
+.medium-note{ min-height:260px; }
 
-.large-note{ min-height:220px; }
-.medium-note{ min-height:140px; }
-
-/* ===== PRINT DOCUMENT PAGES (Cover/TOC/Summary) ===== */
+/* ================= PRINT ================= */
 .print-only{ display:none; }
 
 .print-page{
-  padding:18mm 18mm 24mm;
+  padding:20mm 20mm 26mm;
   page-break-after:always;
 }
 
 .print-title{
   text-align:center;
-  margin-top:40mm;
+  margin-top:45mm;
 }
 
 .print-title h1{
-  font-size:34px;
-  margin-bottom:8px;
+  font-size:38px;
 }
 
 .print-sub{
-  text-align:center;
-  font-size:13px;
+  margin-top:18px;
+  font-size:15px;
   color:#444;
-  margin-top:10px;
-}
-
-.toc{
-  font-size:13.5px;
-}
-.toc ol{
-  padding-left:18px;
 }
 
 .family-box{
   border:1px solid #ccc;
-  padding:12px 14px;
-  margin:10px 0;
-  font-size:13.5px;
-  line-height:1.55;
+  padding:14px 16px;
+  margin:12px 0;
+  font-size:15px;
 }
 
-/* This is the magic print-safe text style */
 .print-text{
   white-space:pre-wrap;
-  font-size:12pt;
-  line-height:1.45;
-  margin:0 0 10px;
-  color:#111827;
+  font-size:14pt;
+  line-height:1.65;
+  margin-bottom:12px;
 }
 
-.print-label{
-  font-weight:700;
-  margin:10px 0 4px;
-  color:#111827;
-}
-
-/* ===== PRINT FOOTER PAGE NUMBERS ===== */
+/* Footer page numbers */
 @media print{
   body{ background:#fff; }
   .container{ display:none !important; }
   .print-only{ display:block !important; }
 
-  @page{ margin:18mm 18mm 24mm; }
+  @page{ margin:20mm 20mm 26mm; }
 
   footer{
     position:fixed;
@@ -199,7 +186,7 @@ input, textarea{
     left:0;
     right:0;
     text-align:center;
-    font-size:11px;
+    font-size:12px;
     color:#555;
   }
 
@@ -216,21 +203,20 @@ input, textarea{
 <div class="print-only print-page">
   <div class="print-title">
     <h1>My Estate Plan</h1>
-    <div style="margin-top:22px;font-size:14px;">
+    <div style="margin-top:26px;">
       <div><b>Prepared for:</b> <span id="coverName">—</span></div>
-      <div style="margin-top:6px;"><b>Jurisdiction:</b> <span id="coverCountry">—</span></div>
-      <div style="margin-top:6px;"><b>Date:</b> <span id="coverDate">—</span></div>
-      <div style="margin-top:6px;"><b>Version:</b> 1.0</div>
+      <div><b>Jurisdiction:</b> <span id="coverCountry">—</span></div>
+      <div><b>Date:</b> <span id="coverDate">—</span></div>
+      <div><b>Version:</b> 1.0</div>
     </div>
     <p class="print-sub">
-      This document is a personal planning record intended to assist family and executors.
-      It is not a legal will.
+      This document is a personal planning record only and is not a legal will.
     </p>
   </div>
 </div>
 
-<!-- ================= PRINT: TABLE OF CONTENTS ================= -->
-<div class="print-only print-page toc">
+<!-- ================= PRINT: TOC ================= -->
+<div class="print-only print-page">
   <h2>Table of Contents</h2>
   <ol id="tocList"></ol>
 </div>
@@ -239,14 +225,14 @@ input, textarea{
 <div class="print-only print-page">
   <h2>What To Do First</h2>
 
-  <div class="family-box"><b>1. Do not rush.</b><br>Take time. Nothing must be decided immediately.</div>
-  <div class="family-box"><b>2. Locate key documents.</b><br>Use the “Important Documents” section in this binder.</div>
-  <div class="family-box"><b>3. Contact the executor.</b><br>The executor named in this document should guide next steps.</div>
-  <div class="family-box"><b>4. Secure property & valuables.</b><br>Protect homes, vehicles, pets, and important items.</div>
-  <div class="family-box"><b>5. Do not distribute assets early.</b><br>Wait for proper legal guidance.</div>
-  <div class="family-box"><b>6. Seek professional advice.</b><br>Laws vary by jurisdiction. A lawyer/advisor may be required.</div>
+  <div class="family-box"><b>1. Do not rush.</b><br>Take time before making decisions.</div>
+  <div class="family-box"><b>2. Locate documents.</b><br>Use the Important Documents section.</div>
+  <div class="family-box"><b>3. Contact executor.</b><br>They should guide next steps.</div>
+  <div class="family-box"><b>4. Secure property & pets.</b></div>
+  <div class="family-box"><b>5. Do not distribute assets early.</b></div>
+  <div class="family-box"><b>6. Seek professional advice.</b></div>
 
-  <h3 style="margin-top:18px;">Family Notes</h3>
+  <h3 style="margin-top:20px;">Family Notes</h3>
   <div class="print-text" id="familyNotesPrint">—</div>
 </div>
 
@@ -256,69 +242,60 @@ input, textarea{
 <div class="container" id="screenDoc">
 
   <h1>My Estate Plan</h1>
-  <p class="subtitle">Personal planning record for family and executors · Not a legal document</p>
+  <p class="subtitle">Personal planning record · Not a legal document</p>
 
   <div class="toolbar">
     <button onclick="window.print()">Print / Save PDF</button>
     <button onclick="exportWord()">Download Word</button>
-    <button onclick="downloadBackup()">Backup</button>
-    <button onclick="importBackup()">Restore</button>
+    <button onclick="backup()">Backup</button>
+    <button onclick="restore()">Restore</button>
   </div>
 
   <div class="notice">
-    <b>Privacy:</b> Your entries are saved locally in this browser on this device.
-    Use <b>Print / Save PDF</b> and/or <b>Backup</b> to share with family/executors.
+    <b>Privacy:</b> All information is stored locally in your browser on this device.
   </div>
 
   <section data-section>
     <div class="section-header"><h2>Personal Information</h2></div>
     <div class="section-content">
-      <p class="help">Basic identification details for this binder cover and for reference.</p>
       <div class="grid-2">
         <input id="name" data-key="name" placeholder="Full legal name">
-        <input id="dob" data-key="dob" placeholder="Date of birth (YYYY-MM-DD)">
+        <input data-key="dob" placeholder="Date of birth">
       </div>
-      <input id="address" data-key="address" placeholder="Primary residence address">
+      <input data-key="address" placeholder="Address">
       <div class="grid-2">
-        <input id="phone" data-key="phone" placeholder="Telephone number">
-        <input id="email" data-key="email" placeholder="Email address">
+        <input data-key="phone" placeholder="Telephone">
+        <input data-key="email" placeholder="Email">
       </div>
-      <input id="country" data-key="country" placeholder="Country / jurisdiction (e.g., Canada, United States)">
+      <input id="country" data-key="country" placeholder="Country / jurisdiction">
     </div>
   </section>
 
   <section data-section>
     <div class="section-header"><h2>Executor</h2></div>
     <div class="section-content">
-      <p class="help">The executor manages the estate process under local law.</p>
-      <div class="grid-2">
-        <input data-key="ex_name" placeholder="Primary executor name">
-        <input data-key="ex_phone" placeholder="Executor phone">
-      </div>
-      <textarea class="large-note" data-key="ex_instructions" placeholder="Executor instructions, key contacts, guidance"></textarea>
+      <input data-key="executor" placeholder="Executor name">
+      <textarea class="large-note" data-key="executor_notes" placeholder="Executor instructions"></textarea>
     </div>
   </section>
 
   <section data-section>
     <div class="section-header"><h2>Important Documents</h2></div>
     <div class="section-content">
-      <p class="help">Where originals and key records are located.</p>
-      <textarea class="large-note" data-key="docs" placeholder="Location of will, insurance policies, titles, deeds, tax returns, pension statements, etc."></textarea>
+      <textarea class="large-note" data-key="documents" placeholder="Where documents are stored"></textarea>
     </div>
   </section>
 
   <section data-section>
     <div class="section-header"><h2>Assets</h2></div>
     <div class="section-content">
-      <p class="help">List major assets (property, bank/investments, vehicles, valuables).</p>
-      <textarea class="large-note" data-key="assets" placeholder="Assets list + notes"></textarea>
+      <textarea class="large-note" data-key="assets" placeholder="List assets"></textarea>
     </div>
   </section>
 
   <section data-section>
     <div class="section-header"><h2>Final Wishes</h2></div>
     <div class="section-content">
-      <p class="help">Funeral, burial/cremation, memorial wishes, and personal notes.</p>
       <textarea class="large-note" data-key="final_wishes" placeholder="Final wishes"></textarea>
     </div>
   </section>
@@ -326,191 +303,97 @@ input, textarea{
   <section data-section>
     <div class="section-header"><h2>Family “What To Do First” Notes</h2></div>
     <div class="section-content">
-      <p class="help">Editable notes for family (keys, pets, who to call, urgent instructions).</p>
       <textarea id="familyNotes" class="large-note" data-key="family_notes"
-        placeholder="Keys location, pet care, immediate contacts, urgent instructions..."></textarea>
+        placeholder="Keys, pets, urgent contacts, immediate instructions"></textarea>
     </div>
   </section>
 
 </div>
 
 <script>
-/* =========================
-   LOCAL SAVE (so you don't lose work)
-========================= */
-const STORE = "estate_plan_complete_v1";
-const fields = Array.from(document.querySelectorAll("[data-key]"));
+/* ================= LOCAL SAVE ================= */
+const STORE="estate_plan_large_text_v1";
+const fields=[...document.querySelectorAll("[data-key]")];
 
-function saveLocal(){
-  const payload = {};
-  fields.forEach(el => payload[el.dataset.key] = el.value || "");
-  localStorage.setItem(STORE, JSON.stringify(payload));
+function save(){
+  const d={};
+  fields.forEach(f=>d[f.dataset.key]=f.value||"");
+  localStorage.setItem(STORE,JSON.stringify(d));
 }
-
-function loadLocal(){
-  const raw = localStorage.getItem(STORE);
+function load(){
+  const raw=localStorage.getItem(STORE);
   if(!raw) return;
   try{
-    const payload = JSON.parse(raw);
-    fields.forEach(el => { el.value = payload[el.dataset.key] || ""; });
+    const d=JSON.parse(raw);
+    fields.forEach(f=>f.value=d[f.dataset.key]||"");
   }catch(e){}
 }
+fields.forEach(f=>f.addEventListener("input",save));
+load();
 
-fields.forEach(el => el.addEventListener("input", saveLocal));
-loadLocal();
-
-/* =========================
-   PRINT: Cover + TOC + Family Notes
-   PLUS: convert all inputs/textareas to flowing text
-   so long text NEVER clips in PDF.
-========================= */
+/* ================= PRINT ================= */
 function buildTOC(){
-  const toc = document.getElementById("tocList");
-  toc.innerHTML = "";
-  document.querySelectorAll("[data-section] .section-header h2").forEach((h, i)=>{
-    const li = document.createElement("li");
-    li.textContent = h.textContent;
+  const toc=document.getElementById("tocList");
+  toc.innerHTML="";
+  document.querySelectorAll("[data-section] h2").forEach(h=>{
+    const li=document.createElement("li");
+    li.textContent=h.textContent;
     toc.appendChild(li);
   });
 }
 
-function fillCoverAndSummary(){
-  document.getElementById("coverName").textContent = document.getElementById("name").value || "—";
-  document.getElementById("coverCountry").textContent = document.getElementById("country").value || "—";
-  document.getElementById("coverDate").textContent = new Date().toLocaleDateString();
-  document.getElementById("familyNotesPrint").textContent = document.getElementById("familyNotes").value || "—";
-}
-
-function convertFieldsForPrint(){
-  // Replace each input/textarea in the SCREEN doc with print-friendly text blocks (temporarily)
-  document.querySelectorAll("#screenDoc input, #screenDoc textarea").forEach(el=>{
-    const label = el.placeholder ? el.placeholder.trim() : "";
-    const value = (el.value || "").trim();
-
-    const wrapper = document.createElement("div");
-    wrapper.dataset.printReplace = "1";
-
-    if(label){
-      const lbl = document.createElement("div");
-      lbl.className = "print-label";
-      lbl.textContent = label;
-      wrapper.appendChild(lbl);
-    }
-
-    const txt = document.createElement("div");
-    txt.className = "print-text";
-    txt.textContent = value || "—";
-    wrapper.appendChild(txt);
-
-    // Insert wrapper before the element, then hide element
-    el.parentNode.insertBefore(wrapper, el);
-    el.dataset.printHidden = "1";
-    el.style.display = "none";
-  });
-}
-
-function restoreAfterPrint(){
-  document.querySelectorAll("[data-print-replace]").forEach(n => n.remove());
-  document.querySelectorAll("#screenDoc input[data-print-hidden], #screenDoc textarea[data-print-hidden]").forEach(el=>{
-    el.style.display = "";
-    el.removeAttribute("data-print-hidden");
-  });
-}
-
-window.addEventListener("beforeprint", ()=>{
-  saveLocal();
-  fillCoverAndSummary();
+window.addEventListener("beforeprint",()=>{
+  document.getElementById("coverName").textContent=document.getElementById("name").value||"—";
+  document.getElementById("coverCountry").textContent=document.getElementById("country").value||"—";
+  document.getElementById("coverDate").textContent=new Date().toLocaleDateString();
+  document.getElementById("familyNotesPrint").textContent=document.getElementById("familyNotes").value||"—";
   buildTOC();
-  convertFieldsForPrint();
 });
 
-window.addEventListener("afterprint", restoreAfterPrint);
-
-/* =========================
-   WORD/DOC EXPORT
-   Exports a clean doc with headings and printed text.
-========================= */
+/* ================= WORD EXPORT ================= */
 function exportWord(){
-  // Create a Word-friendly HTML document using the same content as the screen binder
-  // We convert form fields into readable text blocks so Word looks clean.
-  const clone = document.getElementById("screenDoc").cloneNode(true);
-
-  // Remove toolbar buttons from export
-  const tb = clone.querySelector(".toolbar");
-  if(tb) tb.remove();
-
-  // Convert fields to text
+  const clone=document.getElementById("screenDoc").cloneNode(true);
+  clone.querySelector(".toolbar").remove();
   clone.querySelectorAll("input,textarea").forEach(el=>{
-    const label = el.placeholder ? el.placeholder.trim() : "";
-    const value = (el.value || "").trim();
-
-    const wrap = document.createElement("div");
-    if(label){
-      const b = document.createElement("div");
-      b.style.fontWeight = "700";
-      b.style.marginTop = "10px";
-      b.textContent = label;
-      wrap.appendChild(b);
-    }
-    const p = document.createElement("div");
-    p.style.whiteSpace = "pre-wrap";
-    p.style.marginBottom = "8px";
-    p.textContent = value || "—";
-    wrap.appendChild(p);
-
-    el.parentNode.replaceChild(wrap, el);
+    const p=document.createElement("div");
+    p.style.whiteSpace="pre-wrap";
+    p.textContent=el.value||"—";
+    el.replaceWith(p);
   });
 
-  const html = `
-  <html>
-    <head>
-      <meta charset="UTF-8">
-      <title>My Estate Plan</title>
-    </head>
-    <body style="font-family:Times New Roman, Georgia, serif;">
-      ${clone.outerHTML}
-    </body>
-  </html>`;
+  const html=`<html><head><meta charset="UTF-8"></head>
+  <body style="font-family:Times New Roman,Georgia,serif;">${clone.outerHTML}</body></html>`;
 
-  const blob = new Blob(['\ufeff', html], { type: 'application/msword' });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "My_Estate_Plan.doc";
+  const blob=new Blob(['\ufeff',html],{type:"application/msword"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="My_Estate_Plan.doc";
   a.click();
 }
 
-/* =========================
-   BACKUP / RESTORE (JSON)
-========================= */
-function downloadBackup(){
-  const payload = {};
-  fields.forEach(el => payload[el.dataset.key] = el.value || "");
-  const blob = new Blob([JSON.stringify({version:"1.0", saved:new Date().toISOString(), payload}, null, 2)], {type:"application/json"});
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "my-estate-plan-backup.json";
+/* ================= BACKUP ================= */
+function backup(){
+  const d={};
+  fields.forEach(f=>d[f.dataset.key]=f.value||"");
+  const blob=new Blob([JSON.stringify(d,null,2)],{type:"application/json"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="estate-plan-backup.json";
   a.click();
 }
-
-function importBackup(){
-  const input = document.createElement("input");
-  input.type = "file";
-  input.accept = ".json,application/json";
-  input.onchange = async ()=>{
-    const file = input.files?.[0];
-    if(!file) return;
-    try{
-      const text = await file.text();
-      const parsed = JSON.parse(text);
-      const payload = parsed?.payload || {};
-      fields.forEach(el => { el.value = payload[el.dataset.key] || ""; });
-      saveLocal();
-      alert("Restore complete.");
-    }catch(e){
-      alert("That backup file could not be read.");
-    }
+function restore(){
+  const i=document.createElement("input");
+  i.type="file";
+  i.accept=".json";
+  i.onchange=async()=>{
+    const f=i.files[0];
+    if(!f) return;
+    const t=await f.text();
+    const d=JSON.parse(t);
+    fields.forEach(el=>el.value=d[el.dataset.key]||"");
+    save();
   };
-  input.click();
+  i.click();
 }
 </script>
 
