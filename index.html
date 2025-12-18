@@ -1,38 +1,310 @@
-<section>
-  <div class="section-header">
-    <h2>Executor / Estate Administrator</h2>
-  </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Estate Plan</title>
 
-  <div class="section-content">
+<style>
+:root{
+  --jam-dark:#2b1518;
+  --jam-mid:#3a1f23;
+  --paper:#ffffff;
+  --border:#d7dadd;
+  --primary:#2f4f4f;
+  --muted:#5c6b75;
+}
 
-    <div class="help">
-      The executor (also called estate administrator or personal representative)
-      is responsible for carrying out the instructions of this estate plan and
-      managing the estate after death.
-    </div>
+body{
+  margin:0;
+  font-family:"Times New Roman", Georgia, serif;
+  background:radial-gradient(circle at top, var(--jam-mid), var(--jam-dark));
+  color:#1f2a33;
+}
 
-    <h3>Primary Executor</h3>
-    <input placeholder="Full legal name">
-    <input placeholder="Relationship to you">
-    <input placeholder="Telephone number">
-    <input placeholder="Email address">
-    <input placeholder="Address">
+.container{
+  max-width:1100px;
+  margin:50px auto;
+  padding:40px 30px 100px;
+  background:var(--paper);
+  border-radius:18px;
+  box-shadow:0 30px 80px rgba(0,0,0,.35);
+  position:relative;
+}
 
-    <h3>Alternate / Backup Executor</h3>
-    <input placeholder="Full legal name">
-    <input placeholder="Relationship to you">
-    <input placeholder="Telephone number">
-    <input placeholder="Email address">
-    <input placeholder="Address">
+h1{
+  text-align:center;
+  color:var(--primary);
+  font-size:30px;
+  margin-bottom:6px;
+}
 
-    <h3>Executor Authority & Instructions</h3>
-    <textarea placeholder="Special instructions, powers, compensation expectations, or guidance for the executor"></textarea>
+.subtitle{
+  text-align:center;
+  font-size:14px;
+  color:var(--muted);
+  margin-bottom:25px;
+}
 
-    <h3>Professional Advisors</h3>
-    <input placeholder="Lawyer or law firm (name & contact)">
-    <input placeholder="Accountant or tax advisor">
-    <input placeholder="Financial advisor">
-    <textarea placeholder="Additional professional contacts or notes"></textarea>
+.toolbar{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-bottom:25px;
+}
 
-  </div>
+button, select{
+  padding:9px 16px;
+  border-radius:6px;
+  border:1px solid var(--border);
+  background:#f9fafb;
+  font-family:inherit;
+  cursor:pointer;
+}
+
+button:hover{ background:#eef1f3; }
+
+.progress{
+  text-align:center;
+  font-size:14px;
+  color:var(--muted);
+  margin-bottom:25px;
+}
+
+section{
+  border:1px solid var(--border);
+  border-radius:10px;
+  margin-bottom:20px;
+  background:#fff;
+}
+
+.section-header{
+  padding:18px 22px;
+  border-bottom:1px solid var(--border);
+  cursor:pointer;
+}
+
+.section-header h2{
+  margin:0;
+  font-size:18px;
+  color:var(--primary);
+}
+
+.section-content{
+  padding:22px;
+  display:none;
+}
+
+section.open .section-content{ display:block; }
+
+.help{
+  font-size:14px;
+  color:#555;
+  margin-bottom:15px;
+  line-height:1.6;
+}
+
+h3{
+  margin-top:25px;
+  font-size:16px;
+  color:#344b4b;
+}
+
+input, textarea{
+  width:100%;
+  padding:10px;
+  margin:8px 0 14px;
+  border-radius:6px;
+  border:1px solid var(--border);
+  font-family:inherit;
+  font-size:14px;
+  background:#fafafa;
+}
+
+textarea{ min-height:90px; }
+
+.item{
+  border:1px solid var(--border);
+  padding:12px;
+  border-radius:6px;
+  background:#fcfcfd;
+  margin-top:10px;
+}
+
+/* WATERMARK */
+#watermark{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%) rotate(-28deg);
+  font-size:120px;
+  color:rgba(0,0,0,.06);
+  pointer-events:none;
+  user-select:none;
+}
+
+/* PRINT */
+@media print{
+  body{ background:#fff; }
+  .container{ box-shadow:none; margin:0; }
+  button,select{ display:none; }
+  .section-content{ display:block!important; }
+  section{ page-break-inside:avoid; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div id="watermark">DRAFT</div>
+
+<h1>My Estate Plan</h1>
+<p class="subtitle">
+Personal estate planning record for family and executors<br>
+Not a legal document
+</p>
+
+<div class="toolbar">
+  <select id="country">
+    <option value="">Select country</option>
+    <option>United States</option>
+    <option>Canada</option>
+    <option>United Kingdom</option>
+    <option>Australia</option>
+    <option>New Zealand</option>
+    <option>India</option>
+    <option>Germany</option>
+    <option>France</option>
+    <option>Other</option>
+  </select>
+
+  <button onclick="toggleFinal()">Draft / Final</button>
+  <button onclick="window.print()">Print / PDF</button>
+</div>
+
+<div class="progress" id="progress">Completion Status: 0%</div>
+
+<!-- PERSONAL INFO -->
+<section class="open">
+<div class="section-header" onclick="toggle(this)">
+<h2>Personal Information</h2>
+</div>
+<div class="section-content">
+<input placeholder="Full legal name">
+<input placeholder="Date of birth">
+<input placeholder="Primary address">
+<input placeholder="Telephone">
+<input placeholder="Email address">
+</div>
 </section>
+
+<!-- FAMILY -->
+<section>
+<div class="section-header" onclick="toggle(this)">
+<h2>Family / Dependants</h2>
+</div>
+<div class="section-content">
+
+<h3>Spouse / Partner</h3>
+<input placeholder="Full legal name">
+<input placeholder="Relationship">
+<input placeholder="Date of birth">
+<textarea placeholder="Marriage agreements or notes"></textarea>
+
+<h3>Children</h3>
+<div id="children"></div>
+<button onclick="addRow('children',['Child name','Date of birth','Guardian','Notes'])">Add Child</button>
+
+<h3>Other Dependants</h3>
+<div id="dependants"></div>
+<button onclick="addRow('dependants',['Name','Relationship','Dependency type','Notes'])">Add Dependant</button>
+
+</div>
+</section>
+
+<!-- EXECUTOR -->
+<section>
+<div class="section-header" onclick="toggle(this)">
+<h2>Executor / Estate Administrator</h2>
+</div>
+<div class="section-content">
+
+<h3>Primary Executor</h3>
+<input placeholder="Full legal name">
+<input placeholder="Relationship">
+<input placeholder="Phone">
+<input placeholder="Email">
+
+<h3>Alternate Executor</h3>
+<input placeholder="Full legal name">
+<input placeholder="Relationship">
+<input placeholder="Phone">
+<input placeholder="Email">
+
+<textarea placeholder="Executor instructions or authority notes"></textarea>
+
+</div>
+</section>
+
+<!-- GUARDIANSHIP -->
+<section>
+<div class="section-header" onclick="toggle(this)">
+<h2>Guardianship</h2>
+</div>
+<div class="section-content">
+<input placeholder="Primary guardian name">
+<input placeholder="Alternate guardian name">
+<textarea placeholder="Guardianship instructions or preferences"></textarea>
+</div>
+</section>
+
+<!-- ASSETS -->
+<section>
+<div class="section-header" onclick="toggle(this)">
+<h2>Assets</h2>
+</div>
+<div class="section-content">
+<div id="assets"></div>
+<button onclick="addRow('assets',['Asset type','Description','Location','Notes'])">Add Asset</button>
+</div>
+</section>
+
+<!-- FINAL WISHES -->
+<section>
+<div class="section-header" onclick="toggle(this)">
+<h2>Final Wishes</h2>
+</div>
+<div class="section-content">
+<textarea placeholder="Funeral, burial, or cremation preferences"></textarea>
+<textarea placeholder="Personal messages or notes"></textarea>
+</div>
+</section>
+
+</div>
+
+<script>
+function toggle(h){ h.parentElement.classList.toggle("open"); }
+
+function addRow(id,fields){
+  const d=document.createElement("div");
+  d.className="item";
+  fields.forEach(f=>{
+    const i=document.createElement("input");
+    i.placeholder=f;
+    d.appendChild(i);
+  });
+  document.getElementById(id).appendChild(d);
+}
+
+let isFinal=false;
+function toggleFinal(){
+  isFinal=!isFinal;
+  document.getElementById("watermark").textContent=isFinal?"FINAL":"DRAFT";
+}
+</script>
+
+</body>
+</html>
