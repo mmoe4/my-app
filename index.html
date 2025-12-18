@@ -15,6 +15,7 @@
   --muted:#6b7280;
 }
 
+/* PAGE */
 body{
   margin:0;
   font-family:"Times New Roman", Georgia, serif;
@@ -22,6 +23,7 @@ body{
   color:#1f2933;
 }
 
+/* CONTAINER */
 .container{
   max-width:1100px;
   margin:50px auto;
@@ -32,6 +34,7 @@ body{
   position:relative;
 }
 
+/* WATERMARK */
 #watermark{
   position:fixed;
   top:50%;
@@ -40,12 +43,15 @@ body{
   font-size:110px;
   color:rgba(0,0,0,0.06);
   pointer-events:none;
+  user-select:none;
 }
 
+/* HEADINGS */
 h1{
   text-align:center;
   margin:0;
   color:var(--heading);
+  letter-spacing:0.4px;
 }
 
 .subtitle{
@@ -55,6 +61,7 @@ h1{
   margin-top:6px;
 }
 
+/* TOOLBAR */
 .toolbar{
   display:flex;
   justify-content:center;
@@ -75,13 +82,7 @@ button, select{
 
 button:hover{ background:#eef2f5; }
 
-.progress{
-  text-align:center;
-  font-size:14px;
-  color:var(--muted);
-  margin-bottom:28px;
-}
-
+/* SECTIONS */
 section{
   border:1px solid var(--border);
   border-radius:10px;
@@ -104,6 +105,7 @@ section{
   padding:20px;
 }
 
+/* INPUTS */
 input, textarea{
   width:100%;
   padding:10px;
@@ -116,15 +118,17 @@ input, textarea{
 }
 
 .large-note{
-  min-height:240px;
+  min-height:260px;
 }
 
+/* PRINT TEXT */
 .print-text{
   white-space:pre-wrap;
   font-size:12pt;
   margin-bottom:14px;
 }
 
+/* PRINT */
 @media print{
   body{ background:#fff; }
   .container{ box-shadow:none; margin:0; }
@@ -155,13 +159,12 @@ Not a legal document
     <option>New Zealand</option>
     <option>Other</option>
   </select>
+
   <button onclick="toggleFinal()">Draft / Final</button>
   <button onclick="window.print()">Print / Save PDF</button>
 </div>
 
-<div class="progress">Completion Status: Manual</div>
-
-<!-- PERSONAL INFO -->
+<!-- PERSONAL INFORMATION -->
 <section>
   <div class="section-header"><h2>Personal Information</h2></div>
   <div class="section-content">
@@ -189,7 +192,7 @@ Not a legal document
     <input placeholder="Relationship">
     <input placeholder="Telephone number">
     <input placeholder="Email address">
-    <textarea class="large-note" placeholder="Executor authority and instructions"></textarea>
+    <textarea class="large-note" placeholder="Executor authority, powers, compensation, and instructions"></textarea>
   </div>
 </section>
 
@@ -205,7 +208,7 @@ Not a legal document
 <section>
   <div class="section-header"><h2>Assets</h2></div>
   <div class="section-content">
-    <textarea class="large-note" placeholder="Property, financial accounts, investments, vehicles, valuables"></textarea>
+    <textarea class="large-note" placeholder="Property, bank accounts, investments, vehicles, valuables"></textarea>
   </div>
 </section>
 
@@ -217,7 +220,7 @@ Not a legal document
   </div>
 </section>
 
-<!-- ADDITIONAL NOTES / APPENDIX (NOW AT END) -->
+<!-- ADDITIONAL NOTES / APPENDIX (END OF DOCUMENT) -->
 <section>
   <div class="section-header"><h2>Additional Notes / Appendix</h2></div>
   <div class="section-content">
