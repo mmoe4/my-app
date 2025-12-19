@@ -13,7 +13,6 @@
   --border:#d2d6da;
   --heading:#2f4f4f;
   --muted:#6b7280;
-  --soft:#f7f8fa;
 }
 
 body{
@@ -45,13 +44,11 @@ h1{
   text-align:center;
   color:var(--muted);
   margin-top:10px;
-  font-size:16px;
 }
 
 .toolbar{
   display:flex;
   justify-content:center;
-  align-items:center;
   gap:12px;
   flex-wrap:wrap;
   margin:28px 0;
@@ -66,10 +63,7 @@ select, button{
   background:#f9fafb;
 }
 
-button{
-  cursor:pointer;
-}
-button:hover{ background:#eef2f5; }
+button{ cursor:pointer; }
 
 section{
   border:1px solid var(--border);
@@ -81,6 +75,7 @@ section{
   padding:20px 24px;
   border-bottom:1px solid var(--border);
 }
+
 .section-header h2{
   margin:0;
   font-size:24px;
@@ -103,20 +98,9 @@ input, textarea{
 }
 
 textarea.large{ min-height:420px; }
-textarea.medium{ min-height:260px; }
-
-.grid-2{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:16px;
-}
-@media(max-width:900px){
-  .grid-2{ grid-template-columns:1fr; }
-}
 
 /* PRINT */
 .print-only{ display:none; }
-
 @media print{
   body{ background:#fff; }
   .container{ display:none; }
@@ -135,136 +119,90 @@ textarea.medium{ min-height:260px; }
 
 <body>
 
-<!-- ================= PRINT COVER ================= -->
+<!-- PRINT COVER -->
 <div class="print-only">
   <div style="margin-top:100px;text-align:center;">
-    <h1>My Estate Plan</h1>
-    <p><b>Prepared for:</b> <span id="printName">—</span></p>
-    <p><b>Country / Jurisdiction:</b> <span id="printCountry">—</span></p>
-    <p><b>Date:</b> <span id="printDate">—</span></p>
-    <p style="margin-top:40px;font-size:14px;">
-      This document is for personal planning only and is not a legal will.
-    </p>
+    <h1 id="printTitle">My Estate Plan</h1>
+    <p><b id="printPreparedFor">Prepared for:</b> <span id="printName">—</span></p>
+    <p><b id="printCountryLabel">Country:</b> <span id="printCountry">—</span></p>
+    <p><b id="printDateLabel">Date:</b> <span id="printDate">—</span></p>
   </div>
 </div>
 
 <footer class="print-only"></footer>
 
-<!-- ================= APP ================= -->
 <div class="container" id="app">
 
-<h1>My Estate Plan</h1>
-<p class="subtitle">Personal estate planning record · Not a legal document</p>
+<h1 id="title">My Estate Plan</h1>
+<p class="subtitle" id="subtitle">Personal estate planning record · Not a legal document</p>
 
-<!-- 🔽 COUNTRY DROPDOWN AT TOP -->
 <div class="toolbar">
+  <!-- LANGUAGE -->
+  <select id="language">
+    <option value="en">English</option>
+    <option value="fr">Français</option>
+  </select>
+
+  <!-- COUNTRY -->
   <select data-key="country">
-    <option value="">Select country / jurisdiction</option>
+    <option value="">Select country</option>
     <option>Canada</option>
     <option>United States</option>
     <option>United Kingdom</option>
-    <option>Australia</option>
-    <option>New Zealand</option>
     <option>France</option>
     <option>Germany</option>
-    <option>Italy</option>
-    <option>Spain</option>
-    <option>Netherlands</option>
-    <option>Belgium</option>
-    <option>Sweden</option>
-    <option>Norway</option>
-    <option>Denmark</option>
-    <option>Finland</option>
-    <option>Switzerland</option>
-    <option>Austria</option>
-    <option>Ireland</option>
-    <option>Japan</option>
-    <option>China</option>
-    <option>India</option>
-    <option>Brazil</option>
-    <option>Mexico</option>
-    <option>South Africa</option>
     <option>Other</option>
   </select>
 
-  <button onclick="window.print()">Print / Save PDF</button>
-  <button onclick="exportWord()">Export Word</button>
-  <button onclick="backup()">Backup</button>
-  <button onclick="restore()">Restore</button>
+  <button onclick="window.print()" id="btnPrint">Print / Save PDF</button>
+  <button onclick="exportWord()" id="btnWord">Export Word</button>
 </div>
 
 <section>
-<div class="section-header"><h2>Personal Information</h2></div>
-<div class="section-content">
-  <input data-key="name" placeholder="Full legal name">
-  <input data-key="dob" placeholder="Date of birth">
-  <input data-key="address" placeholder="Address">
-  <div class="grid-2">
-    <input data-key="phone" placeholder="Telephone">
-    <input data-key="email" placeholder="Email">
+  <div class="section-header"><h2 data-i18n="personal">Personal Information</h2></div>
+  <div class="section-content">
+    <input data-key="name" placeholder="Full legal name">
+    <input data-key="dob" placeholder="Date of birth">
+    <input data-key="address" placeholder="Address">
   </div>
-</div>
 </section>
 
 <section>
-<div class="section-header"><h2>Executor / Estate Administrator</h2></div>
-<div class="section-content">
-  <input data-key="executor_name" placeholder="Primary executor name">
-  <input data-key="executor_alt" placeholder="Alternate executor name">
-  <textarea class="medium" data-key="executor_notes"
-    placeholder="Executor authority, compensation, and instructions"></textarea>
-</div>
+  <div class="section-header"><h2 data-i18n="executor">Executor</h2></div>
+  <div class="section-content">
+    <input data-key="executor" placeholder="Executor name">
+    <textarea class="large" data-key="executor_notes"
+      placeholder="Executor instructions"></textarea>
+  </div>
 </section>
 
 <section>
-<div class="section-header"><h2>Important Documents</h2></div>
-<div class="section-content">
-  <textarea class="large" data-key="documents"
-    placeholder="Where wills, insurance, banking, digital passwords are stored"></textarea>
-</div>
+  <div class="section-header"><h2 data-i18n="assets">Assets</h2></div>
+  <div class="section-content">
+    <textarea class="large" data-key="assets"
+      placeholder="Assets and property"></textarea>
+  </div>
 </section>
 
 <section>
-<div class="section-header"><h2>Assets</h2></div>
-<div class="section-content">
-  <textarea class="large" data-key="assets"
-    placeholder="Homes, accounts, vehicles, valuables, business interests"></textarea>
-</div>
-</section>
-
-<section>
-<div class="section-header"><h2>Final Wishes</h2></div>
-<div class="section-content">
-  <textarea class="large" data-key="final_wishes"
-    placeholder="Funeral, burial, cremation, memorial wishes"></textarea>
-</div>
-</section>
-
-<section>
-<div class="section-header"><h2>Family – What To Do First</h2></div>
-<div class="section-content">
-  <textarea class="large" data-key="family_notes"
-    placeholder="Immediate steps, pets, keys, contacts, urgent instructions"></textarea>
-</div>
-</section>
-
-<section>
-<div class="section-header"><h2>Additional Notes</h2></div>
-<div class="section-content">
-  <textarea class="large" data-key="extra_notes"
-    placeholder="Any other important information"></textarea>
-</div>
+  <div class="section-header"><h2 data-i18n="final">Final Wishes</h2></div>
+  <div class="section-content">
+    <textarea class="large" data-key="final_wishes"
+      placeholder="Final wishes"></textarea>
+  </div>
 </section>
 
 </div>
 
 <script>
-const STORE="estate_plan_top_country_v1";
+/* STORAGE */
+const STORE="estate_plan_lang_v1";
 const fields=[...document.querySelectorAll("[data-key]")];
 
 function save(){
   const d={};
   fields.forEach(f=>d[f.dataset.key]=f.value||"");
+  d.language=document.getElementById("language").value;
   localStorage.setItem(STORE,JSON.stringify(d));
 }
 function load(){
@@ -272,10 +210,65 @@ function load(){
   if(!raw) return;
   const d=JSON.parse(raw);
   fields.forEach(f=>f.value=d[f.dataset.key]||"");
+  if(d.language){
+    document.getElementById("language").value=d.language;
+    applyLanguage(d.language);
+  }
 }
 fields.forEach(f=>f.addEventListener("input",save));
+document.getElementById("language").addEventListener("change",()=>{
+  applyLanguage(language.value);
+  save();
+});
 load();
 
+/* LANGUAGE MAP */
+const translations={
+  en:{
+    title:"My Estate Plan",
+    subtitle:"Personal estate planning record · Not a legal document",
+    personal:"Personal Information",
+    executor:"Executor",
+    assets:"Assets",
+    final:"Final Wishes",
+    print:"Print / Save PDF",
+    word:"Export Word",
+    prepared:"Prepared for:",
+    country:"Country:",
+    date:"Date:"
+  },
+  fr:{
+    title:"Mon plan successoral",
+    subtitle:"Dossier personnel · Document non juridique",
+    personal:"Renseignements personnels",
+    executor:"Liquidateur",
+    assets:"Biens",
+    final:"Dernières volontés",
+    print:"Imprimer / PDF",
+    word:"Exporter Word",
+    prepared:"Préparé pour :",
+    country:"Pays :",
+    date:"Date :"
+  }
+};
+
+function applyLanguage(lang){
+  const t=translations[lang];
+  document.getElementById("title").textContent=t.title;
+  document.getElementById("subtitle").textContent=t.subtitle;
+  document.getElementById("btnPrint").textContent=t.print;
+  document.getElementById("btnWord").textContent=t.word;
+  document.getElementById("printTitle").textContent=t.title;
+  document.getElementById("printPreparedFor").textContent=t.prepared;
+  document.getElementById("printCountryLabel").textContent=t.country;
+  document.getElementById("printDateLabel").textContent=t.date;
+
+  document.querySelectorAll("[data-i18n]").forEach(el=>{
+    el.textContent=t[el.dataset.i18n];
+  });
+}
+
+/* PRINT */
 window.addEventListener("beforeprint",()=>{
   document.getElementById("printName").textContent =
     document.querySelector("[data-key=name]").value || "—";
@@ -285,6 +278,7 @@ window.addEventListener("beforeprint",()=>{
     new Date().toLocaleDateString();
 });
 
+/* WORD */
 function exportWord(){
   const clone=document.getElementById("app").cloneNode(true);
   clone.querySelectorAll("input,textarea,select").forEach(el=>{
@@ -293,35 +287,12 @@ function exportWord(){
     d.style.whiteSpace="pre-wrap";
     el.replaceWith(d);
   });
-  const html=`<html><body style="font-family:Times New Roman,Georgia,serif;">${clone.outerHTML}</body></html>`;
+  const html=`<html><body>${clone.outerHTML}</body></html>`;
   const blob=new Blob(['\ufeff',html],{type:"application/msword"});
   const a=document.createElement("a");
   a.href=URL.createObjectURL(blob);
-  a.download="My_Estate_Plan.doc";
+  a.download="Estate_Plan.doc";
   a.click();
-}
-
-function backup(){
-  const d={};
-  fields.forEach(f=>d[f.dataset.key]=f.value||"");
-  const blob=new Blob([JSON.stringify(d,null,2)],{type:"application/json"});
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
-  a.download="estate-plan-backup.json";
-  a.click();
-}
-
-function restore(){
-  const i=document.createElement("input");
-  i.type="file";
-  i.accept=".json";
-  i.onchange=async()=>{
-    const t=await i.files[0].text();
-    const d=JSON.parse(t);
-    fields.forEach(f=>f.value=d[f.dataset.key]||"");
-    save();
-  };
-  i.click();
 }
 </script>
 
