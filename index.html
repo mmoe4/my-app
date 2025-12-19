@@ -75,7 +75,6 @@ section{
   padding:20px 24px;
   border-bottom:1px solid var(--border);
 }
-
 .section-header h2{
   margin:0;
   font-size:24px;
@@ -98,6 +97,7 @@ input, textarea{
 }
 
 textarea.large{ min-height:420px; }
+textarea.medium{ min-height:260px; }
 
 /* PRINT */
 .print-only{ display:none; }
@@ -123,7 +123,7 @@ textarea.large{ min-height:420px; }
 <div class="print-only">
   <div style="margin-top:100px;text-align:center;">
     <h1 id="printTitle">My Estate Plan</h1>
-    <p><b id="printPreparedFor">Prepared for:</b> <span id="printName">—</span></p>
+    <p><b id="printPrepared">Prepared for:</b> <span id="printName">—</span></p>
     <p><b id="printCountryLabel">Country:</b> <span id="printCountry">—</span></p>
     <p><b id="printDateLabel">Date:</b> <span id="printDate">—</span></p>
   </div>
@@ -131,6 +131,7 @@ textarea.large{ min-height:420px; }
 
 <footer class="print-only"></footer>
 
+<!-- APP -->
 <div class="container" id="app">
 
 <h1 id="title">My Estate Plan</h1>
@@ -138,15 +139,15 @@ textarea.large{ min-height:420px; }
 
 <div class="toolbar">
   <!-- LANGUAGE -->
- <select id="language">
-  <option value="en">English</option>
-  <option value="fr">Français</option>
-  <option value="es">Español</option>
-  <option value="de">Deutsch</option>
-  <option value="it">Italiano</option>
-  <option value="pt">Português</option>
-  <option value="nl">Nederlands</option>
-</select>
+  <select id="language">
+    <option value="en">English</option>
+    <option value="fr">Français</option>
+    <option value="es">Español</option>
+    <option value="de">Deutsch</option>
+    <option value="it">Italiano</option>
+    <option value="pt">Português</option>
+    <option value="nl">Nederlands</option>
+  </select>
 
   <!-- COUNTRY -->
   <select data-key="country">
@@ -154,8 +155,27 @@ textarea.large{ min-height:420px; }
     <option>Canada</option>
     <option>United States</option>
     <option>United Kingdom</option>
+    <option>Australia</option>
+    <option>New Zealand</option>
     <option>France</option>
     <option>Germany</option>
+    <option>Italy</option>
+    <option>Spain</option>
+    <option>Netherlands</option>
+    <option>Belgium</option>
+    <option>Sweden</option>
+    <option>Norway</option>
+    <option>Denmark</option>
+    <option>Finland</option>
+    <option>Switzerland</option>
+    <option>Austria</option>
+    <option>Ireland</option>
+    <option>Japan</option>
+    <option>China</option>
+    <option>India</option>
+    <option>Brazil</option>
+    <option>Mexico</option>
+    <option>South Africa</option>
     <option>Other</option>
   </select>
 
@@ -176,7 +196,7 @@ textarea.large{ min-height:420px; }
   <div class="section-header"><h2 data-i18n="executor">Executor</h2></div>
   <div class="section-content">
     <input data-key="executor" placeholder="Executor name">
-    <textarea class="large" data-key="executor_notes"
+    <textarea class="medium" data-key="executor_notes"
       placeholder="Executor instructions"></textarea>
   </div>
 </section>
@@ -197,11 +217,18 @@ textarea.large{ min-height:420px; }
   </div>
 </section>
 
+<section>
+  <div class="section-header"><h2 data-i18n="notes">Additional Notes</h2></div>
+  <div class="section-content">
+    <textarea class="large" data-key="notes"
+      placeholder="Additional notes"></textarea>
+  </div>
+</section>
+
 </div>
 
 <script>
-/* STORAGE */
-const STORE="estate_plan_lang_v1";
+const STORE="estate_plan_multilang_v1";
 const fields=[...document.querySelectorAll("[data-key]")];
 
 function save(){
@@ -227,8 +254,8 @@ document.getElementById("language").addEventListener("change",()=>{
 });
 load();
 
-/* LANGUAGE MAP */
-const translations = {
+/* TRANSLATIONS */
+const translations={
   en:{
     title:"My Estate Plan",
     subtitle:"Personal estate planning record · Not a legal document",
@@ -236,13 +263,13 @@ const translations = {
     executor:"Executor",
     assets:"Assets",
     final:"Final Wishes",
+    notes:"Additional Notes",
     print:"Print / Save PDF",
     word:"Export Word",
     prepared:"Prepared for:",
     country:"Country:",
     date:"Date:"
   },
-
   fr:{
     title:"Mon plan successoral",
     subtitle:"Dossier personnel · Document non juridique",
@@ -250,13 +277,13 @@ const translations = {
     executor:"Liquidateur",
     assets:"Biens",
     final:"Dernières volontés",
+    notes:"Notes supplémentaires",
     print:"Imprimer / PDF",
     word:"Exporter Word",
     prepared:"Préparé pour :",
     country:"Pays :",
     date:"Date :"
   },
-
   es:{
     title:"Mi plan patrimonial",
     subtitle:"Registro personal · No es un documento legal",
@@ -264,41 +291,41 @@ const translations = {
     executor:"Albacea",
     assets:"Activos",
     final:"Últimos deseos",
+    notes:"Notas adicionales",
     print:"Imprimir / PDF",
     word:"Exportar Word",
     prepared:"Preparado para:",
     country:"País:",
     date:"Fecha:"
   },
-
   de:{
     title:"Mein Nachlassplan",
-    subtitle:"Persönliches Dokument · Kein rechtsgültiges Dokument",
+    subtitle:"Persönliches Dokument · Kein Rechtsdokument",
     personal:"Persönliche Angaben",
     executor:"Testamentsvollstrecker",
-    assets:"Vermögenswerte",
+    assets:"Vermögen",
     final:"Letzte Wünsche",
+    notes:"Zusätzliche Notizen",
     print:"Drucken / PDF",
     word:"Word exportieren",
     prepared:"Vorbereitet für:",
     country:"Land:",
     date:"Datum:"
   },
-
   it:{
     title:"Il mio piano patrimoniale",
     subtitle:"Documento personale · Non è un atto legale",
     personal:"Informazioni personali",
-    executor:"Esecutore testamentario",
+    executor:"Esecutore",
     assets:"Beni",
     final:"Ultime volontà",
+    notes:"Note aggiuntive",
     print:"Stampa / PDF",
     word:"Esporta Word",
     prepared:"Preparato per:",
     country:"Paese:",
     date:"Data:"
   },
-
   pt:{
     title:"Meu plano patrimonial",
     subtitle:"Registro pessoal · Não é um documento legal",
@@ -306,13 +333,13 @@ const translations = {
     executor:"Testamenteiro",
     assets:"Bens",
     final:"Últimos desejos",
+    notes:"Notas adicionais",
     print:"Imprimir / PDF",
     word:"Exportar Word",
     prepared:"Preparado para:",
     country:"País:",
     date:"Data:"
   },
-
   nl:{
     title:"Mijn nalatenschapsplan",
     subtitle:"Persoonlijk document · Geen juridisch document",
@@ -320,6 +347,7 @@ const translations = {
     executor:"Executeur",
     assets:"Bezittingen",
     final:"Laatste wensen",
+    notes:"Aanvullende notities",
     print:"Afdrukken / PDF",
     word:"Word exporteren",
     prepared:"Voorbereid voor:",
@@ -328,7 +356,6 @@ const translations = {
   }
 };
 
-
 function applyLanguage(lang){
   const t=translations[lang];
   document.getElementById("title").textContent=t.title;
@@ -336,7 +363,7 @@ function applyLanguage(lang){
   document.getElementById("btnPrint").textContent=t.print;
   document.getElementById("btnWord").textContent=t.word;
   document.getElementById("printTitle").textContent=t.title;
-  document.getElementById("printPreparedFor").textContent=t.prepared;
+  document.getElementById("printPrepared").textContent=t.prepared;
   document.getElementById("printCountryLabel").textContent=t.country;
   document.getElementById("printDateLabel").textContent=t.date;
 
@@ -355,7 +382,7 @@ window.addEventListener("beforeprint",()=>{
     new Date().toLocaleDateString();
 });
 
-/* WORD */
+/* WORD EXPORT */
 function exportWord(){
   const clone=document.getElementById("app").cloneNode(true);
   clone.querySelectorAll("input,textarea,select").forEach(el=>{
@@ -368,7 +395,7 @@ function exportWord(){
   const blob=new Blob(['\ufeff',html],{type:"application/msword"});
   const a=document.createElement("a");
   a.href=URL.createObjectURL(blob);
-  a.download="Estate_Plan.doc";
+  a.download="My_Estate_Plan.doc";
   a.click();
 }
 </script>
