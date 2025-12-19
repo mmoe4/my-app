@@ -162,27 +162,20 @@ textarea.medium{ min-height:260px; }
     <option>Canada</option>
     <option>United States</option>
     <option>United Kingdom</option>
-    <option>Australia</option>
-    <option>New Zealand</option>
     <option>France</option>
     <option>Germany</option>
     <option>Italy</option>
     <option>Spain</option>
+    <option>Portugal</option>
     <option>Netherlands</option>
-    <option>Belgium</option>
-    <option>Sweden</option>
-    <option>Norway</option>
-    <option>Denmark</option>
-    <option>Finland</option>
-    <option>Switzerland</option>
-    <option>Austria</option>
-    <option>Ireland</option>
-    <option>Japan</option>
-    <option>China</option>
-    <option>India</option>
-    <option>Brazil</option>
-    <option>Mexico</option>
-    <option>South Africa</option>
+    <option>Poland</option>
+    <option>Czech Republic</option>
+    <option>Slovakia</option>
+    <option>Hungary</option>
+    <option>Romania</option>
+    <option>Bulgaria</option>
+    <option>Ukraine</option>
+    <option>Russia</option>
     <option>Other</option>
   </select>
 
@@ -231,13 +224,16 @@ textarea.medium{ min-height:260px; }
 </div>
 
 <script>
-const STORE="estate_plan_15_lang_v1";
+const STORE="estate_plan_auto_lang_v1";
 const fields=[...document.querySelectorAll("[data-key]")];
+let languageManuallySet=false;
 
+/* SAVE / LOAD */
 function save(){
   const d={};
   fields.forEach(f=>d[f.dataset.key]=f.value||"");
   d.language=document.getElementById("language").value;
+  d.languageManual=languageManuallySet;
   localStorage.setItem(STORE,JSON.stringify(d));
 }
 function load(){
@@ -249,14 +245,12 @@ function load(){
     document.getElementById("language").value=d.language;
     applyLanguage(d.language);
   }
+  languageManuallySet=d.languageManual||false;
 }
 fields.forEach(f=>f.addEventListener("input",save));
-document.getElementById("language").addEventListener("change",()=>{
-  applyLanguage(language.value);
-  save();
-});
 load();
 
+/* TRANSLATIONS */
 const translations={
   en:{title:"My Estate Plan",subtitle:"Personal estate planning record · Not a legal document",personal:"Personal Information",executor:"Executor",assets:"Assets",final:"Final Wishes",notes:"Additional Notes",print:"Print / Save PDF",word:"Export Word",prepared:"Prepared for:",country:"Country:",date:"Date:"},
   fr:{title:"Mon plan successoral",subtitle:"Dossier personnel · Document non juridique",personal:"Renseignements personnels",executor:"Liquidateur",assets:"Biens",final:"Dernières volontés",notes:"Notes supplémentaires",print:"Imprimer / PDF",word:"Exporter Word",prepared:"Préparé pour :",country:"Pays :",date:"Date :"},
@@ -290,12 +284,40 @@ function applyLanguage(lang){
   });
 }
 
+/* AUTO LANGUAGE BY COUNTRY */
+const countryLanguageMap={
+  "Canada":"en","United States":"en","United Kingdom":"en",
+  "France":"fr","Germany":"de","Italy":"it","Spain":"es",
+  "Portugal":"pt","Netherlands":"nl","Poland":"pl",
+  "Czech Republic":"cs","Slovakia":"sk","Hungary":"hu",
+  "Romania":"ro","Bulgaria":"bg","Ukraine":"uk","Russia":"ru"
+};
+
+document.querySelector('[data-key="country"]').addEventListener("change",e=>{
+  if(languageManuallySet) return;
+  const autoLang=countryLanguageMap[e.target.value];
+  if(autoLang){
+    document.getElementById("language").value=autoLang;
+    applyLanguage(autoLang);
+    save();
+  }
+});
+
+/* LANGUAGE MANUAL */
+document.getElementById("language").addEventListener("change",()=>{
+  languageManuallySet=true;
+  applyLanguage(language.value);
+  save();
+});
+
+/* PRINT */
 window.addEventListener("beforeprint",()=>{
-  document.getElementById("printName").textContent=document.querySelector("[data-key=name]").value||"—";
-  document.getElementById("printCountry").textContent=document.querySelector("[data-key=country]").value||"—";
+  document.getElementById("printName").textContent=document.querySelector('[data-key="name"]').value||"—";
+  document.getElementById("printCountry").textContent=document.querySelector('[data-key="country"]').value||"—";
   document.getElementById("printDate").textContent=new Date().toLocaleDateString();
 });
 
+/* WORD EXPORT */
 function exportWord(){
   const clone=document.getElementById("app").cloneNode(true);
   clone.querySelectorAll("input,textarea,select").forEach(el=>{
