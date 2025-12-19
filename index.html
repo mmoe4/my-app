@@ -51,18 +51,22 @@ h1{
 .toolbar{
   display:flex;
   justify-content:center;
+  align-items:center;
   gap:12px;
   flex-wrap:wrap;
   margin:28px 0;
 }
 
-button{
+select, button{
   padding:12px 18px;
   font-size:16px;
   font-family:inherit;
   border-radius:8px;
   border:1px solid var(--border);
   background:#f9fafb;
+}
+
+button{
   cursor:pointer;
 }
 button:hover{ background:#eef2f5; }
@@ -87,7 +91,7 @@ section{
   padding:24px;
 }
 
-input, textarea, select{
+input, textarea{
   width:100%;
   padding:16px;
   margin-bottom:18px;
@@ -96,7 +100,6 @@ input, textarea, select{
   background:#fafafa;
   font-size:18px;
   font-family:inherit;
-  box-sizing:border-box;
 }
 
 textarea.large{ min-height:420px; }
@@ -137,7 +140,7 @@ textarea.medium{ min-height:260px; }
   <div style="margin-top:100px;text-align:center;">
     <h1>My Estate Plan</h1>
     <p><b>Prepared for:</b> <span id="printName">—</span></p>
-    <p><b>Country:</b> <span id="printCountry">—</span></p>
+    <p><b>Country / Jurisdiction:</b> <span id="printCountry">—</span></p>
     <p><b>Date:</b> <span id="printDate">—</span></p>
     <p style="margin-top:40px;font-size:14px;">
       This document is for personal planning only and is not a legal will.
@@ -153,26 +156,10 @@ textarea.medium{ min-height:260px; }
 <h1>My Estate Plan</h1>
 <p class="subtitle">Personal estate planning record · Not a legal document</p>
 
+<!-- 🔽 COUNTRY DROPDOWN AT TOP -->
 <div class="toolbar">
-  <button onclick="window.print()">Print / Save PDF</button>
-  <button onclick="exportWord()">Export Word</button>
-  <button onclick="backup()">Backup</button>
-  <button onclick="restore()">Restore</button>
-</div>
-
-<section>
-<div class="section-header"><h2>Personal Information</h2></div>
-<div class="section-content">
-  <input data-key="name" placeholder="Full legal name">
-  <input data-key="dob" placeholder="Date of birth">
-  <input data-key="address" placeholder="Address">
-  <div class="grid-2">
-    <input data-key="phone" placeholder="Telephone">
-    <input data-key="email" placeholder="Email">
-  </div>
-
   <select data-key="country">
-    <option value="">Select country</option>
+    <option value="">Select country / jurisdiction</option>
     <option>Canada</option>
     <option>United States</option>
     <option>United Kingdom</option>
@@ -199,6 +186,23 @@ textarea.medium{ min-height:260px; }
     <option>South Africa</option>
     <option>Other</option>
   </select>
+
+  <button onclick="window.print()">Print / Save PDF</button>
+  <button onclick="exportWord()">Export Word</button>
+  <button onclick="backup()">Backup</button>
+  <button onclick="restore()">Restore</button>
+</div>
+
+<section>
+<div class="section-header"><h2>Personal Information</h2></div>
+<div class="section-content">
+  <input data-key="name" placeholder="Full legal name">
+  <input data-key="dob" placeholder="Date of birth">
+  <input data-key="address" placeholder="Address">
+  <div class="grid-2">
+    <input data-key="phone" placeholder="Telephone">
+    <input data-key="email" placeholder="Email">
+  </div>
 </div>
 </section>
 
@@ -255,7 +259,7 @@ textarea.medium{ min-height:260px; }
 </div>
 
 <script>
-const STORE="estate_plan_complete_v1";
+const STORE="estate_plan_top_country_v1";
 const fields=[...document.querySelectorAll("[data-key]")];
 
 function save(){
