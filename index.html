@@ -138,10 +138,15 @@ textarea.large{ min-height:420px; }
 
 <div class="toolbar">
   <!-- LANGUAGE -->
-  <select id="language">
-    <option value="en">English</option>
-    <option value="fr">Français</option>
-  </select>
+ <select id="language">
+  <option value="en">English</option>
+  <option value="fr">Français</option>
+  <option value="es">Español</option>
+  <option value="de">Deutsch</option>
+  <option value="it">Italiano</option>
+  <option value="pt">Português</option>
+  <option value="nl">Nederlands</option>
+</select>
 
   <!-- COUNTRY -->
   <select data-key="country">
@@ -223,7 +228,7 @@ document.getElementById("language").addEventListener("change",()=>{
 load();
 
 /* LANGUAGE MAP */
-const translations={
+const translations = {
   en:{
     title:"My Estate Plan",
     subtitle:"Personal estate planning record · Not a legal document",
@@ -237,6 +242,7 @@ const translations={
     country:"Country:",
     date:"Date:"
   },
+
   fr:{
     title:"Mon plan successoral",
     subtitle:"Dossier personnel · Document non juridique",
@@ -249,8 +255,79 @@ const translations={
     prepared:"Préparé pour :",
     country:"Pays :",
     date:"Date :"
+  },
+
+  es:{
+    title:"Mi plan patrimonial",
+    subtitle:"Registro personal · No es un documento legal",
+    personal:"Información personal",
+    executor:"Albacea",
+    assets:"Activos",
+    final:"Últimos deseos",
+    print:"Imprimir / PDF",
+    word:"Exportar Word",
+    prepared:"Preparado para:",
+    country:"País:",
+    date:"Fecha:"
+  },
+
+  de:{
+    title:"Mein Nachlassplan",
+    subtitle:"Persönliches Dokument · Kein rechtsgültiges Dokument",
+    personal:"Persönliche Angaben",
+    executor:"Testamentsvollstrecker",
+    assets:"Vermögenswerte",
+    final:"Letzte Wünsche",
+    print:"Drucken / PDF",
+    word:"Word exportieren",
+    prepared:"Vorbereitet für:",
+    country:"Land:",
+    date:"Datum:"
+  },
+
+  it:{
+    title:"Il mio piano patrimoniale",
+    subtitle:"Documento personale · Non è un atto legale",
+    personal:"Informazioni personali",
+    executor:"Esecutore testamentario",
+    assets:"Beni",
+    final:"Ultime volontà",
+    print:"Stampa / PDF",
+    word:"Esporta Word",
+    prepared:"Preparato per:",
+    country:"Paese:",
+    date:"Data:"
+  },
+
+  pt:{
+    title:"Meu plano patrimonial",
+    subtitle:"Registro pessoal · Não é um documento legal",
+    personal:"Informações pessoais",
+    executor:"Testamenteiro",
+    assets:"Bens",
+    final:"Últimos desejos",
+    print:"Imprimir / PDF",
+    word:"Exportar Word",
+    prepared:"Preparado para:",
+    country:"País:",
+    date:"Data:"
+  },
+
+  nl:{
+    title:"Mijn nalatenschapsplan",
+    subtitle:"Persoonlijk document · Geen juridisch document",
+    personal:"Persoonlijke gegevens",
+    executor:"Executeur",
+    assets:"Bezittingen",
+    final:"Laatste wensen",
+    print:"Afdrukken / PDF",
+    word:"Word exporteren",
+    prepared:"Voorbereid voor:",
+    country:"Land:",
+    date:"Datum:"
   }
 };
+
 
 function applyLanguage(lang){
   const t=translations[lang];
