@@ -10,71 +10,59 @@
   --jam-dark:#2b1417;
   --jam-mid:#4a1f26;
   --paper:#ffffff;
-  --border:#d2d6da;
-  --heading:#2f4f4f;
+  --border:#d1d5db;
+  --heading:#1f3a3d;
   --muted:#6b7280;
-  --soft:#f7f8fa;
 }
 
-/* ================= SCREEN ================= */
 body{
   margin:0;
   font-family:"Times New Roman", Georgia, serif;
+  background:radial-gradient(circle at top, var(--jam-mid), var(--jam-dark));
   font-size:18px;
   line-height:1.6;
-  background:radial-gradient(circle at top, var(--jam-mid), var(--jam-dark));
-  color:#1f2933;
 }
 
 .container{
   max-width:1150px;
-  margin:50px auto;
-  padding:48px 36px 140px;
+  margin:40px auto;
   background:var(--paper);
   border-radius:18px;
-  box-shadow:0 22px 50px rgba(0,0,0,0.35);
+  padding:40px;
+  box-shadow:0 20px 50px rgba(0,0,0,.35);
 }
 
 h1{
   text-align:center;
-  margin:0;
-  font-size:36px;
   color:var(--heading);
+  margin-bottom:4px;
 }
 
 .subtitle{
   text-align:center;
-  font-size:16px;
+  font-size:15px;
   color:var(--muted);
-  margin-top:8px;
 }
 
-.toolbar{
-  display:flex;
+.topbar{
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr 1fr;
   gap:12px;
-  justify-content:center;
-  flex-wrap:wrap;
-  margin:26px 0;
+  margin:30px 0;
 }
 
-select,button,input,textarea{
-  font-family:inherit;
-  font-size:18px;
-}
-
-button{
-  padding:10px 16px;
-  border-radius:8px;
+select,input{
+  padding:14px;
+  font-size:16px;
+  border-radius:10px;
   border:1px solid var(--border);
-  background:#f9fafb;
-  cursor:pointer;
+  font-family:inherit;
 }
 
 section{
   border:1px solid var(--border);
   border-radius:12px;
   margin-bottom:22px;
-  background:#fff;
 }
 
 .section-header{
@@ -82,337 +70,266 @@ section{
   border-bottom:1px solid var(--border);
 }
 
-.section-header h2{ margin:0; }
-
-.section-content{ padding:22px; }
-
-.grid-2{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:16px;
+.section-header h2{
+  margin:0;
+  color:var(--heading);
 }
 
-@media(max-width:900px){
-  .grid-2{ grid-template-columns:1fr; }
+.section-content{
+  padding:22px;
 }
 
-input,textarea{
+textarea,input{
   width:100%;
-  padding:14px;
   margin-bottom:14px;
+  padding:16px;
   border-radius:10px;
   border:1px solid var(--border);
-  background:#fafafa;
-  box-sizing:border-box;
+  font-family:inherit;
 }
 
-.large-note{ min-height:420px; }
+textarea{ min-height:260px; }
 
-/* ================= PRINT ================= */
-.print-only{ display:none; }
-
-@media print{
-  body{ background:#fff; }
-  .container{ display:none; }
-  .print-only{ display:block; }
-  textarea,input,button,select{ display:none; }
-  .print-block{
-    page-break-after:always;
-    padding:20mm;
-    font-size:14pt;
-    line-height:1.65;
-    white-space:pre-wrap;
-  }
-  footer{
-    position:fixed;
-    bottom:8mm;
-    width:100%;
-    text-align:center;
-    font-size:11pt;
-  }
-  footer:after{
-    content:"Page " counter(page);
-  }
+.rtl{
+  direction:rtl;
+  text-align:right;
 }
 </style>
 </head>
 
 <body>
 
-<!-- ================= PRINT PAGES ================= -->
-<div class="print-only print-block">
-  <h1 id="p_title"></h1>
-  <p id="p_sub"></p>
-  <p><b id="p_country"></b></p>
-  <p><b id="p_date"></b></p>
-</div>
-
-<div class="print-only print-block">
-  <h2 id="p_toc"></h2>
-  <ol id="tocList"></ol>
-</div>
-
-<div class="print-only print-block">
-  <h2 id="p_first"></h2>
-  <div id="p_first_notes"></div>
-</div>
-
-<footer class="print-only"></footer>
-
-<!-- ================= APP ================= -->
 <div class="container" id="app">
-  <h1 id="title"></h1>
-  <p class="subtitle" id="subtitle"></p>
 
-  <div class="toolbar">
-    <select id="country"></select>
-    <button onclick="window.print()">Print / PDF</button>
-    <button onclick="exportWord()">Word</button>
-    <button onclick="backup()">Backup</button>
-    <button onclick="restore()">Restore</button>
+<h1 id="title">My Estate Plan</h1>
+<div class="subtitle" id="subtitle">
+Personal estate planning record · Not a legal document
+</div>
+
+<!-- ================= TOP BAR ================= -->
+<div class="topbar">
+  <select id="countrySelect"></select>
+  <select id="languageSelect"></select>
+  <input id="dateField" disabled>
+  <input value="1.0" disabled>
+</div>
+
+<!-- ================= SECTIONS ================= -->
+
+<section>
+  <div class="section-header"><h2 data-i18n="personal">Personal Information</h2></div>
+  <div class="section-content">
+    <input data-i18n-ph="name" placeholder="Full legal name">
+    <input data-i18n-ph="dob" placeholder="Date of birth">
+    <input data-i18n-ph="address" placeholder="Address">
+    <input data-i18n-ph="phone" placeholder="Telephone">
+    <input data-i18n-ph="email" placeholder="Email">
   </div>
+</section>
 
-  <section>
-    <div class="section-header"><h2 id="s_personal"></h2></div>
-    <div class="section-content">
-      <input data-key="name" id="name">
-      <input data-key="dob" id="dob">
-      <input data-key="address" id="address">
-      <input data-key="phone" id="phone">
-      <input data-key="email" id="email">
-    </div>
-  </section>
+<section>
+  <div class="section-header"><h2 data-i18n="executor">Executor</h2></div>
+  <div class="section-content">
+    <input data-i18n-ph="executor_name" placeholder="Executor name">
+    <textarea data-i18n-ph="executor_notes" placeholder="Executor instructions"></textarea>
+  </div>
+</section>
 
-  <section>
-    <div class="section-header"><h2 id="s_executor"></h2></div>
-    <div class="section-content">
-      <input data-key="executor" id="executor">
-      <textarea class="large-note" data-key="executor_notes" id="executor_notes"></textarea>
-    </div>
-  </section>
+<section>
+  <div class="section-header"><h2 data-i18n="documents">Important Documents</h2></div>
+  <div class="section-content">
+    <textarea data-i18n-ph="documents_ph" placeholder="Where documents are stored"></textarea>
+  </div>
+</section>
 
-  <section>
-    <div class="section-header"><h2 id="s_docs"></h2></div>
-    <div class="section-content">
-      <textarea class="large-note" data-key="documents" id="documents"></textarea>
-    </div>
-  </section>
+<section>
+  <div class="section-header"><h2 data-i18n="assets">Assets</h2></div>
+  <div class="section-content">
+    <textarea data-i18n-ph="assets_ph" placeholder="List assets"></textarea>
+  </div>
+</section>
 
-  <section>
-    <div class="section-header"><h2 id="s_assets"></h2></div>
-    <div class="section-content">
-      <textarea class="large-note" data-key="assets" id="assets"></textarea>
-    </div>
-  </section>
+<section>
+  <div class="section-header"><h2 data-i18n="wishes">Final Wishes</h2></div>
+  <div class="section-content">
+    <textarea data-i18n-ph="wishes_ph" placeholder="Funeral and final wishes"></textarea>
+  </div>
+</section>
 
-  <section>
-    <div class="section-header"><h2 id="s_wishes"></h2></div>
-    <div class="section-content">
-      <textarea class="large-note" data-key="wishes" id="wishes"></textarea>
-    </div>
-  </section>
-
-  <section>
-    <div class="section-header"><h2 id="s_first"></h2></div>
-    <div class="section-content">
-      <textarea class="large-note" data-key="first_notes" id="first_notes"></textarea>
-    </div>
-  </section>
 </div>
 
 <script>
-const STORE="estate_plan_full_v1";
+/* ================= DATE ================= */
+document.getElementById("dateField").value=new Date().toLocaleDateString();
 
-/* ================= TRANSLATIONS ================= */
-const LANG={
-  en:{
-    dir:"ltr",
-    title:"My Estate Plan",
-    sub:"Personal planning record · Not a legal document",
-    personal:"Personal Information",
-    executor:"Executor",
-    docs:"Important Documents",
-    assets:"Assets",
-    wishes:"Final Wishes",
-    first:"What To Do First",
-    name:"Full legal name",
-    dob:"Date of birth",
-    address:"Address",
-    phone:"Telephone",
-    email:"Email",
-    executor_ph:"Executor name",
-    executor_notes:"Executor instructions",
-    docs_ph:"Where documents are stored",
-    assets_ph:"List assets",
-    wishes_ph:"Final wishes",
-    first_ph:"Urgent family instructions"
-  },
-  fr:{
-    dir:"ltr",
-    title:"Mon plan successoral",
-    sub:"Document personnel · Non juridique",
-    personal:"Informations personnelles",
-    executor:"Exécuteur",
-    docs:"Documents importants",
-    assets:"Actifs",
-    wishes:"Dernières volontés",
-    first:"Que faire en premier",
-    name:"Nom légal complet",
-    dob:"Date de naissance",
-    address:"Adresse",
-    phone:"Téléphone",
-    email:"Courriel",
-    executor_ph:"Nom de l'exécuteur",
-    executor_notes:"Instructions",
-    docs_ph:"Où sont les documents",
-    assets_ph:"Liste des actifs",
-    wishes_ph:"Dernières volontés",
-    first_ph:"Instructions urgentes"
-  },
-  ar:{
-    dir:"rtl",
-    title:"خطة التركة",
-    sub:"وثيقة شخصية غير قانونية",
-    personal:"المعلومات الشخصية",
-    executor:"المنفذ",
-    docs:"المستندات المهمة",
-    assets:"الأصول",
-    wishes:"الوصايا",
-    first:"ما يجب فعله أولاً",
-    name:"الاسم الكامل",
-    dob:"تاريخ الميلاد",
-    address:"العنوان",
-    phone:"الهاتف",
-    email:"البريد الإلكتروني",
-    executor_ph:"اسم المنفذ",
-    executor_notes:"تعليمات",
-    docs_ph:"مكان المستندات",
-    assets_ph:"قائمة الأصول",
-    wishes_ph:"الوصايا",
-    first_ph:"تعليمات عاجلة"
-  }
-};
-
-/* ================= COUNTRY MAP ================= */
+/* ================= COUNTRY → LANGUAGE ================= */
 const COUNTRIES={
-  "United States":"en",
-  "Canada":"en",
-  "France":"fr",
-  "Morocco":"ar",
-  "Saudi Arabia":"ar"
+  "United States":"en","Canada":"en","United Kingdom":"en",
+  "France":"fr","Belgium":"fr","Switzerland":"fr",
+  "Germany":"de","Austria":"de",
+  "Spain":"es","Mexico":"es","Argentina":"es","Chile":"es",
+  "Italy":"it",
+  "Portugal":"pt","Brazil":"pt",
+  "Netherlands":"nl",
+  "Sweden":"sv","Norway":"no","Denmark":"da","Finland":"fi",
+  "Poland":"pl","Czech Republic":"cs","Slovakia":"sk",
+  "Hungary":"hu","Romania":"ro","Bulgaria":"bg",
+  "Greece":"el",
+  "Russia":"ru","Ukraine":"uk",
+  "Turkey":"tr",
+  "China":"zh","Taiwan":"zh",
+  "Japan":"ja","South Korea":"ko",
+  "India":"hi",
+  "Thailand":"th","Vietnam":"vi",
+  "Indonesia":"id",
+  "Philippines":"tl",
+  "Israel":"he",
+  "Saudi Arabia":"ar","UAE":"ar","Egypt":"ar","Morocco":"ar"
 };
 
-const countrySel=document.getElementById("country");
+/* ================= LANGUAGES ================= */
+const LANG={
+en:{
+ title:"My Estate Plan",
+ subtitle:"Personal estate planning record · Not a legal document",
+ personal:"Personal Information",
+ executor:"Executor",
+ documents:"Important Documents",
+ assets:"Assets",
+ wishes:"Final Wishes",
+ name:"Full legal name",
+ dob:"Date of birth",
+ address:"Address",
+ phone:"Telephone",
+ email:"Email",
+ executor_name:"Executor name",
+ executor_notes:"Executor instructions",
+ documents_ph:"Where documents are stored",
+ assets_ph:"List assets",
+ wishes_ph:"Funeral and final wishes"
+},
+fr:{
+ title:"Mon plan successoral",
+ subtitle:"Dossier personnel · Document non juridique",
+ personal:"Informations personnelles",
+ executor:"Exécuteur",
+ documents:"Documents importants",
+ assets:"Biens",
+ wishes:"Dernières volontés",
+ name:"Nom légal complet",
+ dob:"Date de naissance",
+ address:"Adresse",
+ phone:"Téléphone",
+ email:"Courriel",
+ executor_name:"Nom de l'exécuteur",
+ executor_notes:"Instructions à l'exécuteur",
+ documents_ph:"Où sont les documents",
+ assets_ph:"Liste des biens",
+ wishes_ph:"Dernières volontés"
+},
+de:{
+ title:"Mein Nachlassplan",
+ subtitle:"Persönliche Planung · Kein Rechtsdokument",
+ personal:"Persönliche Angaben",
+ executor:"Testamentsvollstrecker",
+ documents:"Wichtige Dokumente",
+ assets:"Vermögenswerte",
+ wishes:"Letzte Wünsche",
+ name:"Vollständiger Name",
+ dob:"Geburtsdatum",
+ address:"Adresse",
+ phone:"Telefon",
+ email:"E-Mail",
+ executor_name:"Name des Testamentsvollstreckers",
+ executor_notes:"Anweisungen",
+ documents_ph:"Aufbewahrungsort",
+ assets_ph:"Vermögensliste",
+ wishes_ph:"Letzte Wünsche"
+},
+es:{
+ title:"Mi plan patrimonial",
+ subtitle:"Registro personal · No es un documento legal",
+ personal:"Información personal",
+ executor:"Albacea",
+ documents:"Documentos importantes",
+ assets:"Bienes",
+ wishes:"Últimos deseos",
+ name:"Nombre legal completo",
+ dob:"Fecha de nacimiento",
+ address:"Dirección",
+ phone:"Teléfono",
+ email:"Correo electrónico",
+ executor_name:"Nombre del albacea",
+ executor_notes:"Instrucciones",
+ documents_ph:"Dónde están los documentos",
+ assets_ph:"Lista de bienes",
+ wishes_ph:"Últimos deseos"
+},
+ar:{
+ title:"خطة التركة الخاصة بي",
+ subtitle:"سجل شخصي · ليس وثيقة قانونية",
+ personal:"المعلومات الشخصية",
+ executor:"المنفذ",
+ documents:"الوثائق المهمة",
+ assets:"الممتلكات",
+ wishes:"الرغبات النهائية",
+ name:"الاسم القانوني الكامل",
+ dob:"تاريخ الميلاد",
+ address:"العنوان",
+ phone:"الهاتف",
+ email:"البريد الإلكتروني",
+ executor_name:"اسم المنفذ",
+ executor_notes:"تعليمات",
+ documents_ph:"مكان حفظ الوثائق",
+ assets_ph:"قائمة الممتلكات",
+ wishes_ph:"الرغبات النهائية"
+}
+};
+
+/* ================= INIT ================= */
+const countrySelect=document.getElementById("countrySelect");
+const languageSelect=document.getElementById("languageSelect");
+
 Object.keys(COUNTRIES).forEach(c=>{
-  const o=document.createElement("option");
-  o.value=c;
-  o.textContent=c;
-  countrySel.appendChild(o);
+  countrySelect.add(new Option(c,c));
+});
+
+Object.keys(LANG).forEach(l=>{
+  languageSelect.add(new Option(l.toUpperCase(),l));
 });
 
 /* ================= APPLY LANGUAGE ================= */
-function applyLang(code){
-  const t=LANG[code];
-  document.body.dir=t.dir;
-  title.textContent=t.title;
-  subtitle.textContent=t.sub;
-  s_personal.textContent=t.personal;
-  s_executor.textContent=t.executor;
-  s_docs.textContent=t.docs;
-  s_assets.textContent=t.assets;
-  s_wishes.textContent=t.wishes;
-  s_first.textContent=t.first;
-  name.placeholder=t.name;
-  dob.placeholder=t.dob;
-  address.placeholder=t.address;
-  phone.placeholder=t.phone;
-  email.placeholder=t.email;
-  executor.placeholder=t.executor_ph;
-  executor_notes.placeholder=t.executor_notes;
-  documents.placeholder=t.docs_ph;
-  assets.placeholder=t.assets_ph;
-  wishes.placeholder=t.wishes_ph;
-  first_notes.placeholder=t.first_ph;
-}
+function applyLanguage(lang){
+  document.documentElement.lang=lang;
+  document.body.classList.toggle("rtl",lang==="ar"||lang==="he");
 
-/* ================= COUNTRY CHANGE ================= */
-countrySel.addEventListener("change",()=>{
-  const lang=COUNTRIES[countrySel.value];
-  applyLang(lang);
-});
+  document.getElementById("title").textContent=LANG[lang].title;
+  document.getElementById("subtitle").textContent=LANG[lang].subtitle;
 
-/* DEFAULT */
-countrySel.value="United States";
-applyLang("en");
-
-/* ================= SAVE ================= */
-const fields=[...document.querySelectorAll("[data-key]")];
-function save(){
-  const d={country:countrySel.value};
-  fields.forEach(f=>d[f.dataset.key]=f.value||"");
-  localStorage.setItem(STORE,JSON.stringify(d));
-}
-fields.forEach(f=>f.oninput=save);
-countrySel.onchange=save;
-
-function load(){
-  const r=localStorage.getItem(STORE);
-  if(!r) return;
-  const d=JSON.parse(r);
-  countrySel.value=d.country||"United States";
-  applyLang(COUNTRIES[countrySel.value]);
-  fields.forEach(f=>f.value=d[f.dataset.key]||"");
-}
-load();
-
-/* ================= PRINT ================= */
-window.addEventListener("beforeprint",()=>{
-  p_title.textContent=title.textContent;
-  p_sub.textContent=subtitle.textContent;
-  p_country.textContent=countrySel.value;
-  p_date.textContent=new Date().toLocaleDateString();
-  p_first_notes.textContent=first_notes.value||"—";
-  tocList.innerHTML="";
-  document.querySelectorAll(".section-header h2").forEach(h=>{
-    const li=document.createElement("li");
-    li.textContent=h.textContent;
-    tocList.appendChild(li);
+  document.querySelectorAll("[data-i18n]").forEach(el=>{
+    el.textContent=LANG[lang][el.dataset.i18n];
   });
-});
 
-/* ================= EXPORT ================= */
-function exportWord(){
-  const html=`<html><body style="font-family:Times New Roman">${document.body.innerText}</body></html>`;
-  const blob=new Blob(['\ufeff',html],{type:"application/msword"});
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
-  a.download="My_Estate_Plan.doc";
-  a.click();
+  document.querySelectorAll("[data-i18n-ph]").forEach(el=>{
+    el.placeholder=LANG[lang][el.dataset.i18nPh];
+  });
 }
 
-function backup(){
-  const d={country:countrySel.value};
-  fields.forEach(f=>d[f.dataset.key]=f.value||"");
-  const blob=new Blob([JSON.stringify(d,null,2)],{type:"application/json"});
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
-  a.download="estate-plan-backup.json";
-  a.click();
-}
+/* ================= EVENTS ================= */
+countrySelect.onchange=()=>{
+  const lang=COUNTRIES[countrySelect.value];
+  languageSelect.value=lang;
+  applyLanguage(lang);
+};
 
-function restore(){
-  const i=document.createElement("input");
-  i.type="file"; i.accept=".json";
-  i.onchange=async()=>{
-    const t=await i.files[0].text();
-    const d=JSON.parse(t);
-    countrySel.value=d.country||"United States";
-    applyLang(COUNTRIES[countrySel.value]);
-    fields.forEach(f=>f.value=d[f.dataset.key]||"");
-    save();
-  };
-  i.click();
-}
+languageSelect.onchange=()=>{
+  applyLanguage(languageSelect.value);
+};
+
+/* ================= DEFAULT ================= */
+countrySelect.value="United States";
+languageSelect.value="en";
+applyLanguage("en");
 </script>
 
 </body>
