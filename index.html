@@ -21,6 +21,7 @@ body{
   font-family:"Times New Roman", Georgia, serif;
   font-size:18px;
   background:radial-gradient(circle at top, var(--jam-mid), var(--jam-dark));
+  color:#111827;
 }
 
 .container{
@@ -32,8 +33,8 @@ body{
   box-shadow:0 25px 60px rgba(0,0,0,.45);
 }
 
-h1{ text-align:center; margin:0; }
-.subtitle{ text-align:center; color:var(--muted); margin:10px 0 30px; }
+h1{text-align:center;margin:0;font-size:38px}
+.subtitle{text-align:center;color:var(--muted);margin:10px 0 28px}
 
 .top-bar{
   display:grid;
@@ -42,15 +43,16 @@ h1{ text-align:center; margin:0; }
   margin-bottom:26px;
 }
 
-select,input{
+select,input,textarea{
   padding:14px;
+  font-family:inherit;
   font-size:16px;
   border-radius:10px;
   border:1px solid var(--border);
   background:#fafafa;
 }
 
-.toolbar{ text-align:center; margin-bottom:30px; }
+.toolbar{text-align:center;margin-bottom:28px}
 button{
   padding:12px 18px;
   font-size:16px;
@@ -71,9 +73,9 @@ section{
   padding:22px;
   border-bottom:1px solid var(--border);
 }
-.section-header h2{ margin:0; }
+.section-header h2{margin:0;font-size:24px}
 
-.section-content{ padding:24px; }
+.section-content{padding:24px}
 
 .help{
   background:var(--help);
@@ -81,19 +83,10 @@ section{
   padding:12px 14px;
   margin-bottom:18px;
   font-size:15px;
-  color:#374151;
 }
 
-textarea,input{
-  width:100%;
-  padding:14px;
-  font-size:17px;
-  border-radius:10px;
-  border:1px solid var(--border);
-  margin-bottom:12px;
-}
-
-textarea{ min-height:220px; }
+textarea{width:100%;min-height:220px;margin-bottom:14px}
+.large{min-height:420px}
 
 .row{
   display:grid;
@@ -113,30 +106,36 @@ textarea{ min-height:220px; }
   border-radius:12px;
   padding:20px;
   white-space:pre-wrap;
-  font-size:16px;
 }
 
 /* PRINT */
-.print-only{ display:none; }
+.print-only{display:none}
 @media print{
-  body{ background:#fff; }
-  .container{ display:none; }
-  .print-only{ display:block; }
-  @page{ margin:20mm; }
+  body{background:#fff}
+  .container{display:none}
+  .print-only{display:block}
+  @page{margin:20mm}
 }
 </style>
 </head>
 
 <body>
 
+<div class="print-only">
+  <h1 id="printTitle"></h1>
+  <p id="printSub"></p>
+  <p id="printCountry"></p>
+  <hr>
+</div>
+
 <div class="container">
 
-<h1>My Estate Plan</h1>
-<div class="subtitle">Personal planning record · Not a legal document</div>
+<h1 id="title"></h1>
+<div class="subtitle" id="subtitle"></div>
 
 <div class="top-bar">
   <select id="countrySelect"></select>
-  <input value="Language auto-selected" disabled>
+  <select id="languageSelect" disabled></select>
   <input id="dateField">
   <input value="Version 1.0" disabled>
 </div>
@@ -146,101 +145,223 @@ textarea{ min-height:220px; }
   <button onclick="window.print()">Print / PDF</button>
 </div>
 
+<!-- PERSONAL -->
+<section>
+  <div class="section-header"><h2 id="secPersonal"></h2></div>
+  <div class="section-content">
+    <input id="name">
+    <input id="dob">
+    <input id="address">
+    <input id="phone">
+    <input id="email">
+  </div>
+</section>
+
 <!-- CHILDREN -->
 <section>
-  <div class="section-header"><h2>Children</h2></div>
+  <div class="section-header"><h2 id="secChildren"></h2></div>
   <div class="section-content">
-    <div class="help">
-      List all children, including biological, adopted, or step-children.
-      Include full legal names and dates of birth.
-    </div>
+    <div class="help" id="helpChildren"></div>
     <div id="childrenList"></div>
-    <button onclick="addChild()">Add Child</button>
+    <button onclick="addRow('childrenList')">Add Child</button>
   </div>
 </section>
 
 <!-- GUARDIANS -->
 <section>
-  <div class="section-header"><h2>Guardians</h2></div>
+  <div class="section-header"><h2 id="secGuardians"></h2></div>
   <div class="section-content">
-    <div class="help">
-      Guardians are responsible for the care of minor children if parents are deceased.
-      List alternates in order of preference.
-    </div>
-    <div id="guardianList"></div>
-    <button onclick="addGuardian()">Add Guardian</button>
+    <div class="help" id="helpGuardians"></div>
+    <div id="guardiansList"></div>
+    <button onclick="addRow('guardiansList')">Add Guardian</button>
   </div>
 </section>
 
 <!-- BENEFICIARIES -->
 <section>
-  <div class="section-header"><h2>Beneficiaries</h2></div>
+  <div class="section-header"><h2 id="secBeneficiaries"></h2></div>
   <div class="section-content">
-    <div class="help">
-      Beneficiaries receive assets from your estate.
-      Include percentages or conditions if applicable.
-    </div>
-    <div id="beneficiaryList"></div>
-    <button onclick="addBeneficiary()">Add Beneficiary</button>
+    <div class="help" id="helpBeneficiaries"></div>
+    <div id="beneficiariesList"></div>
+    <button onclick="addRow('beneficiariesList')">Add Beneficiary</button>
+  </div>
+</section>
+
+<!-- NOTES -->
+<section>
+  <div class="section-header"><h2 id="secNotes"></h2></div>
+  <div class="section-content">
+    <textarea class="large" id="notes"></textarea>
   </div>
 </section>
 
 <!-- LAWYER SUMMARY -->
 <section>
-  <div class="section-header"><h2>Lawyer Summary</h2></div>
+  <div class="section-header"><h2 id="secSummary"></h2></div>
   <div class="section-content">
-    <div class="help">
-      This section auto-generates a concise summary suitable for a lawyer or advisor.
+    <div class="summary-box" id="lawyerSummary">
+      Click “Generate Lawyer Summary”
     </div>
-    <div class="summary-box" id="lawyerSummary">Click “Generate Lawyer Summary” above.</div>
   </div>
 </section>
 
 </div>
 
 <script>
-document.getElementById("dateField").value=new Date().toLocaleDateString();
+/* ================= COUNTRY → LANGUAGE ================= */
+const COUNTRY_LANGUAGE={
+  "United States":"en","Canada":"en","United Kingdom":"en","Australia":"en",
+  "France":"fr","Germany":"de","Spain":"es",
+  "Saudi Arabia":"ar",
+  "China":"zh","Japan":"ja","South Korea":"ko",
+  "India":"hi","Thailand":"th","Vietnam":"vi","Indonesia":"id","Philippines":"fil"
+};
 
-/* ===== REPEATABLE ROWS ===== */
-function rowTemplate(name="", extra=""){
-  return `
-    <div class="row">
-      <input placeholder="Full name" value="${name}">
-      <input placeholder="Details (DOB, %, relationship)" value="${extra}">
-      <button class="remove" onclick="this.parentElement.remove()">✕</button>
-    </div>
-  `;
+/* ================= TRANSLATIONS ================= */
+const T={
+en:{
+ title:"My Estate Plan",
+ sub:"Personal planning record · Not a legal document",
+ personal:"Personal Information",
+ children:"Children",
+ guardians:"Guardians",
+ beneficiaries:"Beneficiaries",
+ notes:"Additional Notes",
+ summary:"Lawyer Summary",
+ name:"Full legal name",
+ dob:"Date of birth",
+ address:"Address",
+ phone:"Telephone",
+ email:"Email",
+ helpChildren:"List all children, including adopted or step-children.",
+ helpGuardians:"Guardians care for minor children if parents are deceased.",
+ helpBeneficiaries:"Beneficiaries receive assets from your estate."
+},
+fr:{
+ title:"Mon plan successoral",
+ sub:"Dossier personnel · Document non juridique",
+ personal:"Informations personnelles",
+ children:"Enfants",
+ guardians:"Tuteurs",
+ beneficiaries:"Bénéficiaires",
+ notes:"Notes supplémentaires",
+ summary:"Résumé pour avocat",
+ name:"Nom légal complet",
+ dob:"Date de naissance",
+ address:"Adresse",
+ phone:"Téléphone",
+ email:"Courriel",
+ helpChildren:"Listez tous les enfants.",
+ helpGuardians:"Les tuteurs s’occupent des enfants mineurs.",
+ helpBeneficiaries:"Les bénéficiaires reçoivent les actifs."
+},
+ar:{
+ title:"خطة التركة الخاصة بي",
+ sub:"سجل شخصي · مستند غير قانوني",
+ personal:"المعلومات الشخصية",
+ children:"الأطفال",
+ guardians:"الأوصياء",
+ beneficiaries:"المستفيدون",
+ notes:"ملاحظات إضافية",
+ summary:"ملخص للمحامي",
+ name:"الاسم القانوني الكامل",
+ dob:"تاريخ الميلاد",
+ address:"العنوان",
+ phone:"الهاتف",
+ email:"البريد الإلكتروني",
+ helpChildren:"قائمة بجميع الأطفال.",
+ helpGuardians:"الأوصياء مسؤولون عن رعاية الأطفال.",
+ helpBeneficiaries:"المستفيدون يتلقون أصول التركة."
+}
+};
+
+/* ================= APPLY LANGUAGE ================= */
+function applyLang(lang){
+  const t=T[lang]||T.en;
+  document.body.dir=(lang==="ar")?"rtl":"ltr";
+
+  title.textContent=t.title;
+  subtitle.textContent=t.sub;
+  secPersonal.textContent=t.personal;
+  secChildren.textContent=t.children;
+  secGuardians.textContent=t.guardians;
+  secBeneficiaries.textContent=t.beneficiaries;
+  secNotes.textContent=t.notes;
+  secSummary.textContent=t.summary;
+
+  name.placeholder=t.name;
+  dob.placeholder=t.dob;
+  address.placeholder=t.address;
+  phone.placeholder=t.phone;
+  email.placeholder=t.email;
+
+  helpChildren.textContent=t.helpChildren;
+  helpGuardians.textContent=t.helpGuardians;
+  helpBeneficiaries.textContent=t.helpBeneficiaries;
 }
 
-function addChild(){ document.getElementById("childrenList").insertAdjacentHTML("beforeend",rowTemplate()); }
-function addGuardian(){ document.getElementById("guardianList").insertAdjacentHTML("beforeend",rowTemplate()); }
-function addBeneficiary(){ document.getElementById("beneficiaryList").insertAdjacentHTML("beforeend",rowTemplate()); }
+/* ================= INIT ================= */
+const countrySelect=document.getElementById("countrySelect");
+const languageSelect=document.getElementById("languageSelect");
 
-/* ===== LAWYER SUMMARY ===== */
-function listToText(id){
+Object.keys(COUNTRY_LANGUAGE).forEach(c=>{
+  const o=document.createElement("option");
+  o.value=c;o.textContent=c;
+  countrySelect.appendChild(o);
+});
+
+Object.keys(T).forEach(l=>{
+  const o=document.createElement("option");
+  o.value=l;o.textContent=l.toUpperCase();
+  languageSelect.appendChild(o);
+});
+
+countrySelect.addEventListener("change",()=>{
+  const lang=COUNTRY_LANGUAGE[countrySelect.value];
+  languageSelect.value=lang;
+  applyLang(lang);
+});
+
+countrySelect.value="United States";
+languageSelect.value="en";
+applyLang("en");
+dateField.value=new Date().toLocaleDateString();
+
+/* ================= REPEATABLE ROWS ================= */
+function rowTemplate(){
+  return `<div class="row">
+    <input placeholder="Full name">
+    <input placeholder="Details">
+    <button class="remove" onclick="this.parentElement.remove()">✕</button>
+  </div>`;
+}
+function addRow(id){
+  document.getElementById(id).insertAdjacentHTML("beforeend",rowTemplate());
+}
+addRow("childrenList");
+addRow("guardiansList");
+addRow("beneficiariesList");
+
+/* ================= LAWYER SUMMARY ================= */
+function collect(id){
   return [...document.querySelectorAll(`#${id} .row`)]
     .map(r=>`- ${r.children[0].value} (${r.children[1].value})`)
-    .join("\n") || "None listed";
+    .join("\n")||"None listed";
 }
-
 function generateSummary(){
-  const summary=
+  lawyerSummary.textContent=
 `CHILDREN:
-${listToText("childrenList")}
+${collect("childrenList")}
 
 GUARDIANS:
-${listToText("guardianList")}
+${collect("guardiansList")}
 
 BENEFICIARIES:
-${listToText("beneficiaryList")}
-`;
-  document.getElementById("lawyerSummary").textContent=summary;
-}
+${collect("beneficiariesList")}
 
-/* INIT DEFAULT ROWS */
-addChild();
-addGuardian();
-addBeneficiary();
+NOTES:
+${notes.value||"—"}`;
+}
 </script>
 
 </body>
