@@ -29,41 +29,63 @@ body{
 }
 
 .container{
-  max-width:1150px;
+  max-width:1200px;
   margin:50px auto;
-  padding:48px 36px 140px;
+  padding:40px 36px 120px;
   background:var(--paper);
   border-radius:18px;
   box-shadow:0 22px 50px rgba(0,0,0,0.35);
 }
 
-h1{
+/* ===== TOP HEADER ===== */
+.header{
+  border-bottom:2px solid var(--border);
+  padding-bottom:20px;
+  margin-bottom:30px;
+}
+
+.header-title{
   text-align:center;
-  font-size:36px;
+}
+
+.header-title h1{
+  margin:0;
+  font-size:38px;
   color:var(--heading);
 }
 
-.subtitle{
-  text-align:center;
+.header-title p{
+  margin:6px 0 0;
   color:var(--muted);
+  font-size:16px;
 }
 
-.toolbar{
-  display:flex;
-  justify-content:center;
-  gap:12px;
-  flex-wrap:wrap;
-  margin:28px 0;
+.header-grid{
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr 1fr auto;
+  gap:14px;
+  margin-top:26px;
 }
 
-select, button{
-  padding:12px 18px;
+.header-grid input,
+.header-grid select{
+  padding:12px 14px;
   font-size:16px;
   font-family:inherit;
   border-radius:8px;
   border:1px solid var(--border);
+  background:#fafafa;
 }
 
+.header-grid button{
+  padding:12px 18px;
+  font-size:16px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  cursor:pointer;
+}
+
+/* ===== SECTIONS ===== */
 section{
   border:1px solid var(--border);
   border-radius:12px;
@@ -71,12 +93,18 @@ section{
 }
 
 .section-header{
-  padding:20px 24px;
+  padding:18px 22px;
   border-bottom:1px solid var(--border);
 }
 
+.section-header h2{
+  margin:0;
+  font-size:24px;
+  color:var(--heading);
+}
+
 .section-content{
-  padding:24px;
+  padding:22px;
 }
 
 input, textarea{
@@ -86,9 +114,11 @@ input, textarea{
   border-radius:10px;
   border:1px solid var(--border);
   font-size:18px;
+  font-family:inherit;
+  background:#fafafa;
 }
 
-textarea.large{ min-height:360px; }
+textarea.large{ min-height:380px; }
 
 .notice{
   background:#f8f9fb;
@@ -98,9 +128,10 @@ textarea.large{ min-height:360px; }
   font-size:16px;
 }
 
+/* ===== PRINT ===== */
 @media print{
   body{ background:#fff; }
-  .container{ display:none; }
+  .container{ box-shadow:none; margin:0; }
   footer{
     position:fixed;
     bottom:10mm;
@@ -117,106 +148,117 @@ textarea.large{ min-height:360px; }
 
 <div class="container" id="app">
 
-<h1 id="title"></h1>
-<p class="subtitle" id="subtitle"></p>
+  <!-- ===== HEADER ===== -->
+  <div class="header">
+    <div class="header-title">
+      <h1 id="title"></h1>
+      <p id="subtitle"></p>
+    </div>
 
-<div class="toolbar">
-  <!-- COUNTRY -->
-  <select id="country">
-    <option value="">Select country</option>
-    <option>Canada</option>
-    <option>United States</option>
-    <option>United Kingdom</option>
-    <option>France</option>
-    <option>Germany</option>
-    <option>Italy</option>
-    <option>Spain</option>
-    <option>Netherlands</option>
-    <option>Poland</option>
-    <option>Brazil</option>
-    <option>Mexico</option>
-    <option>Israel</option>
-    <option>Saudi Arabia</option>
-    <option>United Arab Emirates</option>
-  </select>
+    <div class="header-grid">
+      <input id="preparedFor" data-ph="preparedFor">
+      
+      <select id="country">
+        <option value="">Select country</option>
+        <option>Canada</option>
+        <option>United States</option>
+        <option>United Kingdom</option>
+        <option>France</option>
+        <option>Germany</option>
+        <option>Italy</option>
+        <option>Spain</option>
+        <option>Israel</option>
+        <option>Saudi Arabia</option>
+        <option>United Arab Emirates</option>
+      </select>
 
-  <button onclick="window.print()" id="btnPrint"></button>
-</div>
+      <input id="docDate" disabled>
+      <input id="docVersion" value="1.0" disabled>
 
-<section>
-  <div class="section-header"><h2 data-i18n="personal"></h2></div>
-  <div class="section-content">
-    <input data-ph="name">
-    <input data-ph="dob">
-    <input data-ph="address">
+      <button onclick="window.print()" id="btnPrint"></button>
+    </div>
   </div>
-</section>
 
-<section>
-  <div class="section-header"><h2 data-i18n="assets"></h2></div>
-  <div class="section-content">
-    <textarea class="large" data-ph="assets"></textarea>
-  </div>
-</section>
+  <!-- ===== PERSONAL ===== -->
+  <section>
+    <div class="section-header"><h2 data-i18n="personal"></h2></div>
+    <div class="section-content">
+      <input data-ph="name">
+      <input data-ph="dob">
+      <input data-ph="address">
+    </div>
+  </section>
 
-<section>
-  <div class="section-header"><h2 data-i18n="legal"></h2></div>
-  <div class="section-content">
-    <div class="notice" id="legalText"></div>
-  </div>
-</section>
+  <!-- ===== ASSETS ===== -->
+  <section>
+    <div class="section-header"><h2 data-i18n="assets"></h2></div>
+    <div class="section-content">
+      <textarea class="large" data-ph="assets"></textarea>
+    </div>
+  </section>
+
+  <!-- ===== LEGAL ===== -->
+  <section>
+    <div class="section-header"><h2 data-i18n="legal"></h2></div>
+    <div class="section-content">
+      <div class="notice" id="legalText"></div>
+    </div>
+  </section>
 
 </div>
 
 <footer></footer>
 
 <script>
-/* COUNTRY → LANGUAGE + RTL */
-const countryConfig = {
+/* ===== COUNTRY CONFIG ===== */
+const countryConfig={
   "Canada":{lang:"en",rtl:false,legal:"This document does not replace a legally executed will under Canadian law."},
   "United States":{lang:"en",rtl:false,legal:"This document is not a legally binding will under U.S. law."},
   "United Kingdom":{lang:"en",rtl:false,legal:"This record does not constitute a valid will under UK law."},
   "France":{lang:"fr",rtl:false,legal:"Ce document ne remplace pas un testament légal selon le droit français."},
   "Germany":{lang:"de",rtl:false,legal:"Dieses Dokument ersetzt kein rechtsgültiges Testament nach deutschem Recht."},
-  "Italy":{lang:"it",rtl:false,legal:"Questo documento non sostituisce un testamento legale ai sensi della legge italiana."},
+  "Italy":{lang:"it",rtl:false,legal:"Questo documento non sostituisce un testamento legale secondo la legge italiana."},
   "Spain":{lang:"es",rtl:false,legal:"Este documento no sustituye un testamento legal conforme a la ley española."},
   "Israel":{lang:"he",rtl:true,legal:"מסמך זה אינו מהווה צוואה חוקית לפי הדין הישראלי."},
   "Saudi Arabia":{lang:"ar",rtl:true,legal:"هذه الوثيقة لا تُعد وصية قانونية بموجب أنظمة المملكة العربية السعودية."},
   "United Arab Emirates":{lang:"ar",rtl:true,legal:"هذه الوثيقة لا تحل محل وصية قانونية وفق قوانين دولة الإمارات."}
 };
 
-/* TRANSLATIONS */
-const translations = {
-  en:{title:"My Estate Plan",subtitle:"Personal estate planning record · Not a legal document",personal:"Personal Information",assets:"Assets",legal:"Legal Notice",print:"Print / Save PDF",ph:{name:"Full legal name",dob:"Date of birth",address:"Address",assets:"Assets and property"}},
-  fr:{title:"Mon plan successoral",subtitle:"Dossier personnel · Document non juridique",personal:"Renseignements personnels",assets:"Biens",legal:"Avis juridique",print:"Imprimer / PDF",ph:{name:"Nom légal complet",dob:"Date de naissance",address:"Adresse",assets:"Biens et propriétés"}},
-  de:{title:"Mein Nachlassplan",subtitle:"Persönliches Dokument · Kein Rechtsdokument",personal:"Persönliche Angaben",assets:"Vermögen",legal:"Rechtlicher Hinweis",print:"Drucken / PDF",ph:{name:"Vollständiger Name",dob:"Geburtsdatum",address:"Adresse",assets:"Vermögen"}},
-  it:{title:"Il mio piano patrimoniale",subtitle:"Documento personale · Non legale",personal:"Informazioni personali",assets:"Beni",legal:"Avviso legale",print:"Stampa / PDF",ph:{name:"Nome completo",dob:"Data di nascita",address:"Indirizzo",assets:"Beni"}},
-  es:{title:"Mi plan patrimonial",subtitle:"Documento personal · No legal",personal:"Información personal",assets:"Activos",legal:"Aviso legal",print:"Imprimir / PDF",ph:{name:"Nombre completo",dob:"Fecha de nacimiento",address:"Dirección",assets:"Activos"}},
-  ar:{title:"خطة التركة الخاصة بي",subtitle:"سجل شخصي · غير قانوني",personal:"المعلومات الشخصية",assets:"الأصول",legal:"تنبيه قانوني",print:"طباعة / PDF",ph:{name:"الاسم الكامل",dob:"تاريخ الميلاد",address:"العنوان",assets:"الأصول"}},
-  he:{title:"תוכנית העיזבון שלי",subtitle:"מסמך אישי · לא משפטי",personal:"פרטים אישיים",assets:"נכסים",legal:"הודעה משפטית",print:"הדפסה / PDF",ph:{name:"שם מלא",dob:"תאריך לידה",address:"כתובת",assets:"נכסים"}}
+/* ===== TRANSLATIONS ===== */
+const translations={
+  en:{title:"My Estate Plan",subtitle:"Personal planning record · Not a legal document",personal:"Personal Information",assets:"Assets",legal:"Legal Notice",print:"Print / Save PDF",ph:{preparedFor:"Prepared for (full name)",name:"Full legal name",dob:"Date of birth",address:"Address",assets:"Assets and property"}},
+  fr:{title:"Mon plan successoral",subtitle:"Dossier personnel · Document non juridique",personal:"Renseignements personnels",assets:"Biens",legal:"Avis juridique",print:"Imprimer / PDF",ph:{preparedFor:"Préparé pour",name:"Nom légal complet",dob:"Date de naissance",address:"Adresse",assets:"Biens et propriétés"}},
+  de:{title:"Mein Nachlassplan",subtitle:"Persönliches Dokument · Kein Rechtsdokument",personal:"Persönliche Angaben",assets:"Vermögen",legal:"Rechtlicher Hinweis",print:"Drucken / PDF",ph:{preparedFor:"Vorbereitet für",name:"Vollständiger Name",dob:"Geburtsdatum",address:"Adresse",assets:"Vermögen"}},
+  it:{title:"Il mio piano patrimoniale",subtitle:"Documento personale · Non legale",personal:"Informazioni personali",assets:"Beni",legal:"Avviso legale",print:"Stampa / PDF",ph:{preparedFor:"Preparato per",name:"Nome completo",dob:"Data di nascita",address:"Indirizzo",assets:"Beni"}},
+  es:{title:"Mi plan patrimonial",subtitle:"Documento personal · No legal",personal:"Información personal",assets:"Activos",legal:"Aviso legal",print:"Imprimir / PDF",ph:{preparedFor:"Preparado para",name:"Nombre completo",dob:"Fecha de nacimiento",address:"Dirección",assets:"Activos"}},
+  ar:{title:"خطة التركة الخاصة بي",subtitle:"سجل شخصي · غير قانوني",personal:"المعلومات الشخصية",assets:"الأصول",legal:"تنبيه قانوني",print:"طباعة / PDF",ph:{preparedFor:"أُعدّ لصالح",name:"الاسم الكامل",dob:"تاريخ الميلاد",address:"العنوان",assets:"الأصول"}},
+  he:{title:"תוכנית העיזבון שלי",subtitle:"מסמך אישי · לא משפטי",personal:"פרטים אישיים",assets:"נכסים",legal:"הודעה משפטית",print:"הדפסה / PDF",ph:{preparedFor:"הוכן עבור",name:"שם מלא",dob:"תאריך לידה",address:"כתובת",assets:"נכסים"}}
 };
 
 function applyCountry(country){
-  const cfg = countryConfig[country];
+  const cfg=countryConfig[country];
   if(!cfg) return;
+  const t=translations[cfg.lang];
 
-  const t = translations[cfg.lang];
-  document.documentElement.dir = cfg.rtl ? "rtl" : "ltr";
+  document.documentElement.dir=cfg.rtl?"rtl":"ltr";
 
-  title.textContent = t.title;
-  subtitle.textContent = t.subtitle;
-  btnPrint.textContent = t.print;
+  title.textContent=t.title;
+  subtitle.textContent=t.subtitle;
+  btnPrint.textContent=t.print;
 
   document.querySelectorAll("[data-i18n]").forEach(el=>{
-    el.textContent = t[el.dataset.i18n];
+    el.textContent=t[el.dataset.i18n];
   });
 
   document.querySelectorAll("[data-ph]").forEach(el=>{
-    el.placeholder = t.ph[el.dataset.ph];
+    el.placeholder=t.ph[el.dataset.ph];
   });
 
-  legalText.textContent = cfg.legal;
+  legalText.textContent=cfg.legal;
 }
+
+/* INIT */
+document.getElementById("docDate").value=new Date().toLocaleDateString();
 
 country.addEventListener("change",()=>{
   applyCountry(country.value);
