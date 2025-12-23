@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>My Estate Plan</title>
 
 <style>
@@ -122,40 +122,22 @@ textarea.medium{ min-height:260px; }
 <!-- PRINT COVER -->
 <div class="print-only">
   <div style="margin-top:100px;text-align:center;">
-    <h1 id="printTitle">My Estate Plan</h1>
-    <p><b id="printPrepared">Prepared for:</b> <span id="printName">—</span></p>
-    <p><b id="printCountryLabel">Country:</b> <span id="printCountry">—</span></p>
-    <p><b id="printDateLabel">Date:</b> <span id="printDate">—</span></p>
+    <h1 id="printTitle"></h1>
+    <p><b id="printPrepared"></b> <span id="printName">—</span></p>
+    <p><b id="printCountryLabel"></b> <span id="printCountry">—</span></p>
+    <p><b id="printDateLabel"></b> <span id="printDate">—</span></p>
   </div>
 </div>
-
 <footer class="print-only"></footer>
 
-<div class="container" id="app">
+<div class="container">
 
-<h1 id="title">My Estate Plan</h1>
-<p class="subtitle" id="subtitle">Personal estate planning record · Not a legal document</p>
+<h1 id="title"></h1>
+<p class="subtitle" id="subtitle"></p>
 
 <div class="toolbar">
-  <select id="language">
-    <option value="en">English</option>
-    <option value="fr">Français</option>
-    <option value="es">Español</option>
-    <option value="de">Deutsch</option>
-    <option value="it">Italiano</option>
-    <option value="pt">Português</option>
-    <option value="nl">Nederlands</option>
-    <option value="pl">Polski</option>
-    <option value="cs">Čeština</option>
-    <option value="sk">Slovenčina</option>
-    <option value="hu">Magyar</option>
-    <option value="ro">Română</option>
-    <option value="bg">Български</option>
-    <option value="ru">Русский</option>
-    <option value="uk">Українська</option>
-  </select>
-
-  <select data-key="country">
+  <!-- COUNTRY (SOURCE OF TRUTH) -->
+  <select id="country">
     <option value="">Select country</option>
     <option>Canada</option>
     <option>United States</option>
@@ -164,25 +146,13 @@ textarea.medium{ min-height:260px; }
     <option>Germany</option>
     <option>Italy</option>
     <option>Spain</option>
-    <option>Portugal</option>
-    <option>Netherlands</option>
-    <option>Poland</option>
-    <option>Czech Republic</option>
-    <option>Slovakia</option>
-    <option>Hungary</option>
-    <option>Romania</option>
-    <option>Bulgaria</option>
-    <option>Ukraine</option>
-    <option>Russia</option>
-    <option>Other</option>
   </select>
 
-  <button id="btnPrint" onclick="window.print()">Print / Save PDF</button>
-  <button id="btnWord" onclick="exportWord()">Export Word</button>
+  <button id="btnPrint" onclick="window.print()"></button>
 </div>
 
 <section>
-  <div class="section-header"><h2 data-i18n="personal">Personal Information</h2></div>
+  <div class="section-header"><h2 data-i18n="personal"></h2></div>
   <div class="section-content">
     <input data-key="name" data-ph="name">
     <input data-key="dob" data-ph="dob">
@@ -191,7 +161,7 @@ textarea.medium{ min-height:260px; }
 </section>
 
 <section>
-  <div class="section-header"><h2 data-i18n="executor">Executor</h2></div>
+  <div class="section-header"><h2 data-i18n="executor"></h2></div>
   <div class="section-content">
     <input data-key="executor" data-ph="executor">
     <textarea class="medium" data-key="executor_notes" data-ph="executor_notes"></textarea>
@@ -199,21 +169,21 @@ textarea.medium{ min-height:260px; }
 </section>
 
 <section>
-  <div class="section-header"><h2 data-i18n="assets">Assets</h2></div>
+  <div class="section-header"><h2 data-i18n="assets"></h2></div>
   <div class="section-content">
     <textarea class="large" data-key="assets" data-ph="assets"></textarea>
   </div>
 </section>
 
 <section>
-  <div class="section-header"><h2 data-i18n="final">Final Wishes</h2></div>
+  <div class="section-header"><h2 data-i18n="final"></h2></div>
   <div class="section-content">
     <textarea class="large" data-key="final_wishes" data-ph="final_wishes"></textarea>
   </div>
 </section>
 
 <section>
-  <div class="section-header"><h2 data-i18n="notes">Additional Notes</h2></div>
+  <div class="section-header"><h2 data-i18n="notes"></h2></div>
   <div class="section-content">
     <textarea class="large" data-key="notes" data-ph="notes"></textarea>
   </div>
@@ -222,34 +192,10 @@ textarea.medium{ min-height:260px; }
 </div>
 
 <script>
-const STORE="estate_plan_full_i18n_v1";
-const fields=[...document.querySelectorAll("[data-key]")];
-let languageManuallySet=false;
-
-/* SAVE / LOAD */
-function save(){
-  const d={};
-  fields.forEach(f=>d[f.dataset.key]=f.value||"");
-  d.language=language.value;
-  d.languageManual=languageManuallySet;
-  localStorage.setItem(STORE,JSON.stringify(d));
-}
-function load(){
-  const raw=localStorage.getItem(STORE);
-  if(!raw) return;
-  const d=JSON.parse(raw);
-  fields.forEach(f=>f.value=d[f.dataset.key]||"");
-  if(d.language){
-    language.value=d.language;
-    applyLanguage(d.language);
-  }
-  languageManuallySet=d.languageManual||false;
-}
-fields.forEach(f=>f.addEventListener("input",save));
-load();
+const STORE = "estate_plan_country_language";
 
 /* TRANSLATIONS */
-const translations={
+const translations = {
   en:{
     title:"My Estate Plan",
     subtitle:"Personal estate planning record · Not a legal document",
@@ -259,7 +205,6 @@ const translations={
     final:"Final Wishes",
     notes:"Additional Notes",
     print:"Print / Save PDF",
-    word:"Export Word",
     prepared:"Prepared for:",
     country:"Country:",
     date:"Date:",
@@ -283,7 +228,6 @@ const translations={
     final:"Dernières volontés",
     notes:"Notes supplémentaires",
     print:"Imprimer / PDF",
-    word:"Exporter Word",
     prepared:"Préparé pour :",
     country:"Pays :",
     date:"Date :",
@@ -297,78 +241,156 @@ const translations={
       final_wishes:"Dernières volontés",
       notes:"Notes supplémentaires"
     }
+  },
+  de:{
+    title:"Mein Nachlassplan",
+    subtitle:"Persönliches Dokument · Kein Rechtsdokument",
+    personal:"Persönliche Angaben",
+    executor:"Testamentsvollstrecker",
+    assets:"Vermögen",
+    final:"Letzte Wünsche",
+    notes:"Zusätzliche Notizen",
+    print:"Drucken / PDF",
+    prepared:"Vorbereitet für:",
+    country:"Land:",
+    date:"Datum:",
+    ph:{
+      name:"Vollständiger legaler Name",
+      dob:"Geburtsdatum",
+      address:"Adresse",
+      executor:"Name des Vollstreckers",
+      executor_notes:"Anweisungen für den Vollstrecker",
+      assets:"Vermögen und Eigentum",
+      final_wishes:"Letzte Wünsche",
+      notes:"Zusätzliche Notizen"
+    }
+  },
+  it:{
+    title:"Il mio piano patrimoniale",
+    subtitle:"Documento personale · Non è un atto legale",
+    personal:"Informazioni personali",
+    executor:"Esecutore",
+    assets:"Beni",
+    final:"Ultime volontà",
+    notes:"Note aggiuntive",
+    print:"Stampa / PDF",
+    prepared:"Preparato per:",
+    country:"Paese:",
+    date:"Data:",
+    ph:{
+      name:"Nome legale completo",
+      dob:"Data di nascita",
+      address:"Indirizzo",
+      executor:"Nome dell’esecutore",
+      executor_notes:"Istruzioni per l’esecutore",
+      assets:"Beni e proprietà",
+      final_wishes:"Ultime volontà",
+      notes:"Note aggiuntive"
+    }
+  },
+  es:{
+    title:"Mi plan patrimonial",
+    subtitle:"Registro personal · No es un documento legal",
+    personal:"Información personal",
+    executor:"Albacea",
+    assets:"Activos",
+    final:"Últimos deseos",
+    notes:"Notas adicionales",
+    print:"Imprimir / PDF",
+    prepared:"Preparado para:",
+    country:"País:",
+    date:"Fecha:",
+    ph:{
+      name:"Nombre legal completo",
+      dob:"Fecha de nacimiento",
+      address:"Dirección",
+      executor:"Nombre del albacea",
+      executor_notes:"Instrucciones para el albacea",
+      assets:"Activos y propiedad",
+      final_wishes:"Últimos deseos",
+      notes:"Notas adicionales"
+    }
   }
-  /* other languages remain as previously added */
+};
+
+/* COUNTRY → LANGUAGE (ALWAYS) */
+const countryLanguageMap = {
+  "Canada":"en",
+  "United States":"en",
+  "United Kingdom":"en",
+  "France":"fr",
+  "Germany":"de",
+  "Italy":"it",
+  "Spain":"es"
 };
 
 function applyLanguage(lang){
-  const t=translations[lang];
-  title.textContent=t.title;
-  subtitle.textContent=t.subtitle;
-  btnPrint.textContent=t.print;
-  btnWord.textContent=t.word;
-  printTitle.textContent=t.title;
-  printPrepared.textContent=t.prepared;
-  printCountryLabel.textContent=t.country;
-  printDateLabel.textContent=t.date;
+  const t = translations[lang];
+  if(!t) return;
+
+  title.textContent = t.title;
+  subtitle.textContent = t.subtitle;
+  btnPrint.textContent = t.print;
+
+  printTitle.textContent = t.title;
+  printPrepared.textContent = t.prepared;
+  printCountryLabel.textContent = t.country;
+  printDateLabel.textContent = t.date;
 
   document.querySelectorAll("[data-i18n]").forEach(el=>{
-    el.textContent=t[el.dataset.i18n];
+    el.textContent = t[el.dataset.i18n];
   });
 
   document.querySelectorAll("[data-ph]").forEach(el=>{
-    el.placeholder=t.ph[el.dataset.ph];
+    el.placeholder = t.ph[el.dataset.ph];
   });
 }
 
-/* AUTO LANGUAGE BY COUNTRY */
-const countryLanguageMap={
-  "Canada":"en","United States":"en","United Kingdom":"en",
-  "France":"fr","Germany":"de","Italy":"it","Spain":"es",
-  "Portugal":"pt","Netherlands":"nl","Poland":"pl",
-  "Czech Republic":"cs","Slovakia":"sk","Hungary":"hu",
-  "Romania":"ro","Bulgaria":"bg","Ukraine":"uk","Russia":"ru"
-};
+/* SAVE / LOAD */
+function save(){
+  const d={ country: country.value };
+  document.querySelectorAll("[data-key]").forEach(el=>{
+    d[el.dataset.key]=el.value||"";
+  });
+  localStorage.setItem(STORE, JSON.stringify(d));
+}
 
-document.querySelector('[data-key="country"]').addEventListener("change",e=>{
-  if(languageManuallySet) return;
-  const autoLang=countryLanguageMap[e.target.value];
-  if(autoLang && translations[autoLang]){
-    language.value=autoLang;
-    applyLanguage(autoLang);
-    save();
+function load(){
+  const raw = localStorage.getItem(STORE);
+  if(!raw) return;
+  const d = JSON.parse(raw);
+  country.value = d.country || "";
+  document.querySelectorAll("[data-key]").forEach(el=>{
+    el.value = d[el.dataset.key] || "";
+  });
+}
+
+/* EVENTS */
+document.addEventListener("DOMContentLoaded", ()=>{
+  load();
+
+  if(country.value){
+    applyLanguage(countryLanguageMap[country.value] || "en");
+  }else{
+    applyLanguage("en");
   }
-});
 
-language.addEventListener("change",()=>{
-  languageManuallySet=true;
-  applyLanguage(language.value);
-  save();
-});
-
-/* PRINT */
-window.addEventListener("beforeprint",()=>{
-  printName.textContent=document.querySelector('[data-key="name"]').value||"—";
-  printCountry.textContent=document.querySelector('[data-key="country"]').value||"—";
-  printDate.textContent=new Date().toLocaleDateString();
-});
-
-/* WORD EXPORT */
-function exportWord(){
-  const clone=app.cloneNode(true);
-  clone.querySelectorAll("input,textarea,select").forEach(el=>{
-    const d=document.createElement("div");
-    d.textContent=el.value||"—";
-    d.style.whiteSpace="pre-wrap";
-    el.replaceWith(d);
+  document.querySelectorAll("[data-key]").forEach(el=>{
+    el.addEventListener("input", save);
   });
-  const html=`<html><body>${clone.outerHTML}</body></html>`;
-  const blob=new Blob(['\ufeff',html],{type:"application/msword"});
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
-  a.download="My_Estate_Plan.doc";
-  a.click();
-}
+
+  country.addEventListener("change", ()=>{
+    const lang = countryLanguageMap[country.value] || "en";
+    applyLanguage(lang);
+    save();
+  });
+
+  window.addEventListener("beforeprint", ()=>{
+    printName.textContent = document.querySelector('[data-key="name"]').value || "—";
+    printCountry.textContent = country.value || "—";
+    printDate.textContent = new Date().toLocaleDateString();
+  });
+});
 </script>
 
 </body>
