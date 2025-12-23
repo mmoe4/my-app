@@ -20,8 +20,359 @@ body{
   font-family:"Times New Roman", Georgia, serif;
   font-size:18px;
   background:radial-gradient(circle at top, var(--jam-mid), var(--jam-dark));
+  color:#111827;
 }
 
 .container{
   max-width:1200px;
- 
+  margin:40px auto;
+  padding:50px 40px 180px;
+  background:var(--paper);
+  border-radius:18px;
+  box-shadow:0 25px 60px rgba(0,0,0,.45);
+}
+
+h1{text-align:center;margin:0;font-size:38px}
+.subtitle{text-align:center;color:var(--muted);margin:10px 0 28px}
+
+.top-bar{
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr 1fr;
+  gap:14px;
+  margin-bottom:26px;
+}
+
+select,input,textarea{
+  padding:14px;
+  font-family:inherit;
+  font-size:16px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:#fafafa;
+  width:100%;
+}
+
+.toolbar{text-align:center;margin-bottom:28px}
+button{
+  padding:12px 18px;
+  font-size:16px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:#f9fafb;
+  cursor:pointer;
+  margin:0 6px;
+}
+
+section{
+  border:1px solid var(--border);
+  border-radius:14px;
+  margin-bottom:28px;
+}
+
+.section-header{
+  padding:22px;
+  border-bottom:1px solid var(--border);
+}
+.section-header h2{margin:0;font-size:24px}
+
+.section-content{padding:24px}
+
+.help{
+  background:var(--help);
+  border-left:4px solid #9ca3af;
+  padding:12px 14px;
+  margin-bottom:18px;
+  font-size:15px;
+}
+
+textarea{min-height:220px;margin-bottom:14px}
+.large{min-height:420px}
+
+.row{
+  display:grid;
+  grid-template-columns:2fr 1fr auto;
+  gap:10px;
+  margin-bottom:10px;
+}
+
+.remove{
+  background:#fee2e2;
+  border-color:#fca5a5;
+}
+
+.summary{
+  background:#f9fafb;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:20px;
+  white-space:pre-wrap;
+}
+
+/* RTL support */
+body[dir="rtl"]{
+  direction:rtl;
+}
+body[dir="rtl"] .row{
+  grid-template-columns:auto 1fr 2fr;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1 id="title"></h1>
+<div class="subtitle" id="subtitle"></div>
+
+<div class="top-bar">
+  <select id="countrySelect"></select>
+  <select id="languageSelect" disabled></select>
+  <input id="dateField">
+  <input value="Version 1.0" disabled>
+</div>
+
+<div class="toolbar">
+  <button onclick="generateSummary()" id="btnSummary"></button>
+  <button onclick="window.print()" id="btnPrint"></button>
+</div>
+
+<!-- PERSONAL -->
+<section>
+  <div class="section-header"><h2 id="secPersonal"></h2></div>
+  <div class="section-content">
+    <input id="name">
+    <input id="dob">
+    <input id="address">
+    <input id="phone">
+    <input id="email">
+  </div>
+</section>
+
+<!-- CHILDREN -->
+<section>
+  <div class="section-header"><h2 id="secChildren"></h2></div>
+  <div class="section-content">
+    <div class="help" id="helpChildren"></div>
+    <div id="children"></div>
+    <button onclick="addRow('children')" id="btnAddChild"></button>
+  </div>
+</section>
+
+<!-- GUARDIANS -->
+<section>
+  <div class="section-header"><h2 id="secGuardians"></h2></div>
+  <div class="section-content">
+    <div class="help" id="helpGuardians"></div>
+    <div id="guardians"></div>
+    <button onclick="addRow('guardians')" id="btnAddGuardian"></button>
+  </div>
+</section>
+
+<!-- BENEFICIARIES -->
+<section>
+  <div class="section-header"><h2 id="secBeneficiaries"></h2></div>
+  <div class="section-content">
+    <div class="help" id="helpBeneficiaries"></div>
+    <div id="beneficiaries"></div>
+    <button onclick="addRow('beneficiaries')" id="btnAddBeneficiary"></button>
+  </div>
+</section>
+
+<!-- NOTES -->
+<section>
+  <div class="section-header"><h2 id="secNotes"></h2></div>
+  <div class="section-content">
+    <textarea class="large" id="notes"></textarea>
+  </div>
+</section>
+
+<!-- LAWYER SUMMARY -->
+<section>
+  <div class="section-header"><h2 id="secSummary"></h2></div>
+  <div class="section-content">
+    <div class="summary" id="summaryBox"></div>
+  </div>
+</section>
+
+</div>
+
+<script>
+/* ================= COUNTRY → LANGUAGE ================= */
+const COUNTRY_LANGUAGE={
+  "United States":"en",
+  "Canada":"en",
+  "United Kingdom":"en",
+  "France":"fr",
+  "Germany":"de",
+  "Spain":"es",
+  "Saudi Arabia":"ar",
+  "China":"zh",
+  "Japan":"ja"
+};
+
+/* ================= FULL TRANSLATIONS ================= */
+const T={
+en:{
+ title:"My Estate Plan",
+ subtitle:"Personal planning record · Not a legal document",
+ btnSummary:"Generate Lawyer Summary",
+ btnPrint:"Print / PDF",
+ personal:"Personal Information",
+ children:"Children",
+ guardians:"Guardians",
+ beneficiaries:"Beneficiaries",
+ notes:"Additional Notes",
+ summary:"Lawyer Summary",
+ helpChildren:"List all children including adopted or step-children.",
+ helpGuardians:"Guardians care for minor children if parents are deceased.",
+ helpBeneficiaries:"Beneficiaries receive assets from your estate.",
+ addChild:"Add Child",
+ addGuardian:"Add Guardian",
+ addBeneficiary:"Add Beneficiary",
+ name:"Full legal name",
+ dob:"Date of birth",
+ address:"Address",
+ phone:"Telephone",
+ email:"Email"
+},
+fr:{
+ title:"Mon plan successoral",
+ subtitle:"Dossier personnel · Document non juridique",
+ btnSummary:"Générer le résumé pour avocat",
+ btnPrint:"Imprimer / PDF",
+ personal:"Informations personnelles",
+ children:"Enfants",
+ guardians:"Tuteurs",
+ beneficiaries:"Bénéficiaires",
+ notes:"Notes supplémentaires",
+ summary:"Résumé pour avocat",
+ helpChildren:"Listez tous les enfants, y compris adoptés ou beaux-enfants.",
+ helpGuardians:"Les tuteurs prennent soin des enfants mineurs.",
+ helpBeneficiaries:"Les bénéficiaires reçoivent les actifs de la succession.",
+ addChild:"Ajouter un enfant",
+ addGuardian:"Ajouter un tuteur",
+ addBeneficiary:"Ajouter un bénéficiaire",
+ name:"Nom légal complet",
+ dob:"Date de naissance",
+ address:"Adresse",
+ phone:"Téléphone",
+ email:"Courriel"
+},
+ar:{
+ title:"خطة التركة الخاصة بي",
+ subtitle:"سجل شخصي · مستند غير قانوني",
+ btnSummary:"إنشاء ملخص للمحامي",
+ btnPrint:"طباعة / PDF",
+ personal:"المعلومات الشخصية",
+ children:"الأطفال",
+ guardians:"الأوصياء",
+ beneficiaries:"المستفيدون",
+ notes:"ملاحظات إضافية",
+ summary:"ملخص للمحامي",
+ helpChildren:"أدرج جميع الأطفال بما في ذلك المتبنين.",
+ helpGuardians:"الأوصياء مسؤولون عن رعاية الأطفال القُصَّر.",
+ helpBeneficiaries:"المستفيدون يتلقون أصول التركة.",
+ addChild:"إضافة طفل",
+ addGuardian:"إضافة وصي",
+ addBeneficiary:"إضافة مستفيد",
+ name:"الاسم القانوني الكامل",
+ dob:"تاريخ الميلاد",
+ address:"العنوان",
+ phone:"الهاتف",
+ email:"البريد الإلكتروني"
+}
+};
+
+/* ================= APPLY LANGUAGE ================= */
+function applyLanguage(lang){
+  const t=T[lang]||T.en;
+  document.body.setAttribute("dir",lang==="ar"?"rtl":"ltr");
+
+  title.textContent=t.title;
+  subtitle.textContent=t.subtitle;
+  btnSummary.textContent=t.btnSummary;
+  btnPrint.textContent=t.btnPrint;
+
+  secPersonal.textContent=t.personal;
+  secChildren.textContent=t.children;
+  secGuardians.textContent=t.guardians;
+  secBeneficiaries.textContent=t.beneficiaries;
+  secNotes.textContent=t.notes;
+  secSummary.textContent=t.summary;
+
+  helpChildren.textContent=t.helpChildren;
+  helpGuardians.textContent=t.helpGuardians;
+  helpBeneficiaries.textContent=t.helpBeneficiaries;
+
+  btnAddChild.textContent=t.addChild;
+  btnAddGuardian.textContent=t.addGuardian;
+  btnAddBeneficiary.textContent=t.addBeneficiary;
+
+  name.placeholder=t.name;
+  dob.placeholder=t.dob;
+  address.placeholder=t.address;
+  phone.placeholder=t.phone;
+  email.placeholder=t.email;
+}
+
+/* ================= INIT ================= */
+const countrySelect=document.getElementById("countrySelect");
+const languageSelect=document.getElementById("languageSelect");
+
+Object.keys(COUNTRY_LANGUAGE).forEach(c=>{
+  countrySelect.add(new Option(c,c));
+});
+Object.values(COUNTRY_LANGUAGE)
+ .filter((v,i,a)=>a.indexOf(v)===i)
+ .forEach(l=>languageSelect.add(new Option(l.toUpperCase(),l)));
+
+countrySelect.addEventListener("change",()=>{
+  const lang=COUNTRY_LANGUAGE[countrySelect.value]||"en";
+  languageSelect.value=lang;
+  applyLanguage(lang);
+});
+
+countrySelect.value="United States";
+languageSelect.value="en";
+applyLanguage("en");
+dateField.value=new Date().toLocaleDateString();
+
+/* ================= REPEATABLE ROWS ================= */
+function addRow(id){
+  document.getElementById(id).insertAdjacentHTML("beforeend",
+    `<div class="row">
+      <input placeholder="">
+      <input placeholder="">
+      <button class="remove" onclick="this.parentElement.remove()">✕</button>
+    </div>`);
+}
+addRow("children");
+addRow("guardians");
+addRow("beneficiaries");
+
+/* ================= LAWYER SUMMARY ================= */
+function collect(id){
+  return [...document.querySelectorAll(`#${id} .row`)]
+    .map(r=>`${r.children[0].value} (${r.children[1].value})`)
+    .join("\n")||"—";
+}
+
+function generateSummary(){
+  summaryBox.textContent=
+`CHILDREN:
+${collect("children")}
+
+GUARDIANS:
+${collect("guardians")}
+
+BENEFICIARIES:
+${collect("beneficiaries")}
+
+NOTES:
+${notes.value||"—"}`;
+}
+</script>
+
+</body>
+</html>
