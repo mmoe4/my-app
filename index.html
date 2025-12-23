@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My Estate Plan</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 :root{
@@ -11,325 +11,331 @@
   --jam-mid:#4a1f26;
   --paper:#ffffff;
   --border:#d1d5db;
-  --heading:#1f3a3d;
+  --heading:#1f2937;
   --muted:#6b7280;
 }
 
+/* ===== SCREEN ===== */
 body{
   margin:0;
   font-family:"Times New Roman", Georgia, serif;
-  background:radial-gradient(circle at top, var(--jam-mid), var(--jam-dark));
   font-size:18px;
-  line-height:1.6;
+  background:radial-gradient(circle at top, var(--jam-mid), var(--jam-dark));
+  color:#111827;
 }
 
 .container{
-  max-width:1150px;
-  margin:40px auto;
+  max-width:1100px;
+  margin:50px auto;
+  padding:50px 40px 140px;
   background:var(--paper);
   border-radius:18px;
-  padding:40px;
-  box-shadow:0 20px 50px rgba(0,0,0,.35);
+  box-shadow:0 25px 60px rgba(0,0,0,.4);
 }
 
 h1{
   text-align:center;
+  font-size:38px;
+  margin:0;
   color:var(--heading);
-  margin-bottom:4px;
 }
 
 .subtitle{
   text-align:center;
   font-size:15px;
   color:var(--muted);
+  margin:10px 0 30px;
 }
 
-.topbar{
+.top-bar{
   display:grid;
   grid-template-columns:2fr 1fr 1fr 1fr;
-  gap:12px;
-  margin:30px 0;
+  gap:14px;
+  margin-bottom:28px;
 }
 
 select,input{
   padding:14px;
+  font-family:inherit;
   font-size:16px;
   border-radius:10px;
   border:1px solid var(--border);
+  background:#fafafa;
+}
+
+.toolbar{
+  text-align:center;
+  margin-bottom:24px;
+}
+button{
+  padding:12px 18px;
+  font-size:16px;
   font-family:inherit;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:#f9fafb;
+  cursor:pointer;
+  margin:0 6px;
 }
 
 section{
   border:1px solid var(--border);
-  border-radius:12px;
-  margin-bottom:22px;
+  border-radius:14px;
+  margin-bottom:26px;
 }
 
 .section-header{
-  padding:18px 22px;
+  padding:22px;
   border-bottom:1px solid var(--border);
 }
-
 .section-header h2{
   margin:0;
-  color:var(--heading);
+  font-size:24px;
 }
 
 .section-content{
-  padding:22px;
+  padding:24px;
 }
 
-textarea,input{
+input,textarea{
   width:100%;
-  margin-bottom:14px;
   padding:16px;
+  font-size:18px;
   border-radius:10px;
   border:1px solid var(--border);
-  font-family:inherit;
+  margin-bottom:16px;
 }
 
-textarea{ min-height:260px; }
+textarea{ min-height:300px; }
 
-.rtl{
-  direction:rtl;
-  text-align:right;
+/* ===== PRINT ===== */
+.print-only{ display:none; }
+
+@media print{
+  body{ background:#fff; }
+  .container{ display:none; }
+  .print-only{ display:block; }
+
+  @page{ margin:20mm; }
+
+  footer{
+    position:fixed;
+    bottom:10mm;
+    width:100%;
+    text-align:center;
+    font-size:12px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<div class="container" id="app">
+<!-- ===== PRINT COVER ===== -->
+<div class="print-only">
+  <h1 id="printTitle"></h1>
+  <p id="printSub"></p>
+  <p><b id="printCountry"></b></p>
+  <hr>
+</div>
+
+<!-- ===== APP ===== -->
+<div class="container">
 
 <h1 id="title">My Estate Plan</h1>
-<div class="subtitle" id="subtitle">
-Personal estate planning record · Not a legal document
-</div>
+<p class="subtitle" id="subtitle">Personal estate planning record · Not a legal document</p>
 
-<!-- ================= TOP BAR ================= -->
-<div class="topbar">
+<div class="top-bar">
   <select id="countrySelect"></select>
-  <select id="languageSelect"></select>
-  <input id="dateField" disabled>
-  <input value="1.0" disabled>
+  <select id="languageSelect" disabled></select>
+  <input type="text" id="dateField">
+  <input type="text" value="1.0" readonly>
 </div>
 
-<!-- ================= SECTIONS ================= -->
+<div class="toolbar">
+  <button onclick="window.print()">Print / PDF</button>
+  <button onclick="exportWord()">Download Word</button>
+</div>
 
 <section>
-  <div class="section-header"><h2 data-i18n="personal">Personal Information</h2></div>
+  <div class="section-header"><h2 id="secPersonal"></h2></div>
   <div class="section-content">
-    <input data-i18n-ph="name" placeholder="Full legal name">
-    <input data-i18n-ph="dob" placeholder="Date of birth">
-    <input data-i18n-ph="address" placeholder="Address">
-    <input data-i18n-ph="phone" placeholder="Telephone">
-    <input data-i18n-ph="email" placeholder="Email">
+    <input id="name">
+    <input id="dob">
+    <input id="address">
+    <input id="phone">
+    <input id="email">
   </div>
 </section>
 
 <section>
-  <div class="section-header"><h2 data-i18n="executor">Executor</h2></div>
+  <div class="section-header"><h2 id="secExecutor"></h2></div>
   <div class="section-content">
-    <input data-i18n-ph="executor_name" placeholder="Executor name">
-    <textarea data-i18n-ph="executor_notes" placeholder="Executor instructions"></textarea>
+    <textarea id="executor"></textarea>
   </div>
 </section>
 
 <section>
-  <div class="section-header"><h2 data-i18n="documents">Important Documents</h2></div>
+  <div class="section-header"><h2 id="secDocs"></h2></div>
   <div class="section-content">
-    <textarea data-i18n-ph="documents_ph" placeholder="Where documents are stored"></textarea>
+    <textarea id="documents"></textarea>
   </div>
 </section>
 
 <section>
-  <div class="section-header"><h2 data-i18n="assets">Assets</h2></div>
+  <div class="section-header"><h2 id="secAssets"></h2></div>
   <div class="section-content">
-    <textarea data-i18n-ph="assets_ph" placeholder="List assets"></textarea>
+    <textarea id="assets"></textarea>
   </div>
 </section>
 
 <section>
-  <div class="section-header"><h2 data-i18n="wishes">Final Wishes</h2></div>
+  <div class="section-header"><h2 id="secWishes"></h2></div>
   <div class="section-content">
-    <textarea data-i18n-ph="wishes_ph" placeholder="Funeral and final wishes"></textarea>
+    <textarea id="wishes"></textarea>
+  </div>
+</section>
+
+<section>
+  <div class="section-header"><h2 id="secFamily"></h2></div>
+  <div class="section-content">
+    <textarea id="family"></textarea>
   </div>
 </section>
 
 </div>
+
+<footer class="print-only">My Estate Plan</footer>
 
 <script>
-/* ================= DATE ================= */
-document.getElementById("dateField").value=new Date().toLocaleDateString();
-
-/* ================= COUNTRY → LANGUAGE ================= */
-const COUNTRIES={
+/* ===== COUNTRY → LANGUAGE ===== */
+const COUNTRY_LANGUAGE={
   "United States":"en","Canada":"en","United Kingdom":"en",
   "France":"fr","Belgium":"fr","Switzerland":"fr",
   "Germany":"de","Austria":"de",
-  "Spain":"es","Mexico":"es","Argentina":"es","Chile":"es",
-  "Italy":"it",
-  "Portugal":"pt","Brazil":"pt",
-  "Netherlands":"nl",
-  "Sweden":"sv","Norway":"no","Denmark":"da","Finland":"fi",
-  "Poland":"pl","Czech Republic":"cs","Slovakia":"sk",
-  "Hungary":"hu","Romania":"ro","Bulgaria":"bg",
-  "Greece":"el",
-  "Russia":"ru","Ukraine":"uk",
-  "Turkey":"tr",
-  "China":"zh","Taiwan":"zh",
-  "Japan":"ja","South Korea":"ko",
-  "India":"hi",
-  "Thailand":"th","Vietnam":"vi",
-  "Indonesia":"id",
-  "Philippines":"tl",
-  "Israel":"he",
-  "Saudi Arabia":"ar","UAE":"ar","Egypt":"ar","Morocco":"ar"
+  "Spain":"es","Mexico":"es","Argentina":"es",
+  "Saudi Arabia":"ar","United Arab Emirates":"ar","Egypt":"ar"
 };
 
-/* ================= LANGUAGES ================= */
-const LANG={
-en:{
- title:"My Estate Plan",
- subtitle:"Personal estate planning record · Not a legal document",
- personal:"Personal Information",
- executor:"Executor",
- documents:"Important Documents",
- assets:"Assets",
- wishes:"Final Wishes",
- name:"Full legal name",
- dob:"Date of birth",
- address:"Address",
- phone:"Telephone",
- email:"Email",
- executor_name:"Executor name",
- executor_notes:"Executor instructions",
- documents_ph:"Where documents are stored",
- assets_ph:"List assets",
- wishes_ph:"Funeral and final wishes"
-},
-fr:{
- title:"Mon plan successoral",
- subtitle:"Dossier personnel · Document non juridique",
- personal:"Informations personnelles",
- executor:"Exécuteur",
- documents:"Documents importants",
- assets:"Biens",
- wishes:"Dernières volontés",
- name:"Nom légal complet",
- dob:"Date de naissance",
- address:"Adresse",
- phone:"Téléphone",
- email:"Courriel",
- executor_name:"Nom de l'exécuteur",
- executor_notes:"Instructions à l'exécuteur",
- documents_ph:"Où sont les documents",
- assets_ph:"Liste des biens",
- wishes_ph:"Dernières volontés"
-},
-de:{
- title:"Mein Nachlassplan",
- subtitle:"Persönliche Planung · Kein Rechtsdokument",
- personal:"Persönliche Angaben",
- executor:"Testamentsvollstrecker",
- documents:"Wichtige Dokumente",
- assets:"Vermögenswerte",
- wishes:"Letzte Wünsche",
- name:"Vollständiger Name",
- dob:"Geburtsdatum",
- address:"Adresse",
- phone:"Telefon",
- email:"E-Mail",
- executor_name:"Name des Testamentsvollstreckers",
- executor_notes:"Anweisungen",
- documents_ph:"Aufbewahrungsort",
- assets_ph:"Vermögensliste",
- wishes_ph:"Letzte Wünsche"
-},
-es:{
- title:"Mi plan patrimonial",
- subtitle:"Registro personal · No es un documento legal",
- personal:"Información personal",
- executor:"Albacea",
- documents:"Documentos importantes",
- assets:"Bienes",
- wishes:"Últimos deseos",
- name:"Nombre legal completo",
- dob:"Fecha de nacimiento",
- address:"Dirección",
- phone:"Teléfono",
- email:"Correo electrónico",
- executor_name:"Nombre del albacea",
- executor_notes:"Instrucciones",
- documents_ph:"Dónde están los documentos",
- assets_ph:"Lista de bienes",
- wishes_ph:"Últimos deseos"
-},
-ar:{
- title:"خطة التركة الخاصة بي",
- subtitle:"سجل شخصي · ليس وثيقة قانونية",
- personal:"المعلومات الشخصية",
- executor:"المنفذ",
- documents:"الوثائق المهمة",
- assets:"الممتلكات",
- wishes:"الرغبات النهائية",
- name:"الاسم القانوني الكامل",
- dob:"تاريخ الميلاد",
- address:"العنوان",
- phone:"الهاتف",
- email:"البريد الإلكتروني",
- executor_name:"اسم المنفذ",
- executor_notes:"تعليمات",
- documents_ph:"مكان حفظ الوثائق",
- assets_ph:"قائمة الممتلكات",
- wishes_ph:"الرغبات النهائية"
+/* ===== TRANSLATIONS ===== */
+const T={
+  en:{
+    title:"My Estate Plan",
+    sub:"Personal estate planning record · Not a legal document",
+    personal:"Personal Information",
+    executor:"Executor / Estate Administrator",
+    docs:"Important Documents",
+    assets:"Assets",
+    wishes:"Final Wishes",
+    family:"Family – What to do first",
+    name:"Full legal name",
+    dob:"Date of birth",
+    address:"Address",
+    phone:"Telephone",
+    email:"Email"
+  },
+  fr:{
+    title:"Mon plan successoral",
+    sub:"Dossier personnel · Document non juridique",
+    personal:"Informations personnelles",
+    executor:"Exécuteur testamentaire",
+    docs:"Documents importants",
+    assets:"Actifs",
+    wishes:"Dernières volontés",
+    family:"Famille – Que faire en premier",
+    name:"Nom légal complet",
+    dob:"Date de naissance",
+    address:"Adresse",
+    phone:"Téléphone",
+    email:"Courriel"
+  },
+  de:{
+    title:"Mein Nachlassplan",
+    sub:"Persönliches Dokument · Kein Rechtsdokument",
+    personal:"Persönliche Angaben",
+    executor:"Testamentsvollstrecker",
+    docs:"Wichtige Dokumente",
+    assets:"Vermögenswerte",
+    wishes:"Letzter Wille",
+    family:"Familie – Erste Schritte",
+    name:"Vollständiger Name",
+    dob:"Geburtsdatum",
+    address:"Adresse",
+    phone:"Telefon",
+    email:"E-Mail"
+  },
+  ar:{
+    title:"خطة التركة الخاصة بي",
+    sub:"سجل شخصي · مستند غير قانوني",
+    personal:"المعلومات الشخصية",
+    executor:"المنفذ",
+    docs:"المستندات الهامة",
+    assets:"الأصول",
+    wishes:"الرغبات النهائية",
+    family:"العائلة – ماذا تفعل أولاً",
+    name:"الاسم القانوني الكامل",
+    dob:"تاريخ الميلاد",
+    address:"العنوان",
+    phone:"الهاتف",
+    email:"البريد الإلكتروني"
+  }
+};
+
+/* ===== APPLY LANGUAGE ===== */
+function applyLang(lang){
+  const t=T[lang];
+  document.body.dir=(lang==="ar")?"rtl":"ltr";
+  title.textContent=t.title;
+  subtitle.textContent=t.sub;
+  secPersonal.textContent=t.personal;
+  secExecutor.textContent=t.executor;
+  secDocs.textContent=t.docs;
+  secAssets.textContent=t.assets;
+  secWishes.textContent=t.wishes;
+  secFamily.textContent=t.family;
+  name.placeholder=t.name;
+  dob.placeholder=t.dob;
+  address.placeholder=t.address;
+  phone.placeholder=t.phone;
+  email.placeholder=t.email;
 }
-};
 
-/* ================= INIT ================= */
+/* ===== INIT ===== */
 const countrySelect=document.getElementById("countrySelect");
 const languageSelect=document.getElementById("languageSelect");
 
-Object.keys(COUNTRIES).forEach(c=>{
-  countrySelect.add(new Option(c,c));
+Object.keys(COUNTRY_LANGUAGE).forEach(c=>{
+  const o=document.createElement("option");
+  o.value=c;o.textContent=c;
+  countrySelect.appendChild(o);
 });
 
-Object.keys(LANG).forEach(l=>{
-  languageSelect.add(new Option(l.toUpperCase(),l));
+["en","fr","de","es","ar"].forEach(l=>{
+  const o=document.createElement("option");
+  o.value=l;o.textContent=l.toUpperCase();
+  languageSelect.appendChild(o);
 });
 
-/* ================= APPLY LANGUAGE ================= */
-function applyLanguage(lang){
-  document.documentElement.lang=lang;
-  document.body.classList.toggle("rtl",lang==="ar"||lang==="he");
-
-  document.getElementById("title").textContent=LANG[lang].title;
-  document.getElementById("subtitle").textContent=LANG[lang].subtitle;
-
-  document.querySelectorAll("[data-i18n]").forEach(el=>{
-    el.textContent=LANG[lang][el.dataset.i18n];
-  });
-
-  document.querySelectorAll("[data-i18n-ph]").forEach(el=>{
-    el.placeholder=LANG[lang][el.dataset.i18nPh];
-  });
-}
-
-/* ================= EVENTS ================= */
-countrySelect.onchange=()=>{
-  const lang=COUNTRIES[countrySelect.value];
+countrySelect.addEventListener("change",()=>{
+  const lang=COUNTRY_LANGUAGE[countrySelect.value];
   languageSelect.value=lang;
-  applyLanguage(lang);
-};
+  applyLang(lang);
+});
 
-languageSelect.onchange=()=>{
-  applyLanguage(languageSelect.value);
-};
-
-/* ================= DEFAULT ================= */
 countrySelect.value="United States";
 languageSelect.value="en";
-applyLanguage("en");
+applyLang("en");
+dateField.value=new Date().toLocaleDateString();
+
+/* ===== WORD EXPORT ===== */
+function exportWord(){
+  const html=`<html><body>${document.body.innerText}</body></html>`;
+  const blob=new Blob(['\ufeff',html],{type:"application/msword"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="My_Estate_Plan.doc";
+  a.click();
+}
 </script>
 
 </body>
