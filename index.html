@@ -15,7 +15,6 @@
   --muted:#6b7280;
 }
 
-/* ===== SCREEN ===== */
 body{
   margin:0;
   font-family:"Times New Roman", Georgia, serif;
@@ -25,33 +24,32 @@ body{
 }
 
 .container{
-  max-width:1100px;
+  max-width:1150px;
   margin:50px auto;
-  padding:50px 40px 140px;
+  padding:50px 40px 160px;
   background:var(--paper);
   border-radius:18px;
-  box-shadow:0 25px 60px rgba(0,0,0,.4);
+  box-shadow:0 25px 60px rgba(0,0,0,.45);
 }
 
 h1{
   text-align:center;
   font-size:38px;
   margin:0;
-  color:var(--heading);
 }
 
 .subtitle{
   text-align:center;
   font-size:15px;
   color:var(--muted);
-  margin:10px 0 30px;
+  margin:10px 0 28px;
 }
 
 .top-bar{
   display:grid;
   grid-template-columns:2fr 1fr 1fr 1fr;
   gap:14px;
-  margin-bottom:28px;
+  margin-bottom:26px;
 }
 
 select,input{
@@ -65,8 +63,9 @@ select,input{
 
 .toolbar{
   text-align:center;
-  margin-bottom:24px;
+  margin-bottom:30px;
 }
+
 button{
   padding:12px 18px;
   font-size:16px;
@@ -81,7 +80,7 @@ button{
 section{
   border:1px solid var(--border);
   border-radius:14px;
-  margin-bottom:26px;
+  margin-bottom:28px;
 }
 
 .section-header{
@@ -106,9 +105,9 @@ input,textarea{
   margin-bottom:16px;
 }
 
-textarea{ min-height:300px; }
+textarea{ min-height:320px; }
 
-/* ===== PRINT ===== */
+/* PRINT */
 .print-only{ display:none; }
 
 @media print{
@@ -131,7 +130,7 @@ textarea{ min-height:300px; }
 
 <body>
 
-<!-- ===== PRINT COVER ===== -->
+<!-- PRINT COVER -->
 <div class="print-only">
   <h1 id="printTitle"></h1>
   <p id="printSub"></p>
@@ -139,11 +138,10 @@ textarea{ min-height:300px; }
   <hr>
 </div>
 
-<!-- ===== APP ===== -->
 <div class="container">
 
-<h1 id="title">My Estate Plan</h1>
-<p class="subtitle" id="subtitle">Personal estate planning record · Not a legal document</p>
+<h1 id="title"></h1>
+<p class="subtitle" id="subtitle"></p>
 
 <div class="top-bar">
   <select id="countrySelect"></select>
@@ -208,80 +206,85 @@ textarea{ min-height:300px; }
 <footer class="print-only">My Estate Plan</footer>
 
 <script>
-/* ===== COUNTRY → LANGUAGE ===== */
+/* COUNTRY → LANGUAGE */
 const COUNTRY_LANGUAGE={
-  "United States":"en","Canada":"en","United Kingdom":"en",
+  "United States":"en","Canada":"en","United Kingdom":"en","Australia":"en",
   "France":"fr","Belgium":"fr","Switzerland":"fr",
   "Germany":"de","Austria":"de",
   "Spain":"es","Mexico":"es","Argentina":"es",
-  "Saudi Arabia":"ar","United Arab Emirates":"ar","Egypt":"ar"
+  "Saudi Arabia":"ar","United Arab Emirates":"ar","Egypt":"ar",
+  "China":"zh","Taiwan":"zh-TW","Japan":"ja","South Korea":"ko",
+  "India":"hi","Thailand":"th","Vietnam":"vi","Indonesia":"id","Philippines":"fil"
 };
 
-/* ===== TRANSLATIONS ===== */
+/* TRANSLATIONS */
 const T={
-  en:{
-    title:"My Estate Plan",
-    sub:"Personal estate planning record · Not a legal document",
-    personal:"Personal Information",
-    executor:"Executor / Estate Administrator",
-    docs:"Important Documents",
-    assets:"Assets",
-    wishes:"Final Wishes",
-    family:"Family – What to do first",
-    name:"Full legal name",
-    dob:"Date of birth",
-    address:"Address",
-    phone:"Telephone",
-    email:"Email"
-  },
-  fr:{
-    title:"Mon plan successoral",
-    sub:"Dossier personnel · Document non juridique",
-    personal:"Informations personnelles",
-    executor:"Exécuteur testamentaire",
-    docs:"Documents importants",
-    assets:"Actifs",
-    wishes:"Dernières volontés",
-    family:"Famille – Que faire en premier",
-    name:"Nom légal complet",
-    dob:"Date de naissance",
-    address:"Adresse",
-    phone:"Téléphone",
-    email:"Courriel"
-  },
-  de:{
-    title:"Mein Nachlassplan",
-    sub:"Persönliches Dokument · Kein Rechtsdokument",
-    personal:"Persönliche Angaben",
-    executor:"Testamentsvollstrecker",
-    docs:"Wichtige Dokumente",
-    assets:"Vermögenswerte",
-    wishes:"Letzter Wille",
-    family:"Familie – Erste Schritte",
-    name:"Vollständiger Name",
-    dob:"Geburtsdatum",
-    address:"Adresse",
-    phone:"Telefon",
-    email:"E-Mail"
-  },
-  ar:{
-    title:"خطة التركة الخاصة بي",
-    sub:"سجل شخصي · مستند غير قانوني",
-    personal:"المعلومات الشخصية",
-    executor:"المنفذ",
-    docs:"المستندات الهامة",
-    assets:"الأصول",
-    wishes:"الرغبات النهائية",
-    family:"العائلة – ماذا تفعل أولاً",
-    name:"الاسم القانوني الكامل",
-    dob:"تاريخ الميلاد",
-    address:"العنوان",
-    phone:"الهاتف",
-    email:"البريد الإلكتروني"
-  }
+en:{
+title:"My Estate Plan",sub:"Personal estate planning record · Not a legal document",
+personal:"Personal Information",executor:"Executor / Estate Administrator",
+docs:"Important Documents",assets:"Assets",wishes:"Final Wishes",
+family:"Family – What to do first",
+name:"Full legal name",dob:"Date of birth",address:"Address",
+phone:"Telephone",email:"Email"},
+fr:{
+title:"Mon plan successoral",sub:"Dossier personnel · Document non juridique",
+personal:"Informations personnelles",executor:"Exécuteur testamentaire",
+docs:"Documents importants",assets:"Actifs",wishes:"Dernières volontés",
+family:"Famille – Que faire en premier",
+name:"Nom légal complet",dob:"Date de naissance",address:"Adresse",
+phone:"Téléphone",email:"Courriel"},
+de:{
+title:"Mein Nachlassplan",sub:"Persönliches Dokument · Kein Rechtsdokument",
+personal:"Persönliche Angaben",executor:"Testamentsvollstrecker",
+docs:"Wichtige Dokumente",assets:"Vermögenswerte",wishes:"Letzter Wille",
+family:"Familie – Erste Schritte",
+name:"Vollständiger Name",dob:"Geburtsdatum",address:"Adresse",
+phone:"Telefon",email:"E-Mail"},
+es:{
+title:"Mi plan patrimonial",sub:"Registro personal · No es un documento legal",
+personal:"Información personal",executor:"Ejecutor testamentario",
+docs:"Documentos importantes",assets:"Activos",wishes:"Deseos finales",
+family:"Familia – Qué hacer primero",
+name:"Nombre legal completo",dob:"Fecha de nacimiento",address:"Dirección",
+phone:"Teléfono",email:"Correo electrónico"},
+ar:{
+title:"خطة التركة الخاصة بي",sub:"سجل شخصي · مستند غير قانوني",
+personal:"المعلومات الشخصية",executor:"المنفذ",
+docs:"المستندات الهامة",assets:"الأصول",wishes:"الرغبات النهائية",
+family:"العائلة – ماذا تفعل أولاً",
+name:"الاسم القانوني الكامل",dob:"تاريخ الميلاد",address:"العنوان",
+phone:"الهاتف",email:"البريد الإلكتروني"},
+zh:{
+title:"我的遗产规划",sub:"个人规划文件 · 非法律文件",
+personal:"个人信息",executor:"遗嘱执行人",
+docs:"重要文件",assets:"资产",wishes:"最终意愿",
+family:"家庭 – 首要事项",
+name:"法定全名",dob:"出生日期",address:"地址",
+phone:"电话",email:"电子邮件"},
+"zh-TW":{
+title:"我的遺產規劃",sub:"個人規劃文件 · 非法律文件",
+personal:"個人資料",executor:"遺囑執行人",
+docs:"重要文件",assets:"資產",wishes:"最終意願",
+family:"家庭 – 首要事項",
+name:"法定全名",dob:"出生日期",address:"地址",
+phone:"電話",email:"電子郵件"},
+ja:{
+title:"私の遺産計画",sub:"個人記録 · 法的文書ではありません",
+personal:"個人情報",executor:"遺言執行者",
+docs:"重要書類",assets:"資産",wishes:"最終の希望",
+family:"家族 – 最初に行うこと",
+name:"法的氏名",dob:"生年月日",address:"住所",
+phone:"電話番号",email:"メール"},
+ko:{
+title:"나의 유산 계획",sub:"개인 기록 · 법적 문서 아님",
+personal:"개인 정보",executor:"유언 집행자",
+docs:"중요 문서",assets:"자산",wishes:"최종 희망",
+family:"가족 – 먼저 할 일",
+name:"법적 이름",dob:"생년월일",address:"주소",
+phone:"전화",email:"이메일"}
 };
 
-/* ===== APPLY LANGUAGE ===== */
+/* APPLY LANGUAGE */
 function applyLang(lang){
   const t=T[lang];
   document.body.dir=(lang==="ar")?"rtl":"ltr";
@@ -300,7 +303,7 @@ function applyLang(lang){
   email.placeholder=t.email;
 }
 
-/* ===== INIT ===== */
+/* INIT */
 const countrySelect=document.getElementById("countrySelect");
 const languageSelect=document.getElementById("languageSelect");
 
@@ -310,7 +313,7 @@ Object.keys(COUNTRY_LANGUAGE).forEach(c=>{
   countrySelect.appendChild(o);
 });
 
-["en","fr","de","es","ar"].forEach(l=>{
+Object.keys(T).forEach(l=>{
   const o=document.createElement("option");
   o.value=l;o.textContent=l.toUpperCase();
   languageSelect.appendChild(o);
@@ -327,7 +330,7 @@ languageSelect.value="en";
 applyLang("en");
 dateField.value=new Date().toLocaleDateString();
 
-/* ===== WORD EXPORT ===== */
+/* WORD EXPORT */
 function exportWord(){
   const html=`<html><body>${document.body.innerText}</body></html>`;
   const blob=new Blob(['\ufeff',html],{type:"application/msword"});
