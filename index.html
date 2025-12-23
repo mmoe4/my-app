@@ -11,7 +11,6 @@
   --jam-mid:#4a1f26;
   --paper:#ffffff;
   --border:#d1d5db;
-  --heading:#1f2937;
   --muted:#6b7280;
   --help:#f3f4f6;
 }
@@ -21,13 +20,12 @@ body{
   font-family:"Times New Roman", Georgia, serif;
   font-size:18px;
   background:radial-gradient(circle at top, var(--jam-mid), var(--jam-dark));
-  color:#111827;
 }
 
 .container{
   max-width:1200px;
   margin:40px auto;
-  padding:50px 40px 160px;
+  padding:50px 40px 180px;
   background:var(--paper);
   border-radius:18px;
   box-shadow:0 25px 60px rgba(0,0,0,.45);
@@ -100,7 +98,7 @@ textarea{width:100%;min-height:220px;margin-bottom:14px}
   border-color:#fca5a5;
 }
 
-.summary-box{
+.summary{
   background:#f9fafb;
   border:1px solid var(--border);
   border-radius:12px;
@@ -109,29 +107,19 @@ textarea{width:100%;min-height:220px;margin-bottom:14px}
 }
 
 /* PRINT */
-.print-only{display:none}
 @media print{
   body{background:#fff}
-  .container{display:none}
-  .print-only{display:block}
-  @page{margin:20mm}
+  .container{box-shadow:none;border-radius:0}
 }
 </style>
 </head>
 
 <body>
 
-<div class="print-only">
-  <h1 id="printTitle"></h1>
-  <p id="printSub"></p>
-  <p id="printCountry"></p>
-  <hr>
-</div>
-
 <div class="container">
 
-<h1 id="title"></h1>
-<div class="subtitle" id="subtitle"></div>
+<h1>My Estate Plan</h1>
+<div class="subtitle">Personal planning record · Not a legal document</div>
 
 <div class="top-bar">
   <select id="countrySelect"></select>
@@ -147,59 +135,173 @@ textarea{width:100%;min-height:220px;margin-bottom:14px}
 
 <!-- PERSONAL -->
 <section>
-  <div class="section-header"><h2 id="secPersonal"></h2></div>
+  <div class="section-header"><h2>Personal Information</h2></div>
   <div class="section-content">
-    <input id="name">
-    <input id="dob">
-    <input id="address">
-    <input id="phone">
-    <input id="email">
+    <input placeholder="Full legal name">
+    <input placeholder="Date of birth">
+    <input placeholder="Address">
+    <input placeholder="Telephone">
+    <input placeholder="Email">
+  </div>
+</section>
+
+<!-- MARITAL -->
+<section>
+  <div class="section-header"><h2>Marriage & Prior Relationships</h2></div>
+  <div class="section-content">
+    <div class="help">Used to determine spousal rights and obligations.</div>
+    <input placeholder="Current marital status">
+    <textarea placeholder="Previous marriages or relationships (names, dates)"></textarea>
+    <textarea placeholder="Support obligations or agreements"></textarea>
   </div>
 </section>
 
 <!-- CHILDREN -->
 <section>
-  <div class="section-header"><h2 id="secChildren"></h2></div>
+  <div class="section-header"><h2>Children</h2></div>
   <div class="section-content">
-    <div class="help" id="helpChildren"></div>
-    <div id="childrenList"></div>
-    <button onclick="addRow('childrenList')">Add Child</button>
+    <div class="help">Include biological, adopted, and step-children.</div>
+    <div id="children"></div>
+    <button onclick="addRow('children')">Add Child</button>
+  </div>
+</section>
+
+<!-- DEPENDENTS -->
+<section>
+  <div class="section-header"><h2>Other Dependents</h2></div>
+  <div class="section-content">
+    <textarea class="large"
+      placeholder="Parents, disabled relatives, or others financially dependent"></textarea>
   </div>
 </section>
 
 <!-- GUARDIANS -->
 <section>
-  <div class="section-header"><h2 id="secGuardians"></h2></div>
+  <div class="section-header"><h2>Guardianship</h2></div>
   <div class="section-content">
-    <div class="help" id="helpGuardians"></div>
-    <div id="guardiansList"></div>
-    <button onclick="addRow('guardiansList')">Add Guardian</button>
+    <div class="help">Who should care for minor children.</div>
+    <div id="guardians"></div>
+    <button onclick="addRow('guardians')">Add Guardian</button>
+  </div>
+</section>
+
+<!-- EXECUTOR -->
+<section>
+  <div class="section-header"><h2>Executor</h2></div>
+  <div class="section-content">
+    <textarea placeholder="Executor name, alternates, compensation, powers"></textarea>
   </div>
 </section>
 
 <!-- BENEFICIARIES -->
 <section>
-  <div class="section-header"><h2 id="secBeneficiaries"></h2></div>
+  <div class="section-header"><h2>Beneficiaries</h2></div>
   <div class="section-content">
-    <div class="help" id="helpBeneficiaries"></div>
-    <div id="beneficiariesList"></div>
-    <button onclick="addRow('beneficiariesList')">Add Beneficiary</button>
+    <div class="help">Who receives your estate and under what terms.</div>
+    <div id="beneficiaries"></div>
+    <button onclick="addRow('beneficiaries')">Add Beneficiary</button>
+  </div>
+</section>
+
+<!-- TRUSTS -->
+<section>
+  <div class="section-header"><h2>Trust Planning</h2></div>
+  <div class="section-content">
+    <textarea placeholder="Trusts for minors, disability, education, protection"></textarea>
+    <textarea placeholder="Conditions or restrictions"></textarea>
+  </div>
+</section>
+
+<!-- ASSETS -->
+<section>
+  <div class="section-header"><h2>Assets</h2></div>
+  <div class="section-content">
+    <textarea class="large"
+      placeholder="Real estate, bank accounts, investments, vehicles, valuables"></textarea>
+  </div>
+</section>
+
+<!-- DEBTS -->
+<section>
+  <div class="section-header"><h2>Debts & Liabilities</h2></div>
+  <div class="section-content">
+    <textarea class="large"
+      placeholder="Mortgages, loans, credit cards, taxes, guarantees"></textarea>
+  </div>
+</section>
+
+<!-- INSURANCE -->
+<section>
+  <div class="section-header"><h2>Insurance</h2></div>
+  <div class="section-content">
+    <textarea placeholder="Life, disability, health, long-term care policies"></textarea>
+  </div>
+</section>
+
+<!-- BUSINESS -->
+<section>
+  <div class="section-header"><h2>Business Interests</h2></div>
+  <div class="section-content">
+    <textarea placeholder="Businesses owned, shares, partners"></textarea>
+    <textarea placeholder="Succession or buy-sell agreements"></textarea>
+  </div>
+</section>
+
+<!-- DIGITAL -->
+<section>
+  <div class="section-header"><h2>Digital Assets</h2></div>
+  <div class="section-content">
+    <textarea class="large"
+      placeholder="Email, cloud storage, social media, crypto, subscriptions"></textarea>
+    <textarea placeholder="Who manages or closes accounts"></textarea>
+  </div>
+</section>
+
+<!-- PETS -->
+<section>
+  <div class="section-header"><h2>Pets</h2></div>
+  <div class="section-content">
+    <textarea placeholder="Pets, care needs, designated caregiver"></textarea>
+  </div>
+</section>
+
+<!-- CHARITY -->
+<section>
+  <div class="section-header"><h2>Charitable Gifts</h2></div>
+  <div class="section-content">
+    <textarea placeholder="Charities, causes, amounts or percentages"></textarea>
+  </div>
+</section>
+
+<!-- FUNERAL -->
+<section>
+  <div class="section-header"><h2>Final Wishes</h2></div>
+  <div class="section-content">
+    <textarea placeholder="Burial, cremation, organ donation, services"></textarea>
+  </div>
+</section>
+
+<!-- ADVISORS -->
+<section>
+  <div class="section-header"><h2>Professional Advisors</h2></div>
+  <div class="section-content">
+    <textarea placeholder="Lawyer, accountant, financial advisor"></textarea>
   </div>
 </section>
 
 <!-- NOTES -->
 <section>
-  <div class="section-header"><h2 id="secNotes"></h2></div>
+  <div class="section-header"><h2>Additional Notes</h2></div>
   <div class="section-content">
-    <textarea class="large" id="notes"></textarea>
+    <textarea class="large"></textarea>
   </div>
 </section>
 
 <!-- LAWYER SUMMARY -->
 <section>
-  <div class="section-header"><h2 id="secSummary"></h2></div>
+  <div class="section-header"><h2>Lawyer Summary</h2></div>
   <div class="section-content">
-    <div class="summary-box" id="lawyerSummary">
+    <div class="summary" id="summaryBox">
       Click “Generate Lawyer Summary”
     </div>
   </div>
@@ -208,7 +310,7 @@ textarea{width:100%;min-height:220px;margin-bottom:14px}
 </div>
 
 <script>
-/* ================= COUNTRY → LANGUAGE ================= */
+/* COUNTRY → LANGUAGE */
 const COUNTRY_LANGUAGE={
   "United States":"en","Canada":"en","United Kingdom":"en","Australia":"en",
   "France":"fr","Germany":"de","Spain":"es",
@@ -217,90 +319,6 @@ const COUNTRY_LANGUAGE={
   "India":"hi","Thailand":"th","Vietnam":"vi","Indonesia":"id","Philippines":"fil"
 };
 
-/* ================= TRANSLATIONS ================= */
-const T={
-en:{
- title:"My Estate Plan",
- sub:"Personal planning record · Not a legal document",
- personal:"Personal Information",
- children:"Children",
- guardians:"Guardians",
- beneficiaries:"Beneficiaries",
- notes:"Additional Notes",
- summary:"Lawyer Summary",
- name:"Full legal name",
- dob:"Date of birth",
- address:"Address",
- phone:"Telephone",
- email:"Email",
- helpChildren:"List all children, including adopted or step-children.",
- helpGuardians:"Guardians care for minor children if parents are deceased.",
- helpBeneficiaries:"Beneficiaries receive assets from your estate."
-},
-fr:{
- title:"Mon plan successoral",
- sub:"Dossier personnel · Document non juridique",
- personal:"Informations personnelles",
- children:"Enfants",
- guardians:"Tuteurs",
- beneficiaries:"Bénéficiaires",
- notes:"Notes supplémentaires",
- summary:"Résumé pour avocat",
- name:"Nom légal complet",
- dob:"Date de naissance",
- address:"Adresse",
- phone:"Téléphone",
- email:"Courriel",
- helpChildren:"Listez tous les enfants.",
- helpGuardians:"Les tuteurs s’occupent des enfants mineurs.",
- helpBeneficiaries:"Les bénéficiaires reçoivent les actifs."
-},
-ar:{
- title:"خطة التركة الخاصة بي",
- sub:"سجل شخصي · مستند غير قانوني",
- personal:"المعلومات الشخصية",
- children:"الأطفال",
- guardians:"الأوصياء",
- beneficiaries:"المستفيدون",
- notes:"ملاحظات إضافية",
- summary:"ملخص للمحامي",
- name:"الاسم القانوني الكامل",
- dob:"تاريخ الميلاد",
- address:"العنوان",
- phone:"الهاتف",
- email:"البريد الإلكتروني",
- helpChildren:"قائمة بجميع الأطفال.",
- helpGuardians:"الأوصياء مسؤولون عن رعاية الأطفال.",
- helpBeneficiaries:"المستفيدون يتلقون أصول التركة."
-}
-};
-
-/* ================= APPLY LANGUAGE ================= */
-function applyLang(lang){
-  const t=T[lang]||T.en;
-  document.body.dir=(lang==="ar")?"rtl":"ltr";
-
-  title.textContent=t.title;
-  subtitle.textContent=t.sub;
-  secPersonal.textContent=t.personal;
-  secChildren.textContent=t.children;
-  secGuardians.textContent=t.guardians;
-  secBeneficiaries.textContent=t.beneficiaries;
-  secNotes.textContent=t.notes;
-  secSummary.textContent=t.summary;
-
-  name.placeholder=t.name;
-  dob.placeholder=t.dob;
-  address.placeholder=t.address;
-  phone.placeholder=t.phone;
-  email.placeholder=t.email;
-
-  helpChildren.textContent=t.helpChildren;
-  helpGuardians.textContent=t.helpGuardians;
-  helpBeneficiaries.textContent=t.helpBeneficiaries;
-}
-
-/* ================= INIT ================= */
 const countrySelect=document.getElementById("countrySelect");
 const languageSelect=document.getElementById("languageSelect");
 
@@ -310,57 +328,49 @@ Object.keys(COUNTRY_LANGUAGE).forEach(c=>{
   countrySelect.appendChild(o);
 });
 
-Object.keys(T).forEach(l=>{
-  const o=document.createElement("option");
-  o.value=l;o.textContent=l.toUpperCase();
-  languageSelect.appendChild(o);
-});
+Object.values(COUNTRY_LANGUAGE)
+  .filter((v,i,a)=>a.indexOf(v)===i)
+  .forEach(l=>{
+    const o=document.createElement("option");
+    o.value=l;o.textContent=l.toUpperCase();
+    languageSelect.appendChild(o);
+  });
 
 countrySelect.addEventListener("change",()=>{
-  const lang=COUNTRY_LANGUAGE[countrySelect.value];
-  languageSelect.value=lang;
-  applyLang(lang);
+  languageSelect.value=COUNTRY_LANGUAGE[countrySelect.value];
 });
 
 countrySelect.value="United States";
 languageSelect.value="en";
-applyLang("en");
 dateField.value=new Date().toLocaleDateString();
 
-/* ================= REPEATABLE ROWS ================= */
-function rowTemplate(){
-  return `<div class="row">
-    <input placeholder="Full name">
-    <input placeholder="Details">
-    <button class="remove" onclick="this.parentElement.remove()">✕</button>
-  </div>`;
-}
+/* REPEATABLE ROWS */
 function addRow(id){
-  document.getElementById(id).insertAdjacentHTML("beforeend",rowTemplate());
+  document.getElementById(id).insertAdjacentHTML("beforeend",
+    `<div class="row">
+      <input placeholder="Full name">
+      <input placeholder="Details (DOB, %, relationship)">
+      <button class="remove" onclick="this.parentElement.remove()">✕</button>
+    </div>`);
 }
-addRow("childrenList");
-addRow("guardiansList");
-addRow("beneficiariesList");
+addRow("children");
+addRow("guardians");
+addRow("beneficiaries");
 
-/* ================= LAWYER SUMMARY ================= */
-function collect(id){
-  return [...document.querySelectorAll(`#${id} .row`)]
-    .map(r=>`- ${r.children[0].value} (${r.children[1].value})`)
-    .join("\n")||"None listed";
-}
+/* LAWYER SUMMARY */
 function generateSummary(){
-  lawyerSummary.textContent=
+  const rows=(id)=>[...document.querySelectorAll(`#${id} .row`)]
+    .map(r=>`${r.children[0].value} (${r.children[1].value})`).join("\n")||"None";
+
+  summaryBox.textContent=
 `CHILDREN:
-${collect("childrenList")}
+${rows("children")}
 
 GUARDIANS:
-${collect("guardiansList")}
+${rows("guardians")}
 
 BENEFICIARIES:
-${collect("beneficiariesList")}
-
-NOTES:
-${notes.value||"—"}`;
+${rows("beneficiaries")}`;
 }
 </script>
 
