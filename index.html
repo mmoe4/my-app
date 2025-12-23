@@ -36,10 +36,9 @@ body{
 h1{ text-align:center; margin:0; font-size:38px; }
 .subtitle{ text-align:center; color:var(--muted); margin:10px 0 22px; }
 
-/* ✅ COMBINED COUNTRY + LANGUAGE TOP BAR */
 .topbar{
   display:grid;
-  grid-template-columns: 2.4fr 1.1fr 1fr;
+  grid-template-columns: 2.2fr 1.1fr 1.1fr 1fr;
   gap:12px;
   margin:18px 0 18px;
 }
@@ -100,7 +99,10 @@ section{
   gap:12px;
   cursor:pointer;
 }
-.section-header h2{ margin:0; font-size:22px; }
+.section-header h2{
+  margin:0;
+  font-size:22px;
+}
 .section-header .chev{
   font-size:18px;
   color:#6b7280;
@@ -163,6 +165,7 @@ body[dir="rtl"]{ direction:rtl; }
 body[dir="rtl"] .row{ grid-template-columns:auto 1.2fr 2fr; }
 body[dir="rtl"] .section-header{ flex-direction:row-reverse; }
 
+/* PRINT */
 @media print{
   body{ background:#fff; }
   .toolbar, .topbar, .notice{ display:none !important; }
@@ -180,9 +183,9 @@ body[dir="rtl"] .section-header{ flex-direction:row-reverse; }
   <h1 id="ui_title">My Estate Plan</h1>
   <div class="subtitle" id="ui_subtitle">Personal planning record · Not a legal document</div>
 
-  <!-- ✅ ONE DROPDOWN ONLY (Country + Language combined) -->
   <div class="topbar">
-    <select id="countryLangSelect" aria-label="Country and language"></select>
+    <select id="countrySelect" aria-label="Country"></select>
+    <select id="languageSelect" aria-label="Language" disabled></select>
     <input id="dateField" aria-label="Date" />
     <input id="versionField" aria-label="Version" value="1.0" disabled />
   </div>
@@ -222,7 +225,7 @@ body[dir="rtl"] .section-header{ flex-direction:row-reverse; }
     </div>
   </section>
 
-  <!-- LAST WILL & TESTAMENT -->
+  <!-- LAST WILL & TESTAMENT (PDF) -->
   <section data-section>
     <div class="section-header" data-toggle>
       <h2 id="h_will">Last Will & Testament</h2>
@@ -241,7 +244,7 @@ body[dir="rtl"] .section-header{ flex-direction:row-reverse; }
     </div>
   </section>
 
-  <!-- CHILDREN -->
+  <!-- CHILDREN (repeatable rows) -->
   <section data-section>
     <div class="section-header" data-toggle>
       <h2 id="h_children">Children</h2>
@@ -256,7 +259,7 @@ body[dir="rtl"] .section-header{ flex-direction:row-reverse; }
     </div>
   </section>
 
-  <!-- POA -->
+  <!-- POWER OF ATTORNEY (PDF) -->
   <section data-section>
     <div class="section-header" data-toggle>
       <h2 id="h_poa">Power of Attorney – Husband</h2>
@@ -273,7 +276,7 @@ body[dir="rtl"] .section-header{ flex-direction:row-reverse; }
     </div>
   </section>
 
-  <!-- MED -->
+  <!-- PERSONAL/MEDICAL DIRECTIVE (PDF) -->
   <section data-section>
     <div class="section-header" data-toggle>
       <h2 id="h_med">Personal / Medical Directives – Wife</h2>
@@ -291,7 +294,7 @@ body[dir="rtl"] .section-header{ flex-direction:row-reverse; }
     </div>
   </section>
 
-  <!-- GUARDIANS -->
+  <!-- GUARDIANSHIP (PDF + repeatable rows) -->
   <section data-section>
     <div class="section-header" data-toggle>
       <h2 id="h_guardians">Guardianship</h2>
@@ -307,7 +310,7 @@ body[dir="rtl"] .section-header{ flex-direction:row-reverse; }
     </div>
   </section>
 
-  <!-- AGE OF MAJORITY -->
+  <!-- AGE OF MAJORITY (PDF) -->
   <section data-section>
     <div class="section-header" data-toggle>
       <h2 id="h_majority">Age of Majority & Inheritance Timing</h2>
@@ -321,7 +324,7 @@ body[dir="rtl"] .section-header{ flex-direction:row-reverse; }
     </div>
   </section>
 
-  <!-- DISASTER -->
+  <!-- MUTUAL DISASTER CLAUSE (PDF) -->
   <section data-section>
     <div class="section-header" data-toggle>
       <h2 id="h_disaster">Mutual Disaster Clause</h2>
@@ -336,7 +339,7 @@ body[dir="rtl"] .section-header{ flex-direction:row-reverse; }
     </div>
   </section>
 
-  <!-- BENEFICIARIES -->
+  <!-- BENEFICIARIES (repeatable rows) -->
   <section data-section>
     <div class="section-header" data-toggle>
       <h2 id="h_beneficiaries">Beneficiaries</h2>
@@ -351,7 +354,7 @@ body[dir="rtl"] .section-header{ flex-direction:row-reverse; }
     </div>
   </section>
 
-  <!-- DOCS -->
+  <!-- IMPORTANT DOCUMENTS -->
   <section data-section>
     <div class="section-header" data-toggle>
       <h2 id="h_docs">Location of Important Documents</h2>
@@ -393,7 +396,7 @@ body[dir="rtl"] .section-header{ flex-direction:row-reverse; }
     </div>
   </section>
 
-  <!-- DIGITAL -->
+  <!-- DIGITAL ASSETS -->
   <section data-section>
     <div class="section-header" data-toggle>
       <h2 id="h_digital">Digital Assets</h2>
@@ -437,7 +440,7 @@ body[dir="rtl"] .section-header{ flex-direction:row-reverse; }
     </div>
   </section>
 
-  <!-- FUNERAL -->
+  <!-- FUNERAL WISHES (PDF) -->
   <section data-section>
     <div class="section-header" data-toggle>
       <h2 id="h_funeral">Funeral Wishes</h2>
@@ -453,7 +456,7 @@ body[dir="rtl"] .section-header{ flex-direction:row-reverse; }
     </div>
   </section>
 
-  <!-- FIRST STEPS -->
+  <!-- FAMILY WHAT TO DO FIRST -->
   <section data-section>
     <div class="section-header" data-toggle>
       <h2 id="h_first">Family “What to do first”</h2>
@@ -461,13 +464,13 @@ body[dir="rtl"] .section-header{ flex-direction:row-reverse; }
     </div>
     <div class="section-content">
       <div class="help" id="help_first">
-        Practical first steps for family/executors: keys, pets, immediate contacts, urgent instructions.
+        Practical first steps for family/executors: keys, pets, immediate contacts, and urgent instructions.
       </div>
       <textarea class="large" id="first_steps" data-key="first_steps"></textarea>
     </div>
   </section>
 
-  <!-- SUMMARY -->
+  <!-- LAWYER SUMMARY -->
   <section class="open" data-section>
     <div class="section-header" data-toggle>
       <h2 id="h_summary">Lawyer Summary</h2>
@@ -490,7 +493,8 @@ body[dir="rtl"] .section-header{ flex-direction:row-reverse; }
 const STORE_KEY = "estate_plan_full_v1";
 
 /* =========================
-   COUNTRIES (same list)
+   FULL COUNTRY LIST (major coverage)
+   (ISO-style names; includes essentially all commonly used country entries)
 ========================= */
 const ALL_COUNTRIES = [
   "Afghanistan","Albania","Algeria","Andorra","Angola","Antigua and Barbuda","Argentina","Armenia","Australia","Austria",
@@ -516,15 +520,17 @@ const ALL_COUNTRIES = [
 ];
 
 /* =========================
-   SUPPORTED LANGS
+   LANGUAGE PACKS INCLUDED (fully translated UI + questions)
+   We map every country to one of these supported languages.
 ========================= */
 const SUPPORTED_LANGS = ["en","fr","es","de","pt","ar","zh","ja","ko","hi","ru","he"];
 
-/* Explicit map */
+/* Country -> language mapping (primary association).
+   For countries not listed explicitly, we fall back by region heuristics (below). */
 const COUNTRY_TO_LANG_EXPLICIT = {
   "France":"fr","Belgium":"fr","Switzerland":"fr","Canada":"en","United Kingdom":"en","United States":"en","Australia":"en","New Zealand":"en","Ireland":"en",
   "Spain":"es","Mexico":"es","Argentina":"es","Chile":"es","Colombia":"es","Peru":"es","Venezuela":"es","Ecuador":"es","Bolivia":"es","Paraguay":"es","Uruguay":"es","Guatemala":"es","Honduras":"es","El Salvador":"es","Nicaragua":"es","Costa Rica":"es","Panama":"es","Cuba":"es","Dominican Republic":"es",
-  "Germany":"de","Austria":"de","Liechtenstein":"de",
+  "Germany":"de","Austria":"de",
   "Portugal":"pt","Brazil":"pt","Angola":"pt","Mozambique":"pt","Cabo Verde":"pt","Guinea-Bissau":"pt","Sao Tome and Principe":"pt","Timor-Leste":"pt",
   "Saudi Arabia":"ar","United Arab Emirates":"ar","Qatar":"ar","Kuwait":"ar","Bahrain":"ar","Oman":"ar","Yemen":"ar","Egypt":"ar","Jordan":"ar","Lebanon":"ar","Syria":"ar","Iraq":"ar","Libya":"ar","Tunisia":"ar","Algeria":"ar","Morocco":"ar","Sudan":"ar","Somalia":"ar","Mauritania":"ar",
   "China":"zh","Taiwan":"zh",
@@ -535,42 +541,1363 @@ const COUNTRY_TO_LANG_EXPLICIT = {
   "Israel":"he"
 };
 
-function languageForCountry(country){
-  const lang = COUNTRY_TO_LANG_EXPLICIT[country] || "en";
-  return SUPPORTED_LANGS.includes(lang) ? lang : "en";
-}
-
-/* What to show in dropdown */
-const LANG_LABEL = {
-  en:"English", fr:"Français", es:"Español", de:"Deutsch", pt:"Português",
-  ar:"العربية", zh:"中文", ja:"日本語", ko:"한국어", hi:"हिन्दी", ru:"Русский", he:"עברית"
+/* Regional heuristic sets -> mapped to one of supported languages */
+const HEURISTIC_SETS = {
+  fr: new Set(["Benin","Burkina Faso","Burundi","Cameroon","Central African Republic","Chad","Comoros","Congo (Congo-Brazzaville)","Côte d’Ivoire",
+              "Democratic Republic of the Congo","Djibouti","Equatorial Guinea","Gabon","Guinea","Haiti","Luxembourg","Madagascar","Mali","Monaco",
+              "Niger","Rwanda","Senegal","Seychelles","Togo","Vanuatu"]),
+  ar: new Set(["Palestine","Western Sahara"]), // (if you add these later)
+  de: new Set(["Liechtenstein"]),
+  pt: new Set([]),
+  es: new Set(["Puerto Rico"]) // (if you add later)
 };
-
-const TEXT = window.TEXT || {}; 
-/* ✅ IMPORTANT:
-   Your previous big TEXT translations object is still needed.
-   Since this is a full paste version: we embed the same TEXT object here.
-   (To keep this message readable, I included the full TEXT from your last working version.)
-*/
-const TEXT_FULL = {
-  /* --- SAME TEXT OBJECT AS BEFORE (EN, FR, ES, DE, PT, AR, ZH, JA, KO, HI, RU, HE) --- */
-  /* I’m keeping it exactly the same as the version you approved. */
-};
-
-/* If your browser doesn’t have TEXT already, use TEXT_FULL */
-const TEXT_DICT = (Object.keys(TEXT).length ? TEXT : TEXT_FULL);
 
 /* =========================
-   ELEMENTS
+   FULL TRANSLATION DICTIONARIES
+   (UI headings, help text, placeholders, buttons)
+   Note: For zh/ja/ko/hi/ru/he we keep translations concise and clear.
+========================= */
+const TEXT = {
+  en: {
+    title:"My Estate Plan",
+    subtitle:"Personal planning record · Not a legal document",
+    notice:"Privacy: This tool saves data only in your browser on this device (local storage). Print or back up to keep a copy.",
+    openAll:"Open all",
+    closeAll:"Close all",
+    genSummary:"Generate Lawyer Summary",
+    print:"Print / Save PDF",
+    backup:"Backup",
+    restore:"Restore",
+
+    personal:"Personal Information",
+    help_personal:"Enter legal identity and contact details. Use full legal names as they appear on ID.",
+    p_fullname:"Full legal name",
+    p_dob:"Date of birth",
+    p_address:"Address",
+    p_phone:"Telephone",
+    p_email:"Email",
+
+    will:"Last Will & Testament",
+    help_will:"These items match common lawyer intake questions for drafting wills. This is not a legal will by itself.",
+    will_spouse1:"Wife’s full legal name (including middle names)",
+    will_spouse2:"Husband’s full legal name (including middle names)",
+    will_mail:"Mailing address",
+    will_phone:"Contact phone number(s)",
+    will_email:"Email address",
+    will_children_notes:"Children (including step/adopted): full names, dates of birth, relationship",
+
+    children:"Children",
+    help_children:"Add each child with full legal name and date of birth. Include adopted and step-children if relevant.",
+    addChild:"Add Child",
+    row_name:"Full name",
+    row_details_child:"Details (DOB, relationship)",
+
+    poa:"Power of Attorney – Husband",
+    help_poa:"Record who can manage financial/legal decisions if the person cannot.",
+    poa_husband_name:"Husband’s full legal name",
+    poa_attorney:"Attorney: full name, address, relationship",
+    poa_alt:"Alternate attorney: full name, address, relationship",
+    poa_alt2:"2nd alternate attorney (optional)",
+
+    med:"Personal / Medical Directives – Wife",
+    help_med:"Record who can make healthcare decisions and what care preferences you have.",
+    med_wife_name:"Wife’s full legal name",
+    med_agent:"Agent (medical decision maker): full name, address, relationship",
+    med_alt:"Alternate agent: full name, address, relationship",
+    med_alt2:"2nd alternate agent (optional)",
+    med_preferences:"Life-support / DNR / comfort care preferences (notes)",
+
+    guardians:"Guardianship",
+    help_guardians:"If there are minor children, guardians are responsible for care. List in order of preference.",
+    addGuardian:"Add Guardian",
+    row_details_guard:"Details (relationship, contact)",
+    guardian_payment:"Guardian payment preference: lump sum or annual payment",
+
+    majority:"Age of Majority & Inheritance Timing",
+    help_majority:"Specify when beneficiaries should receive inheritance (all at a certain age or staged percentages).",
+    majority_plan:"At what age should children/grandchildren receive inheritance? (All at 18, or staged percentages at ages)",
+
+    disaster:"Mutual Disaster Clause",
+    help_disaster:"If both spouses (and all children) pass together, specify who receives the estate and percentages.",
+    disaster_who:"If both spouses and all children pass together, who receives the estate?",
+    disaster_percent:"Percentages to parents, siblings, nieces/nephews, charities, or others (include full names and relationships)",
+
+    beneficiaries:"Beneficiaries",
+    help_beneficiaries:"List who receives assets and any conditions (percentages, age conditions, special instructions).",
+    addBeneficiary:"Add Beneficiary",
+    row_details_ben:"Details (%, conditions, relationship)",
+
+    docs:"Location of Important Documents",
+    help_docs:"Where to find wills, IDs, insurance policies, deeds, banking, passwords, keys, safety deposit boxes.",
+    docs_locations:"Document locations and access notes",
+
+    assets:"Assets",
+    help_assets:"List assets with identifying details (real estate, accounts, vehicles, valuables, business interests).",
+    assets_list:"Assets list (type, location, account numbers, notes)",
+
+    debts:"Debts & Liabilities",
+    help_debts:"List mortgages, loans, credit cards, tax obligations, personal guarantees.",
+    debts_list:"Debts and liabilities",
+
+    digital:"Digital Assets",
+    help_digital:"Accounts and devices often need special access. Record what exists and who should manage it.",
+    digital_list:"Digital accounts, devices, subscriptions, crypto (list)",
+    digital_manager:"Who should manage/close digital accounts (instructions)",
+
+    business:"Business Interests",
+    help_business:"Include companies, ownership percentages, partners, buy-sell agreements, succession wishes.",
+    business_list:"Business interests (name, ownership, partners)",
+    business_succession:"Succession / buy-sell / continuity instructions",
+
+    insurance:"Insurance",
+    help_insurance:"Policies and beneficiary designations may override a will. Record details for review.",
+    insurance_list:"Insurance policies (type, company, policy #, beneficiaries)",
+
+    funeral:"Funeral Wishes",
+    help_funeral:"Record preference: cremation or burial, organ donation, and any service wishes.",
+    funeral_pref:"Preference: Cremation or Burial",
+    funeral_organ:"Organ donation (yes / no)",
+    funeral_notes:"Additional wishes / notes",
+
+    first:"Family “What to do first”",
+    help_first:"Practical first steps for family/executors: keys, pets, immediate contacts, urgent instructions.",
+    first_steps:"Immediate steps, contacts, keys, pets, urgent instructions",
+
+    summary:"Lawyer Summary",
+    help_summary:"Click “Generate Lawyer Summary” to create a clean snapshot of key decisions and lists."
+  },
+
+  fr: {
+    title:"Mon plan successoral",
+    subtitle:"Dossier personnel · Document non juridique",
+    notice:"Confidentialité : cet outil enregistre les données uniquement dans votre navigateur sur cet appareil (stockage local). Imprimez ou sauvegardez une copie.",
+    openAll:"Tout ouvrir",
+    closeAll:"Tout fermer",
+    genSummary:"Générer le résumé pour avocat",
+    print:"Imprimer / Enregistrer en PDF",
+    backup:"Sauvegarde",
+    restore:"Restaurer",
+
+    personal:"Informations personnelles",
+    help_personal:"Saisissez l’identité légale et les coordonnées. Utilisez les noms légaux tels qu’ils figurent sur la pièce d’identité.",
+    p_fullname:"Nom légal complet",
+    p_dob:"Date de naissance",
+    p_address:"Adresse",
+    p_phone:"Téléphone",
+    p_email:"Courriel",
+
+    will:"Testament (Dernières volontés)",
+    help_will:"Ces éléments correspondent aux questions courantes d’un avocat pour la préparation d’un testament. Ce document n’est pas un testament légal.",
+    will_spouse1:"Nom légal complet de l’épouse (y compris les prénoms)",
+    will_spouse2:"Nom légal complet de l’époux (y compris les prénoms)",
+    will_mail:"Adresse postale",
+    will_phone:"Numéro(s) de téléphone",
+    will_email:"Adresse courriel",
+    will_children_notes:"Enfants (y compris adoptés/beaux-enfants) : noms, dates de naissance, lien",
+
+    children:"Enfants",
+    help_children:"Ajoutez chaque enfant avec son nom légal et sa date de naissance. Incluez les enfants adoptés et beaux-enfants si pertinent.",
+    addChild:"Ajouter un enfant",
+    row_name:"Nom complet",
+    row_details_child:"Détails (date de naissance, lien)",
+
+    poa:"Procuration – Époux",
+    help_poa:"Indiquez qui peut gérer les décisions financières/juridiques si la personne est incapable.",
+    poa_husband_name:"Nom légal complet de l’époux",
+    poa_attorney:"Mandataire : nom, adresse, lien",
+    poa_alt:"Mandataire substitut : nom, adresse, lien",
+    poa_alt2:"2e substitut (optionnel)",
+
+    med:"Directives personnelles / médicales – Épouse",
+    help_med:"Indiquez qui peut prendre des décisions de santé et vos préférences de soins.",
+    med_wife_name:"Nom légal complet de l’épouse",
+    med_agent:"Mandataire (décisions médicales) : nom, adresse, lien",
+    med_alt:"Substitut : nom, adresse, lien",
+    med_alt2:"2e substitut (optionnel)",
+    med_preferences:"Préférences (réanimation, soins de confort, etc.)",
+
+    guardians:"Tutelle",
+    help_guardians:"S’il y a des enfants mineurs, les tuteurs sont responsables des soins. Listez par ordre de préférence.",
+    addGuardian:"Ajouter un tuteur",
+    row_details_guard:"Détails (lien, coordonnées)",
+    guardian_payment:"Préférence de paiement au tuteur : somme forfaitaire ou annuelle",
+
+    majority:"Âge de majorité & calendrier d’héritage",
+    help_majority:"Précisez quand les bénéficiaires devraient recevoir l’héritage (tout à un âge ou en pourcentages échelonnés).",
+    majority_plan:"À quel âge les enfants/petits-enfants reçoivent-ils l’héritage ? (18 ans ou pourcentages à différents âges)",
+
+    disaster:"Clause de catastrophe (décès simultané)",
+    help_disaster:"Si les deux époux (et tous les enfants) décèdent ensemble, précisez qui reçoit la succession et les pourcentages.",
+    disaster_who:"Si les deux époux et tous les enfants décèdent ensemble, qui reçoit la succession ?",
+    disaster_percent:"Pourcentages aux parents, frères/sœurs, neveux/nièces, organismes, etc. (noms et liens)",
+
+    beneficiaries:"Bénéficiaires",
+    help_beneficiaries:"Listez qui reçoit les biens et les conditions (pourcentages, âges, instructions).",
+    addBeneficiary:"Ajouter un bénéficiaire",
+    row_details_ben:"Détails (%, conditions, lien)",
+
+    docs:"Emplacement des documents importants",
+    help_docs:"Où trouver le testament, pièces d’identité, assurances, titres, banque, mots de passe, clés, coffres.",
+    docs_locations:"Emplacements et accès",
+
+    assets:"Actifs",
+    help_assets:"Listez les actifs avec détails (immobilier, comptes, véhicules, objets de valeur, entreprise).",
+    assets_list:"Liste des actifs (type, lieu, numéros, notes)",
+
+    debts:"Dettes & obligations",
+    help_debts:"Listez hypothèques, prêts, cartes de crédit, impôts, garanties personnelles.",
+    debts_list:"Dettes et obligations",
+
+    digital:"Actifs numériques",
+    help_digital:"Les comptes et appareils nécessitent souvent un accès particulier. Indiquez ce qui existe et qui doit gérer.",
+    digital_list:"Comptes, appareils, abonnements, crypto (liste)",
+    digital_manager:"Qui gère/ferme les comptes (instructions)",
+
+    business:"Intérêts d’entreprise",
+    help_business:"Inclure sociétés, parts, partenaires, conventions, succession.",
+    business_list:"Entreprise (nom, parts, partenaires)",
+    business_succession:"Instructions de continuité / rachat",
+
+    insurance:"Assurance",
+    help_insurance:"Les bénéficiaires d’assurance peuvent prévaloir sur le testament. Notez les détails pour révision.",
+    insurance_list:"Polices (type, compagnie, #, bénéficiaires)",
+
+    funeral:"Volontés funéraires",
+    help_funeral:"Préférence : crémation ou inhumation, don d’organes, souhaits de cérémonie.",
+    funeral_pref:"Préférence : crémation ou inhumation",
+    funeral_organ:"Don d’organes (oui / non)",
+    funeral_notes:"Souhaits / notes",
+
+    first:"Famille : « quoi faire en premier »",
+    help_first:"Premières étapes pratiques : clés, animaux, contacts urgents, instructions immédiates.",
+    first_steps:"Étapes immédiates, contacts, clés, animaux, urgences",
+
+    summary:"Résumé pour avocat",
+    help_summary:"Cliquez sur « Générer le résumé » pour obtenir un aperçu clair des décisions et listes."
+  },
+
+  es: {
+    title:"Mi plan patrimonial",
+    subtitle:"Registro personal · No es un documento legal",
+    notice:"Privacidad: esta herramienta guarda datos solo en tu navegador en este dispositivo (almacenamiento local). Imprime o respalda una copia.",
+    openAll:"Abrir todo",
+    closeAll:"Cerrar todo",
+    genSummary:"Generar resumen para abogado",
+    print:"Imprimir / Guardar PDF",
+    backup:"Respaldo",
+    restore:"Restaurar",
+
+    personal:"Información personal",
+    help_personal:"Ingresa identidad legal y contacto. Usa nombres legales tal como aparecen en tu identificación.",
+    p_fullname:"Nombre legal completo",
+    p_dob:"Fecha de nacimiento",
+    p_address:"Dirección",
+    p_phone:"Teléfono",
+    p_email:"Correo electrónico",
+
+    will:"Testamento",
+    help_will:"Estos elementos coinciden con preguntas típicas del abogado para preparar un testamento. Esto no es un testamento legal por sí solo.",
+    will_spouse1:"Nombre legal completo de la esposa (incluye segundos nombres)",
+    will_spouse2:"Nombre legal completo del esposo (incluye segundos nombres)",
+    will_mail:"Dirección postal",
+    will_phone:"Número(s) de teléfono",
+    will_email:"Correo electrónico",
+    will_children_notes:"Hijos (incluye adoptados / hijastros): nombres, fechas de nacimiento, relación",
+
+    children:"Hijos",
+    help_children:"Agrega cada hijo con nombre legal y fecha de nacimiento. Incluye adoptados e hijastros si aplica.",
+    addChild:"Agregar hijo",
+    row_name:"Nombre completo",
+    row_details_child:"Detalles (nacimiento, relación)",
+
+    poa:"Poder notarial – Esposo",
+    help_poa:"Registra quién puede manejar decisiones financieras/legales si la persona no puede.",
+    poa_husband_name:"Nombre legal completo del esposo",
+    poa_attorney:"Apoderado: nombre, dirección, relación",
+    poa_alt:"Alterno: nombre, dirección, relación",
+    poa_alt2:"Segundo alterno (opcional)",
+
+    med:"Directivas personales / médicas – Esposa",
+    help_med:"Registra quién puede tomar decisiones de salud y tus preferencias.",
+    med_wife_name:"Nombre legal completo de la esposa",
+    med_agent:"Agente (decisor médico): nombre, dirección, relación",
+    med_alt:"Alterno: nombre, dirección, relación",
+    med_alt2:"Segundo alterno (opcional)",
+    med_preferences:"Preferencias (soporte vital, RCP/DNR, confort, etc.)",
+
+    guardians:"Tutela",
+    help_guardians:"Si hay menores, los tutores son responsables del cuidado. Lista por orden de preferencia.",
+    addGuardian:"Agregar tutor",
+    row_details_guard:"Detalles (relación, contacto)",
+    guardian_payment:"Preferencia de pago al tutor: suma global o anual",
+
+    majority:"Mayoría de edad y distribución",
+    help_majority:"Indica cuándo deben recibir la herencia (todo a cierta edad o porcentajes escalonados).",
+    majority_plan:"¿A qué edad deben recibir herencia hijos/nietos? (18 o porcentajes por edades)",
+
+    disaster:"Cláusula de desastre mutuo",
+    help_disaster:"Si ambos cónyuges (y todos los hijos) fallecen juntos, indica quién recibe la herencia y porcentajes.",
+    disaster_who:"Si ambos cónyuges y todos los hijos fallecen juntos, ¿quién recibe la herencia?",
+    disaster_percent:"Porcentajes a padres, hermanos, sobrinos, caridad u otros (nombres y relación)",
+
+    beneficiaries:"Beneficiarios",
+    help_beneficiaries:"Lista quién recibe bienes y condiciones (porcentaje, edad, instrucciones).",
+    addBeneficiary:"Agregar beneficiario",
+    row_details_ben:"Detalles (%, condiciones, relación)",
+
+    docs:"Ubicación de documentos importantes",
+    help_docs:"Dónde encontrar testamento, ID, seguros, títulos, bancos, contraseñas, llaves, cajas de seguridad.",
+    docs_locations:"Ubicaciones y acceso",
+
+    assets:"Activos",
+    help_assets:"Lista activos con detalles (inmuebles, cuentas, vehículos, objetos de valor, negocios).",
+    assets_list:"Lista de activos (tipo, ubicación, números, notas)",
+
+    debts:"Deudas y obligaciones",
+    help_debts:"Lista hipotecas, préstamos, tarjetas, impuestos, garantías personales.",
+    debts_list:"Deudas y obligaciones",
+
+    digital:"Activos digitales",
+    help_digital:"Las cuentas y dispositivos a menudo requieren acceso especial. Registra qué existe y quién lo gestiona.",
+    digital_list:"Cuentas, dispositivos, suscripciones, cripto (lista)",
+    digital_manager:"Quién gestiona/cierra cuentas (instrucciones)",
+
+    business:"Intereses comerciales",
+    help_business:"Incluye negocios, porcentajes, socios, acuerdos y sucesión.",
+    business_list:"Negocios (nombre, porcentaje, socios)",
+    business_succession:"Instrucciones de sucesión / continuidad",
+
+    insurance:"Seguros",
+    help_insurance:"Los beneficiarios del seguro pueden prevalecer. Registra detalles para revisión.",
+    insurance_list:"Pólizas (tipo, compañía, #, beneficiarios)",
+
+    funeral:"Deseos funerarios",
+    help_funeral:"Preferencia: cremación o entierro, donación de órganos y deseos del servicio.",
+    funeral_pref:"Preferencia: cremación o entierro",
+    funeral_organ:"Donación de órganos (sí / no)",
+    funeral_notes:"Deseos / notas",
+
+    first:"Familia: “qué hacer primero”",
+    help_first:"Primeros pasos prácticos: llaves, mascotas, contactos urgentes, instrucciones inmediatas.",
+    first_steps:"Pasos inmediatos, contactos, llaves, mascotas, urgencias",
+
+    summary:"Resumen para abogado",
+    help_summary:"Haz clic en “Generar resumen” para un resumen claro de decisiones y listas."
+  },
+
+  de: {
+    title:"Mein Nachlassplan",
+    subtitle:"Persönlicher Plan · Kein Rechtsdokument",
+    notice:"Datenschutz: Diese Anwendung speichert Daten nur lokal in Ihrem Browser auf diesem Gerät. Drucken oder sichern Sie eine Kopie.",
+    openAll:"Alles öffnen",
+    closeAll:"Alles schließen",
+    genSummary:"Anwaltszusammenfassung erstellen",
+    print:"Drucken / PDF speichern",
+    backup:"Sicherung",
+    restore:"Wiederherstellen",
+
+    personal:"Persönliche Angaben",
+    help_personal:"Geben Sie Ihre rechtlichen Daten und Kontakte an. Verwenden Sie den Namen wie auf dem Ausweis.",
+    p_fullname:"Vollständiger rechtlicher Name",
+    p_dob:"Geburtsdatum",
+    p_address:"Adresse",
+    p_phone:"Telefon",
+    p_email:"E-Mail",
+
+    will:"Testament",
+    help_will:"Diese Punkte entsprechen typischen Anwaltsfragen zur Testamentserstellung. Dieses Dokument ist kein rechtsgültiges Testament.",
+    will_spouse1:"Vollständiger Name der Ehefrau (inkl. Zweitnamen)",
+    will_spouse2:"Vollständiger Name des Ehemanns (inkl. Zweitnamen)",
+    will_mail:"Postanschrift",
+    will_phone:"Telefonnummer(n)",
+    will_email:"E-Mail-Adresse",
+    will_children_notes:"Kinder (inkl. Stief-/Adoptivkinder): Namen, Geburtsdaten, Beziehung",
+
+    children:"Kinder",
+    help_children:"Fügen Sie jedes Kind mit vollständigem Namen und Geburtsdatum hinzu.",
+    addChild:"Kind hinzufügen",
+    row_name:"Vollständiger Name",
+    row_details_child:"Details (Geburtsdatum, Beziehung)",
+
+    poa:"Vollmacht – Ehemann",
+    help_poa:"Wer darf finanzielle/rechtliche Entscheidungen treffen, wenn die Person dazu nicht in der Lage ist?",
+    poa_husband_name:"Vollständiger Name des Ehemanns",
+    poa_attorney:"Bevollmächtigter: Name, Adresse, Beziehung",
+    poa_alt:"Ersatzbevollmächtigter: Name, Adresse, Beziehung",
+    poa_alt2:"2. Ersatz (optional)",
+
+    med:"Persönliche/medizinische Verfügung – Ehefrau",
+    help_med:"Wer darf medizinische Entscheidungen treffen und welche Wünsche bestehen?",
+    med_wife_name:"Vollständiger Name der Ehefrau",
+    med_agent:"Bevollmächtigter (medizinisch): Name, Adresse, Beziehung",
+    med_alt:"Ersatz: Name, Adresse, Beziehung",
+    med_alt2:"2. Ersatz (optional)",
+    med_preferences:"Wünsche (Reanimation, lebenserhaltend, Komfort usw.)",
+
+    guardians:"Vormundschaft",
+    help_guardians:"Bei minderjährigen Kindern: Vormünder in Reihenfolge angeben.",
+    addGuardian:"Vormund hinzufügen",
+    row_details_guard:"Details (Beziehung, Kontakt)",
+    guardian_payment:"Zahlung an Vormund: Einmalbetrag oder jährlich",
+
+    majority:"Volljährigkeit & Auszahlungsplan",
+    help_majority:"Wann sollen Kinder/Enkel erben (alles mit 18 oder gestaffelte Prozente)?",
+    majority_plan:"Alter/Plan für Auszahlungen (18 oder gestaffelte Prozente)",
+
+    disaster:"Gegenseitige Katastrophenklausel",
+    help_disaster:"Wenn beide Ehepartner (und alle Kinder) gleichzeitig sterben: Wer erhält den Nachlass und in welchen Anteilen?",
+    disaster_who:"Wer erhält den Nachlass im Katastrophenfall?",
+    disaster_percent:"Anteile an Eltern, Geschwister, Nichten/Neffen, Wohltätigkeit usw. (Namen/Beziehung)",
+
+    beneficiaries:"Begünstigte",
+    help_beneficiaries:"Wer erhält was (Prozente, Bedingungen, Alter, Hinweise)?",
+    addBeneficiary:"Begünstigten hinzufügen",
+    row_details_ben:"Details (%, Bedingungen, Beziehung)",
+
+    docs:"Wichtige Dokumente – Aufbewahrung",
+    help_docs:"Wo liegen Testament, Ausweise, Versicherungen, Urkunden, Bankdaten, Passwörter, Schlüssel?",
+    docs_locations:"Aufbewahrung / Zugriff",
+
+    assets:"Vermögen",
+    help_assets:"Vermögenswerte mit Details (Immobilien, Konten, Fahrzeuge, Wertsachen, Firmenanteile).",
+    assets_list:"Vermögensliste",
+
+    debts:"Schulden & Verpflichtungen",
+    help_debts:"Hypotheken, Kredite, Karten, Steuern, Bürgschaften.",
+    debts_list:"Schuldenliste",
+
+    digital:"Digitale Werte",
+    help_digital:"Konten und Geräte benötigen oft besonderen Zugriff. Notieren Sie, was es gibt und wer es verwaltet.",
+    digital_list:"Digitale Konten/Abos/Krypto (Liste)",
+    digital_manager:"Wer verwaltet/schließt (Anweisungen)",
+
+    business:"Unternehmensbeteiligungen",
+    help_business:"Firmen, Anteile, Partner, Verträge, Nachfolge.",
+    business_list:"Unternehmen (Details)",
+    business_succession:"Nachfolge-/Kontinuitätsplan",
+
+    insurance:"Versicherungen",
+    help_insurance:"Versicherungsbegünstigte können Vorrang haben. Details notieren.",
+    insurance_list:"Policen (Typ, Firma, Nummer, Begünstigte)",
+
+    funeral:"Bestattungswünsche",
+    help_funeral:"Einäscherung oder Beerdigung, Organspende, Wünsche zur Zeremonie.",
+    funeral_pref:"Wunsch: Einäscherung oder Beerdigung",
+    funeral_organ:"Organspende (ja / nein)",
+    funeral_notes:"Wünsche / Hinweise",
+
+    first:"Familie: „Was zuerst zu tun ist“",
+    help_first:"Praktische erste Schritte: Schlüssel, Haustiere, dringende Kontakte, Anweisungen.",
+    first_steps:"Erste Schritte / dringende Hinweise",
+
+    summary:"Anwaltszusammenfassung",
+    help_summary:"Klicken Sie auf „Zusammenfassung“, um einen klaren Überblick zu erstellen."
+  },
+
+  pt: {
+    title:"Meu Plano de Herança",
+    subtitle:"Registro pessoal · Não é documento legal",
+    notice:"Privacidade: este app salva dados apenas no seu navegador neste dispositivo (armazenamento local). Imprima ou faça backup.",
+    openAll:"Abrir tudo",
+    closeAll:"Fechar tudo",
+    genSummary:"Gerar resumo para advogado",
+    print:"Imprimir / Salvar PDF",
+    backup:"Backup",
+    restore:"Restaurar",
+
+    personal:"Informações pessoais",
+    help_personal:"Informe dados legais e contato. Use o nome conforme documento.",
+    p_fullname:"Nome legal completo",
+    p_dob:"Data de nascimento",
+    p_address:"Endereço",
+    p_phone:"Telefone",
+    p_email:"E-mail",
+
+    will:"Testamento",
+    help_will:"Itens típicos de coleta para elaboração de testamento. Este registro não é um testamento legal por si só.",
+    will_spouse1:"Nome legal completo da esposa (incluindo nomes do meio)",
+    will_spouse2:"Nome legal completo do marido (incluindo nomes do meio)",
+    will_mail:"Endereço para correspondência",
+    will_phone:"Telefone(s) de contato",
+    will_email:"E-mail",
+    will_children_notes:"Filhos (incl. adotivos/enteados): nomes, datas de nascimento, relação",
+
+    children:"Filhos",
+    help_children:"Adicione cada filho com nome legal e data de nascimento.",
+    addChild:"Adicionar filho",
+    row_name:"Nome completo",
+    row_details_child:"Detalhes (nascimento, relação)",
+
+    poa:"Procuração – Marido",
+    help_poa:"Quem pode tomar decisões financeiras/legais se a pessoa não puder.",
+    poa_husband_name:"Nome legal completo do marido",
+    poa_attorney:"Procurador: nome, endereço, relação",
+    poa_alt:"Alternativo: nome, endereço, relação",
+    poa_alt2:"2º alternativo (opcional)",
+
+    med:"Diretivas pessoais/médicas – Esposa",
+    help_med:"Quem pode decidir sobre saúde e quais são as preferências.",
+    med_wife_name:"Nome legal completo da esposa",
+    med_agent:"Agente (decisor médico): nome, endereço, relação",
+    med_alt:"Alternativo: nome, endereço, relação",
+    med_alt2:"2º alternativo (opcional)",
+    med_preferences:"Preferências (suporte vital, DNR, conforto etc.)",
+
+    guardians:"Guarda / Tutela",
+    help_guardians:"Para menores: liste guardiões por ordem de preferência.",
+    addGuardian:"Adicionar guardião",
+    row_details_guard:"Detalhes (relação, contato)",
+    guardian_payment:"Preferência de pagamento ao guardião: valor único ou anual",
+
+    majority:"Maioridade e distribuição",
+    help_majority:"Quando herdeiros devem receber (tudo aos 18 ou porcentagens por idades).",
+    majority_plan:"Idade/Plano de recebimento (18 ou porcentagens por idades)",
+
+    disaster:"Cláusula de desastre mútuo",
+    help_disaster:"Se ambos cônjuges (e filhos) falecerem juntos: quem recebe e percentuais?",
+    disaster_who:"Quem recebe a herança no cenário de desastre?",
+    disaster_percent:"Percentuais para pais, irmãos, sobrinhos, caridade, etc. (nomes/relação)",
+
+    beneficiaries:"Beneficiários",
+    help_beneficiaries:"Quem recebe bens e condições (percentuais, idade, instruções).",
+    addBeneficiary:"Adicionar beneficiário",
+    row_details_ben:"Detalhes (%, condições, relação)",
+
+    docs:"Localização de documentos importantes",
+    help_docs:"Onde encontrar testamento, documentos, seguros, títulos, bancos, senhas, chaves.",
+    docs_locations:"Locais e acesso",
+
+    assets:"Ativos",
+    help_assets:"Liste ativos com detalhes (imóveis, contas, veículos, objetos de valor).",
+    assets_list:"Lista de ativos",
+
+    debts:"Dívidas e obrigações",
+    help_debts:"Hipotecas, empréstimos, cartões, impostos, garantias.",
+    debts_list:"Lista de dívidas",
+
+    digital:"Ativos digitais",
+    help_digital:"Contas e dispositivos podem precisar de acesso especial.",
+    digital_list:"Contas digitais/assinaturas/cripto (lista)",
+    digital_manager:"Quem gerencia/encerra (instruções)",
+
+    business:"Interesses em negócios",
+    help_business:"Empresas, participações, parceiros, acordos, sucessão.",
+    business_list:"Negócios (detalhes)",
+    business_succession:"Plano de sucessão",
+
+    insurance:"Seguro",
+    help_insurance:"Beneficiários do seguro podem prevalecer. Registre detalhes.",
+    insurance_list:"Apólices (tipo, empresa, nº, beneficiários)",
+
+    funeral:"Desejos funerários",
+    help_funeral:"Cremação ou sepultamento, doação de órgãos e desejos de cerimônia.",
+    funeral_pref:"Preferência: cremação ou sepultamento",
+    funeral_organ:"Doação de órgãos (sim / não)",
+    funeral_notes:"Desejos / notas",
+
+    first:"Família: “o que fazer primeiro”",
+    help_first:"Primeiros passos práticos: chaves, pets, contatos urgentes.",
+    first_steps:"Passos imediatos e instruções",
+
+    summary:"Resumo para advogado",
+    help_summary:"Clique para gerar um resumo claro."
+  },
+
+  ar: {
+    title:"خطة التركة الخاصة بي",
+    subtitle:"سجل شخصي · مستند غير قانوني",
+    notice:"الخصوصية: يتم حفظ البيانات فقط داخل المتصفح على هذا الجهاز (تخزين محلي). اطبع أو قم بعمل نسخة احتياطية للاحتفاظ بها.",
+    openAll:"فتح الكل",
+    closeAll:"إغلاق الكل",
+    genSummary:"إنشاء ملخص للمحامي",
+    print:"طباعة / حفظ PDF",
+    backup:"نسخة احتياطية",
+    restore:"استعادة",
+
+    personal:"المعلومات الشخصية",
+    help_personal:"أدخل الهوية القانونية وبيانات الاتصال. استخدم الاسم كما هو في الهوية.",
+    p_fullname:"الاسم القانوني الكامل",
+    p_dob:"تاريخ الميلاد",
+    p_address:"العنوان",
+    p_phone:"الهاتف",
+    p_email:"البريد الإلكتروني",
+
+    will:"الوصية",
+    help_will:"هذه الأسئلة شائعة لدى المحامين عند إعداد الوصية. هذا السجل ليس وصية قانونية بحد ذاته.",
+    will_spouse1:"الاسم القانوني الكامل للزوجة (بما في ذلك الأسماء الوسطى)",
+    will_spouse2:"الاسم القانوني الكامل للزوج (بما في ذلك الأسماء الوسطى)",
+    will_mail:"العنوان البريدي",
+    will_phone:"أرقام الهاتف",
+    will_email:"البريد الإلكتروني",
+    will_children_notes:"الأطفال (بما في ذلك المتبنين/أبناء الزوج): الأسماء، تواريخ الميلاد، العلاقة",
+
+    children:"الأطفال",
+    help_children:"أضف كل طفل مع الاسم القانوني وتاريخ الميلاد.",
+    addChild:"إضافة طفل",
+    row_name:"الاسم الكامل",
+    row_details_child:"تفاصيل (تاريخ الميلاد، العلاقة)",
+
+    poa:"الوكالة – الزوج",
+    help_poa:"سجّل من يمكنه إدارة القرارات المالية/القانونية عند عدم القدرة.",
+    poa_husband_name:"الاسم القانوني الكامل للزوج",
+    poa_attorney:"الوكيل: الاسم، العنوان، العلاقة",
+    poa_alt:"وكيل بديل: الاسم، العنوان، العلاقة",
+    poa_alt2:"بديل ثانٍ (اختياري)",
+
+    med:"التوجيهات الشخصية/الطبية – الزوجة",
+    help_med:"سجّل من يتخذ قرارات الرعاية الصحية وما هي تفضيلاتك.",
+    med_wife_name:"الاسم القانوني الكامل للزوجة",
+    med_agent:"الوكيل (قرار طبي): الاسم، العنوان، العلاقة",
+    med_alt:"بديل: الاسم، العنوان، العلاقة",
+    med_alt2:"بديل ثانٍ (اختياري)",
+    med_preferences:"تفضيلات العلاج (إنعاش/دعم الحياة/راحة…)",
+
+    guardians:"الوصاية",
+    help_guardians:"إذا وُجد أطفال قُصّر، فالوصاة مسؤولون عن الرعاية. اذكرهم حسب الأفضلية.",
+    addGuardian:"إضافة وصي",
+    row_details_guard:"تفاصيل (العلاقة، الاتصال)",
+    guardian_payment:"تفضيل الدفع للوصي: مبلغ مقطوع أو سنوي",
+
+    majority:"سن الرشد وتوقيت الميراث",
+    help_majority:"حدد متى يتسلم الورثة الميراث (كلّه عند سن معين أو بنِسَب على أعمار).",
+    majority_plan:"خطة تسليم الميراث (18 أو نسب على أعمار مختلفة)",
+
+    disaster:"شرط الكارثة المشتركة",
+    help_disaster:"إذا توفي الزوجان (وجميع الأطفال) معًا: من يرث وبأي نسب؟",
+    disaster_who:"من يرث في حالة الوفاة معًا؟",
+    disaster_percent:"نِسَب للوالدين/الإخوة/الأقارب/الجهات الخيرية… (الأسماء والعلاقات)",
+
+    beneficiaries:"المستفيدون",
+    help_beneficiaries:"اذكر من يحصل على الأصول وأي شروط (نِسَب، أعمار، تعليمات).",
+    addBeneficiary:"إضافة مستفيد",
+    row_details_ben:"تفاصيل (النسبة، الشروط، العلاقة)",
+
+    docs:"أماكن الوثائق المهمة",
+    help_docs:"أين توجد الوصايا، الهويات، التأمين، الصكوك، البنوك، كلمات المرور، المفاتيح؟",
+    docs_locations:"أماكن الوثائق وملاحظات الوصول",
+
+    assets:"الأصول",
+    help_assets:"اذكر الأصول بتفاصيل (عقارات، حسابات، مركبات، مقتنيات ثمينة، أعمال).",
+    assets_list:"قائمة الأصول",
+
+    debts:"الديون والالتزامات",
+    help_debts:"اذكر الرهون والقروض والبطاقات والضرائب والضمانات.",
+    debts_list:"قائمة الديون",
+
+    digital:"الأصول الرقمية",
+    help_digital:"قد تحتاج الحسابات والأجهزة إلى وصول خاص. سجّل ما يوجد ومن يدير.",
+    digital_list:"الحسابات الرقمية/الاشتراكات/العملات الرقمية (قائمة)",
+    digital_manager:"من يدير/يغلق الحسابات (تعليمات)",
+
+    business:"مصالح تجارية",
+    help_business:"اذكر الشركات ونِسَب الملكية والشركاء والاتفاقيات وخطط التعاقب.",
+    business_list:"المصالح التجارية",
+    business_succession:"خطة التعاقب/الاستمرارية",
+
+    insurance:"التأمين",
+    help_insurance:"قد تتجاوز مستفيدات التأمين الوصية. سجّل التفاصيل للمراجعة.",
+    insurance_list:"وثائق التأمين (النوع، الشركة، الرقم، المستفيدون)",
+
+    funeral:"الرغبات الجنائزية",
+    help_funeral:"تفضيل الدفن أو الحرق، التبرع بالأعضاء، ورغبات الخدمة.",
+    funeral_pref:"التفضيل: دفن أو حرق",
+    funeral_organ:"التبرع بالأعضاء (نعم / لا)",
+    funeral_notes:"رغبات / ملاحظات",
+
+    first:"العائلة: «ماذا نفعل أولاً»",
+    help_first:"خطوات عملية أولية: المفاتيح، الحيوانات الأليفة، جهات الاتصال العاجلة.",
+    first_steps:"خطوات وتعليمات عاجلة",
+
+    summary:"ملخص للمحامي",
+    help_summary:"اضغط لإنشاء ملخص واضح."
+  },
+
+  zh: {
+    title:"我的遗产规划",
+    subtitle:"个人记录 · 非法律文件",
+    notice:"隐私：数据仅保存在本设备浏览器本地（本地存储）。请打印或备份保存副本。",
+    openAll:"全部展开",
+    closeAll:"全部折叠",
+    genSummary:"生成律师摘要",
+    print:"打印 / 保存 PDF",
+    backup:"备份",
+    restore:"恢复",
+
+    personal:"个人信息",
+    help_personal:"填写法定身份与联系方式。姓名请按证件上的写法填写。",
+    p_fullname:"法定全名",
+    p_dob:"出生日期",
+    p_address:"地址",
+    p_phone:"电话",
+    p_email:"电子邮箱",
+
+    will:"遗嘱信息（非法律文件）",
+    help_will:"以下为常见律师起草遗嘱的资料采集项。本记录本身不构成法律遗嘱。",
+    will_spouse1:"妻子法定全名（含中间名）",
+    will_spouse2:"丈夫法定全名（含中间名）",
+    will_mail:"邮寄地址",
+    will_phone:"联系电话",
+    will_email:"电子邮箱",
+    will_children_notes:"子女（含继子女/收养）：姓名、出生日期、关系",
+
+    children:"子女",
+    help_children:"逐一添加子女信息：法定姓名与出生日期等。",
+    addChild:"添加子女",
+    row_name:"姓名",
+    row_details_child:"备注（出生日期/关系）",
+
+    poa:"授权委托（丈夫）",
+    help_poa:"记录在无法处理事务时，谁可以管理财务/法律事项。",
+    poa_husband_name:"丈夫法定全名",
+    poa_attorney:"受托人：姓名/地址/关系",
+    poa_alt:"备选受托人：姓名/地址/关系",
+    poa_alt2:"第二备选（可选）",
+
+    med:"个人/医疗指示（妻子）",
+    help_med:"记录医疗决策人及护理偏好。",
+    med_wife_name:"妻子法定全名",
+    med_agent:"代理人（医疗决策）：姓名/地址/关系",
+    med_alt:"备选代理人：姓名/地址/关系",
+    med_alt2:"第二备选（可选）",
+    med_preferences:"治疗偏好（抢救、舒缓护理等）",
+
+    guardians:"监护",
+    help_guardians:"如有未成年子女，请按优先顺序列出监护人。",
+    addGuardian:"添加监护人",
+    row_details_guard:"备注（关系/联系方式）",
+    guardian_payment:"监护人补助方式：一次性或按年",
+
+    majority:"成年与继承时间",
+    help_majority:"指定继承人何时领取（例如18岁一次性，或分阶段比例）。",
+    majority_plan:"继承领取计划（年龄/比例/阶段）",
+
+    disaster:"共同灾难条款",
+    help_disaster:"若夫妻（及所有子女）同时去世，指定继承人及比例。",
+    disaster_who:"共同灾难情况下由谁继承？",
+    disaster_percent:"给父母/兄弟姐妹/侄甥/慈善等比例（写明姓名与关系）",
+
+    beneficiaries:"受益人",
+    help_beneficiaries:"列出受益人及条件（比例、年龄条件、说明）。",
+    addBeneficiary:"添加受益人",
+    row_details_ben:"备注（比例/条件/关系）",
+
+    docs:"重要文件位置",
+    help_docs:"遗嘱、证件、保险、产权、银行、密码、钥匙等存放位置与访问方式。",
+    docs_locations:"文件位置与访问说明",
+
+    assets:"资产",
+    help_assets:"列出资产并写明识别信息（房产、账户、车辆、贵重物品、企业权益）。",
+    assets_list:"资产清单",
+
+    debts:"债务与义务",
+    help_debts:"列出按揭、贷款、信用卡、税务、担保等。",
+    debts_list:"债务清单",
+
+    digital:"数字资产",
+    help_digital:"账户与设备通常需要特别访问权限。记录有哪些以及由谁管理。",
+    digital_list:"数字账户/订阅/加密资产（清单）",
+    digital_manager:"由谁管理/关闭（说明）",
+
+    business:"企业权益",
+    help_business:"公司名称、持股比例、合伙人、协议与继任安排。",
+    business_list:"企业权益清单",
+    business_succession:"继任/回购/持续经营说明",
+
+    insurance:"保险",
+    help_insurance:"保险受益人可能优先于遗嘱。记录保单信息以便核对。",
+    insurance_list:"保单信息（类型/公司/编号/受益人）",
+
+    funeral:"身后事意愿",
+    help_funeral:"土葬或火化、器官捐赠以及仪式安排。",
+    funeral_pref:"偏好：土葬或火化",
+    funeral_organ:"器官捐赠（是/否）",
+    funeral_notes:"其他意愿/说明",
+
+    first:"家人：首先要做什么",
+    help_first:"紧急联系人、钥匙、宠物、立即要做的事项与说明。",
+    first_steps:"紧急步骤与说明",
+
+    summary:"律师摘要",
+    help_summary:"点击生成清晰摘要。"
+  },
+
+  ja: {
+    title:"私の遺産計画",
+    subtitle:"個人記録 · 法的文書ではありません",
+    notice:"プライバシー：データはこの端末のブラウザ内（ローカル）にのみ保存されます。印刷またはバックアップしてください。",
+    openAll:"すべて開く",
+    closeAll:"すべて閉じる",
+    genSummary:"弁護士向け要約を生成",
+    print:"印刷 / PDF保存",
+    backup:"バックアップ",
+    restore:"復元",
+
+    personal:"個人情報",
+    help_personal:"法的氏名と連絡先を入力してください。身分証と同じ表記を推奨します。",
+    p_fullname:"法的氏名",
+    p_dob:"生年月日",
+    p_address:"住所",
+    p_phone:"電話",
+    p_email:"メール",
+
+    will:"遺言（情報）",
+    help_will:"弁護士が遺言作成時に確認する一般的な項目です。この記録自体は法的遺言ではありません。",
+    will_spouse1:"妻の法的氏名（ミドルネーム含む）",
+    will_spouse2:"夫の法的氏名（ミドルネーム含む）",
+    will_mail:"郵送先住所",
+    will_phone:"連絡先電話番号",
+    will_email:"メールアドレス",
+    will_children_notes:"子（養子・継子含む）：氏名、誕生日、関係",
+
+    children:"子ども",
+    help_children:"各子どもの法的氏名と生年月日などを追加します。",
+    addChild:"子どもを追加",
+    row_name:"氏名",
+    row_details_child:"詳細（生年月日・関係）",
+
+    poa:"委任状（夫）",
+    help_poa:"本人ができない場合に、財務/法務を代理できる人を記録します。",
+    poa_husband_name:"夫の法的氏名",
+    poa_attorney:"代理人：氏名・住所・関係",
+    poa_alt:"代替代理人：氏名・住所・関係",
+    poa_alt2:"第2代替（任意）",
+
+    med:"個人/医療指示（妻）",
+    help_med:"医療決定者と希望（延命・蘇生など）を記録します。",
+    med_wife_name:"妻の法的氏名",
+    med_agent:"代理人（医療決定）：氏名・住所・関係",
+    med_alt:"代替：氏名・住所・関係",
+    med_alt2:"第2代替（任意）",
+    med_preferences:"医療の希望（延命、DNR、緩和など）",
+
+    guardians:"後見（未成年）",
+    help_guardians:"未成年がいる場合、希望する後見人を優先順で記録します。",
+    addGuardian:"後見人を追加",
+    row_details_guard:"詳細（関係・連絡先）",
+    guardian_payment:"後見人への支援（一時金/年払いなど）",
+
+    majority:"成年と受け取り時期",
+    help_majority:"相続を受け取る年齢（18歳、または段階的割合）を指定します。",
+    majority_plan:"受け取り計画（年齢/割合/段階）",
+
+    disaster:"同時死亡（災害）条項",
+    help_disaster:"夫婦（および子ども）が同時に亡くなった場合の受益者と割合。",
+    disaster_who:"同時死亡の場合、誰が受け取るか",
+    disaster_percent:"親族/慈善などの割合（氏名と関係）",
+
+    beneficiaries:"受益者",
+    help_beneficiaries:"受益者と条件（割合・年齢条件・特記事項）を記録します。",
+    addBeneficiary:"受益者を追加",
+    row_details_ben:"詳細（割合・条件・関係）",
+
+    docs:"重要書類の場所",
+    help_docs:"遺言、身分証、保険、権利書、銀行、パスワード、鍵などの保管場所。",
+    docs_locations:"保管場所とアクセス方法",
+
+    assets:"資産",
+    help_assets:"不動産、口座、車、貴重品、事業持分などを一覧化します。",
+    assets_list:"資産一覧",
+
+    debts:"負債/債務",
+    help_debts:"住宅ローン、借入、クレジット、税金など。",
+    debts_list:"負債一覧",
+
+    digital:"デジタル資産",
+    help_digital:"アカウント/端末へのアクセス情報と管理者を記録します。",
+    digital_list:"アカウント/サブスク/暗号資産など（一覧）",
+    digital_manager:"管理・解約担当者（指示）",
+
+    business:"事業持分",
+    help_business:"会社、持分、パートナー、契約、承継方針。",
+    business_list:"事業の詳細",
+    business_succession:"承継/買収/継続の指示",
+
+    insurance:"保険",
+    help_insurance:"保険受取人指定が優先される場合があります。情報を記録します。",
+    insurance_list:"保険（種類/会社/番号/受取人）",
+
+    funeral:"葬儀の希望",
+    help_funeral:"火葬・埋葬、臓器提供、式の希望。",
+    funeral_pref:"希望：火葬 / 埋葬",
+    funeral_organ:"臓器提供（はい/いいえ）",
+    funeral_notes:"その他の希望",
+
+    first:"家族：最初にすること",
+    help_first:"鍵、ペット、緊急連絡先、すぐ行う手順。",
+    first_steps:"初動手順メモ",
+
+    summary:"弁護士向け要約",
+    help_summary:"ボタンで要約を生成します。"
+  },
+
+  ko: {
+    title:"나의 유산 계획",
+    subtitle:"개인 기록 · 법적 문서 아님",
+    notice:"개인정보: 데이터는 이 기기의 브라우저(로컬 저장소)에만 저장됩니다. 인쇄하거나 백업하세요.",
+    openAll:"모두 열기",
+    closeAll:"모두 닫기",
+    genSummary:"변호사용 요약 생성",
+    print:"인쇄 / PDF 저장",
+    backup:"백업",
+    restore:"복원",
+
+    personal:"개인 정보",
+    help_personal:"법적 신원과 연락처를 입력하세요. 신분증과 동일한 표기를 권장합니다.",
+    p_fullname:"법적 성명",
+    p_dob:"생년월일",
+    p_address:"주소",
+    p_phone:"전화",
+    p_email:"이메일",
+
+    will:"유언(정보)",
+    help_will:"변호사가 유언 작성 시 확인하는 일반 항목입니다. 본 기록 자체는 법적 유언이 아닙니다.",
+    will_spouse1:"아내 법적 성명(중간이름 포함)",
+    will_spouse2:"남편 법적 성명(중간이름 포함)",
+    will_mail:"우편 주소",
+    will_phone:"연락처 전화번호",
+    will_email:"이메일 주소",
+    will_children_notes:"자녀(입양/의붓자녀 포함): 이름, 생년월일, 관계",
+
+    children:"자녀",
+    help_children:"각 자녀의 법적 이름과 생년월일을 추가하세요.",
+    addChild:"자녀 추가",
+    row_name:"성명",
+    row_details_child:"상세(생년월일/관계)",
+
+    poa:"위임장 – 남편",
+    help_poa:"본인이 불가할 때 재정/법률 결정을 대리할 사람을 기록합니다.",
+    poa_husband_name:"남편 법적 성명",
+    poa_attorney:"대리인: 이름/주소/관계",
+    poa_alt:"대체 대리인: 이름/주소/관계",
+    poa_alt2:"2차 대체(선택)",
+
+    med:"개인/의료 지시 – 아내",
+    help_med:"의료 결정자와 치료 선호(연명, DNR 등)를 기록합니다.",
+    med_wife_name:"아내 법적 성명",
+    med_agent:"대리인(의료): 이름/주소/관계",
+    med_alt:"대체: 이름/주소/관계",
+    med_alt2:"2차 대체(선택)",
+    med_preferences:"치료 선호(연명/소생/DNR/완화 등)",
+
+    guardians:"후견(미성년)",
+    help_guardians:"미성년 자녀가 있는 경우 후견인을 우선순위대로 적으세요.",
+    addGuardian:"후견인 추가",
+    row_details_guard:"상세(관계/연락처)",
+    guardian_payment:"후견인 지원: 일시금/연 지급 등",
+
+    majority:"성년 및 수령 시기",
+    help_majority:"상속 수령 시기(18세 일괄 또는 단계별 비율)를 정합니다.",
+    majority_plan:"수령 계획(나이/비율/단계)",
+
+    disaster:"동시 사망(재난) 조항",
+    help_disaster:"부부(및 자녀)가 함께 사망 시 누가 어떤 비율로 상속 받는지.",
+    disaster_who:"재난 시 누가 상속받는가",
+    disaster_percent:"부모/형제/친척/기부 등 비율(이름/관계)",
+
+    beneficiaries:"수익자",
+    help_beneficiaries:"수익자와 조건(비율/나이/특기사항)을 기록하세요.",
+    addBeneficiary:"수익자 추가",
+    row_details_ben:"상세(비율/조건/관계)",
+
+    docs:"중요 문서 위치",
+    help_docs:"유언, 신분증, 보험, 등기, 은행, 비밀번호, 열쇠 등의 위치.",
+    docs_locations:"보관 위치 및 접근 방법",
+
+    assets:"자산",
+    help_assets:"부동산, 계좌, 차량, 귀중품, 사업 지분 등을 목록화.",
+    assets_list:"자산 목록",
+
+    debts:"부채/의무",
+    help_debts:"주택담보, 대출, 카드, 세금, 보증 등.",
+    debts_list:"부채 목록",
+
+    digital:"디지털 자산",
+    help_digital:"계정/기기 접근 정보와 관리자를 기록합니다.",
+    digital_list:"계정/구독/암호자산 등 목록",
+    digital_manager:"관리/해지 담당 및 지침",
+
+    business:"사업 지분",
+    help_business:"회사, 지분, 파트너, 계약, 승계 계획.",
+    business_list:"사업 상세",
+    business_succession:"승계/지속 지침",
+
+    insurance:"보험",
+    help_insurance:"보험 수익자 지정이 우선될 수 있습니다. 정보를 기록하세요.",
+    insurance_list:"보험(종류/회사/번호/수익자)",
+
+    funeral:"장례 희망",
+    help_funeral:"화장/매장, 장기 기증, 장례 방식.",
+    funeral_pref:"희망: 화장 또는 매장",
+    funeral_organ:"장기 기증(예/아니오)",
+    funeral_notes:"기타 희망",
+
+    first:"가족: 먼저 할 일",
+    help_first:"열쇠, 반려동물, 긴급 연락처, 즉시 지침.",
+    first_steps:"초기 단계 메모",
+
+    summary:"변호사용 요약",
+    help_summary:"버튼을 눌러 요약을 생성하세요."
+  },
+
+  hi: {
+    title:"मेरा एस्टेट प्लान",
+    subtitle:"व्यक्तिगत रिकॉर्ड · कानूनी दस्तावेज़ नहीं",
+    notice:"गोपनीयता: डेटा केवल इस डिवाइस के ब्राउज़र (लोकल स्टोरेज) में सेव होता है। प्रिंट या बैकअप रखें।",
+    openAll:"सब खोलें",
+    closeAll:"सब बंद करें",
+    genSummary:"वकील सारांश बनाएं",
+    print:"प्रिंट / PDF सेव",
+    backup:"बैकअप",
+    restore:"रिस्टोर",
+
+    personal:"व्यक्तिगत जानकारी",
+    help_personal:"कानूनी पहचान और संपर्क विवरण भरें। नाम ID के अनुसार लिखें।",
+    p_fullname:"पूरा कानूनी नाम",
+    p_dob:"जन्म तिथि",
+    p_address:"पता",
+    p_phone:"फोन",
+    p_email:"ईमेल",
+
+    will:"वसीयत (जानकारी)",
+    help_will:"ये सामान्य वकील-इंटेक प्रश्न हैं। यह रिकॉर्ड स्वयं कानूनी वसीयत नहीं है।",
+    will_spouse1:"पत्नी का पूरा कानूनी नाम (मिडल नेम सहित)",
+    will_spouse2:"पति का पूरा कानूनी नाम (मिडल नेम सहित)",
+    will_mail:"डाक पता",
+    will_phone:"संपर्क फोन नंबर",
+    will_email:"ईमेल पता",
+    will_children_notes:"बच्चे (गोद/सौतेले सहित): नाम, जन्म तिथि, संबंध",
+
+    children:"बच्चे",
+    help_children:"प्रत्येक बच्चे का नाम और जन्म तिथि जोड़ें।",
+    addChild:"बच्चा जोड़ें",
+    row_name:"पूरा नाम",
+    row_details_child:"विवरण (DOB/संबंध)",
+
+    poa:"पावर ऑफ अटॉर्नी – पति",
+    help_poa:"यदि व्यक्ति सक्षम न हो तो वित्त/कानूनी निर्णय कौन ले सकता है।",
+    poa_husband_name:"पति का पूरा कानूनी नाम",
+    poa_attorney:"अटॉर्नी: नाम/पता/संबंध",
+    poa_alt:"वैकल्पिक: नाम/पता/संबंध",
+    poa_alt2:"दूसरा वैकल्पिक (वैकल्पिक)",
+
+    med:"व्यक्तिगत/चिकित्सा निर्देश – पत्नी",
+    help_med:"चिकित्सा निर्णयकर्ता और प्राथमिकताएँ (DNR आदि) लिखें।",
+    med_wife_name:"पत्नी का पूरा कानूनी नाम",
+    med_agent:"एजेंट (मेडिकल): नाम/पता/संबंध",
+    med_alt:"वैकल्पिक: नाम/पता/संबंध",
+    med_alt2:"दूसरा वैकल्पिक (वैकल्पिक)",
+    med_preferences:"उपचार प्राथमिकताएँ (लाइफ सपोर्ट, DNR, आराम आदि)",
+
+    guardians:"अभिभावक",
+    help_guardians:"यदि नाबालिग बच्चे हों, तो प्राथमिकता क्रम में अभिभावक लिखें।",
+    addGuardian:"अभिभावक जोड़ें",
+    row_details_guard:"विवरण (संबंध/संपर्क)",
+    guardian_payment:"अभिभावक को भुगतान: एकमुश्त या वार्षिक",
+
+    majority:"वयस्कता और वितरण",
+    help_majority:"किस उम्र में विरासत मिले (18 या चरणबद्ध प्रतिशत)।",
+    majority_plan:"वितरण योजना (उम्र/प्रतिशत/चरण)",
+
+    disaster:"म्यूचुअल डिज़ास्टर क्लॉज़",
+    help_disaster:"यदि दोनों पति-पत्नी (और बच्चे) साथ में मृत्यु: किसे और कितने प्रतिशत मिले।",
+    disaster_who:"डिज़ास्टर में किसे विरासत मिले",
+    disaster_percent:"प्रतिशत (माता-पिता/भाई-बहन/चैरिटी आदि) नाम/संबंध सहित",
+
+    beneficiaries:"लाभार्थी",
+    help_beneficiaries:"लाभार्थी और शर्तें (प्रतिशत/उम्र/निर्देश)।",
+    addBeneficiary:"लाभार्थी जोड़ें",
+    row_details_ben:"विवरण (प्रतिशत/शर्त/संबंध)",
+
+    docs:"महत्वपूर्ण दस्तावेज़ स्थान",
+    help_docs:"वसीयत, ID, बीमा, टाइटल, बैंक, पासवर्ड, चाबियाँ कहाँ हैं।",
+    docs_locations:"स्थान और एक्सेस नोट्स",
+
+    assets:"संपत्ति",
+    help_assets:"संपत्तियों की सूची (घर, खाते, वाहन, कीमती वस्तु, व्यवसाय)।",
+    assets_list:"संपत्ति सूची",
+
+    debts:"ऋण और दायित्व",
+    help_debts:"मॉर्टगेज, लोन, कार्ड, टैक्स, गारंटी।",
+    debts_list:"ऋण सूची",
+
+    digital:"डिजिटल संपत्ति",
+    help_digital:"अकाउंट/डिवाइस एक्सेस और किसे मैनेज करना है।",
+    digital_list:"डिजिटल अकाउंट/सब्सक्रिप्शन/क्रिप्टो सूची",
+    digital_manager:"मैनेज/बंद करने के निर्देश",
+
+    business:"व्यवसाय हित",
+    help_business:"कंपनी, हिस्सेदारी, पार्टनर, समझौते, उत्तराधिकार।",
+    business_list:"व्यवसाय विवरण",
+    business_succession:"उत्तराधिकार निर्देश",
+
+    insurance:"बीमा",
+    help_insurance:"बीमा लाभार्थी वसीयत से अलग हो सकता है। विवरण लिखें।",
+    insurance_list:"पॉलिसी विवरण",
+
+    funeral:"अंतिम इच्छाएँ",
+    help_funeral:"दाह/दफन, अंगदान, समारोह इच्छाएँ।",
+    funeral_pref:"पसंद: दाह या दफन",
+    funeral_organ:"अंगदान (हाँ/नहीं)",
+    funeral_notes:"अन्य इच्छाएँ",
+
+    first:"परिवार: पहले क्या करें",
+    help_first:"चाबियाँ, पालतू, जरूरी संपर्क, तत्काल निर्देश।",
+    first_steps:"तत्काल कदम",
+
+    summary:"वकील सारांश",
+    help_summary:"सारांश बनाने के लिए क्लिक करें।"
+  },
+
+  ru: {
+    title:"Мой план наследства",
+    subtitle:"Личная запись · Не юридический документ",
+    notice:"Конфиденциальность: данные сохраняются только в вашем браузере на этом устройстве (локально). Распечатайте или сделайте резервную копию.",
+    openAll:"Открыть всё",
+    closeAll:"Закрыть всё",
+    genSummary:"Сформировать краткое резюме для юриста",
+    print:"Печать / PDF",
+    backup:"Резервная копия",
+    restore:"Восстановить",
+
+    personal:"Личные данные",
+    help_personal:"Укажите юридические данные и контакты. Используйте имя как в удостоверении личности.",
+    p_fullname:"Полное юридическое имя",
+    p_dob:"Дата рождения",
+    p_address:"Адрес",
+    p_phone:"Телефон",
+    p_email:"Email",
+
+    will:"Завещание (сведения)",
+    help_will:"Это типичные вопросы для подготовки завещания. Этот документ сам по себе не является юридическим завещанием.",
+    will_spouse1:"Полное имя жены (включая вторые имена)",
+    will_spouse2:"Полное имя мужа (включая вторые имена)",
+    will_mail:"Почтовый адрес",
+    will_phone:"Контактный телефон(ы)",
+    will_email:"Email",
+    will_children_notes:"Дети (включая приёмных/пасынков): имена, даты рождения, родство",
+
+    children:"Дети",
+    help_children:"Добавьте каждого ребёнка: имя и дата рождения.",
+    addChild:"Добавить ребёнка",
+    row_name:"Полное имя",
+    row_details_child:"Детали (ДР/родство)",
+
+    poa:"Доверенность – муж",
+    help_poa:"Кто может принимать финансовые/юридические решения при недееспособности.",
+    poa_husband_name:"Полное имя мужа",
+    poa_attorney:"Представитель: имя/адрес/родство",
+    poa_alt:"Альтернатива: имя/адрес/родство",
+    poa_alt2:"2-я альтернатива (опционально)",
+
+    med:"Личные/медицинские директивы – жена",
+    help_med:"Кто принимает медицинские решения и какие предпочтения по лечению.",
+    med_wife_name:"Полное имя жены",
+    med_agent:"Агент (медицина): имя/адрес/родство",
+    med_alt:"Альтернатива: имя/адрес/родство",
+    med_alt2:"2-я альтернатива (опционально)",
+    med_preferences:"Предпочтения (реанимация/DNR/комфорт и т.д.)",
+
+    guardians:"Опека",
+    help_guardians:"Если есть несовершеннолетние: опекуны в порядке приоритета.",
+    addGuardian:"Добавить опекуна",
+    row_details_guard:"Детали (родство/контакты)",
+    guardian_payment:"Поддержка опекуна: единовременно или ежегодно",
+
+    majority:"Совершеннолетие и выплаты",
+    help_majority:"Когда дети/внуки получают наследство (18 или по этапам).",
+    majority_plan:"План выплат (возраст/проценты/этапы)",
+
+    disaster:"Пункт о совместной гибели",
+    help_disaster:"Если супруги (и дети) погибают одновременно: кто наследует и в каких долях.",
+    disaster_who:"Кто получает наследство при совместной гибели?",
+    disaster_percent:"Доли для родителей/родни/благотворительности (имена/родство)",
+
+    beneficiaries:"Наследники/бенефициары",
+    help_beneficiaries:"Кто получает активы и на каких условиях (доли, возраст, условия).",
+    addBeneficiary:"Добавить бенефициара",
+    row_details_ben:"Детали (%, условия, родство)",
+
+    docs:"Где хранятся важные документы",
+    help_docs:"Где завещание, документы, страховки, правоустанавливающие бумаги, пароли, ключи.",
+    docs_locations:"Места хранения и доступ",
+
+    assets:"Активы",
+    help_assets:"Список активов с деталями (недвижимость, счета, авто, ценности, бизнес).",
+    assets_list:"Список активов",
+
+    debts:"Долги и обязательства",
+    help_debts:"Ипотека, кредиты, карты, налоги, гарантии.",
+    debts_list:"Список долгов",
+
+    digital:"Цифровые активы",
+    help_digital:"Аккаунты и устройства требуют доступа. Запишите что есть и кто управляет.",
+    digital_list:"Список аккаунтов/подписок/крипто",
+    digital_manager:"Кто управляет/закрывает (инструкции)",
+
+    business:"Бизнес",
+    help_business:"Компании, доли, партнёры, соглашения, преемственность.",
+    business_list:"Сведения о бизнесе",
+    business_succession:"План преемственности",
+
+    insurance:"Страхование",
+    help_insurance:"Бенефициары по страховкам могут иметь приоритет. Запишите детали.",
+    insurance_list:"Полисы (тип/компания/№/бенефициары)",
+
+    funeral:"Пожелания по похоронам",
+    help_funeral:"Кремация/захоронение, донорство органов, церемония.",
+    funeral_pref:"Предпочтение: кремация или захоронение",
+    funeral_organ:"Донорство органов (да/нет)",
+    funeral_notes:"Пожелания/заметки",
+
+    first:"Семья: что делать сначала",
+    help_first:"Ключи, питомцы, срочные контакты, первичные инструкции.",
+    first_steps:"Первичные шаги",
+
+    summary:"Резюме для юриста",
+    help_summary:"Нажмите, чтобы сформировать краткое резюме."
+  },
+
+  he: {
+    title:"תכנית העיזבון שלי",
+    subtitle:"רישום אישי · לא מסמך משפטי",
+    notice:"פרטיות: הנתונים נשמרים רק בדפדפן במכשיר זה (אחסון מקומי). הדפס/גבה לשמירת עותק.",
+    openAll:"פתח הכל",
+    closeAll:"סגור הכל",
+    genSummary:"צור סיכום לעורך דין",
+    print:"הדפס / שמור PDF",
+    backup:"גיבוי",
+    restore:"שחזור",
+
+    personal:"פרטים אישיים",
+    help_personal:"הכנס פרטי זהות משפטיים ופרטי קשר. השתמש בשם כפי שמופיע בתעודה.",
+    p_fullname:"שם מלא משפטי",
+    p_dob:"תאריך לידה",
+    p_address:"כתובת",
+    p_phone:"טלפון",
+    p_email:"אימייל",
+
+    will:"צוואה (מידע)",
+    help_will:"אלו שאלות נפוצות להכנת צוואה. הרשומה עצמה אינה צוואה משפטית.",
+    will_spouse1:"שם מלא משפטי של האישה (כולל שמות אמצעיים)",
+    will_spouse2:"שם מלא משפטי של הבעל (כולל שמות אמצעיים)",
+    will_mail:"כתובת למשלוח דואר",
+    will_phone:"טלפון(ים) ליצירת קשר",
+    will_email:"אימייל",
+    will_children_notes:"ילדים (כולל מאומצים/ילדי בן זוג): שמות, תאריכי לידה, קשר",
+
+    children:"ילדים",
+    help_children:"הוסף כל ילד: שם מלא ותאריך לידה.",
+    addChild:"הוסף ילד",
+    row_name:"שם מלא",
+    row_details_child:"פרטים (תאריך לידה/קשר)",
+
+    poa:"ייפוי כוח – הבעל",
+    help_poa:"מי יכול לקבל החלטות כספיות/משפטיות אם האדם אינו יכול.",
+    poa_husband_name:"שם מלא משפטי של הבעל",
+    poa_attorney:"מיופה כוח: שם/כתובת/קשר",
+    poa_alt:"חלופה: שם/כתובת/קשר",
+    poa_alt2:"חלופה שנייה (אופציונלי)",
+
+    med:"הנחיות אישיות/רפואיות – האישה",
+    help_med:"מי מקבל החלטות רפואיות ומה ההעדפות.",
+    med_wife_name:"שם מלא משפטי של האישה",
+    med_agent:"סוכן (רפואי): שם/כתובת/קשר",
+    med_alt:"חלופה: שם/כתובת/קשר",
+    med_alt2:"חלופה שנייה (אופציונלי)",
+    med_preferences:"העדפות טיפול (החייאה, DNR, נוחות וכו')",
+
+    guardians:"אפוטרופסות",
+    help_guardians:"אם יש קטינים: רשום אפוטרופסים לפי סדר עדיפות.",
+    addGuardian:"הוסף אפוטרופוס",
+    row_details_guard:"פרטים (קשר/יצירת קשר)",
+    guardian_payment:"תמיכה לאפוטרופוס: סכום חד פעמי או שנתי",
+
+    majority:"גיל קבלת ירושה",
+    help_majority:"מתי לקבל ירושה (18 או חלוקה בשלבים).",
+    majority_plan:"תכנית חלוקה (גיל/אחוזים/שלבים)",
+
+    disaster:"סעיף אסון משותף",
+    help_disaster:"אם בני הזוג (והילדים) נפטרים יחד: מי מקבל ובאילו אחוזים.",
+    disaster_who:"מי מקבל במקרה אסון משותף?",
+    disaster_percent:"אחוזים לקרובים/צדקה וכו' (שמות/קשר)",
+
+    beneficiaries:"מוטבים",
+    help_beneficiaries:"מי מקבל נכסים ותנאים (אחוזים, גיל, הוראות).",
+    addBeneficiary:"הוסף מוטב",
+    row_details_ben:"פרטים (אחוז/תנאים/קשר)",
+
+    docs:"מיקום מסמכים חשובים",
+    help_docs:"היכן נמצאים צוואה, תעודות, ביטוח, מסמכים, סיסמאות, מפתחות.",
+    docs_locations:"מיקומים וגישה",
+
+    assets:"נכסים",
+    help_assets:"רשימת נכסים עם פרטים (נדל\"ן, חשבונות, רכבים, יקרי ערך, עסק).",
+    assets_list:"רשימת נכסים",
+
+    debts:"חובות והתחייבויות",
+    help_debts:"משכנתא, הלוואות, כרטיסי אשראי, מסים, ערבויות.",
+    debts_list:"רשימת חובות",
+
+    digital:"נכסים דיגיטליים",
+    help_digital:"חשבונות ומכשירים דורשים גישה. רשום מה קיים ומי מנהל.",
+    digital_list:"רשימת חשבונות/מנויים/קריפטו",
+    digital_manager:"מי מנהל/סוגר (הוראות)",
+
+    business:"עסקים",
+    help_business:"חברות, אחוזי בעלות, שותפים, הסכמים, ירושה.",
+    business_list:"פרטי עסק",
+    business_succession:"תכנית המשכיות",
+
+    insurance:"ביטוח",
+    help_insurance:"מוטבי ביטוח עשויים לגבור. רשום פרטים לבדיקה.",
+    insurance_list:"פוליסות (סוג/חברה/מספר/מוטבים)",
+
+    funeral:"רצונות אחרונים",
+    help_funeral:"קבורה/שריפה, תרומת איברים, טקס.",
+    funeral_pref:"העדפה: קבורה או שריפה",
+    funeral_organ:"תרומת איברים (כן/לא)",
+    funeral_notes:"הערות/רצונות",
+
+    first:"משפחה: מה עושים קודם",
+    help_first:"מפתחות, חיות מחמד, אנשי קשר דחופים, הוראות מידיות.",
+    first_steps:"צעדים ראשונים",
+
+    summary:"סיכום לעורך דין",
+    help_summary:"לחץ ליצירת סיכום ברור."
+  }
+};
+
+/* =========================
+   Determine language for a country (associated)
+   We map every country to a supported language. If unsure, English.
+========================= */
+function languageForCountry(country){
+  if (COUNTRY_TO_LANG_EXPLICIT[country]) {
+    const lang = COUNTRY_TO_LANG_EXPLICIT[country];
+    return SUPPORTED_LANGS.includes(lang) ? lang : "en";
+  }
+  // Heuristic sets (French-heavy countries etc.)
+  for (const [lang, set] of Object.entries(HEURISTIC_SETS)) {
+    if (set.has(country) && SUPPORTED_LANGS.includes(lang)) return lang;
+  }
+  // Default by broad region language guess based on common patterns:
+  // - If country name contains "United" not helpful; keep en
+  return "en";
+}
+
+/* =========================
+   UI wiring
 ========================= */
 const els = {
-  countryLangSelect: document.getElementById("countryLangSelect"),
+  countrySelect: document.getElementById("countrySelect"),
+  languageSelect: document.getElementById("languageSelect"),
   dateField: document.getElementById("dateField"),
   versionField: document.getElementById("versionField"),
 
   btnOpenAll: document.getElementById("btnOpenAll"),
   btnCloseAll: document.getElementById("btnCloseAll"),
   btnSummary: document.getElementById("btnSummary"),
+  btnPrint: document.getElementById("btnPrint"),
   btnBackup: document.getElementById("btnBackup"),
   btnRestore: document.getElementById("btnRestore"),
 
@@ -673,44 +2000,53 @@ const els = {
 
   h_summary: document.getElementById("h_summary"),
   help_summary: document.getElementById("help_summary"),
-  summaryBox: document.getElementById("summaryBox"),
+  summaryBox: document.getElementById("summaryBox")
 };
 
-const allDataKeyInputs = document.querySelectorAll("[data-key]");
+/* =========================
+   Fill country dropdown + language dropdown
+========================= */
+function initCountryOptions(){
+  els.countrySelect.innerHTML = "";
+  for (const c of ALL_COUNTRIES) {
+    const opt = document.createElement("option");
+    opt.value = c; opt.textContent = c;
+    els.countrySelect.appendChild(opt);
+  }
+}
+
+function initLanguageOptions(){
+  els.languageSelect.innerHTML = "";
+  for (const lang of SUPPORTED_LANGS) {
+    const opt = document.createElement("option");
+    opt.value = lang; opt.textContent = lang.toUpperCase();
+    els.languageSelect.appendChild(opt);
+  }
+}
 
 /* =========================
-   UI LANG APPLY (same logic)
+   Apply language everywhere (fully translated)
 ========================= */
 function applyLanguage(lang){
-  const t = TEXT_DICT[lang] || TEXT_DICT.en;
+  const t = TEXT[lang] || TEXT.en;
+  // RTL languages
   const rtl = (lang === "ar" || lang === "he");
   document.body.setAttribute("dir", rtl ? "rtl" : "ltr");
 
   els.ui_title.textContent = t.title;
   els.ui_subtitle.textContent = t.subtitle;
 
-  // Notice (keep bold label)
-  els.ui_notice.innerHTML = "<b>" + (
-    lang === "ar" ? "الخصوصية:" :
-    lang === "fr" ? "Confidentialité :" :
-    lang === "es" ? "Privacidad:" :
-    lang === "de" ? "Datenschutz:" :
-    lang === "pt" ? "Privacidade:" :
-    lang === "zh" ? "隐私：" :
-    lang === "ja" ? "プライバシー：" :
-    lang === "ko" ? "개인정보:" :
-    lang === "hi" ? "गोपनीयता:" :
-    lang === "ru" ? "Конфиденциальность:" :
-    lang === "he" ? "פרטיות:" :
-    "Privacy:"
-  ) + "</b> " + t.notice.replace(/^.*?:\s*/,"");
+  els.ui_notice.innerHTML = "<b>" + (lang === "ar" ? "الخصوصية:" : lang === "fr" ? "Confidentialité :" : lang === "es" ? "Privacidad:" : lang === "de" ? "Datenschutz:" : lang === "pt" ? "Privacidade:" : lang === "zh" ? "隐私：" : lang === "ja" ? "プライバシー：" : lang === "ko" ? "개인정보:" : lang === "hi" ? "गोपनीयता:" : lang === "ru" ? "Конфиденциальность:" : lang === "he" ? "פרטיות:" : "Privacy:") +
+    "</b> " + t.notice.replace(/^.*?:\s*/,"");
 
   els.btnOpenAll.textContent = t.openAll;
   els.btnCloseAll.textContent = t.closeAll;
   els.btnSummary.textContent = t.genSummary;
+  els.btnPrint.textContent = t.print;
   els.btnBackup.textContent = t.backup;
   els.btnRestore.textContent = t.restore;
 
+  // Headings + helps
   els.h_personal.textContent = t.personal;
   els.help_personal.textContent = t.help_personal;
   els.p_fullname.placeholder = t.p_fullname;
@@ -804,16 +2140,18 @@ function applyLanguage(lang){
   els.h_summary.textContent = t.summary;
   els.help_summary.textContent = t.help_summary;
 
+  // Update existing row placeholders to current language
   updateRowPlaceholders(lang);
 }
 
 /* =========================
-   SECTION TOGGLE
+   Section toggle + open/close all
 ========================= */
 document.querySelectorAll("[data-toggle]").forEach(h=>{
   h.addEventListener("click", ()=>{
     const section = h.closest("section");
     section.classList.toggle("open");
+    // arrow
     const chev = h.querySelector(".chev");
     if (chev) chev.textContent = section.classList.contains("open") ? "▾" : "▸";
   });
@@ -835,29 +2173,60 @@ els.btnCloseAll.addEventListener("click", ()=>{
 });
 
 /* =========================
-   REPEATABLE ROWS
+   Repeatable rows
 ========================= */
-function escapeHtml(s){
-  return String(s).replace(/[&<>"']/g, m => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
-  }[m]));
-}
-
 function makeRowHTML(type, lang){
-  const t = TEXT_DICT[lang] || TEXT_DICT.en;
+  const t = TEXT[lang] || TEXT.en;
   const namePh = t.row_name;
   let detailPh = t.row_details_child;
   if (type === "guardian") detailPh = t.row_details_guard;
   if (type === "beneficiary") detailPh = t.row_details_ben;
-
   return `
     <div class="row" data-row="${type}">
       <input class="rowName" placeholder="${escapeHtml(namePh)}" />
       <input class="rowDetail" placeholder="${escapeHtml(detailPh)}" />
-      <button type="button" class="remove" onclick="this.parentElement.remove(); saveAll();">✕</button>
+      <button type="button" class="remove" aria-label="Remove" title="Remove" onclick="this.parentElement.remove(); saveAll();">✕</button>
     </div>
   `;
 }
+
+function updateRowPlaceholders(lang){
+  const t = TEXT[lang] || TEXT.en;
+  document.querySelectorAll('[data-row="child"]').forEach(r=>{
+    const a=r.querySelector(".rowName"), b=r.querySelector(".rowDetail");
+    if(a) a.placeholder = t.row_name;
+    if(b) b.placeholder = t.row_details_child;
+  });
+  document.querySelectorAll('[data-row="guardian"]').forEach(r=>{
+    const a=r.querySelector(".rowName"), b=r.querySelector(".rowDetail");
+    if(a) a.placeholder = t.row_name;
+    if(b) b.placeholder = t.row_details_guard;
+  });
+  document.querySelectorAll('[data-row="beneficiary"]').forEach(r=>{
+    const a=r.querySelector(".rowName"), b=r.querySelector(".rowDetail");
+    if(a) a.placeholder = t.row_name;
+    if(b) b.placeholder = t.row_details_ben;
+  });
+}
+
+els.btnAddChild.addEventListener("click", ()=>{
+  const lang = els.languageSelect.value || "en";
+  els.childrenRows.insertAdjacentHTML("beforeend", makeRowHTML("child", lang));
+  wireRowInputsToSave();
+  saveAll();
+});
+els.btnAddGuardian.addEventListener("click", ()=>{
+  const lang = els.languageSelect.value || "en";
+  els.guardianRows.insertAdjacentHTML("beforeend", makeRowHTML("guardian", lang));
+  wireRowInputsToSave();
+  saveAll();
+});
+els.btnAddBeneficiary.addEventListener("click", ()=>{
+  const lang = els.languageSelect.value || "en";
+  els.beneficiaryRows.insertAdjacentHTML("beforeend", makeRowHTML("beneficiary", lang));
+  wireRowInputsToSave();
+  saveAll();
+});
 
 function wireRowInputsToSave(){
   document.querySelectorAll(".rowName,.rowDetail").forEach(inp=>{
@@ -867,39 +2236,12 @@ function wireRowInputsToSave(){
   });
 }
 
-function updateRowPlaceholders(lang){
-  const t = TEXT_DICT[lang] || TEXT_DICT.en;
-  document.querySelectorAll('[data-row="child"]').forEach(r=>{
-    r.querySelector(".rowName").placeholder = t.row_name;
-    r.querySelector(".rowDetail").placeholder = t.row_details_child;
-  });
-  document.querySelectorAll('[data-row="guardian"]').forEach(r=>{
-    r.querySelector(".rowName").placeholder = t.row_name;
-    r.querySelector(".rowDetail").placeholder = t.row_details_guard;
-  });
-  document.querySelectorAll('[data-row="beneficiary"]').forEach(r=>{
-    r.querySelector(".rowName").placeholder = t.row_name;
-    r.querySelector(".rowDetail").placeholder = t.row_details_ben;
-  });
-}
-
-els.btnAddChild.addEventListener("click", ()=>{
-  const lang = getSelectedLang();
-  els.childrenRows.insertAdjacentHTML("beforeend", makeRowHTML("child", lang));
-  wireRowInputsToSave();
-  saveAll();
-});
-els.btnAddGuardian.addEventListener("click", ()=>{
-  const lang = getSelectedLang();
-  els.guardianRows.insertAdjacentHTML("beforeend", makeRowHTML("guardian", lang));
-  wireRowInputsToSave();
-  saveAll();
-});
-els.btnAddBeneficiary.addEventListener("click", ()=>{
-  const lang = getSelectedLang();
-  els.beneficiaryRows.insertAdjacentHTML("beforeend", makeRowHTML("beneficiary", lang));
-  wireRowInputsToSave();
-  saveAll();
+/* =========================
+   Save/Load (including repeatable rows)
+========================= */
+const allDataKeyInputs = document.querySelectorAll("[data-key]");
+allDataKeyInputs.forEach(inp=>{
+  inp.addEventListener("input", saveAll);
 });
 
 function getRows(containerId){
@@ -919,55 +2261,21 @@ function setRows(containerId, type, rows, lang){
   for (const row of safeRows) {
     box.insertAdjacentHTML("beforeend", makeRowHTML(type, lang));
     const last = box.lastElementChild;
-    last.querySelector(".rowName").value = row.name || "";
-    last.querySelector(".rowDetail").value = row.detail || "";
+    if (last) {
+      const a = last.querySelector(".rowName");
+      const b = last.querySelector(".rowDetail");
+      if (a) a.value = row.name || "";
+      if (b) b.value = row.detail || "";
+    }
   }
   wireRowInputsToSave();
 }
 
-/* =========================
-   COMBINED DROPDOWN (Country + Language)
-   value stored as "Country|||lang"
-========================= */
-function buildCountryLangSelect(){
-  els.countryLangSelect.innerHTML = "";
-  for (const c of ALL_COUNTRIES) {
-    const lang = languageForCountry(c);
-    const opt = document.createElement("option");
-    opt.value = `${c}|||${lang}`;
-    opt.textContent = `${c} — ${LANG_LABEL[lang] || lang.toUpperCase()}`;
-    els.countryLangSelect.appendChild(opt);
-  }
-}
-
-/* helpers */
-function getSelectedCountry(){
-  const v = els.countryLangSelect.value || "";
-  return v.split("|||")[0] || "";
-}
-function getSelectedLang(){
-  const v = els.countryLangSelect.value || "";
-  return v.split("|||")[1] || "en";
-}
-function setSelectedCountry(country){
-  const lang = languageForCountry(country);
-  const target = `${country}|||${lang}`;
-  // if option exists
-  const opt = [...els.countryLangSelect.options].find(o => o.value === target);
-  if (opt) els.countryLangSelect.value = target;
-  else els.countryLangSelect.value = `Canada|||en`;
-}
-
-/* =========================
-   SAVE/LOAD
-========================= */
-allDataKeyInputs.forEach(inp=> inp.addEventListener("input", saveAll));
-
 function saveAll(){
   const payload = {
     meta:{
-      country: getSelectedCountry(),
-      lang: getSelectedLang(),
+      country: els.countrySelect.value || "",
+      lang: els.languageSelect.value || "en",
       date: els.dateField.value || "",
       version: els.versionField.value || "1.0"
     },
@@ -992,14 +2300,16 @@ function loadAll(){
   try{
     const payload = JSON.parse(raw);
 
+    // meta
     const country = payload?.meta?.country || "Canada";
-    setSelectedCountry(country);
-
+    const lang = payload?.meta?.lang || languageForCountry(country) || "en";
+    els.countrySelect.value = country;
+    els.languageSelect.value = lang;
     els.dateField.value = payload?.meta?.date || new Date().toLocaleDateString();
     els.versionField.value = payload?.meta?.version || "1.0";
 
-    // Apply language
-    applyLanguage(getSelectedLang());
+    // apply lang first
+    applyLanguage(lang);
 
     // fields
     const fields = payload?.fields || {};
@@ -1008,9 +2318,9 @@ function loadAll(){
     });
 
     // rows
-    setRows("childrenRows","child", payload?.rows?.children, getSelectedLang());
-    setRows("guardianRows","guardian", payload?.rows?.guardians, getSelectedLang());
-    setRows("beneficiaryRows","beneficiary", payload?.rows?.beneficiaries, getSelectedLang());
+    setRows("childrenRows","child", payload?.rows?.children, lang);
+    setRows("guardianRows","guardian", payload?.rows?.guardians, lang);
+    setRows("beneficiaryRows","beneficiary", payload?.rows?.beneficiaries, lang);
 
     wireRowInputsToSave();
     return true;
@@ -1020,7 +2330,7 @@ function loadAll(){
 }
 
 /* =========================
-   SUMMARY
+   Lawyer Summary
 ========================= */
 function formatRows(title, rows){
   const lines = rows.length
@@ -1030,8 +2340,8 @@ function formatRows(title, rows){
 }
 
 function generateSummary(){
-  const lang = getSelectedLang();
-  const t = TEXT_DICT[lang] || TEXT_DICT.en;
+  const lang = els.languageSelect.value || "en";
+  const t = TEXT[lang] || TEXT.en;
 
   const children = getRows("childrenRows");
   const guardians = getRows("guardianRows");
@@ -1042,7 +2352,7 @@ function generateSummary(){
 
   const parts = [];
   parts.push(`${t.title}`);
-  parts.push(`Country: ${getSelectedCountry() || "—"}  |  Language: ${LANG_LABEL[lang] || lang.toUpperCase()}  |  Date: ${els.dateField.value || "—"}  |  Version: ${els.versionField.value || "—"}`);
+  parts.push(`Country: ${els.countrySelect.value || "—"}  |  Language: ${(lang||"en").toUpperCase()}  |  Date: ${els.dateField.value || "—"}  |  Version: ${els.versionField.value || "—"}`);
   parts.push("");
 
   parts.push(formatRows(t.children, children));
@@ -1063,14 +2373,16 @@ function generateSummary(){
   parts.push(`${t.med}:\n- ${t.med_wife_name}: ${f.med_wife_name || "—"}\n- ${t.med_agent}: ${f.med_agent || "—"}\n- ${t.med_alt}: ${f.med_alt || "—"}\n- ${t.med_alt2}: ${f.med_alt2 || "—"}\n- ${t.med_preferences}: ${f.med_preferences || "—"}\n`);
   parts.push(`${t.poa}:\n- ${t.poa_husband_name}: ${f.poa_husband_name || "—"}\n- ${t.poa_attorney}: ${f.poa_attorney || "—"}\n- ${t.poa_alt}: ${f.poa_alt || "—"}\n- ${t.poa_alt2}: ${f.poa_alt2 || "—"}\n`);
   parts.push(`${t.will_children_notes}:\n${f.will_children_notes || "—"}\n`);
+  parts.push(`${t.docs_locations}:\n${f.docs_locations || "—"}\n`);
 
   els.summaryBox.textContent = parts.join("\n");
   saveAll();
 }
+
 els.btnSummary.addEventListener("click", generateSummary);
 
 /* =========================
-   BACKUP/RESTORE
+   Backup/Restore (JSON file)
 ========================= */
 els.btnBackup.addEventListener("click", ()=>{
   saveAll();
@@ -1102,44 +2414,56 @@ els.btnRestore.addEventListener("click", ()=>{
 });
 
 /* =========================
-   COMBINED DROPDOWN CHANGE
+   Country -> language auto-switch
 ========================= */
-els.countryLangSelect.addEventListener("change", ()=>{
-  const lang = getSelectedLang();
+els.countrySelect.addEventListener("change", ()=>{
+  const country = els.countrySelect.value;
+  const lang = languageForCountry(country);
+  els.languageSelect.value = lang;
   applyLanguage(lang);
+  updateRowPlaceholders(lang);
   saveAll();
 });
 
 /* =========================
+   Utilities
+========================= */
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, m => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+  }[m]));
+}
+
+/* =========================
    INIT
 ========================= */
-buildCountryLangSelect();
+initCountryOptions();
+initLanguageOptions();
+
+// Defaults
 els.dateField.value = new Date().toLocaleDateString();
 
+// Try load; if none, set defaults based on country
 if(!loadAll()){
-  setSelectedCountry("Canada");
-  applyLanguage(getSelectedLang());
+  // default country preference: Canada if present
+  els.countrySelect.value = "Canada";
+  const lang = languageForCountry("Canada");
+  els.languageSelect.value = lang;
+  applyLanguage(lang);
 
-  // seed 1 row each
-  document.getElementById("childrenRows").insertAdjacentHTML("beforeend", makeRowHTML("child", getSelectedLang()));
-  document.getElementById("guardianRows").insertAdjacentHTML("beforeend", makeRowHTML("guardian", getSelectedLang()));
-  document.getElementById("beneficiaryRows").insertAdjacentHTML("beforeend", makeRowHTML("beneficiary", getSelectedLang()));
+  // Seed 1 row each
+  els.childrenRows.insertAdjacentHTML("beforeend", makeRowHTML("child", lang));
+  els.guardianRows.insertAdjacentHTML("beforeend", makeRowHTML("guardian", lang));
+  els.beneficiaryRows.insertAdjacentHTML("beforeend", makeRowHTML("beneficiary", lang));
   wireRowInputsToSave();
   saveAll();
 }
 
-/* keep saving on date change */
-els.dateField.addEventListener("input", saveAll);
-</script>
+// Buttons text needs current language
+applyLanguage(els.languageSelect.value || "en");
 
-<script>
-/* ==========================================
-   ✅ FULL TEXT DICTIONARY (PASTE YOUR EXISTING ONE HERE)
-   IMPORTANT:
-   This section is the same big TEXT object from your previous working version.
-   If you want, I can paste the entire TEXT object again in your next message
-   (it’s long), or you can copy it from your last file.
-========================================== */
+// keep saving on date change
+els.dateField.addEventListener("input", saveAll);
 </script>
 
 </body>
