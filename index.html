@@ -11,7 +11,6 @@ body{
   font-family:"Times New Roman", Georgia, serif;
   background:radial-gradient(circle at top,#4a1f26,#2b1417);
 }
-
 .container{
   max-width:1200px;
   margin:40px auto;
@@ -19,16 +18,16 @@ body{
   background:#fff;
   border-radius:18px;
 }
-
 h1{text-align:center;margin:0}
-.subtitle{text-align:center;color:#555;margin:10px 0 25px}
+.subtitle{text-align:center;color:#555;margin-bottom:20px}
 
 .topbar,.toolbar{
-  display:flex;
-  flex-wrap:wrap;
+  display:grid;
   gap:10px;
   margin-bottom:15px;
 }
+.topbar{grid-template-columns:2fr 1fr 1fr}
+.toolbar{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
 
 select,input,textarea,button{
   padding:12px;
@@ -37,18 +36,13 @@ select,input,textarea,button{
   font-family:inherit;
   width:100%;
 }
-
-button{
-  cursor:pointer;
-  background:#f3f4f6;
-}
+button{cursor:pointer}
 
 .notice{
   background:#f9fafb;
   padding:12px;
   border-radius:8px;
   font-size:14px;
-  margin-bottom:20px;
 }
 
 section{
@@ -56,19 +50,16 @@ section{
   border-radius:12px;
   margin-top:20px;
 }
-
 .section-header{
   padding:14px;
   background:#f3f4f6;
   cursor:pointer;
   font-weight:bold;
 }
-
 .section-content{
-  padding:16px;
+  padding:14px;
   display:none;
 }
-
 section.open .section-content{display:block}
 
 .help{
@@ -76,21 +67,24 @@ section.open .section-content{display:block}
   background:#f9fafb;
   padding:10px;
   border-left:4px solid #999;
+  margin-bottom:10px;
+}
+
+.row-block{
+  border:1px dashed #ccc;
+  padding:12px;
+  border-radius:8px;
   margin-bottom:12px;
 }
 
-.row{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-  margin-bottom:14px;
+.add-btn{
+  background:#eef2f7;
 }
 
-textarea{min-height:160px}
-.large{min-height:280px}
+textarea{min-height:120px}
+.large{min-height:220px}
 
 @media print{
-  body{background:#fff}
   .toolbar,.topbar{display:none}
   section{page-break-inside:avoid}
 }
@@ -104,15 +98,9 @@ textarea{min-height:160px}
 <div class="subtitle">Personal planning record · Not a legal document</div>
 
 <div class="topbar">
-  <select>
-    <option>Canada</option>
-    <option>United States</option>
-    <option>United Kingdom</option>
-  </select>
-  <select>
-    <option>EN</option>
-  </select>
-  <input value="Version 1.0" disabled>
+  <select><option>Canada</option></select>
+  <select><option>EN</option></select>
+  <input value="1.0" disabled>
 </div>
 
 <div class="toolbar">
@@ -125,39 +113,25 @@ textarea{min-height:160px}
   Information is stored only in your browser. Print or back up your data.
 </div>
 
-<!-- PERSONAL INFORMATION -->
+<!-- PERSONAL -->
 <section class="open">
   <div class="section-header" onclick="toggle(this)">Personal Information</div>
   <div class="section-content">
-
-    <div class="row"><input placeholder="Full legal name"></div>
-    <div class="row"><input placeholder="Date of birth"></div>
-    <div class="row"><input placeholder="Address"></div>
-    <div class="row"><input placeholder="Phone"></div>
-    <div class="row"><input placeholder="Email"></div>
-
+    <input placeholder="Full legal name">
+    <input placeholder="Date of birth">
+    <input placeholder="Address">
+    <input placeholder="Phone">
+    <input placeholder="Email">
   </div>
 </section>
 
-<!-- EXECUTOR -->
+<!-- EXECUTORS -->
 <section>
-  <div class="section-header" onclick="toggle(this)">Executor (NEW)</div>
+  <div class="section-header" onclick="toggle(this)">Executors</div>
   <div class="section-content">
-
     <div class="help">Who is legally responsible for carrying out your estate.</div>
-
-    <div class="row">
-      <input placeholder="Primary executor (name, relationship, contact)">
-    </div>
-
-    <div class="row">
-      <input placeholder="Alternate executor">
-    </div>
-
-    <div class="row">
-      <textarea placeholder="Executor compensation preference (standard / waive / other)"></textarea>
-    </div>
-
+    <div id="executors"></div>
+    <button class="add-btn" onclick="addExecutor()">➕ Add Another Executor</button>
   </div>
 </section>
 
@@ -165,67 +139,8 @@ textarea{min-height:160px}
 <section>
   <div class="section-header" onclick="toggle(this)">Children</div>
   <div class="section-content">
-
-    <div class="row">
-      <textarea class="large" placeholder="List children: names, dates of birth, relationships"></textarea>
-    </div>
-
-  </div>
-</section>
-
-<!-- SPECIAL NEEDS -->
-<section>
-  <div class="section-header" onclick="toggle(this)">Special-Needs Dependents (NEW)</div>
-  <div class="section-content">
-
-    <div class="help">Important for trusts and guardianship planning.</div>
-
-    <div class="row">
-      <textarea placeholder="Describe any dependents with special needs and care considerations"></textarea>
-    </div>
-
-  </div>
-</section>
-
-<!-- GUARDIANS -->
-<section>
-  <div class="section-header" onclick="toggle(this)">Guardians</div>
-  <div class="section-content">
-
-    <div class="row">
-      <textarea placeholder="Primary guardian"></textarea>
-    </div>
-
-    <div class="row">
-      <textarea placeholder="Alternate guardian"></textarea>
-    </div>
-
-  </div>
-</section>
-
-<!-- EXCLUSIONS -->
-<section>
-  <div class="section-header" onclick="toggle(this)">Exclusions / Disinheritance (NEW)</div>
-  <div class="section-content">
-
-    <div class="help">Helps prevent disputes and legal challenges.</div>
-
-    <div class="row">
-      <textarea class="large" placeholder="Is anyone intentionally excluded from inheritance? Explain."></textarea>
-    </div>
-
-  </div>
-</section>
-
-<!-- PETS -->
-<section>
-  <div class="section-header" onclick="toggle(this)">Pets (NEW)</div>
-  <div class="section-content">
-
-    <div class="row"><textarea placeholder="Pets owned"></textarea></div>
-    <div class="row"><textarea placeholder="Caregiver preference"></textarea></div>
-    <div class="row"><textarea placeholder="Funds set aside for pet care"></textarea></div>
-
+    <div id="children"></div>
+    <button class="add-btn" onclick="addChild()">➕ Add Another Child</button>
   </div>
 </section>
 
@@ -233,11 +148,8 @@ textarea{min-height:160px}
 <section>
   <div class="section-header" onclick="toggle(this)">Assets</div>
   <div class="section-content">
-
-    <div class="row">
-      <textarea class="large" placeholder="List assets"></textarea>
-    </div>
-
+    <div id="assets"></div>
+    <button class="add-btn" onclick="addAsset()">➕ Add Another Asset</button>
   </div>
 </section>
 
@@ -245,39 +157,26 @@ textarea{min-height:160px}
 <section>
   <div class="section-header" onclick="toggle(this)">Debts</div>
   <div class="section-content">
-
-    <div class="row">
-      <textarea class="large" placeholder="List debts and liabilities"></textarea>
-    </div>
-
+    <textarea class="large" placeholder="List debts and liabilities"></textarea>
   </div>
 </section>
 
-<!-- DIGITAL ASSETS -->
+<!-- DIGITAL -->
 <section>
-  <div class="section-header" onclick="toggle(this)">Digital Assets (UPDATED)</div>
+  <div class="section-header" onclick="toggle(this)">Digital Assets</div>
   <div class="section-content">
-
-    <div class="row">
-      <textarea placeholder="Accounts and devices"></textarea>
-    </div>
-
-    <div class="row">
-      <textarea placeholder="Delete / memorialize / transfer instructions"></textarea>
-    </div>
-
+    <textarea placeholder="Accounts and devices"></textarea>
+    <textarea placeholder="Delete / memorialize / transfer instructions"></textarea>
   </div>
 </section>
 
 <!-- TAX -->
 <section>
-  <div class="section-header" onclick="toggle(this)">Tax & Residency (NEW)</div>
+  <div class="section-header" onclick="toggle(this)">Tax & Residency</div>
   <div class="section-content">
-
-    <div class="row"><textarea placeholder="Primary legal residence"></textarea></div>
-    <div class="row"><textarea placeholder="Secondary tax residency (if any)"></textarea></div>
-    <div class="row"><textarea placeholder="Foreign assets or accounts"></textarea></div>
-
+    <textarea placeholder="Primary legal residence"></textarea>
+    <textarea placeholder="Secondary tax residency (if any)"></textarea>
+    <textarea placeholder="Foreign assets or accounts"></textarea>
   </div>
 </section>
 
@@ -285,11 +184,9 @@ textarea{min-height:160px}
 <section>
   <div class="section-header" onclick="toggle(this)">Funeral Wishes</div>
   <div class="section-content">
-
-    <div class="row"><textarea placeholder="Burial or cremation preference"></textarea></div>
-    <div class="row"><textarea placeholder="Organ donation wishes"></textarea></div>
-    <div class="row"><textarea class="large" placeholder="Service or memorial wishes"></textarea></div>
-
+    <textarea placeholder="Burial or cremation"></textarea>
+    <textarea placeholder="Organ donation"></textarea>
+    <textarea placeholder="Service wishes"></textarea>
   </div>
 </section>
 
@@ -297,20 +194,56 @@ textarea{min-height:160px}
 <section>
   <div class="section-header" onclick="toggle(this)">What To Do First</div>
   <div class="section-content">
-
-    <div class="row">
-      <textarea class="large" placeholder="Immediate instructions for family"></textarea>
-    </div>
-
+    <textarea class="large" placeholder="Immediate instructions for family"></textarea>
   </div>
 </section>
 
 </div>
 
 <script>
-function toggle(h){h.parentElement.classList.toggle("open")}
-function openAll(){document.querySelectorAll("section").forEach(s=>s.classList.add("open"))}
-function closeAll(){document.querySelectorAll("section").forEach(s=>s.classList.remove("open"))}
+function toggle(h){
+  h.parentElement.classList.toggle("open");
+}
+function openAll(){
+  document.querySelectorAll("section").forEach(s=>s.classList.add("open"));
+}
+function closeAll(){
+  document.querySelectorAll("section").forEach(s=>s.classList.remove("open"));
+}
+
+function addExecutor(){
+  document.getElementById("executors").insertAdjacentHTML("beforeend",`
+    <div class="row-block">
+      <input placeholder="Executor name">
+      <input placeholder="Relationship">
+      <input placeholder="Contact information">
+      <textarea placeholder="Compensation preference (standard / waive / other)"></textarea>
+    </div>
+  `);
+}
+function addChild(){
+  document.getElementById("children").insertAdjacentHTML("beforeend",`
+    <div class="row-block">
+      <input placeholder="Child full name">
+      <input placeholder="Date of birth">
+      <input placeholder="Relationship / notes">
+    </div>
+  `);
+}
+function addAsset(){
+  document.getElementById("assets").insertAdjacentHTML("beforeend",`
+    <div class="row-block">
+      <input placeholder="Asset name">
+      <input placeholder="Location / account number">
+      <textarea placeholder="Additional notes"></textarea>
+    </div>
+  `);
+}
+
+// Seed one row each
+addExecutor();
+addChild();
+addAsset();
 </script>
 
 </body>
