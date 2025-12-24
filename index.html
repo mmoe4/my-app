@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
 <title>My Estate Plan</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 :root{
@@ -27,7 +27,7 @@ body{
 .container{
   max-width:1200px;
   margin:40px auto;
-  padding:50px 40px 120px;
+  padding:50px 40px 180px;
   background:var(--paper);
   border-radius:18px;
   box-shadow:0 25px 60px rgba(0,0,0,.45);
@@ -38,7 +38,7 @@ h1{ text-align:center; margin:0; font-size:38px; }
 
 .topbar{
   display:grid;
-  grid-template-columns: 2.2fr 1.1fr 1.1fr 1fr;
+  grid-template-columns: 2fr 1fr 1fr;
   gap:12px;
   margin:18px 0;
 }
@@ -51,6 +51,7 @@ select,input,textarea{
   border:1px solid var(--border);
   background:#fafafa;
   width:100%;
+  box-sizing:border-box;
 }
 
 .toolbar{
@@ -58,7 +59,7 @@ select,input,textarea{
   gap:10px;
   flex-wrap:wrap;
   justify-content:center;
-  margin-bottom:18px;
+  margin:14px 0;
 }
 
 button{
@@ -76,7 +77,8 @@ button:hover{ background:#eef2f5; }
   border:1px solid var(--border);
   border-radius:12px;
   padding:14px 16px;
-  margin-bottom:24px;
+  color:#374151;
+  margin:16px 0 26px;
   font-size:15px;
 }
 
@@ -95,14 +97,13 @@ section{
   cursor:pointer;
 }
 
-.section-header h2{ margin:0; font-size:22px; }
 .section-content{ padding:18px 20px; display:none; }
 section.open .section-content{ display:block; }
 
 .help{
   background:var(--help);
   border-left:4px solid #9ca3af;
-  padding:12px;
+  padding:12px 14px;
   margin-bottom:14px;
   font-size:15px;
 }
@@ -112,17 +113,32 @@ section.open .section-content{ display:block; }
   grid-template-columns:1fr 1fr;
   gap:12px;
 }
-
-textarea{ min-height:220px; }
-.large{ min-height:420px; }
+textarea.large{ min-height:380px; }
 
 .row{
   display:grid;
-  grid-template-columns:2fr 1.2fr auto;
+  grid-template-columns:2fr 1.5fr auto;
   gap:10px;
   margin-bottom:10px;
 }
-.remove{ background:#fee2e2; }
+
+.remove{
+  background:#fee2e2;
+  border-color:#fca5a5;
+}
+.remove:hover{ background:#fecaca; }
+
+.summary{
+  background:#f9fafb;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:16px;
+  white-space:pre-wrap;
+  font-size:15px;
+}
+
+body[dir="rtl"]{ direction:rtl; }
+body[dir="rtl"] .row{ grid-template-columns:auto 1.5fr 2fr; }
 
 @media print{
   body{ background:#fff; }
@@ -135,60 +151,164 @@ textarea{ min-height:220px; }
 
 <body>
 
-<div class="container">
+<div class="container" id="app">
 
-<h1>My Estate Plan</h1>
-<div class="subtitle">Personal planning record · Not a legal document</div>
+<h1 id="ui_title">My Estate Plan</h1>
+<div class="subtitle" id="ui_subtitle">Personal planning record · Not a legal document</div>
 
 <div class="topbar">
-  <select id="countrySelect"></select>
-  <select id="languageSelect" disabled></select>
-  <input id="dateField" />
-  <input id="versionField" value="1.0" disabled />
+  <select id="countryLang"></select>
+  <input id="docDate">
+  <input value="1.0" disabled>
 </div>
 
 <div class="toolbar">
-  <button id="btnOpenAll">Open all</button>
-  <button id="btnCloseAll">Close all</button>
-  <button onclick="window.print()">Print / Save PDF</button>
+  <button id="btnSummary">Generate Lawyer Summary</button>
+  <button onclick="window.print()">Print / PDF</button>
   <button id="btnBackup">Backup</button>
   <button id="btnRestore">Restore</button>
 </div>
 
 <div class="notice">
-<b>Privacy:</b> Data is saved only in your browser on this device.
+<b>Privacy:</b> All data stays in your browser on this device only.
 </div>
 
-<!-- PERSONAL -->
 <section class="open">
-<div class="section-header"><h2>Personal Information</h2><span>▾</span></div>
+<div class="section-header">Personal Information</div>
 <div class="section-content">
-<input data-key="fullname" placeholder="Full legal name" />
-<input data-key="dob" placeholder="Date of birth" />
-<input data-key="address" placeholder="Address" />
-<input data-key="phone" placeholder="Phone" />
-<input data-key="email" placeholder="Email" />
+<div class="grid2">
+<input data-key="name" placeholder="Full legal name">
+<input data-key="dob" placeholder="Date of birth">
+</div>
+<input data-key="address" placeholder="Address">
+<div class="grid2">
+<input data-key="phone" placeholder="Phone">
+<input data-key="email" placeholder="Email">
+</div>
 </div>
 </section>
 
-<!-- CHILDREN -->
 <section>
-<div class="section-header"><h2>Children</h2><span>▾</span></div>
+<div class="section-header">Children</div>
 <div class="section-content">
-<div id="childrenRows"></div>
-<button onclick="addRow('childrenRows')">Add Child</button>
+<div id="children"></div>
+<button onclick="addRow('children')">Add Child</button>
 </div>
 </section>
 
-<!-- GUARDIANS -->
 <section>
-<div class="section-header"><h2>Guardians</h2><span>▾</span></div>
+<div class="section-header">Guardians</div>
 <div class="section-content">
-<div id="guardianRows"></div>
-<button onclick="addRow('guardianRows')">Add Guardian</button>
+<div id="guardians"></div>
+<button onclick="addRow('guardians')">Add Guardian</button>
 </div>
 </section>
 
-<!-- BENEFICIARIES -->
 <section>
-<div class="section-header"><h2>Beneficiaries</h2><span>▾</span></div>
+<div class="section-header">Beneficiaries</div>
+<div class="section-content">
+<div id="beneficiaries"></div>
+<button onclick="addRow('beneficiaries')">Add Beneficiary</button>
+</div>
+</section>
+
+<section>
+<div class="section-header">Assets</div>
+<div class="section-content">
+<textarea class="large" data-key="assets"></textarea>
+</div>
+</section>
+
+<section>
+<div class="section-header">Final Wishes</div>
+<div class="section-content">
+<textarea class="large" data-key="wishes"></textarea>
+</div>
+</section>
+
+<section class="open">
+<div class="section-header">Lawyer Summary</div>
+<div class="section-content">
+<div class="summary" id="summaryBox">—</div>
+</div>
+</section>
+
+</div>
+
+<script>
+const STORE="estate_plan_v1";
+const countryLang=document.getElementById("countryLang");
+const summaryBox=document.getElementById("summaryBox");
+const inputs=document.querySelectorAll("[data-key]");
+
+const countries=[
+["Canada","en"],["United States","en"],["United Kingdom","en"],
+["France","fr"],["Germany","de"],["Spain","es"],["Portugal","pt"],
+["Saudi Arabia","ar"],["Israel","he"],["China","zh"],["Japan","ja"],
+["South Korea","ko"],["India","hi"],["Russia","ru"]
+];
+
+countries.forEach(c=>{
+  const o=document.createElement("option");
+  o.value=c[1]; o.textContent=c[0];
+  countryLang.appendChild(o);
+});
+
+countryLang.onchange=()=>applyLang(countryLang.value);
+
+function applyLang(lang){
+  document.body.dir=(lang==="ar"||lang==="he")?"rtl":"ltr";
+}
+
+function addRow(id){
+  const box=document.getElementById(id);
+  box.insertAdjacentHTML("beforeend",`
+  <div class="row">
+    <input placeholder="Name">
+    <input placeholder="Details">
+    <button class="remove" onclick="this.parentElement.remove()">✕</button>
+  </div>`);
+}
+
+function save(){
+  const d={};
+  inputs.forEach(i=>d[i.dataset.key]=i.value);
+  localStorage.setItem(STORE,JSON.stringify(d));
+}
+inputs.forEach(i=>i.oninput=save);
+
+function load(){
+  const d=JSON.parse(localStorage.getItem(STORE)||"{}");
+  inputs.forEach(i=>i.value=d[i.dataset.key]||"");
+}
+load();
+
+document.getElementById("btnSummary").onclick=()=>{
+  let text="LAWYER SUMMARY\n\n";
+  inputs.forEach(i=>{
+    if(i.value) text+=`${i.placeholder}: ${i.value}\n`;
+  });
+  summaryBox.textContent=text;
+};
+
+document.getElementById("btnBackup").onclick=()=>{
+  const b=new Blob([localStorage.getItem(STORE)],{type:"application/json"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(b);
+  a.download="estate-plan-backup.json";
+  a.click();
+};
+
+document.getElementById("btnRestore").onclick=()=>{
+  const i=document.createElement("input");
+  i.type="file";
+  i.onchange=async()=>{
+    localStorage.setItem(STORE,await i.files[0].text());
+    load();
+  };
+  i.click();
+};
+</script>
+
+</body>
+</html>
