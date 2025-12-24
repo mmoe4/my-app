@@ -27,20 +27,20 @@ body{
 .container{
   max-width:1200px;
   margin:40px auto;
-  padding:50px 40px 180px;
+  padding:50px 40px 140px;
   background:var(--paper);
   border-radius:18px;
   box-shadow:0 25px 60px rgba(0,0,0,.45);
 }
 
 h1{ text-align:center; margin:0; font-size:38px; }
-.subtitle{ text-align:center; color:var(--muted); margin:10px 0 22px; }
+.subtitle{ text-align:center; color:var(--muted); margin:10px 0 24px; }
 
 .topbar{
   display:grid;
-  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-columns:2fr 1fr 1fr;
   gap:12px;
-  margin:18px 0;
+  margin-bottom:18px;
 }
 
 select,input,textarea{
@@ -54,12 +54,18 @@ select,input,textarea{
   box-sizing:border-box;
 }
 
+label.q{
+  display:block;
+  font-weight:600;
+  margin:12px 0 6px;
+}
+
 .toolbar{
   display:flex;
   gap:10px;
   flex-wrap:wrap;
   justify-content:center;
-  margin:14px 0;
+  margin-bottom:18px;
 }
 
 button{
@@ -70,40 +76,41 @@ button{
   background:#f9fafb;
   cursor:pointer;
 }
-button:hover{ background:#eef2f5; }
 
 .notice{
   background:var(--soft);
   border:1px solid var(--border);
   border-radius:12px;
   padding:14px 16px;
-  color:#374151;
-  margin:16px 0 26px;
+  margin-bottom:26px;
   font-size:15px;
 }
 
 section{
   border:1px solid var(--border);
   border-radius:14px;
-  margin-bottom:22px;
+  margin-bottom:24px;
   background:#fff;
 }
 
 .section-header{
   padding:18px 20px;
   border-bottom:1px solid var(--border);
-  display:flex;
-  justify-content:space-between;
   cursor:pointer;
+  font-size:22px;
+  font-weight:600;
 }
 
-.section-content{ padding:18px 20px; display:none; }
+.section-content{
+  padding:20px;
+  display:none;
+}
 section.open .section-content{ display:block; }
 
 .help{
   background:var(--help);
   border-left:4px solid #9ca3af;
-  padding:12px 14px;
+  padding:12px;
   margin-bottom:14px;
   font-size:15px;
 }
@@ -113,6 +120,7 @@ section.open .section-content{ display:block; }
   grid-template-columns:1fr 1fr;
   gap:12px;
 }
+
 textarea.large{ min-height:380px; }
 
 .row{
@@ -126,19 +134,6 @@ textarea.large{ min-height:380px; }
   background:#fee2e2;
   border-color:#fca5a5;
 }
-.remove:hover{ background:#fecaca; }
-
-.summary{
-  background:#f9fafb;
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:16px;
-  white-space:pre-wrap;
-  font-size:15px;
-}
-
-body[dir="rtl"]{ direction:rtl; }
-body[dir="rtl"] .row{ grid-template-columns:auto 1.5fr 2fr; }
 
 @media print{
   body{ background:#fff; }
@@ -151,155 +146,182 @@ body[dir="rtl"] .row{ grid-template-columns:auto 1.5fr 2fr; }
 
 <body>
 
-<div class="container" id="app">
+<div class="container">
 
-<h1 id="ui_title">My Estate Plan</h1>
-<div class="subtitle" id="ui_subtitle">Personal planning record · Not a legal document</div>
+<h1>My Estate Plan</h1>
+<div class="subtitle">Personal planning record · Not a legal document</div>
 
 <div class="topbar">
-  <select id="countryLang"></select>
+  <select id="countrySelect"></select>
   <input id="docDate">
-  <input value="1.0" disabled>
+  <input value="Version 1.0" disabled>
 </div>
 
 <div class="toolbar">
-  <button id="btnSummary">Generate Lawyer Summary</button>
-  <button onclick="window.print()">Print / PDF</button>
-  <button id="btnBackup">Backup</button>
-  <button id="btnRestore">Restore</button>
+  <button onclick="openAll()">Open all</button>
+  <button onclick="closeAll()">Close all</button>
+  <button onclick="window.print()">Print / Save PDF</button>
+  <button onclick="backup()">Backup</button>
+  <button onclick="restore()">Restore</button>
 </div>
 
 <div class="notice">
-<b>Privacy:</b> All data stays in your browser on this device only.
+<b>Privacy notice:</b> All information is stored locally in this browser only.
 </div>
 
+<!-- PERSONAL INFORMATION -->
 <section class="open">
 <div class="section-header">Personal Information</div>
 <div class="section-content">
-<div class="grid2">
-<input data-key="name" placeholder="Full legal name">
-<input data-key="dob" placeholder="Date of birth">
-</div>
-<input data-key="address" placeholder="Address">
-<div class="grid2">
-<input data-key="phone" placeholder="Phone">
-<input data-key="email" placeholder="Email">
-</div>
+<label class="q">Full legal name</label>
+<input data-key="name">
+
+<label class="q">Date of birth</label>
+<input data-key="dob">
+
+<label class="q">Residential address</label>
+<input data-key="address">
+
+<label class="q">Telephone number</label>
+<input data-key="phone">
+
+<label class="q">Email address</label>
+<input data-key="email">
 </div>
 </section>
 
+<!-- CHILDREN -->
 <section>
 <div class="section-header">Children</div>
 <div class="section-content">
+<div class="help">
+List all children, including adopted or step-children.
+</div>
 <div id="children"></div>
 <button onclick="addRow('children')">Add Child</button>
 </div>
 </section>
 
+<!-- GUARDIANS -->
 <section>
 <div class="section-header">Guardians</div>
 <div class="section-content">
+<div class="help">
+Who should care for minor children if parents are deceased?
+</div>
 <div id="guardians"></div>
 <button onclick="addRow('guardians')">Add Guardian</button>
 </div>
 </section>
 
+<!-- BENEFICIARIES -->
 <section>
 <div class="section-header">Beneficiaries</div>
 <div class="section-content">
+<div class="help">
+Who should receive assets from your estate?
+</div>
 <div id="beneficiaries"></div>
 <button onclick="addRow('beneficiaries')">Add Beneficiary</button>
 </div>
 </section>
 
+<!-- AGE OF MAJORITY -->
 <section>
-<div class="section-header">Assets</div>
+<div class="section-header">Age of Majority</div>
 <div class="section-content">
-<textarea class="large" data-key="assets"></textarea>
+<label class="q">At what age should children receive inheritance?</label>
+<textarea class="large" data-key="majority"></textarea>
 </div>
 </section>
 
+<!-- MUTUAL DISASTER -->
 <section>
-<div class="section-header">Final Wishes</div>
+<div class="section-header">Mutual Disaster Clause</div>
 <div class="section-content">
-<textarea class="large" data-key="wishes"></textarea>
+<label class="q">
+If both spouses and children pass together, who receives the estate?
+</label>
+<textarea class="large" data-key="disaster"></textarea>
 </div>
 </section>
 
-<section class="open">
-<div class="section-header">Lawyer Summary</div>
+<!-- FUNERAL -->
+<section>
+<div class="section-header">Funeral & Final Wishes</div>
 <div class="section-content">
-<div class="summary" id="summaryBox">—</div>
+<label class="q">Burial or cremation preference</label>
+<input data-key="funeral_type">
+
+<label class="q">Organ donation wishes</label>
+<input data-key="organ">
+
+<label class="q">Additional wishes or instructions</label>
+<textarea class="large" data-key="final_wishes"></textarea>
 </div>
 </section>
 
 </div>
 
 <script>
-const STORE="estate_plan_v1";
-const countryLang=document.getElementById("countryLang");
-const summaryBox=document.getElementById("summaryBox");
-const inputs=document.querySelectorAll("[data-key]");
+const STORE="estate_plan_full_labels";
 
 const countries=[
-["Canada","en"],["United States","en"],["United Kingdom","en"],
-["France","fr"],["Germany","de"],["Spain","es"],["Portugal","pt"],
-["Saudi Arabia","ar"],["Israel","he"],["China","zh"],["Japan","ja"],
-["South Korea","ko"],["India","hi"],["Russia","ru"]
+["Canada","English"],["United States","English"],["United Kingdom","English"],
+["France","Français"],["Germany","Deutsch"],["Spain","Español"],
+["Portugal","Português"],["Saudi Arabia","العربية"],
+["Israel","עברית"],["China","中文"],["Japan","日本語"],
+["South Korea","한국어"],["India","हिन्दी"],["Russia","Русский"]
 ];
 
+const countrySelect=document.getElementById("countrySelect");
 countries.forEach(c=>{
   const o=document.createElement("option");
-  o.value=c[1]; o.textContent=c[0];
-  countryLang.appendChild(o);
+  o.textContent=`${c[0]} — ${c[1]}`;
+  countrySelect.appendChild(o);
 });
 
-countryLang.onchange=()=>applyLang(countryLang.value);
-
-function applyLang(lang){
-  document.body.dir=(lang==="ar"||lang==="he")?"rtl":"ltr";
-}
+document.getElementById("docDate").value=new Date().toLocaleDateString();
 
 function addRow(id){
-  const box=document.getElementById(id);
-  box.insertAdjacentHTML("beforeend",`
+  document.getElementById(id).insertAdjacentHTML("beforeend",`
   <div class="row">
     <input placeholder="Name">
-    <input placeholder="Details">
+    <input placeholder="Details / relationship">
     <button class="remove" onclick="this.parentElement.remove()">✕</button>
   </div>`);
 }
 
+["children","guardians","beneficiaries"].forEach(addRow);
+
+function openAll(){
+  document.querySelectorAll("section").forEach(s=>s.classList.add("open"));
+}
+function closeAll(){
+  document.querySelectorAll("section").forEach(s=>s.classList.remove("open"));
+}
+
 function save(){
   const d={};
-  inputs.forEach(i=>d[i.dataset.key]=i.value);
+  document.querySelectorAll("[data-key]").forEach(i=>d[i.dataset.key]=i.value);
   localStorage.setItem(STORE,JSON.stringify(d));
 }
-inputs.forEach(i=>i.oninput=save);
+document.querySelectorAll("[data-key]").forEach(i=>i.oninput=save);
 
 function load(){
   const d=JSON.parse(localStorage.getItem(STORE)||"{}");
-  inputs.forEach(i=>i.value=d[i.dataset.key]||"");
+  document.querySelectorAll("[data-key]").forEach(i=>i.value=d[i.dataset.key]||"");
 }
 load();
 
-document.getElementById("btnSummary").onclick=()=>{
-  let text="LAWYER SUMMARY\n\n";
-  inputs.forEach(i=>{
-    if(i.value) text+=`${i.placeholder}: ${i.value}\n`;
-  });
-  summaryBox.textContent=text;
-};
-
-document.getElementById("btnBackup").onclick=()=>{
+function backup(){
   const b=new Blob([localStorage.getItem(STORE)],{type:"application/json"});
   const a=document.createElement("a");
   a.href=URL.createObjectURL(b);
   a.download="estate-plan-backup.json";
   a.click();
-};
-
-document.getElementById("btnRestore").onclick=()=>{
+}
+function restore(){
   const i=document.createElement("input");
   i.type="file";
   i.onchange=async()=>{
@@ -307,7 +329,7 @@ document.getElementById("btnRestore").onclick=()=>{
     load();
   };
   i.click();
-};
+}
 </script>
 
 </body>
