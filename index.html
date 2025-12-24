@@ -2,299 +2,231 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>My Estate Plan</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Estate Plan</title>
 
 <style>
-:root{
-  --jam-dark:#2b1417;
-  --jam-mid:#4a1f26;
-  --paper:#ffffff;
-  --border:#d1d5db;
-  --muted:#6b7280;
-  --help:#f3f4f6;
-}
-
 body{
   margin:0;
   font-family:"Times New Roman", Georgia, serif;
-  background:radial-gradient(circle at top, var(--jam-mid), var(--jam-dark));
+  background:radial-gradient(circle at top,#4a1f26,#2b1417);
 }
-
 .container{
   max-width:1200px;
   margin:40px auto;
-  background:#fff;
-  border-radius:16px;
   padding:40px;
-  box-shadow:0 30px 60px rgba(0,0,0,.45);
+  background:#fff;
+  border-radius:18px;
 }
+h1{text-align:center}
+.subtitle{text-align:center;color:#555;margin-bottom:20px}
 
-h1{text-align:center;font-size:38px;margin:0}
-.subtitle{text-align:center;color:#6b7280;margin:10px 0 20px}
-
-.topbar{
+.topbar, .toolbar{
   display:grid;
-  grid-template-columns:2fr 1fr 1fr;
-  gap:12px;
+  gap:10px;
+  margin-bottom:15px;
 }
+.topbar{grid-template-columns:2fr 1fr 1fr}
+.toolbar{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
 
 select,input,textarea,button{
-  padding:14px;
-  border-radius:10px;
-  border:1px solid var(--border);
+  padding:12px;
+  border-radius:8px;
+  border:1px solid #ccc;
   font-family:inherit;
-  font-size:16px;
-  width:100%;
-  box-sizing:border-box;
 }
-
-.toolbar{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  justify-content:center;
-  margin:20px 0;
-}
-
-button{cursor:pointer;background:#f9fafb}
-button:hover{background:#eef2f5}
+button{cursor:pointer}
 
 .notice{
   background:#f9fafb;
-  border:1px solid var(--border);
-  padding:14px;
-  border-radius:10px;
-  font-size:15px;
-  margin-bottom:20px;
+  padding:12px;
+  border-radius:8px;
+  font-size:14px;
 }
 
 section{
-  border:1px solid var(--border);
-  border-radius:14px;
-  margin-bottom:18px;
+  border:1px solid #ddd;
+  border-radius:12px;
+  margin-top:20px;
 }
-
 .section-header{
-  padding:16px;
-  font-size:22px;
-  border-bottom:1px solid var(--border);
+  padding:14px;
+  background:#f3f4f6;
   cursor:pointer;
 }
-
-.section-content{padding:16px;display:none}
+.section-content{
+  padding:14px;
+  display:none;
+}
 section.open .section-content{display:block}
 
 .help{
-  background:#f3f4f6;
-  padding:12px;
-  border-radius:8px;
-  font-size:15px;
-  margin-bottom:12px;
-}
-
-.grid2{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-}
-
-.row{
-  display:grid;
-  grid-template-columns:2fr 2fr auto;
-  gap:10px;
+  font-size:14px;
+  background:#f9fafb;
+  padding:10px;
+  border-left:4px solid #999;
   margin-bottom:10px;
 }
 
-.remove{background:#fee2e2}
+textarea{min-height:160px}
+.large{min-height:300px}
 
-.large{min-height:200px}
-
-/* Instructions Overlay */
-#instructionsOverlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.65);
-  display:none;
-  z-index:999;
-}
-#instructionsBox{
-  background:#fff;
-  max-width:900px;
-  margin:40px auto;
-  padding:30px;
-  border-radius:16px;
-  max-height:85vh;
-  overflow:auto;
-}
-#instructionsBox h2{text-align:center}
-.closeBtn{float:right;font-size:20px}
-
-/* Print */
 @media print{
-  body{background:#fff}
-  .toolbar,.topbar,.notice{display:none}
-  .container{box-shadow:none;margin:0}
-  .section-content{display:block}
+  .toolbar,.topbar{display:none}
+  section{page-break-inside:avoid}
 }
 </style>
 </head>
 
 <body>
-
 <div class="container">
 
 <h1>My Estate Plan</h1>
 <div class="subtitle">Personal planning record · Not a legal document</div>
 
 <div class="topbar">
-  <select id="country"></select>
-  <select id="language"></select>
-  <input id="date">
+  <select><option>Canada</option></select>
+  <select><option>EN</option></select>
+  <input value="1.0" disabled>
 </div>
 
 <div class="toolbar">
-  <button onclick="openInstructions()">Instructions</button>
   <button onclick="openAll()">Open All</button>
   <button onclick="closeAll()">Close All</button>
   <button onclick="window.print()">Print / Save PDF</button>
 </div>
 
 <div class="notice">
-  This information is stored only in your browser. Print or back up your data.
+  Information is stored only in your browser. Print or back up your data.
 </div>
 
+<!-- PERSONAL -->
 <section class="open">
-<div class="section-header">Personal Information</div>
-<div class="section-content">
-  <div class="help">Enter full legal details.</div>
-  <div class="grid2">
+  <div class="section-header" onclick="toggle(this)">Personal Information</div>
+  <div class="section-content">
     <input placeholder="Full legal name">
     <input placeholder="Date of birth">
-  </div>
-  <input placeholder="Address">
-  <div class="grid2">
+    <input placeholder="Address">
     <input placeholder="Phone">
     <input placeholder="Email">
   </div>
-</div>
 </section>
 
+<!-- EXECUTOR -->
 <section>
-<div class="section-header">Children</div>
-<div class="section-content">
-  <div class="help">Add each child.</div>
-  <div id="children"></div>
-  <button onclick="addRow('children')">Add Child</button>
-</div>
-</section>
-
-<section>
-<div class="section-header">Guardians</div>
-<div class="section-content">
-  <div class="help">List guardians in order.</div>
-  <div id="guardians"></div>
-  <button onclick="addRow('guardians')">Add Guardian</button>
-</div>
-</section>
-
-<section>
-<div class="section-header">Beneficiaries</div>
-<div class="section-content">
-  <div class="help">Who receives assets.</div>
-  <div id="beneficiaries"></div>
-  <button onclick="addRow('beneficiaries')">Add Beneficiary</button>
-</div>
-</section>
-
-<section>
-<div class="section-header">Assets</div>
-<div class="section-content">
-  <textarea class="large" placeholder="List assets"></textarea>
-</div>
-</section>
-
-<section>
-<div class="section-header">Debts</div>
-<div class="section-content">
-  <textarea class="large" placeholder="List debts"></textarea>
-</div>
-</section>
-
-<section>
-<div class="section-header">Funeral Wishes</div>
-<div class="section-content">
-  <input placeholder="Cremation or Burial">
-  <textarea placeholder="Notes"></textarea>
-</div>
-</section>
-
-<section>
-<div class="section-header">What To Do First</div>
-<div class="section-content">
-  <textarea class="large" placeholder="Immediate instructions for family"></textarea>
-</div>
-</section>
-
-</div>
-
-<!-- Instructions Overlay -->
-<div id="instructionsOverlay">
-  <div id="instructionsBox">
-    <button class="closeBtn" onclick="closeInstructions()">✕</button>
-    <h2>How to Use This Estate Plan</h2>
-    <p>This document helps your family and lawyer understand your wishes.</p>
-    <ul>
-      <li>Fill in all sections you can</li>
-      <li>Use full legal names</li>
-      <li>Print and keep a copy</li>
-      <li>Review annually</li>
-    </ul>
+  <div class="section-header" onclick="toggle(this)">Executor (NEW)</div>
+  <div class="section-content">
+    <div class="help">Who is legally responsible for carrying out your estate.</div>
+    <input placeholder="Primary executor (name, relationship, contact)">
+    <input placeholder="Alternate executor">
+    <textarea placeholder="Executor compensation preference (standard / waive / other)"></textarea>
   </div>
+</section>
+
+<!-- CHILDREN -->
+<section>
+  <div class="section-header" onclick="toggle(this)">Children</div>
+  <div class="section-content">
+    <textarea class="large" placeholder="List children: names, DOBs, relationships"></textarea>
+  </div>
+</section>
+
+<!-- SPECIAL NEEDS -->
+<section>
+  <div class="section-header" onclick="toggle(this)">Special-Needs Dependents (NEW)</div>
+  <div class="section-content">
+    <div class="help">Important for trusts and guardianship planning.</div>
+    <textarea placeholder="Do any dependents have special needs? Explain care and financial considerations."></textarea>
+  </div>
+</section>
+
+<!-- GUARDIANS -->
+<section>
+  <div class="section-header" onclick="toggle(this)">Guardians</div>
+  <div class="section-content">
+    <textarea placeholder="Primary guardian"></textarea>
+    <textarea placeholder="Alternate guardian"></textarea>
+  </div>
+</section>
+
+<!-- EXCLUSIONS -->
+<section>
+  <div class="section-header" onclick="toggle(this)">Exclusions / Disinheritance (NEW)</div>
+  <div class="section-content">
+    <div class="help">Helps prevent disputes and legal challenges.</div>
+    <textarea class="large" placeholder="Is anyone intentionally excluded from inheritance? Explain."></textarea>
+  </div>
+</section>
+
+<!-- PETS -->
+<section>
+  <div class="section-header" onclick="toggle(this)">Pets (NEW)</div>
+  <div class="section-content">
+    <textarea placeholder="Pets owned"></textarea>
+    <textarea placeholder="Caregiver preference"></textarea>
+    <textarea placeholder="Funds set aside for pet care"></textarea>
+  </div>
+</section>
+
+<!-- ASSETS -->
+<section>
+  <div class="section-header" onclick="toggle(this)">Assets</div>
+  <div class="section-content">
+    <textarea class="large" placeholder="List assets"></textarea>
+  </div>
+</section>
+
+<!-- DEBTS -->
+<section>
+  <div class="section-header" onclick="toggle(this)">Debts</div>
+  <div class="section-content">
+    <textarea class="large" placeholder="List debts and liabilities"></textarea>
+  </div>
+</section>
+
+<!-- DIGITAL -->
+<section>
+  <div class="section-header" onclick="toggle(this)">Digital Assets (UPDATED)</div>
+  <div class="section-content">
+    <textarea placeholder="Accounts and devices"></textarea>
+    <textarea placeholder="Delete / memorialize / transfer instructions"></textarea>
+  </div>
+</section>
+
+<!-- TAX -->
+<section>
+  <div class="section-header" onclick="toggle(this)">Tax & Residency (NEW)</div>
+  <div class="section-content">
+    <textarea placeholder="Primary legal residence"></textarea>
+    <textarea placeholder="Secondary tax residency (if any)"></textarea>
+    <textarea placeholder="Foreign assets or accounts"></textarea>
+  </div>
+</section>
+
+<!-- FUNERAL -->
+<section>
+  <div class="section-header" onclick="toggle(this)">Funeral Wishes</div>
+  <div class="section-content">
+    <textarea placeholder="Burial or cremation"></textarea>
+    <textarea placeholder="Organ donation"></textarea>
+    <textarea placeholder="Service wishes"></textarea>
+  </div>
+</section>
+
+<!-- FIRST STEPS -->
+<section>
+  <div class="section-header" onclick="toggle(this)">What To Do First</div>
+  <div class="section-content">
+    <textarea class="large" placeholder="Immediate instructions for family"></textarea>
+  </div>
+</section>
+
 </div>
 
 <script>
-const countries = {
-  "Canada":"en","United States":"en","France":"fr","Germany":"de",
-  "Spain":"es","Brazil":"pt","China":"zh","Japan":"ja",
-  "South Korea":"ko","India":"hi","Saudi Arabia":"ar","Israel":"he"
-};
-
-const countrySel=document.getElementById("country");
-const langSel=document.getElementById("language");
-const dateField=document.getElementById("date");
-
-for(const c in countries){
-  countrySel.innerHTML+=`<option>${c}</option>`;
-}
-["en","fr","de","es","pt","zh","ja","ko","hi","ar","he"].forEach(l=>{
-  langSel.innerHTML+=`<option>${l.toUpperCase()}</option>`;
-});
-
-countrySel.onchange=()=>{
-  langSel.value=countries[countrySel.value].toUpperCase();
-};
-
-dateField.value=new Date().toLocaleDateString();
-
-function addRow(id){
-  document.getElementById(id).innerHTML+=`
-  <div class="row">
-    <input placeholder="Name">
-    <input placeholder="Details">
-    <button class="remove" onclick="this.parentElement.remove()">✕</button>
-  </div>`;
-}
-
+function toggle(h){h.parentElement.classList.toggle("open")}
 function openAll(){document.querySelectorAll("section").forEach(s=>s.classList.add("open"))}
 function closeAll(){document.querySelectorAll("section").forEach(s=>s.classList.remove("open"))}
-
-document.querySelectorAll(".section-header").forEach(h=>{
-  h.onclick=()=>h.parentElement.classList.toggle("open");
-});
-
-function openInstructions(){document.getElementById("instructionsOverlay").style.display="block"}
-function closeInstructions(){document.getElementById("instructionsOverlay").style.display="none"}
 </script>
 
 </body>
