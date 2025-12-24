@@ -6,273 +6,227 @@
 <title>My Estate Plan</title>
 
 <style>
-:root{
-  --jam-dark:#2b1417;
-  --jam-mid:#4a1f26;
-  --paper:#ffffff;
-  --border:#d2d6da;
-  --heading:#2f4f4f;
-  --muted:#6b7280;
-  --soft:#f7f8fa;
-}
-
 body{
   margin:0;
   font-family:"Times New Roman", Georgia, serif;
-  font-size:18px;
-  line-height:1.6;
-  background:radial-gradient(circle at top, var(--jam-mid), var(--jam-dark));
+  background:radial-gradient(circle at top,#4a1f26,#2b1417);
 }
-
 .container{
-  max-width:1150px;
-  margin:50px auto;
-  padding:48px 36px 120px;
-  background:var(--paper);
+  max-width:1200px;
+  margin:40px auto;
+  padding:40px;
+  background:#fff;
   border-radius:18px;
-  box-shadow:0 22px 50px rgba(0,0,0,0.35);
 }
+h1{text-align:center}
+.subtitle{text-align:center;color:#555;margin-bottom:20px}
 
-/* Headings */
-h1{
-  text-align:center;
-  margin:0;
-  font-size:36px;
-  color:var(--heading);
-}
-
-.subtitle{
-  text-align:center;
-  color:var(--muted);
-  margin:8px 0 20px;
-}
-
-/* Toolbar */
-.toolbar{
-  display:flex;
-  gap:12px;
-  justify-content:center;
-  flex-wrap:wrap;
-  margin-bottom:20px;
-}
-
-button{
-  padding:10px 16px;
-  font-family:inherit;
-  font-size:16px;
-  border-radius:8px;
-  border:1px solid var(--border);
-  background:#f9fafb;
-  cursor:pointer;
-}
-
-button:hover{ background:#eef2f5; }
-
-/* Sections */
-section{
-  border:1px solid var(--border);
-  border-radius:12px;
-  margin-bottom:20px;
-}
-
-.section-header{
-  padding:18px 22px;
-  border-bottom:1px solid var(--border);
-  background:#fafafa;
-  cursor:pointer;
-}
-
-.section-header h2{
-  margin:0;
-  font-size:22px;
-}
-
-.section-content{
-  padding:22px;
-  display:none;
-}
-
-section.open .section-content{
-  display:block;
-}
-
-/* Inputs */
-input, textarea{
-  width:100%;
-  padding:14px;
-  margin-bottom:16px;
-  border-radius:10px;
-  border:1px solid var(--border);
-  font-family:inherit;
-  font-size:17px;
-  background:#fafafa;
-}
-
-textarea.large{ min-height:260px; }
-
-.grid-2{
+.topbar, .toolbar{
   display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:16px;
+  gap:10px;
+  margin-bottom:15px;
+}
+.topbar{grid-template-columns:2fr 1fr 1fr}
+.toolbar{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
+
+select,input,textarea,button{
+  padding:12px;
+  border-radius:8px;
+  border:1px solid #ccc;
+  font-family:inherit;
+}
+button{cursor:pointer}
+
+.notice{
+  background:#f9fafb;
+  padding:12px;
+  border-radius:8px;
+  font-size:14px;
 }
 
-@media(max-width:900px){
-  .grid-2{ grid-template-columns:1fr; }
+section{
+  border:1px solid #ddd;
+  border-radius:12px;
+  margin-top:20px;
 }
-
-/* Instructions overlay */
-#instructionsOverlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.6);
+.section-header{
+  padding:14px;
+  background:#f3f4f6;
+  cursor:pointer;
+}
+.section-content{
+  padding:14px;
   display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:999;
+}
+section.open .section-content{display:block}
+
+.help{
+  font-size:14px;
+  background:#f9fafb;
+  padding:10px;
+  border-left:4px solid #999;
+  margin-bottom:10px;
 }
 
-#instructionsBox{
-  background:white;
-  max-width:700px;
-  padding:28px;
-  border-radius:14px;
+textarea{min-height:160px}
+.large{min-height:300px}
+
+@media print{
+  .toolbar,.topbar{display:none}
+  section{page-break-inside:avoid}
 }
-
-#instructionsBox h2{ margin-top:0; }
-
 </style>
 </head>
 
 <body>
-
 <div class="container">
 
-  <h1>My Estate Plan</h1>
-  <p class="subtitle">Personal planning record · Not a legal document</p>
+<h1>My Estate Plan</h1>
+<div class="subtitle">Personal planning record · Not a legal document</div>
 
-  <!-- TOOLBAR -->
-  <div class="toolbar">
-    <button onclick="openAll()">Open All</button>
-    <button onclick="closeAll()">Close All</button>
-    <button onclick="openInstructions()">Instructions</button>
-    <button onclick="window.print()">Print / Save PDF</button>
-  </div>
-
-  <!-- PERSONAL INFO -->
-  <section class="open">
-    <div class="section-header"><h2>Personal Information</h2></div>
-    <div class="section-content">
-      <input placeholder="Full legal name">
-      <input placeholder="Date of birth">
-      <input placeholder="Address">
-      <div class="grid-2">
-        <input placeholder="Telephone">
-        <input placeholder="Email">
-      </div>
-    </div>
-  </section>
-
-  <!-- CHILDREN -->
-  <section>
-    <div class="section-header"><h2>Children</h2></div>
-    <div class="section-content">
-      <textarea class="large" placeholder="Names, dates of birth, special needs, notes"></textarea>
-    </div>
-  </section>
-
-  <!-- GUARDIANS -->
-  <section>
-    <div class="section-header"><h2>Guardians</h2></div>
-    <div class="section-content">
-      <textarea class="large" placeholder="Primary and alternate guardians, contact info, instructions"></textarea>
-    </div>
-  </section>
-
-  <!-- BENEFICIARIES -->
-  <section>
-    <div class="section-header"><h2>Beneficiaries</h2></div>
-    <div class="section-content">
-      <textarea class="large" placeholder="Who receives what, percentages, conditions"></textarea>
-    </div>
-  </section>
-
-  <!-- ASSETS -->
-  <section>
-    <div class="section-header"><h2>Assets</h2></div>
-    <div class="section-content">
-      <textarea class="large" placeholder="Property, bank accounts, investments, vehicles, valuables"></textarea>
-    </div>
-  </section>
-
-  <!-- DEBTS -->
-  <section>
-    <div class="section-header"><h2>Debts & Liabilities</h2></div>
-    <div class="section-content">
-      <textarea class="large" placeholder="Mortgages, loans, credit cards, taxes, other obligations"></textarea>
-    </div>
-  </section>
-
-  <!-- DIGITAL ASSETS -->
-  <section>
-    <div class="section-header"><h2>Digital Assets</h2></div>
-    <div class="section-content">
-      <div class="grid-2">
-        <textarea placeholder="Accounts, devices, subscriptions"></textarea>
-        <textarea placeholder="Delete, memorialize, transfer instructions"></textarea>
-      </div>
-    </div>
-  </section>
-
-  <!-- FUNERAL -->
-  <section>
-    <div class="section-header"><h2>Funeral & Final Wishes</h2></div>
-    <div class="section-content">
-      <textarea class="large" placeholder="Burial, cremation, service preferences, messages"></textarea>
-    </div>
-  </section>
-
-  <!-- WHAT TO DO FIRST -->
-  <section>
-    <div class="section-header"><h2>What To Do First</h2></div>
-    <div class="section-content">
-      <textarea class="large" placeholder="Immediate steps for family: contacts, pets, keys, property"></textarea>
-    </div>
-  </section>
-
+<div class="topbar">
+  <select><option>Canada</option></select>
+  <select><option>EN</option></select>
+  <input value="1.0" disabled>
 </div>
 
-<!-- INSTRUCTIONS OVERLAY -->
-<div id="instructionsOverlay">
-  <div id="instructionsBox">
-    <h2>How to Use This Document</h2>
-    <ul>
-      <li>This is not a legal will.</li>
-      <li>Store this file privately.</li>
-      <li>Share location with executor.</li>
-      <li>Update annually or after major life events.</li>
-    </ul>
-    <button onclick="closeInstructions()">Close</button>
+<div class="toolbar">
+  <button onclick="openAll()">Open All</button>
+  <button onclick="closeAll()">Close All</button>
+  <button onclick="window.print()">Print / Save PDF</button>
+</div>
+
+<div class="notice">
+  Information is stored only in your browser. Print or back up your data.
+</div>
+
+<!-- PERSONAL -->
+<section class="open">
+  <div class="section-header" onclick="toggle(this)">Personal Information</div>
+  <div class="section-content">
+    <input placeholder="Full legal name">
+    <input placeholder="Date of birth">
+    <input placeholder="Address">
+    <input placeholder="Phone">
+    <input placeholder="Email">
   </div>
+</section>
+
+<!-- EXECUTOR -->
+<section>
+  <div class="section-header" onclick="toggle(this)">Executor (NEW)</div>
+  <div class="section-content">
+    <div class="help">Who is legally responsible for carrying out your estate.</div>
+    <input placeholder="Primary executor (name, relationship, contact)">
+    <input placeholder="Alternate executor">
+    <textarea placeholder="Executor compensation preference (standard / waive / other)"></textarea>
+  </div>
+</section>
+
+<!-- CHILDREN -->
+<section>
+  <div class="section-header" onclick="toggle(this)">Children</div>
+  <div class="section-content">
+    <textarea class="large" placeholder="List children: names, DOBs, relationships"></textarea>
+  </div>
+</section>
+
+<!-- SPECIAL NEEDS -->
+<section>
+  <div class="section-header" onclick="toggle(this)">Special-Needs Dependents (NEW)</div>
+  <div class="section-content">
+    <div class="help">Important for trusts and guardianship planning.</div>
+    <textarea placeholder="Do any dependents have special needs? Explain care and financial considerations."></textarea>
+  </div>
+</section>
+
+<!-- GUARDIANS -->
+<section>
+  <div class="section-header" onclick="toggle(this)">Guardians</div>
+  <div class="section-content">
+    <textarea placeholder="Primary guardian"></textarea>
+    <textarea placeholder="Alternate guardian"></textarea>
+  </div>
+</section>
+
+<!-- EXCLUSIONS -->
+<section>
+  <div class="section-header" onclick="toggle(this)">Exclusions / Disinheritance (NEW)</div>
+  <div class="section-content">
+    <div class="help">Helps prevent disputes and legal challenges.</div>
+    <textarea class="large" placeholder="Is anyone intentionally excluded from inheritance? Explain."></textarea>
+  </div>
+</section>
+
+<!-- PETS -->
+<section>
+  <div class="section-header" onclick="toggle(this)">Pets (NEW)</div>
+  <div class="section-content">
+    <textarea placeholder="Pets owned"></textarea>
+    <textarea placeholder="Caregiver preference"></textarea>
+    <textarea placeholder="Funds set aside for pet care"></textarea>
+  </div>
+</section>
+
+<!-- ASSETS -->
+<section>
+  <div class="section-header" onclick="toggle(this)">Assets</div>
+  <div class="section-content">
+    <textarea class="large" placeholder="List assets"></textarea>
+  </div>
+</section>
+
+<!-- DEBTS -->
+<section>
+  <div class="section-header" onclick="toggle(this)">Debts</div>
+  <div class="section-content">
+    <textarea class="large" placeholder="List debts and liabilities"></textarea>
+  </div>
+</section>
+
+<!-- DIGITAL -->
+<section>
+  <div class="section-header" onclick="toggle(this)">Digital Assets (UPDATED)</div>
+  <div class="section-content">
+    <textarea placeholder="Accounts and devices"></textarea>
+    <textarea placeholder="Delete / memorialize / transfer instructions"></textarea>
+  </div>
+</section>
+
+<!-- TAX -->
+<section>
+  <div class="section-header" onclick="toggle(this)">Tax & Residency (NEW)</div>
+  <div class="section-content">
+    <textarea placeholder="Primary legal residence"></textarea>
+    <textarea placeholder="Secondary tax residency (if any)"></textarea>
+    <textarea placeholder="Foreign assets or accounts"></textarea>
+  </div>
+</section>
+
+<!-- FUNERAL -->
+<section>
+  <div class="section-header" onclick="toggle(this)">Funeral Wishes</div>
+  <div class="section-content">
+    <textarea placeholder="Burial or cremation"></textarea>
+    <textarea placeholder="Organ donation"></textarea>
+    <textarea placeholder="Service wishes"></textarea>
+  </div>
+</section>
+
+<!-- FIRST STEPS -->
+<section>
+  <div class="section-header" onclick="toggle(this)">What To Do First</div>
+  <div class="section-content">
+    <textarea class="large" placeholder="Immediate instructions for family"></textarea>
+  </div>
+</section>
+
 </div>
 
 <script>
-document.querySelectorAll(".section-header").forEach(h=>{
-  h.onclick=()=>h.parentElement.classList.toggle("open");
-});
-
-function openAll(){
-  document.querySelectorAll("section").forEach(s=>s.classList.add("open"));
-}
-function closeAll(){
-  document.querySelectorAll("section").forEach(s=>s.classList.remove("open"));
-}
-
-function openInstructions(){
-  document.getElementById("instructionsOverlay").style.display="flex";
-}
-function closeInstructions(){
-  document.getElementById("instructionsOverlay").style.display="none";
-}
+function toggle(h){h.parentElement.classList.toggle("open")}
+function openAll(){document.querySelectorAll("section").forEach(s=>s.classList.add("open"))}
+function closeAll(){document.querySelectorAll("section").forEach(s=>s.classList.remove("open"))}
 </script>
 
 </body>
