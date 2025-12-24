@@ -11,6 +11,7 @@ body{
   font-family:"Times New Roman", Georgia, serif;
   background:radial-gradient(circle at top,#4a1f26,#2b1417);
 }
+
 .container{
   max-width:1200px;
   margin:40px auto;
@@ -18,30 +19,36 @@ body{
   background:#fff;
   border-radius:18px;
 }
-h1{text-align:center}
-.subtitle{text-align:center;color:#555;margin-bottom:20px}
 
-.topbar, .toolbar{
-  display:grid;
+h1{text-align:center;margin:0}
+.subtitle{text-align:center;color:#555;margin:10px 0 25px}
+
+.topbar,.toolbar{
+  display:flex;
+  flex-wrap:wrap;
   gap:10px;
   margin-bottom:15px;
 }
-.topbar{grid-template-columns:2fr 1fr 1fr}
-.toolbar{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
 
 select,input,textarea,button{
   padding:12px;
   border-radius:8px;
   border:1px solid #ccc;
   font-family:inherit;
+  width:100%;
 }
-button{cursor:pointer}
+
+button{
+  cursor:pointer;
+  background:#f3f4f6;
+}
 
 .notice{
   background:#f9fafb;
   padding:12px;
   border-radius:8px;
   font-size:14px;
+  margin-bottom:20px;
 }
 
 section{
@@ -49,15 +56,19 @@ section{
   border-radius:12px;
   margin-top:20px;
 }
+
 .section-header{
   padding:14px;
   background:#f3f4f6;
   cursor:pointer;
+  font-weight:bold;
 }
+
 .section-content{
-  padding:14px;
+  padding:16px;
   display:none;
 }
+
 section.open .section-content{display:block}
 
 .help{
@@ -65,13 +76,21 @@ section.open .section-content{display:block}
   background:#f9fafb;
   padding:10px;
   border-left:4px solid #999;
-  margin-bottom:10px;
+  margin-bottom:12px;
+}
+
+.row{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-bottom:14px;
 }
 
 textarea{min-height:160px}
-.large{min-height:300px}
+.large{min-height:280px}
 
 @media print{
+  body{background:#fff}
   .toolbar,.topbar{display:none}
   section{page-break-inside:avoid}
 }
@@ -85,9 +104,15 @@ textarea{min-height:160px}
 <div class="subtitle">Personal planning record · Not a legal document</div>
 
 <div class="topbar">
-  <select><option>Canada</option></select>
-  <select><option>EN</option></select>
-  <input value="1.0" disabled>
+  <select>
+    <option>Canada</option>
+    <option>United States</option>
+    <option>United Kingdom</option>
+  </select>
+  <select>
+    <option>EN</option>
+  </select>
+  <input value="Version 1.0" disabled>
 </div>
 
 <div class="toolbar">
@@ -100,15 +125,17 @@ textarea{min-height:160px}
   Information is stored only in your browser. Print or back up your data.
 </div>
 
-<!-- PERSONAL -->
+<!-- PERSONAL INFORMATION -->
 <section class="open">
   <div class="section-header" onclick="toggle(this)">Personal Information</div>
   <div class="section-content">
-    <input placeholder="Full legal name">
-    <input placeholder="Date of birth">
-    <input placeholder="Address">
-    <input placeholder="Phone">
-    <input placeholder="Email">
+
+    <div class="row"><input placeholder="Full legal name"></div>
+    <div class="row"><input placeholder="Date of birth"></div>
+    <div class="row"><input placeholder="Address"></div>
+    <div class="row"><input placeholder="Phone"></div>
+    <div class="row"><input placeholder="Email"></div>
+
   </div>
 </section>
 
@@ -116,10 +143,21 @@ textarea{min-height:160px}
 <section>
   <div class="section-header" onclick="toggle(this)">Executor (NEW)</div>
   <div class="section-content">
+
     <div class="help">Who is legally responsible for carrying out your estate.</div>
-    <input placeholder="Primary executor (name, relationship, contact)">
-    <input placeholder="Alternate executor">
-    <textarea placeholder="Executor compensation preference (standard / waive / other)"></textarea>
+
+    <div class="row">
+      <input placeholder="Primary executor (name, relationship, contact)">
+    </div>
+
+    <div class="row">
+      <input placeholder="Alternate executor">
+    </div>
+
+    <div class="row">
+      <textarea placeholder="Executor compensation preference (standard / waive / other)"></textarea>
+    </div>
+
   </div>
 </section>
 
@@ -127,7 +165,11 @@ textarea{min-height:160px}
 <section>
   <div class="section-header" onclick="toggle(this)">Children</div>
   <div class="section-content">
-    <textarea class="large" placeholder="List children: names, DOBs, relationships"></textarea>
+
+    <div class="row">
+      <textarea class="large" placeholder="List children: names, dates of birth, relationships"></textarea>
+    </div>
+
   </div>
 </section>
 
@@ -135,8 +177,13 @@ textarea{min-height:160px}
 <section>
   <div class="section-header" onclick="toggle(this)">Special-Needs Dependents (NEW)</div>
   <div class="section-content">
+
     <div class="help">Important for trusts and guardianship planning.</div>
-    <textarea placeholder="Do any dependents have special needs? Explain care and financial considerations."></textarea>
+
+    <div class="row">
+      <textarea placeholder="Describe any dependents with special needs and care considerations"></textarea>
+    </div>
+
   </div>
 </section>
 
@@ -144,8 +191,15 @@ textarea{min-height:160px}
 <section>
   <div class="section-header" onclick="toggle(this)">Guardians</div>
   <div class="section-content">
-    <textarea placeholder="Primary guardian"></textarea>
-    <textarea placeholder="Alternate guardian"></textarea>
+
+    <div class="row">
+      <textarea placeholder="Primary guardian"></textarea>
+    </div>
+
+    <div class="row">
+      <textarea placeholder="Alternate guardian"></textarea>
+    </div>
+
   </div>
 </section>
 
@@ -153,8 +207,13 @@ textarea{min-height:160px}
 <section>
   <div class="section-header" onclick="toggle(this)">Exclusions / Disinheritance (NEW)</div>
   <div class="section-content">
+
     <div class="help">Helps prevent disputes and legal challenges.</div>
-    <textarea class="large" placeholder="Is anyone intentionally excluded from inheritance? Explain."></textarea>
+
+    <div class="row">
+      <textarea class="large" placeholder="Is anyone intentionally excluded from inheritance? Explain."></textarea>
+    </div>
+
   </div>
 </section>
 
@@ -162,9 +221,11 @@ textarea{min-height:160px}
 <section>
   <div class="section-header" onclick="toggle(this)">Pets (NEW)</div>
   <div class="section-content">
-    <textarea placeholder="Pets owned"></textarea>
-    <textarea placeholder="Caregiver preference"></textarea>
-    <textarea placeholder="Funds set aside for pet care"></textarea>
+
+    <div class="row"><textarea placeholder="Pets owned"></textarea></div>
+    <div class="row"><textarea placeholder="Caregiver preference"></textarea></div>
+    <div class="row"><textarea placeholder="Funds set aside for pet care"></textarea></div>
+
   </div>
 </section>
 
@@ -172,7 +233,11 @@ textarea{min-height:160px}
 <section>
   <div class="section-header" onclick="toggle(this)">Assets</div>
   <div class="section-content">
-    <textarea class="large" placeholder="List assets"></textarea>
+
+    <div class="row">
+      <textarea class="large" placeholder="List assets"></textarea>
+    </div>
+
   </div>
 </section>
 
@@ -180,16 +245,27 @@ textarea{min-height:160px}
 <section>
   <div class="section-header" onclick="toggle(this)">Debts</div>
   <div class="section-content">
-    <textarea class="large" placeholder="List debts and liabilities"></textarea>
+
+    <div class="row">
+      <textarea class="large" placeholder="List debts and liabilities"></textarea>
+    </div>
+
   </div>
 </section>
 
-<!-- DIGITAL -->
+<!-- DIGITAL ASSETS -->
 <section>
   <div class="section-header" onclick="toggle(this)">Digital Assets (UPDATED)</div>
   <div class="section-content">
-    <textarea placeholder="Accounts and devices"></textarea>
-    <textarea placeholder="Delete / memorialize / transfer instructions"></textarea>
+
+    <div class="row">
+      <textarea placeholder="Accounts and devices"></textarea>
+    </div>
+
+    <div class="row">
+      <textarea placeholder="Delete / memorialize / transfer instructions"></textarea>
+    </div>
+
   </div>
 </section>
 
@@ -197,9 +273,11 @@ textarea{min-height:160px}
 <section>
   <div class="section-header" onclick="toggle(this)">Tax & Residency (NEW)</div>
   <div class="section-content">
-    <textarea placeholder="Primary legal residence"></textarea>
-    <textarea placeholder="Secondary tax residency (if any)"></textarea>
-    <textarea placeholder="Foreign assets or accounts"></textarea>
+
+    <div class="row"><textarea placeholder="Primary legal residence"></textarea></div>
+    <div class="row"><textarea placeholder="Secondary tax residency (if any)"></textarea></div>
+    <div class="row"><textarea placeholder="Foreign assets or accounts"></textarea></div>
+
   </div>
 </section>
 
@@ -207,9 +285,11 @@ textarea{min-height:160px}
 <section>
   <div class="section-header" onclick="toggle(this)">Funeral Wishes</div>
   <div class="section-content">
-    <textarea placeholder="Burial or cremation"></textarea>
-    <textarea placeholder="Organ donation"></textarea>
-    <textarea placeholder="Service wishes"></textarea>
+
+    <div class="row"><textarea placeholder="Burial or cremation preference"></textarea></div>
+    <div class="row"><textarea placeholder="Organ donation wishes"></textarea></div>
+    <div class="row"><textarea class="large" placeholder="Service or memorial wishes"></textarea></div>
+
   </div>
 </section>
 
@@ -217,7 +297,11 @@ textarea{min-height:160px}
 <section>
   <div class="section-header" onclick="toggle(this)">What To Do First</div>
   <div class="section-content">
-    <textarea class="large" placeholder="Immediate instructions for family"></textarea>
+
+    <div class="row">
+      <textarea class="large" placeholder="Immediate instructions for family"></textarea>
+    </div>
+
   </div>
 </section>
 
