@@ -11,65 +11,87 @@ body{
   font-family:"Times New Roman", Georgia, serif;
   background:radial-gradient(circle at top,#4a1f26,#2b1417);
 }
+
 .container{
   max-width:1200px;
   margin:40px auto;
   padding:40px;
-  background:#fff;
+  background:#ffffff;
   border-radius:18px;
 }
-h1{text-align:center;margin:0}
-.subtitle{text-align:center;color:#555;margin-bottom:20px}
 
+h1{
+  text-align:center;
+  margin:0;
+}
+.subtitle{
+  text-align:center;
+  color:#555;
+  margin:10px 0 25px;
+}
+
+/* Toolbar & Topbar */
 .topbar,.toolbar{
-  display:grid;
+  display:flex;
+  flex-wrap:wrap;
   gap:10px;
   margin-bottom:15px;
 }
-.topbar{grid-template-columns:2fr 1fr 1fr}
-.toolbar{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
 
 select,input,textarea,button{
+  width:100%;
   padding:12px;
   border-radius:8px;
   border:1px solid #ccc;
   font-family:inherit;
-  width:100%;
+  box-sizing:border-box;
 }
-button{cursor:pointer}
+
+button{
+  cursor:pointer;
+  background:#f3f4f6;
+}
 
 .notice{
   background:#f9fafb;
   padding:12px;
   border-radius:8px;
   font-size:14px;
+  margin-bottom:20px;
 }
 
+/* Sections */
 section{
   border:1px solid #ddd;
   border-radius:12px;
   margin-top:20px;
 }
+
 .section-header{
   padding:14px;
   background:#f3f4f6;
   cursor:pointer;
   font-weight:bold;
 }
+
 .section-content{
-  padding:14px;
+  padding:16px;
   display:none;
 }
-section.open .section-content{display:block}
+
+section.open .section-content{
+  display:block;
+}
 
 .help{
   font-size:14px;
   background:#f9fafb;
   padding:10px;
   border-left:4px solid #999;
-  margin-bottom:10px;
+  margin-bottom:12px;
 }
 
+/* Rows */
 .row-block{
   border:1px dashed #ccc;
   padding:12px;
@@ -77,15 +99,22 @@ section.open .section-content{display:block}
   margin-bottom:12px;
 }
 
+textarea{
+  min-height:120px;
+}
+.large{
+  min-height:220px;
+}
+
 .add-btn{
+  margin-top:10px;
   background:#eef2f7;
 }
 
-textarea{min-height:120px}
-.large{min-height:220px}
-
+/* Print */
 @media print{
-  .toolbar,.topbar{display:none}
+  body{background:#fff}
+  .toolbar,.topbar,.notice{display:none}
   section{page-break-inside:avoid}
 }
 </style>
@@ -97,12 +126,20 @@ textarea{min-height:120px}
 <h1>My Estate Plan</h1>
 <div class="subtitle">Personal planning record · Not a legal document</div>
 
+<!-- TOP BAR -->
 <div class="topbar">
-  <select><option>Canada</option></select>
-  <select><option>EN</option></select>
-  <input value="1.0" disabled>
+  <select>
+    <option>Canada</option>
+    <option>United States</option>
+    <option>United Kingdom</option>
+  </select>
+  <select>
+    <option>EN</option>
+  </select>
+  <input value="Version 1.0" disabled>
 </div>
 
+<!-- TOOLBAR -->
 <div class="toolbar">
   <button onclick="openAll()">Open All</button>
   <button onclick="closeAll()">Close All</button>
@@ -113,7 +150,7 @@ textarea{min-height:120px}
   Information is stored only in your browser. Print or back up your data.
 </div>
 
-<!-- PERSONAL -->
+<!-- PERSONAL INFORMATION -->
 <section class="open">
   <div class="section-header" onclick="toggle(this)">Personal Information</div>
   <div class="section-content">
@@ -161,7 +198,7 @@ textarea{min-height:120px}
   </div>
 </section>
 
-<!-- DIGITAL -->
+<!-- DIGITAL ASSETS -->
 <section>
   <div class="section-header" onclick="toggle(this)">Digital Assets</div>
   <div class="section-content">
@@ -184,9 +221,9 @@ textarea{min-height:120px}
 <section>
   <div class="section-header" onclick="toggle(this)">Funeral Wishes</div>
   <div class="section-content">
-    <textarea placeholder="Burial or cremation"></textarea>
-    <textarea placeholder="Organ donation"></textarea>
-    <textarea placeholder="Service wishes"></textarea>
+    <textarea placeholder="Burial or cremation preference"></textarea>
+    <textarea placeholder="Organ donation wishes"></textarea>
+    <textarea placeholder="Service or memorial wishes"></textarea>
   </div>
 </section>
 
@@ -194,7 +231,7 @@ textarea{min-height:120px}
 <section>
   <div class="section-header" onclick="toggle(this)">What To Do First</div>
   <div class="section-content">
-    <textarea class="large" placeholder="Immediate instructions for family"></textarea>
+    <textarea class="large" placeholder="Immediate instructions for family and executor"></textarea>
   </div>
 </section>
 
@@ -211,25 +248,28 @@ function closeAll(){
   document.querySelectorAll("section").forEach(s=>s.classList.remove("open"));
 }
 
+/* ADD ROW FUNCTIONS */
 function addExecutor(){
   document.getElementById("executors").insertAdjacentHTML("beforeend",`
     <div class="row-block">
-      <input placeholder="Executor name">
+      <input placeholder="Executor full name">
       <input placeholder="Relationship">
-      <input placeholder="Contact information">
+      <input placeholder="Phone / Email">
       <textarea placeholder="Compensation preference (standard / waive / other)"></textarea>
     </div>
   `);
 }
+
 function addChild(){
   document.getElementById("children").insertAdjacentHTML("beforeend",`
     <div class="row-block">
-      <input placeholder="Child full name">
+      <input placeholder="Child full legal name">
       <input placeholder="Date of birth">
       <input placeholder="Relationship / notes">
     </div>
   `);
 }
+
 function addAsset(){
   document.getElementById("assets").insertAdjacentHTML("beforeend",`
     <div class="row-block">
@@ -240,7 +280,7 @@ function addAsset(){
   `);
 }
 
-// Seed one row each
+/* Seed initial rows */
 addExecutor();
 addChild();
 addAsset();
