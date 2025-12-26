@@ -12,106 +12,78 @@ body{
   background:radial-gradient(circle at top,#4a1f26,#2b1417);
 }
 .container{
-  max-width:1200px;
+  max-width:1100px;
   margin:40px auto;
   padding:40px;
   background:#fff;
   border-radius:18px;
 }
-
 h1{text-align:center;margin:0}
 .subtitle{text-align:center;color:#555;margin-bottom:20px}
 
 .topbar,.toolbar{
   display:grid;
-  gap:12px;
+  gap:10px;
   margin-bottom:14px;
 }
 .topbar{grid-template-columns:2fr 1fr 1fr}
-.toolbar{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.toolbar{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
 
 select,input,textarea,button{
-  width:100%;
-  padding:14px;
-  border-radius:10px;
+  padding:12px;
+  border-radius:8px;
   border:1px solid #ccc;
   font-family:inherit;
-  font-size:16px;
+  font-size:15px;
 }
-
-textarea{
-  min-height:140px;
-  resize:vertical;
-}
-
+textarea{min-height:140px}
 .large{min-height:260px}
-
-button{
-  cursor:pointer;
-  background:#f3f4f6;
-}
-button:hover{background:#e5e7eb}
+button{cursor:pointer}
 
 .notice{
   background:#f9fafb;
   padding:12px;
   border-radius:8px;
   font-size:14px;
-  margin-bottom:16px;
 }
 
 section{
   border:1px solid #ddd;
   border-radius:12px;
-  margin-top:20px;
+  margin-top:18px;
 }
 .section-header{
-  padding:16px;
+  padding:14px;
   background:#f3f4f6;
   font-weight:bold;
   cursor:pointer;
 }
 .section-content{
-  padding:16px;
+  padding:14px;
   display:none;
 }
 section.open .section-content{display:block}
 
-.help{
-  font-size:14px;
-  background:#f9fafb;
+.card{
+  border:1px solid #ddd;
+  border-radius:10px;
   padding:12px;
-  border-left:4px solid #999;
   margin-bottom:12px;
 }
-
-.repeat-card{
-  border:1px solid #e5e7eb;
-  border-radius:12px;
-  padding:16px;
-  margin-bottom:16px;
-}
-
-.row{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:12px;
-  margin-bottom:12px;
+.card button{
+  background:#ffecec;
+  border:1px solid #ff9a9a;
 }
 
 .add-btn{
-  margin-top:10px;
-  font-weight:bold;
-}
-
-.remove-btn{
-  background:#fee2e2;
-  border-color:#fca5a5;
+  background:#eef4ff;
+  border:1px solid #8aa8ff;
 }
 
 @media print{
   .toolbar,.topbar{display:none}
   body{background:#fff}
+  section{page-break-inside:avoid}
 }
 </style>
 </head>
@@ -123,8 +95,8 @@ section.open .section-content{display:block}
 <div class="subtitle" id="subtitle">Personal planning record · Not a legal document</div>
 
 <div class="topbar">
-  <select id="country"></select>
-  <select id="language" disabled></select>
+  <select id="countrySelect"></select>
+  <select id="languageSelect"></select>
   <input value="Version 1.0" disabled>
 </div>
 
@@ -138,153 +110,156 @@ section.open .section-content{display:block}
 
 <!-- PERSONAL -->
 <section class="open">
-  <div class="section-header" onclick="toggle(this)">Personal Information</div>
-  <div class="section-content">
-    <input placeholder="Full legal name">
-    <input placeholder="Date of birth">
-    <input placeholder="Address">
-    <input placeholder="Phone">
-    <input placeholder="Email">
-  </div>
+<div class="section-header" onclick="toggle(this)">Personal Information</div>
+<div class="section-content">
+<input placeholder="Full legal name">
+<input placeholder="Date of birth">
+<input placeholder="Address">
+<input placeholder="Phone">
+<input placeholder="Email">
+</div>
 </section>
 
 <!-- EXECUTORS -->
 <section>
-  <div class="section-header" onclick="toggle(this)">Executors</div>
-  <div class="section-content">
-    <div id="executors"></div>
-    <button class="add-btn" onclick="addExecutor()">➕ Add Another Executor</button>
-  </div>
+<div class="section-header" onclick="toggle(this)">Executors</div>
+<div class="section-content">
+<div id="executors"></div>
+<button class="add-btn" onclick="addExecutor()">➕ Add Another Executor</button>
+</div>
 </section>
 
 <!-- CHILDREN -->
 <section>
-  <div class="section-header" onclick="toggle(this)">Children</div>
-  <div class="section-content">
-    <div id="children"></div>
-    <button class="add-btn" onclick="addChild()">➕ Add Another Child</button>
-  </div>
+<div class="section-header" onclick="toggle(this)">Children</div>
+<div class="section-content">
+<div id="children"></div>
+<button class="add-btn" onclick="addChild()">➕ Add Another Child</button>
+</div>
 </section>
 
 <!-- ASSETS -->
 <section>
-  <div class="section-header" onclick="toggle(this)">Assets</div>
-  <div class="section-content">
-    <div id="assets"></div>
-    <button class="add-btn" onclick="addAsset()">➕ Add Another Asset</button>
-  </div>
+<div class="section-header" onclick="toggle(this)">Assets</div>
+<div class="section-content">
+<div id="assets"></div>
+<button class="add-btn" onclick="addAsset()">➕ Add Another Asset</button>
+</div>
+</section>
+
+<!-- DEBTS -->
+<section>
+<div class="section-header" onclick="toggle(this)">Debts</div>
+<div class="section-content">
+<div id="debts"></div>
+<button class="add-btn" onclick="addDebt()">➕ Add Another Debt</button>
+</div>
+</section>
+
+<!-- DIGITAL -->
+<section>
+<div class="section-header" onclick="toggle(this)">Digital Accounts</div>
+<div class="section-content">
+<div id="digital"></div>
+<button class="add-btn" onclick="addDigital()">➕ Add Another Account</button>
+</div>
 </section>
 
 <!-- FUNERAL -->
 <section>
-  <div class="section-header" onclick="toggle(this)">Funeral Wishes</div>
-  <div class="section-content">
-    <div class="repeat-card">
-      <textarea class="large" placeholder="Burial or cremation"></textarea>
-      <textarea class="large" placeholder="Organ donation"></textarea>
-      <textarea class="large" placeholder="Service wishes"></textarea>
-    </div>
-  </div>
+<div class="section-header" onclick="toggle(this)">Funeral Wishes</div>
+<div class="section-content">
+<div id="funeral"></div>
+<button class="add-btn" onclick="addFuneral()">➕ Add Another Wish</button>
+</div>
 </section>
 
-<!-- WHAT TO DO FIRST -->
+<!-- FIRST -->
 <section>
-  <div class="section-header" onclick="toggle(this)">What To Do First</div>
-  <div class="section-content">
-    <textarea class="large" placeholder="Immediate instructions for family"></textarea>
-  </div>
+<div class="section-header" onclick="toggle(this)">What To Do First</div>
+<div class="section-content">
+<textarea class="large" placeholder="Immediate instructions for family"></textarea>
+</div>
 </section>
 
-<!-- EXTRA NOTES -->
+<!-- NOTES -->
 <section>
-  <div class="section-header" onclick="toggle(this)">Additional Notes</div>
-  <div class="section-content">
-    <textarea class="large" placeholder="Any other important notes, explanations, or reminders"></textarea>
-  </div>
+<div class="section-header" onclick="toggle(this)">Additional Notes</div>
+<div class="section-content">
+<div id="notes"></div>
+<button class="add-btn" onclick="addNote()">➕ Add Note</button>
+</div>
 </section>
 
 </div>
+
+<!-- TEMPLATES -->
+<template id="rowTemplate">
+<div class="card">
+<input placeholder="Title / Name">
+<textarea placeholder="Details / Notes"></textarea>
+<button onclick="this.parentElement.remove()">Remove</button>
+</div>
+</template>
 
 <script>
 function toggle(h){h.parentElement.classList.toggle("open")}
 function openAll(){document.querySelectorAll("section").forEach(s=>s.classList.add("open"))}
 function closeAll(){document.querySelectorAll("section").forEach(s=>s.classList.remove("open"))}
 
-/* ---------- COUNTRY → LANGUAGE ---------- */
-const MAP={
-  "Canada":"English",
-  "United States":"English",
-  "France":"Français",
-  "Germany":"Deutsch",
-  "Spain":"Español",
-  "Russia":"Русский",
-  "Ukraine":"Українська",
-  "Japan":"日本語",
-  "China (Simplified)":"中文 (简体)",
-  "China (Traditional)":"中文 (繁體)",
-  "South Korea":"한국어",
-  "India":"हिन्दी"
+function addRow(id){
+  const t=document.getElementById("rowTemplate");
+  document.getElementById(id).appendChild(t.content.cloneNode(true));
+}
+const addExecutor=()=>addRow("executors");
+const addChild=()=>addRow("children");
+const addAsset=()=>addRow("assets");
+const addDebt=()=>addRow("debts");
+const addDigital=()=>addRow("digital");
+const addFuneral=()=>addRow("funeral");
+const addNote=()=>addRow("notes");
+
+/* COUNTRY → LANGUAGE */
+const COUNTRY_LANG={
+"Canada":"en","United States":"en","France":"fr","Germany":"de","Spain":"es",
+"Russia":"ru","Ukraine":"uk",
+"Japan":"ja","China (Simplified)":"zh-CN","China (Traditional)":"zh-TW","South Korea":"ko",
+"India (Hindi)":"hi","India (Tamil)":"ta","India (Bengali)":"bn","India (Urdu)":"ur"
+};
+const RTL=["ur"];
+
+const I18N={
+en:"My Estate Plan",fr:"Mon plan successoral",de:"Mein Nachlassplan",
+es:"Mi plan patrimonial",ru:"Мой план наследства",uk:"Мій спадковий план",
+ja:"相続計画","zh-CN":"遗产计划","zh-TW":"遺產計畫",ko:"유산 계획",
+hi:"वसीयत योजना",ta:"சொத்துத் திட்டம்",bn:"সম্পত্তি পরিকল্পনা",ur:"وراثتی منصوبہ"
 };
 
-const country=document.getElementById("country");
-const language=document.getElementById("language");
+const countrySel=document.getElementById("countrySelect");
+const langSel=document.getElementById("languageSelect");
 
-Object.keys(MAP).forEach(c=>{
-  country.add(new Option(c,c));
+Object.keys(COUNTRY_LANG).forEach(c=>{
+  countrySel.appendChild(new Option(c,c));
+});
+Object.keys(I18N).forEach(l=>{
+  langSel.appendChild(new Option(l,l));
 });
 
-country.onchange=()=>{
-  language.innerHTML="";
-  language.add(new Option(MAP[country.value],MAP[country.value]));
+function setLanguage(l){
+  document.body.dir=RTL.includes(l)?"rtl":"ltr";
+  document.getElementById("title").textContent=I18N[l];
+}
+
+countrySel.onchange=()=>{
+  const l=COUNTRY_LANG[countrySel.value];
+  langSel.value=l;
+  setLanguage(l);
 };
+langSel.onchange=()=>setLanguage(langSel.value);
 
-country.value="Canada";
-country.onchange();
-
-/* ---------- REPEATABLE SECTIONS ---------- */
-function card(html){
-  const d=document.createElement("div");
-  d.className="repeat-card";
-  d.innerHTML=html+`<button class="remove-btn" onclick="this.parentElement.remove()">Remove</button>`;
-  return d;
-}
-
-function addExecutor(){
-  document.getElementById("executors").appendChild(card(`
-    <div class="row">
-      <input placeholder="Executor name">
-      <input placeholder="Relationship">
-      <input placeholder="Contact info">
-    </div>
-    <textarea placeholder="Executor instructions"></textarea>
-  `));
-}
-
-function addChild(){
-  document.getElementById("children").appendChild(card(`
-    <div class="row">
-      <input placeholder="Child name">
-      <input placeholder="Date of birth">
-      <input placeholder="Notes">
-    </div>
-  `));
-}
-
-function addAsset(){
-  document.getElementById("assets").appendChild(card(`
-    <div class="row">
-      <input placeholder="Asset type">
-      <input placeholder="Location / account">
-      <input placeholder="Ownership">
-    </div>
-    <textarea placeholder="Notes"></textarea>
-  `));
-}
-
-/* Defaults */
-addExecutor();
-addChild();
-addAsset();
+countrySel.value="Canada";
+langSel.value="en";
+setLanguage("en");
 </script>
 
 </body>
