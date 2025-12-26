@@ -42,7 +42,7 @@ select,input,textarea,button{
   font-family:inherit;
   font-size:15px;
 }
-textarea{min-height:120px}
+textarea{min-height:120px; width:100%; box-sizing:border-box;}
 .large{min-height:260px}
 button{cursor:pointer}
 
@@ -57,13 +57,24 @@ section{
   border:1px solid #ddd;
   border-radius:12px;
   margin-top:18px;
+  overflow:hidden;
 }
 .section-header{
   padding:14px;
   background:#f3f4f6;
   font-weight:bold;
   cursor:pointer;
+  user-select:none;
 }
+.section-header:after{
+  content:"▾";
+  float:right;
+  opacity:0.7;
+}
+section.open .section-header:after{
+  content:"▴";
+}
+
 .section-content{
   padding:14px;
   display:none;
@@ -120,9 +131,9 @@ Personal estate and care planning record · Not a legal document
 
 <!-- TOOLBAR -->
 <div class="toolbar">
-  <button onclick="openAll()">Open All</button>
-  <button onclick="closeAll()">Close All</button>
-  <button onclick="window.print()">Print / Save PDF</button>
+  <button type="button" onclick="openAll()">Open All</button>
+  <button type="button" onclick="closeAll()">Close All</button>
+  <button type="button" onclick="window.print()">Print / Save PDF</button>
 </div>
 
 <div class="notice" id="notice">
@@ -131,7 +142,7 @@ Information is stored locally in your browser.
 
 <!-- PERSONAL INFO -->
 <section class="open">
-  <div class="section-header" data-i18n="personal">Personal Information</div>
+  <div class="section-header" onclick="toggleSection(this)" data-i18n="personal">Personal Information</div>
   <div class="section-content">
     <div class="row"><input data-i18n-ph="name" placeholder="Full legal name"></div>
     <div class="row"><input data-i18n-ph="dob" placeholder="Date of birth"></div>
@@ -143,7 +154,7 @@ Information is stored locally in your browser.
 
 <!-- EXECUTOR -->
 <section>
-  <div class="section-header" data-i18n="executor">Executor</div>
+  <div class="section-header" onclick="toggleSection(this)" data-i18n="executor">Executor</div>
   <div class="section-content">
     <div class="row"><input data-i18n-ph="executorPrimary" placeholder="Primary executor"></div>
     <div class="row"><input data-i18n-ph="executorAlt" placeholder="Alternate executor"></div>
@@ -153,7 +164,7 @@ Information is stored locally in your browser.
 
 <!-- CHILDREN -->
 <section>
-  <div class="section-header" data-i18n="children">Children</div>
+  <div class="section-header" onclick="toggleSection(this)" data-i18n="children">Children</div>
   <div class="section-content">
     <textarea class="large" data-i18n-ph="childrenNotes" placeholder="List children, dates of birth, relationships"></textarea>
   </div>
@@ -161,7 +172,7 @@ Information is stored locally in your browser.
 
 <!-- ASSETS -->
 <section>
-  <div class="section-header" data-i18n="assets">Assets</div>
+  <div class="section-header" onclick="toggleSection(this)" data-i18n="assets">Assets</div>
   <div class="section-content">
     <textarea class="large" data-i18n-ph="assetsNotes" placeholder="List assets"></textarea>
   </div>
@@ -169,7 +180,7 @@ Information is stored locally in your browser.
 
 <!-- FUNERAL -->
 <section>
-  <div class="section-header" data-i18n="funeral">Funeral Wishes</div>
+  <div class="section-header" onclick="toggleSection(this)" data-i18n="funeral">Funeral Wishes</div>
   <div class="section-content">
     <textarea data-i18n-ph="funeralNotes" placeholder="Burial, cremation, service wishes"></textarea>
   </div>
@@ -178,6 +189,15 @@ Information is stored locally in your browser.
 </div>
 
 <script>
+/* SECTION TOGGLE (FIX) */
+function toggleSection(headerEl){
+  const section = headerEl.closest("section");
+  if(!section) return;
+  section.classList.toggle("open");
+}
+function openAll(){document.querySelectorAll("section").forEach(s=>s.classList.add("open"))}
+function closeAll(){document.querySelectorAll("section").forEach(s=>s.classList.remove("open"))}
+
 /* COUNTRY → LANGUAGE DEFAULT */
 const countryLang = {
   "Canada":"en",
@@ -323,29 +343,29 @@ hi:{
 };
 
 function applyLanguage(lang){
-  document.documentElement.lang=lang;
-  document.getElementById("languageSelect").value=lang;
-  const d=t[lang]||t.en;
+  document.documentElement.lang = lang;
+  document.getElementById("languageSelect").value = lang;
+  const d = t[lang] || t.en;
 
-  document.getElementById("title").textContent=d.title;
-  document.getElementById("subtitle").textContent=d.subtitle;
-  document.getElementById("notice").textContent=d.notice;
+  document.getElementById("title").textContent = d.title;
+  document.getElementById("subtitle").textContent = d.subtitle;
+  document.getElementById("notice").textContent = d.notice;
 
   document.querySelectorAll("[data-i18n]").forEach(e=>{
-    e.textContent=d[e.dataset.i18n];
+    const key = e.dataset.i18n;
+    if(d[key]) e.textContent = d[key];
   });
+
   document.querySelectorAll("[data-i18n-ph]").forEach(e=>{
-    e.placeholder=d[e.dataset.i18nPh];
+    const key = e.dataset.i18nPh;
+    if(d[key]) e.placeholder = d[key];
   });
 }
 
 function onCountryChange(){
-  const c=document.getElementById("countrySelect").value;
-  applyLanguage(countryLang[c]||"en");
+  const c = document.getElementById("countrySelect").value;
+  applyLanguage(countryLang[c] || "en");
 }
-
-function openAll(){document.querySelectorAll("section").forEach(s=>s.classList.add("open"))}
-function closeAll(){document.querySelectorAll("section").forEach(s=>s.classList.remove("open"))}
 
 /* INIT */
 applyLanguage("en");
