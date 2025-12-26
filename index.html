@@ -6,16 +6,10 @@
 <title>My Estate Plan</title>
 
 <style>
-.repeat-card{
-  border:1px solid #e5e7eb;
-  border-radius:10px;
-  padding:16px;
-  margin-bottom:16
-}
 body{
   margin:0;
   font-family:"Times New Roman", Georgia, serif;
-  background:radial-gradient(circle at top, var(--jam-mid), var(--jam-dark));
+  background:radial-gradient(circle at top,#4a1f26,#2b1417);
 }
 .container{
   max-width:1200px;
@@ -23,83 +17,101 @@ body{
   padding:40px;
   background:#fff;
   border-radius:18px;
-  box-shadow:0 25px 60px rgba(0,0,0,.35);
 }
-h1{text-align:center;margin:0;font-size:38px}
-.subtitle{text-align:center;color:var(--muted);margin:10px 0 22px}
+
+h1{text-align:center;margin:0}
+.subtitle{text-align:center;color:#555;margin-bottom:20px}
 
 .topbar,.toolbar{
   display:grid;
-  gap:10px;
+  gap:12px;
   margin-bottom:14px;
 }
 .topbar{grid-template-columns:2fr 1fr 1fr}
-.toolbar{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+.toolbar{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
 
 select,input,textarea,button{
-  padding:12px;
-  border-radius:8px;
+  width:100%;
+  padding:14px;
+  border-radius:10px;
   border:1px solid #ccc;
   font-family:inherit;
-  font-size:15px;
+  font-size:16px;
 }
-textarea{min-height:120px}
-.large{min-height:200px}
-button{cursor:pointer;background:#f9fafb}
+
+textarea{
+  min-height:140px;
+  resize:vertical;
+}
+
+.large{min-height:260px}
+
+button{
+  cursor:pointer;
+  background:#f3f4f6;
+}
+button:hover{background:#e5e7eb}
 
 .notice{
-  background:var(--soft);
+  background:#f9fafb;
   padding:12px;
   border-radius:8px;
   font-size:14px;
-  border:1px solid var(--border);
+  margin-bottom:16px;
 }
 
 section{
   border:1px solid #ddd;
   border-radius:12px;
-  margin-top:18px;
+  margin-top:20px;
 }
 .section-header{
-  padding:14px;
+  padding:16px;
   background:#f3f4f6;
   font-weight:bold;
   cursor:pointer;
-  display:flex;
-  justify-content:space-between;
 }
-.section-content{padding:14px;display:none}
+.section-content{
+  padding:16px;
+  display:none;
+}
 section.open .section-content{display:block}
+
+.help{
+  font-size:14px;
+  background:#f9fafb;
+  padding:12px;
+  border-left:4px solid #999;
+  margin-bottom:12px;
+}
 
 .repeat-card{
   border:1px solid #e5e7eb;
-  border-radius:10px;
-  padding:12px;
-  margin-bottom:12px;
-}
-.repeat-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr 1fr auto;
-  gap:10px;
-}
-.removeBtn{
-  background:#fee2e2;
-  border:1px solid #fca5a5;
-}
-.addBtn{
-  margin-top:6px;
+  border-radius:12px;
+  padding:16px;
+  margin-bottom:16px;
 }
 
-@media(max-width:900px){
-  .topbar{grid-template-columns:1fr}
-  .repeat-grid{grid-template-columns:1fr}
+.row{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:12px;
+  margin-bottom:12px;
+}
+
+.add-btn{
+  margin-top:10px;
+  font-weight:bold;
+}
+
+.remove-btn{
+  background:#fee2e2;
+  border-color:#fca5a5;
 }
 
 @media print{
-  .toolbar,.topbar,.notice{display:none}
+  .toolbar,.topbar{display:none}
   body{background:#fff}
-  section{page-break-inside:avoid}
-  .section-content{display:block!important}
 }
 </style>
 </head>
@@ -107,13 +119,13 @@ section.open .section-content{display:block}
 <body>
 <div class="container">
 
-<h1>My Estate Plan</h1>
-<div class="subtitle">Personal planning record · Not a legal document</div>
+<h1 id="title">My Estate Plan</h1>
+<div class="subtitle" id="subtitle">Personal planning record · Not a legal document</div>
 
 <div class="topbar">
-  <select id="countrySelect"></select>
-  <select id="languageSelect"></select>
-  <input value="1.0" disabled>
+  <select id="country"></select>
+  <select id="language" disabled></select>
+  <input value="Version 1.0" disabled>
 </div>
 
 <div class="toolbar">
@@ -122,11 +134,11 @@ section.open .section-content{display:block}
   <button onclick="window.print()">Print / Save PDF</button>
 </div>
 
-<div class="notice">Information is stored locally in your browser.</div>
+<div class="notice">Information is stored only in your browser.</div>
 
 <!-- PERSONAL -->
 <section class="open">
-  <div class="section-header" onclick="toggle(this)">Personal Information <span>▾</span></div>
+  <div class="section-header" onclick="toggle(this)">Personal Information</div>
   <div class="section-content">
     <input placeholder="Full legal name">
     <input placeholder="Date of birth">
@@ -136,114 +148,144 @@ section.open .section-content{display:block}
   </div>
 </section>
 
-<!-- TEMPLATE FOR REPEATABLE SECTIONS -->
-<script>
-function toggle(h){h.parentElement.classList.toggle("open")}
-function openAll(){document.querySelectorAll("section").forEach(s=>s.classList.add("open"))}
-function closeAll(){document.querySelectorAll("section").forEach(s=>s.classList.remove("open"))}
-
-function addRow(wrapperId, placeholders){
-  const wrap=document.getElementById(wrapperId);
-  const card=document.createElement("div");
-  card.className="repeat-card";
-
-  const grid=document.createElement("div");
-  grid.className="repeat-grid";
-
-  placeholders.forEach(p=>{
-    const i=document.createElement("input");
-    i.placeholder=p;
-    grid.appendChild(i);
-  });
-
-  const remove=document.createElement("button");
-  remove.textContent="Remove";
-  remove.className="removeBtn";
-  remove.onclick=()=>card.remove();
-
-  grid.appendChild(remove);
-  card.appendChild(grid);
-
-  const notes=document.createElement("textarea");
-  notes.placeholder="Notes";
-  card.appendChild(notes);
-
-  wrap.appendChild(card);
-}
-</script>
-
 <!-- EXECUTORS -->
 <section>
-  <div class="section-header" onclick="toggle(this)">Executors <span>▸</span></div>
+  <div class="section-header" onclick="toggle(this)">Executors</div>
   <div class="section-content">
     <div id="executors"></div>
-    <button class="addBtn" onclick="addRow('executors',['Name','Relationship','Contact'])">➕ Add Another Executor</button>
+    <button class="add-btn" onclick="addExecutor()">➕ Add Another Executor</button>
   </div>
 </section>
 
 <!-- CHILDREN -->
 <section>
-  <div class="section-header" onclick="toggle(this)">Children <span>▸</span></div>
+  <div class="section-header" onclick="toggle(this)">Children</div>
   <div class="section-content">
     <div id="children"></div>
-    <button class="addBtn" onclick="addRow('children',['Name','DOB','Relationship'])">➕ Add Another Child</button>
+    <button class="add-btn" onclick="addChild()">➕ Add Another Child</button>
   </div>
 </section>
 
 <!-- ASSETS -->
 <section>
-  <div class="section-header" onclick="toggle(this)">Assets <span>▸</span></div>
+  <div class="section-header" onclick="toggle(this)">Assets</div>
   <div class="section-content">
     <div id="assets"></div>
-    <button class="addBtn" onclick="addRow('assets',['Type','Location','Owner'])">➕ Add Another Asset</button>
+    <button class="add-btn" onclick="addAsset()">➕ Add Another Asset</button>
   </div>
 </section>
 
 <!-- FUNERAL -->
 <section>
-  <div class="section-header" onclick="toggle(this)">Funeral Wishes <span>▸</span></div>
+  <div class="section-header" onclick="toggle(this)">Funeral Wishes</div>
   <div class="section-content">
-    <div id="funeral"></div>
-    <button class="addBtn" onclick="addRow('funeral',['Burial/Cremation','Organ Donation','Service'])">➕ Add Another Wish</button>
+    <div class="repeat-card">
+      <textarea class="large" placeholder="Burial or cremation"></textarea>
+      <textarea class="large" placeholder="Organ donation"></textarea>
+      <textarea class="large" placeholder="Service wishes"></textarea>
+    </div>
   </div>
 </section>
 
-<!-- TAX -->
+<!-- WHAT TO DO FIRST -->
 <section>
-  <div class="section-header" onclick="toggle(this)">Tax / Residency <span>▸</span></div>
+  <div class="section-header" onclick="toggle(this)">What To Do First</div>
   <div class="section-content">
-    <div id="tax"></div>
-    <button class="addBtn" onclick="addRow('tax',['Primary Residence','Secondary Residence','Foreign Assets'])">➕ Add Another Entry</button>
+    <textarea class="large" placeholder="Immediate instructions for family"></textarea>
   </div>
 </section>
 
-<!-- PETS -->
+<!-- EXTRA NOTES -->
 <section>
-  <div class="section-header" onclick="toggle(this)">Pets <span>▸</span></div>
+  <div class="section-header" onclick="toggle(this)">Additional Notes</div>
   <div class="section-content">
-    <div id="pets"></div>
-    <button class="addBtn" onclick="addRow('pets',['Pet Name','Caregiver','Funds Set Aside'])">➕ Add Another Pet</button>
-  </div>
-</section>
-
-<!-- DEBTS -->
-<section>
-  <div class="section-header" onclick="toggle(this)">Debts <span>▸</span></div>
-  <div class="section-content">
-    <div id="debts"></div>
-    <button class="addBtn" onclick="addRow('debts',['Creditor','Amount','Due'])">➕ Add Another Debt</button>
-  </div>
-</section>
-
-<!-- DIGITAL -->
-<section>
-  <div class="section-header" onclick="toggle(this)">Digital Assets <span>▸</span></div>
-  <div class="section-content">
-    <div id="digital"></div>
-    <button class="addBtn" onclick="addRow('digital',['Account','Username','Action'])">➕ Add Another Account</button>
+    <textarea class="large" placeholder="Any other important notes, explanations, or reminders"></textarea>
   </div>
 </section>
 
 </div>
+
+<script>
+function toggle(h){h.parentElement.classList.toggle("open")}
+function openAll(){document.querySelectorAll("section").forEach(s=>s.classList.add("open"))}
+function closeAll(){document.querySelectorAll("section").forEach(s=>s.classList.remove("open"))}
+
+/* ---------- COUNTRY → LANGUAGE ---------- */
+const MAP={
+  "Canada":"English",
+  "United States":"English",
+  "France":"Français",
+  "Germany":"Deutsch",
+  "Spain":"Español",
+  "Russia":"Русский",
+  "Ukraine":"Українська",
+  "Japan":"日本語",
+  "China (Simplified)":"中文 (简体)",
+  "China (Traditional)":"中文 (繁體)",
+  "South Korea":"한국어",
+  "India":"हिन्दी"
+};
+
+const country=document.getElementById("country");
+const language=document.getElementById("language");
+
+Object.keys(MAP).forEach(c=>{
+  country.add(new Option(c,c));
+});
+
+country.onchange=()=>{
+  language.innerHTML="";
+  language.add(new Option(MAP[country.value],MAP[country.value]));
+};
+
+country.value="Canada";
+country.onchange();
+
+/* ---------- REPEATABLE SECTIONS ---------- */
+function card(html){
+  const d=document.createElement("div");
+  d.className="repeat-card";
+  d.innerHTML=html+`<button class="remove-btn" onclick="this.parentElement.remove()">Remove</button>`;
+  return d;
+}
+
+function addExecutor(){
+  document.getElementById("executors").appendChild(card(`
+    <div class="row">
+      <input placeholder="Executor name">
+      <input placeholder="Relationship">
+      <input placeholder="Contact info">
+    </div>
+    <textarea placeholder="Executor instructions"></textarea>
+  `));
+}
+
+function addChild(){
+  document.getElementById("children").appendChild(card(`
+    <div class="row">
+      <input placeholder="Child name">
+      <input placeholder="Date of birth">
+      <input placeholder="Notes">
+    </div>
+  `));
+}
+
+function addAsset(){
+  document.getElementById("assets").appendChild(card(`
+    <div class="row">
+      <input placeholder="Asset type">
+      <input placeholder="Location / account">
+      <input placeholder="Ownership">
+    </div>
+    <textarea placeholder="Notes"></textarea>
+  `));
+}
+
+/* Defaults */
+addExecutor();
+addChild();
+addAsset();
+</script>
+
 </body>
 </html>
