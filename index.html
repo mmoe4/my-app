@@ -12,16 +12,13 @@
   --paper:#ffffff;
   --border:#d1d5db;
   --muted:#6b7280;
-  --help:#f3f4f6;
   --soft:#f9fafb;
 }
-
 body{
   margin:0;
   font-family:"Times New Roman", Georgia, serif;
   background:radial-gradient(circle at top, var(--jam-mid), var(--jam-dark));
 }
-
 .container{
   max-width:1200px;
   margin:40px auto;
@@ -30,17 +27,16 @@ body{
   border-radius:18px;
   box-shadow:0 25px 60px rgba(0,0,0,.35);
 }
-
-h1{ text-align:center; margin:0; font-size:38px; color:#111827; }
-.subtitle{ text-align:center; color:var(--muted); margin:10px 0 22px; }
+h1{text-align:center;margin:0;font-size:38px}
+.subtitle{text-align:center;color:var(--muted);margin:10px 0 22px}
 
 .topbar,.toolbar{
   display:grid;
   gap:10px;
   margin-bottom:14px;
 }
-.topbar{ grid-template-columns:2fr 1fr 1fr; }
-.toolbar{ grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+.topbar{grid-template-columns:2fr 1fr 1fr}
+.toolbar{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
 
 select,input,textarea,button{
   padding:12px;
@@ -48,12 +44,10 @@ select,input,textarea,button{
   border:1px solid #ccc;
   font-family:inherit;
   font-size:15px;
-  box-sizing:border-box;
 }
-textarea{ min-height:120px; }
-.large{ min-height:220px; }
-button{ cursor:pointer; background:#f9fafb; }
-button:hover{ background:#eef2f5; }
+textarea{min-height:120px}
+.large{min-height:200px}
+button{cursor:pointer;background:#f9fafb}
 
 .notice{
   background:var(--soft);
@@ -61,15 +55,12 @@ button:hover{ background:#eef2f5; }
   border-radius:8px;
   font-size:14px;
   border:1px solid var(--border);
-  color:#374151;
 }
 
 section{
   border:1px solid #ddd;
   border-radius:12px;
   margin-top:18px;
-  overflow:hidden;
-  background:#fff;
 }
 .section-header{
   padding:14px;
@@ -77,1010 +68,184 @@ section{
   font-weight:bold;
   cursor:pointer;
   display:flex;
-  align-items:center;
   justify-content:space-between;
 }
-.section-header span{ color:#6b7280; }
-.section-content{
-  padding:14px;
-  display:none;
-}
-section.open .section-content{ display:block; }
+.section-content{padding:14px;display:none}
+section.open .section-content{display:block}
 
-.help{
-  font-size:14px;
-  background:#f9fafb;
-  padding:10px;
-  border-left:4px solid #999;
-  margin-bottom:10px;
-}
-
-hr.sep{
-  border:none;
-  border-top:1px solid #e5e7eb;
-  margin:14px 0;
-}
-
-/* HORIZONTAL REPEATABLE BLOCKS (COLUMNS) */
 .repeat-card{
   border:1px solid #e5e7eb;
   border-radius:10px;
   padding:12px;
   margin-bottom:12px;
-  background:#fff;
 }
 .repeat-grid{
   display:grid;
-  grid-template-columns: 1.3fr 1fr 1fr auto;
+  grid-template-columns:1fr 1fr 1fr auto;
   gap:10px;
-  align-items:start;
 }
-.repeat-grid textarea{ min-height:46px; }
 .removeBtn{
   background:#fee2e2;
   border:1px solid #fca5a5;
 }
-.removeBtn:hover{ background:#fecaca; }
-
-.addRowBtn{
-  margin-top:8px;
-  width:fit-content;
-  padding:10px 14px;
-  border-radius:10px;
-  border:1px solid #d1d5db;
+.addBtn{
+  margin-top:6px;
 }
 
-@media (max-width:900px){
-  .topbar{ grid-template-columns:1fr; }
-  .repeat-grid{ grid-template-columns:1fr; }
+@media(max-width:900px){
+  .topbar{grid-template-columns:1fr}
+  .repeat-grid{grid-template-columns:1fr}
 }
 
 @media print{
-  .toolbar,.topbar,.notice{ display:none !important; }
-  body{ background:#fff; }
-  .container{ box-shadow:none; margin:0; border-radius:0; }
-  section{ page-break-inside:avoid; }
-  .section-content{ display:block !important; }
+  .toolbar,.topbar,.notice{display:none}
+  body{background:#fff}
+  section{page-break-inside:avoid}
+  .section-content{display:block!important}
 }
-
-/* RTL support */
-body[dir="rtl"]{ direction:rtl; }
-body[dir="rtl"] .section-header{ flex-direction:row-reverse; }
 </style>
 </head>
 
 <body>
 <div class="container">
 
-  <h1 id="title">My Estate Plan</h1>
-  <div class="subtitle" id="subtitle">Personal planning record · Not a legal document</div>
+<h1>My Estate Plan</h1>
+<div class="subtitle">Personal planning record · Not a legal document</div>
 
-  <div class="topbar">
-    <select id="countrySelect" aria-label="Country"></select>
-    <select id="languageSelect" aria-label="Language"></select>
-    <input id="version" value="1.0" disabled>
-  </div>
-
-  <div class="toolbar">
-    <button type="button" onclick="openAll()" id="btnOpenAll">Open All</button>
-    <button type="button" onclick="closeAll()" id="btnCloseAll">Close All</button>
-    <button type="button" onclick="window.print()" id="btnPrint">Print / Save PDF</button>
-  </div>
-
-  <div class="notice" id="notice">
-    Information is stored only in your browser (this device). Print to keep a copy.
-  </div>
-
-  <!-- PERSONAL -->
-  <section class="open">
-    <div class="section-header" onclick="toggleSection(this)">
-      <div id="personalTitle">Personal Information</div>
-      <span>▾</span>
-    </div>
-    <div class="section-content">
-      <input id="fullname" placeholder="Full legal name" data-key="fullname">
-      <input id="dob" placeholder="Date of birth" data-key="dob">
-      <input id="address" placeholder="Address" data-key="address">
-      <input id="phone" placeholder="Phone" data-key="phone">
-      <input id="email" placeholder="Email" data-key="email">
-    </div>
-  </section>
-
-  <!-- EXECUTORS (REPEATABLE) -->
-  <section>
-    <div class="section-header" onclick="toggleSection(this)">
-      <div id="executorTitle">Executors</div>
-      <span>▸</span>
-    </div>
-    <div class="section-content">
-      <div class="help" id="executorHelp">People responsible for carrying out your estate.</div>
-
-      <div id="executorsWrap"></div>
-
-      <button class="addRowBtn" type="button" onclick="addExecutor()">➕ Add Another Executor</button>
-    </div>
-  </section>
-
-  <!-- CHILDREN (REPEATABLE) -->
-  <section>
-    <div class="section-header" onclick="toggleSection(this)">
-      <div id="childrenTitle">Children</div>
-      <span>▸</span>
-    </div>
-    <div class="section-content">
-      <div class="help" id="childrenHelp">Add each child. Include step/adopted children if relevant.</div>
-
-      <div id="childrenWrap"></div>
-
-      <button class="addRowBtn" type="button" onclick="addChild()">➕ Add Another Child</button>
-    </div>
-  </section>
-
-  <!-- ASSETS (REPEATABLE) -->
-  <section>
-    <div class="section-header" onclick="toggleSection(this)">
-      <div id="assetsTitle">Assets</div>
-      <span>▸</span>
-    </div>
-    <div class="section-content">
-      <div class="help" id="assetsHelp">List assets with details (type, location, account #, notes).</div>
-
-      <div id="assetsWrap"></div>
-
-      <button class="addRowBtn" type="button" onclick="addAsset()">➕ Add Another Asset</button>
-    </div>
-  </section>
-
-  <!-- FUNERAL -->
-  <section>
-    <div class="section-header" onclick="toggleSection(this)">
-      <div id="funeralTitle">Funeral Wishes</div>
-      <span>▸</span>
-    </div>
-    <div class="section-content">
-      <textarea id="funeral1" placeholder="Burial or cremation" data-key="funeral1"></textarea>
-      <textarea id="funeral2" placeholder="Organ donation" data-key="funeral2"></textarea>
-      <textarea id="funeral3" placeholder="Service wishes" data-key="funeral3"></textarea>
-    </div>
-  </section>
-
-  <!-- FIRST STEPS -->
-  <section>
-    <div class="section-header" onclick="toggleSection(this)">
-      <div id="firstTitle">What To Do First</div>
-      <span>▸</span>
-    </div>
-    <div class="section-content">
-      <textarea class="large" id="firstSteps" placeholder="Immediate instructions for family" data-key="firstSteps"></textarea>
-    </div>
-  </section>
-
+<div class="topbar">
+  <select id="countrySelect"></select>
+  <select id="languageSelect"></select>
+  <input value="1.0" disabled>
 </div>
 
+<div class="toolbar">
+  <button onclick="openAll()">Open All</button>
+  <button onclick="closeAll()">Close All</button>
+  <button onclick="window.print()">Print / Save PDF</button>
+</div>
+
+<div class="notice">Information is stored locally in your browser.</div>
+
+<!-- PERSONAL -->
+<section class="open">
+  <div class="section-header" onclick="toggle(this)">Personal Information <span>▾</span></div>
+  <div class="section-content">
+    <input placeholder="Full legal name">
+    <input placeholder="Date of birth">
+    <input placeholder="Address">
+    <input placeholder="Phone">
+    <input placeholder="Email">
+  </div>
+</section>
+
+<!-- TEMPLATE FOR REPEATABLE SECTIONS -->
 <script>
-/* =========================
-   BASIC UI
-========================= */
-function toggleSection(header){
-  const sec = header.parentElement;
-  sec.classList.toggle("open");
-  const arrow = header.querySelector("span");
-  if (arrow) arrow.textContent = sec.classList.contains("open") ? "▾" : "▸";
-}
-function openAll(){
-  document.querySelectorAll("section").forEach(s=>{
-    s.classList.add("open");
-    const arrow = s.querySelector(".section-header span");
-    if (arrow) arrow.textContent = "▾";
-  });
-}
-function closeAll(){
-  document.querySelectorAll("section").forEach(s=>{
-    s.classList.remove("open");
-    const arrow = s.querySelector(".section-header span");
-    if (arrow) arrow.textContent = "▸";
-  });
-}
+function toggle(h){h.parentElement.classList.toggle("open")}
+function openAll(){document.querySelectorAll("section").forEach(s=>s.classList.add("open"))}
+function closeAll(){document.querySelectorAll("section").forEach(s=>s.classList.remove("open"))}
 
-/* =========================
-   COUNTRY -> LANGUAGE
-   (You asked for Canada, US, France, Germany, Spain, Russia, Ukraine,
-    plus India (hi/ta/bn/ur), East Asia (ja/zh-CN/zh-TW/ko))
-========================= */
-const COUNTRY_LANG = {
-  "Canada":"en",
-  "United States":"en",
-  "United Kingdom":"en",
-  "France":"fr",
-  "Germany":"de",
-  "Spain":"es",
+function addRow(wrapperId, placeholders){
+  const wrap=document.getElementById(wrapperId);
+  const card=document.createElement("div");
+  card.className="repeat-card";
 
-  "Russia":"ru",
-  "Ukraine":"uk",
+  const grid=document.createElement("div");
+  grid.className="repeat-grid";
 
-  "Japan":"ja",
-  "China (Simplified)":"zh-CN",
-  "China (Traditional)":"zh-TW",
-  "South Korea":"ko",
-
-  "India (Hindi)":"hi",
-  "India (Tamil)":"ta",
-  "India (Bengali)":"bn",
-  "India (Urdu)":"ur"
-};
-
-const RTL = new Set(["ur"]);
-
-/* =========================
-   TRANSLATIONS (headings + key placeholders)
-   (Kept concise so it stays stable and readable.)
-========================= */
-const I18N = {
-  "en": {
-    title:"My Estate Plan",
-    subtitle:"Personal planning record · Not a legal document",
-    notice:"Information is stored only in your browser (this device). Print to keep a copy.",
-    openAll:"Open All", closeAll:"Close All", print:"Print / Save PDF",
-    personal:"Personal Information",
-    executors:"Executors",
-    execHelp:"People responsible for carrying out your estate.",
-    children:"Children",
-    childrenHelp:"Add each child. Include step/adopted children if relevant.",
-    assets:"Assets",
-    assetsHelp:"List assets with details (type, location, account #, notes).",
-    funeral:"Funeral Wishes",
-    first:"What To Do First",
-    // repeat block placeholders
-    exec_name:"Executor name",
-    exec_rel:"Relationship",
-    exec_contact:"Contact info",
-    exec_notes:"Executor instructions",
-    child_name:"Child name",
-    child_dob:"Date of birth",
-    child_notes:"Notes",
-    asset_type:"Asset type (house, RRSP, bank, vehicle...)",
-    asset_where:"Where / account #",
-    asset_owner:"Owner / joint?",
-    asset_notes:"Notes"
-  },
-
-  "fr": {
-    title:"Mon plan successoral",
-    subtitle:"Dossier personnel · Document non juridique",
-    notice:"Les informations sont enregistrées uniquement dans votre navigateur (sur cet appareil). Imprimez pour conserver une copie.",
-    openAll:"Tout ouvrir", closeAll:"Tout fermer", print:"Imprimer / PDF",
-    personal:"Informations personnelles",
-    executors:"Exécuteurs",
-    execHelp:"Personnes responsables d’exécuter la succession.",
-    children:"Enfants",
-    childrenHelp:"Ajoutez chaque enfant (y compris adoptés/beaux-enfants si pertinent).",
-    assets:"Actifs",
-    assetsHelp:"Listez les actifs (type, emplacement, numéro de compte, notes).",
-    funeral:"Souhaits funéraires",
-    first:"Que faire en premier",
-    exec_name:"Nom de l’exécuteur",
-    exec_rel:"Lien",
-    exec_contact:"Coordonnées",
-    exec_notes:"Instructions",
-    child_name:"Nom de l’enfant",
-    child_dob:"Date de naissance",
-    child_notes:"Notes",
-    asset_type:"Type d’actif",
-    asset_where:"Emplacement / # compte",
-    asset_owner:"Propriétaire / conjoint ?",
-    asset_notes:"Notes"
-  },
-
-  "de": {
-    title:"Mein Nachlassplan",
-    subtitle:"Persönlicher Plan · Kein Rechtsdokument",
-    notice:"Die Daten werden nur lokal im Browser (auf diesem Gerät) gespeichert. Zum Aufbewahren bitte drucken.",
-    openAll:"Alles öffnen", closeAll:"Alles schließen", print:"Drucken / PDF",
-    personal:"Persönliche Informationen",
-    executors:"Testamentsvollstrecker",
-    execHelp:"Personen, die den Nachlass abwickeln.",
-    children:"Kinder",
-    childrenHelp:"Jedes Kind hinzufügen (inkl. Stief-/Adoptivkinder falls relevant).",
-    assets:"Vermögen",
-    assetsHelp:"Vermögenswerte auflisten (Art, Ort, Konto-Nr., Notizen).",
-    funeral:"Bestattungswünsche",
-    first:"Erste Schritte",
-    exec_name:"Name",
-    exec_rel:"Beziehung",
-    exec_contact:"Kontakt",
-    exec_notes:"Anweisungen",
-    child_name:"Name des Kindes",
-    child_dob:"Geburtsdatum",
-    child_notes:"Notizen",
-    asset_type:"Art des Vermögenswerts",
-    asset_where:"Ort / Konto-Nr.",
-    asset_owner:"Eigentümer / gemeinsam?",
-    asset_notes:"Notizen"
-  },
-
-  "es": {
-    title:"Mi plan patrimonial",
-    subtitle:"Registro personal · No es un documento legal",
-    notice:"La información se guarda solo en tu navegador (en este dispositivo). Imprime para conservar una copia.",
-    openAll:"Abrir todo", closeAll:"Cerrar todo", print:"Imprimir / PDF",
-    personal:"Información personal",
-    executors:"Albaceas",
-    execHelp:"Personas responsables de ejecutar tu herencia.",
-    children:"Hijos",
-    childrenHelp:"Agrega cada hijo (incluye adoptados/hijastros si aplica).",
-    assets:"Activos",
-    assetsHelp:"Lista activos (tipo, ubicación, # cuenta, notas).",
-    funeral:"Deseos funerarios",
-    first:"Qué hacer primero",
-    exec_name:"Nombre del albacea",
-    exec_rel:"Relación",
-    exec_contact:"Contacto",
-    exec_notes:"Instrucciones",
-    child_name:"Nombre del hijo",
-    child_dob:"Fecha de nacimiento",
-    child_notes:"Notas",
-    asset_type:"Tipo de activo",
-    asset_where:"Ubicación / # cuenta",
-    asset_owner:"Dueño / conjunto?",
-    asset_notes:"Notas"
-  },
-
-  "ru": {
-    title:"Мой план наследства",
-    subtitle:"Личная запись · Не юридический документ",
-    notice:"Данные сохраняются только в вашем браузере (на этом устройстве). Распечатайте, чтобы сохранить копию.",
-    openAll:"Открыть всё", closeAll:"Закрыть всё", print:"Печать / PDF",
-    personal:"Личная информация",
-    executors:"Исполнители",
-    execHelp:"Люди, ответственные за исполнение вашей воли.",
-    children:"Дети",
-    childrenHelp:"Добавьте каждого ребёнка (включая приёмных/пасынков при необходимости).",
-    assets:"Активы",
-    assetsHelp:"Список активов (тип, место, № счёта, примечания).",
-    funeral:"Пожелания по похоронам",
-    first:"Что делать сначала",
-    exec_name:"Имя исполнителя",
-    exec_rel:"Родство",
-    exec_contact:"Контакты",
-    exec_notes:"Инструкции",
-    child_name:"Имя ребёнка",
-    child_dob:"Дата рождения",
-    child_notes:"Примечания",
-    asset_type:"Тип актива",
-    asset_where:"Где / № счёта",
-    asset_owner:"Владелец / совместно?",
-    asset_notes:"Примечания"
-  },
-
-  "uk": {
-    title:"Мій спадковий план",
-    subtitle:"Особистий запис · Не юридичний документ",
-    notice:"Дані зберігаються лише у вашому браузері (на цьому пристрої). Роздрукуйте, щоб зберегти копію.",
-    openAll:"Відкрити все", closeAll:"Закрити все", print:"Друк / PDF",
-    personal:"Особиста інформація",
-    executors:"Виконавці",
-    execHelp:"Особи, відповідальні за виконання вашого плану.",
-    children:"Діти",
-    childrenHelp:"Додайте кожну дитину (включно з усиновленими/пасинками за потреби).",
-    assets:"Активи",
-    assetsHelp:"Перелік активів (тип, місце, № рахунку, примітки).",
-    funeral:"Побажання щодо похорону",
-    first:"Що зробити спочатку",
-    exec_name:"Ім’я виконавця",
-    exec_rel:"Зв’язок",
-    exec_contact:"Контакти",
-    exec_notes:"Інструкції",
-    child_name:"Ім’я дитини",
-    child_dob:"Дата народження",
-    child_notes:"Примітки",
-    asset_type:"Тип активу",
-    asset_where:"Де / № рахунку",
-    asset_owner:"Власник / спільно?",
-    asset_notes:"Примітки"
-  },
-
-  "ja": {
-    title:"相続計画",
-    subtitle:"個人記録 · 法的文書ではありません",
-    notice:"情報はこの端末のブラウザ内（ローカル）にのみ保存されます。保存したい場合は印刷してください。",
-    openAll:"すべて開く", closeAll:"すべて閉じる", print:"印刷 / PDF",
-    personal:"個人情報",
-    executors:"遺言執行者",
-    execHelp:"相続手続きを行う責任者を記録します。",
-    children:"子供",
-    childrenHelp:"各子供を追加してください（必要に応じて養子・継子も）。",
-    assets:"資産",
-    assetsHelp:"資産を記録（種類・場所・口座番号・メモ）。",
-    funeral:"葬儀の希望",
-    first:"最初に行うこと",
-    exec_name:"執行者氏名",
-    exec_rel:"関係",
-    exec_contact:"連絡先",
-    exec_notes:"指示",
-    child_name:"子供の氏名",
-    child_dob:"生年月日",
-    child_notes:"メモ",
-    asset_type:"資産の種類",
-    asset_where:"場所 / 口座番号",
-    asset_owner:"所有者 / 共同？",
-    asset_notes:"メモ"
-  },
-
-  "zh-CN": {
-    title:"遗产计划",
-    subtitle:"个人记录 · 非法律文件",
-    notice:"信息仅保存在本设备浏览器本地。需要保存请打印。",
-    openAll:"全部展开", closeAll:"全部折叠", print:"打印 / PDF",
-    personal:"个人信息",
-    executors:"执行人",
-    execHelp:"记录负责处理遗产事务的人。",
-    children:"子女",
-    childrenHelp:"逐一添加子女信息（需要时包含继子女/收养）。",
-    assets:"资产",
-    assetsHelp:"记录资产（类型、位置、账号、备注）。",
-    funeral:"葬礼意愿",
-    first:"首先要做的事",
-    exec_name:"执行人姓名",
-    exec_rel:"关系",
-    exec_contact:"联系方式",
-    exec_notes:"执行说明",
-    child_name:"子女姓名",
-    child_dob:"出生日期",
-    child_notes:"备注",
-    asset_type:"资产类型",
-    asset_where:"位置 / 账号",
-    asset_owner:"所有者 / 共同？",
-    asset_notes:"备注"
-  },
-
-  "zh-TW": {
-    title:"遺產計畫",
-    subtitle:"個人記錄 · 非法律文件",
-    notice:"資訊僅保存在本裝置瀏覽器本地。需要保存請列印。",
-    openAll:"全部展開", closeAll:"全部收合", print:"列印 / PDF",
-    personal:"個人資訊",
-    executors:"執行人",
-    execHelp:"記錄負責處理遺產的人。",
-    children:"子女",
-    childrenHelp:"逐一新增子女（需要時包含繼子女/收養）。",
-    assets:"資產",
-    assetsHelp:"記錄資產（類型、位置、帳號、備註）。",
-    funeral:"葬禮意願",
-    first:"首先要做的事",
-    exec_name:"執行人姓名",
-    exec_rel:"關係",
-    exec_contact:"聯絡方式",
-    exec_notes:"執行說明",
-    child_name:"子女姓名",
-    child_dob:"出生日期",
-    child_notes:"備註",
-    asset_type:"資產類型",
-    asset_where:"位置 / 帳號",
-    asset_owner:"所有者 / 共同？",
-    asset_notes:"備註"
-  },
-
-  "ko": {
-    title:"유산 계획",
-    subtitle:"개인 기록 · 법적 문서 아님",
-    notice:"정보는 이 기기의 브라우저(로컬)에만 저장됩니다. 보관하려면 인쇄하세요.",
-    openAll:"모두 열기", closeAll:"모두 닫기", print:"인쇄 / PDF",
-    personal:"개인 정보",
-    executors:"집행자",
-    execHelp:"유산 처리를 담당할 사람을 기록합니다.",
-    children:"자녀",
-    childrenHelp:"각 자녀를 추가하세요(필요 시 입양/의붓자녀 포함).",
-    assets:"자산",
-    assetsHelp:"자산(종류/위치/계좌/메모)을 기록합니다.",
-    funeral:"장례 희망",
-    first:"먼저 할 일",
-    exec_name:"집행자 이름",
-    exec_rel:"관계",
-    exec_contact:"연락처",
-    exec_notes:"지침",
-    child_name:"자녀 이름",
-    child_dob:"생년월일",
-    child_notes:"메모",
-    asset_type:"자산 종류",
-    asset_where:"위치 / 계좌",
-    asset_owner:"소유자 / 공동?",
-    asset_notes:"메모"
-  },
-
-  "hi": {
-    title:"वसीयत योजना",
-    subtitle:"व्यक्तिगत रिकॉर्ड · कानूनी दस्तावेज़ नहीं",
-    notice:"जानकारी केवल इस डिवाइस के ब्राउज़र में सेव होती है। सुरक्षित रखने के लिए प्रिंट करें।",
-    openAll:"सब खोलें", closeAll:"सब बंद करें", print:"प्रिंट / PDF",
-    personal:"व्यक्तिगत जानकारी",
-    executors:"कार्यपालक",
-    execHelp:"जो व्यक्ति आपकी संपत्ति के कार्यों को पूरा करेगा।",
-    children:"बच्चे",
-    childrenHelp:"हर बच्चे को जोड़ें (जरूरत हो तो दत्तक/सौतेले भी)।",
-    assets:"संपत्ति",
-    assetsHelp:"संपत्ति सूची (प्रकार, स्थान, खाता, नोट्स)।",
-    funeral:"अंतिम इच्छाएँ",
-    first:"सबसे पहले क्या करें",
-    exec_name:"कार्यपालक का नाम",
-    exec_rel:"रिश्ता",
-    exec_contact:"संपर्क",
-    exec_notes:"निर्देश",
-    child_name:"बच्चे का नाम",
-    child_dob:"जन्म तिथि",
-    child_notes:"नोट्स",
-    asset_type:"संपत्ति का प्रकार",
-    asset_where:"स्थान / खाता #",
-    asset_owner:"मालिक / संयुक्त?",
-    asset_notes:"नोट्स"
-  },
-
-  "ta": {
-    title:"சொத்துத் திட்டம்",
-    subtitle:"தனிப்பட்ட பதிவு · சட்ட ஆவணம் அல்ல",
-    notice:"தகவல் இந்த சாதனத்தின் உலாவியில் மட்டும் சேமிக்கப்படுகிறது. பாதுகாக்க அச்சிடவும்.",
-    openAll:"அனைத்தையும் திற", closeAll:"அனைத்தையும் மூடு", print:"அச்சிட / PDF",
-    personal:"தனிப்பட்ட தகவல்",
-    executors:"நிர்வாகிகள்",
-    execHelp:"சொத்துத் திட்டத்தை செயல்படுத்த பொறுப்பாளர்கள்.",
-    children:"குழந்தைகள்",
-    childrenHelp:"ஒவ்வொரு குழந்தையையும் சேர்க்கவும் (தேவைப்பட்டால் தத்தெடுத்த/மற்றையையும்).",
-    assets:"சொத்துகள்",
-    assetsHelp:"சொத்துகள் பட்டியல் (வகை, இடம், கணக்கு, குறிப்புகள்).",
-    funeral:"இறுதி விருப்பங்கள்",
-    first:"முதலில் செய்யவேண்டியது",
-    exec_name:"நிர்வாகி பெயர்",
-    exec_rel:"உறவு",
-    exec_contact:"தொடர்பு",
-    exec_notes:"வழிமுறைகள்",
-    child_name:"குழந்தை பெயர்",
-    child_dob:"பிறந்த தேதி",
-    child_notes:"குறிப்புகள்",
-    asset_type:"சொத்து வகை",
-    asset_where:"இடம் / கணக்கு #",
-    asset_owner:"உரிமையாளர் / கூட்டு?",
-    asset_notes:"குறிப்புகள்"
-  },
-
-  "bn": {
-    title:"সম্পত্তি পরিকল্পনা",
-    subtitle:"ব্যক্তিগত নথি · আইনি দলিল নয়",
-    notice:"তথ্য শুধুমাত্র এই ডিভাইসের ব্রাউজারে সংরক্ষিত থাকে। সংরক্ষণ করতে প্রিন্ট করুন।",
-    openAll:"সব খুলুন", closeAll:"সব বন্ধ করুন", print:"প্রিন্ট / PDF",
-    personal:"ব্যক্তিগত তথ্য",
-    executors:"কার্যনির্বাহী",
-    execHelp:"আপনার এস্টেট পরিচালনার দায়িত্বপ্রাপ্ত ব্যক্তি।",
-    children:"সন্তান",
-    childrenHelp:"প্রতিটি সন্তান যোগ করুন (প্রয়োজনে দত্তক/সৎ সন্তানও)।",
-    assets:"সম্পদ",
-    assetsHelp:"সম্পদের তালিকা (ধরন, অবস্থান, অ্যাকাউন্ট, নোট)।",
-    funeral:"শেষকৃত্যের ইচ্ছা",
-    first:"প্রথমে কী করবেন",
-    exec_name:"কার্যনির্বাহী নাম",
-    exec_rel:"সম্পর্ক",
-    exec_contact:"যোগাযোগ",
-    exec_notes:"নির্দেশনা",
-    child_name:"সন্তানের নাম",
-    child_dob:"জন্মতারিখ",
-    child_notes:"নোট",
-    asset_type:"সম্পদের ধরন",
-    asset_where:"অবস্থান / অ্যাকাউন্ট #",
-    asset_owner:"মালিক / যৌথ?",
-    asset_notes:"নোট"
-  },
-
-  "ur": {
-    title:"وراثتی منصوبہ",
-    subtitle:"ذاتی ریکارڈ · قانونی دستاویز نہیں",
-    notice:"معلومات صرف اسی ڈیوائس کے براؤزر میں محفوظ ہوتی ہیں۔ محفوظ رکھنے کے لیے پرنٹ کریں۔",
-    openAll:"سب کھولیں", closeAll:"سب بند کریں", print:"پرنٹ / PDF",
-    personal:"ذاتی معلومات",
-    executors:"منتظمین",
-    execHelp:"وہ افراد جو آپ کے ورثے کے امور انجام دیں گے۔",
-    children:"بچے",
-    childrenHelp:"ہر بچے کو شامل کریں (ضرورت ہو تو منہ بولے/سوتیلے بھی)۔",
-    assets:"اثاثے",
-    assetsHelp:"اثاثوں کی فہرست (قسم، جگہ، اکاؤنٹ، نوٹس)۔",
-    funeral:"تدفین کی خواہشات",
-    first:"سب سے پہلے کیا کریں",
-    exec_name:"منتظم کا نام",
-    exec_rel:"رشتہ",
-    exec_contact:"رابطہ",
-    exec_notes:"ہدایات",
-    child_name:"بچے کا نام",
-    child_dob:"تاریخ پیدائش",
-    child_notes:"نوٹس",
-    asset_type:"اثاثے کی قسم",
-    asset_where:"جگہ / اکاؤنٹ #",
-    asset_owner:"مالک / مشترکہ؟",
-    asset_notes:"نوٹس"
-  }
-};
-
-/* =========================
-   ELEMENTS
-========================= */
-const countrySel = document.getElementById("countrySelect");
-const langSel = document.getElementById("languageSelect");
-
-const elTitle = document.getElementById("title");
-const elSubtitle = document.getElementById("subtitle");
-const elNotice = document.getElementById("notice");
-
-const btnOpenAll = document.getElementById("btnOpenAll");
-const btnCloseAll = document.getElementById("btnCloseAll");
-const btnPrint = document.getElementById("btnPrint");
-
-const personalTitle = document.getElementById("personalTitle");
-const executorTitle = document.getElementById("executorTitle");
-const executorHelp = document.getElementById("executorHelp");
-const childrenTitle = document.getElementById("childrenTitle");
-const childrenHelp = document.getElementById("childrenHelp");
-const assetsTitle = document.getElementById("assetsTitle");
-const assetsHelp = document.getElementById("assetsHelp");
-const funeralTitle = document.getElementById("funeralTitle");
-const firstTitle = document.getElementById("firstTitle");
-
-/* =========================
-   STORAGE
-========================= */
-const STORE_KEY = "estate_plan_simple_repeat_v1";
-
-function saveAll(){
-  const payload = {
-    meta:{
-      country: countrySel.value || "",
-      lang: langSel.value || "en",
-      version: document.getElementById("version").value || "1.0"
-    },
-    fields:{},
-    rows:{
-      executors: collectRepeat("executorsWrap"),
-      children: collectRepeat("childrenWrap"),
-      assets: collectRepeat("assetsWrap")
-    }
-  };
-
-  document.querySelectorAll("[data-key]").forEach(inp=>{
-    payload.fields[inp.dataset.key] = inp.value || "";
+  placeholders.forEach(p=>{
+    const i=document.createElement("input");
+    i.placeholder=p;
+    grid.appendChild(i);
   });
 
-  localStorage.setItem(STORE_KEY, JSON.stringify(payload));
-}
+  const remove=document.createElement("button");
+  remove.textContent="Remove";
+  remove.className="removeBtn";
+  remove.onclick=()=>card.remove();
 
-function loadAll(){
-  const raw = localStorage.getItem(STORE_KEY);
-  if (!raw) return false;
-  try{
-    const payload = JSON.parse(raw);
-    const country = payload?.meta?.country || "Canada";
-    const lang = payload?.meta?.lang || COUNTRY_LANG[country] || "en";
-
-    countrySel.value = country;
-    langSel.value = lang;
-    applyLanguage(lang);
-
-    const fields = payload?.fields || {};
-    document.querySelectorAll("[data-key]").forEach(inp=>{
-      inp.value = fields[inp.dataset.key] || "";
-    });
-
-    setRepeat("executorsWrap", payload?.rows?.executors, makeExecutorCard);
-    setRepeat("childrenWrap", payload?.rows?.children, makeChildCard);
-    setRepeat("assetsWrap", payload?.rows?.assets, makeAssetCard);
-
-    return true;
-  }catch(e){
-    return false;
-  }
-}
-
-/* =========================
-   INIT DROPDOWNS
-========================= */
-function initCountries(){
-  countrySel.innerHTML = "";
-  Object.keys(COUNTRY_LANG).forEach(c=>{
-    const o=document.createElement("option");
-    o.value=c; o.textContent=c;
-    countrySel.appendChild(o);
-  });
-}
-function initLanguages(){
-  langSel.innerHTML = "";
-  Object.keys(I18N).forEach(l=>{
-    const o=document.createElement("option");
-    o.value=l;
-    o.textContent=l;
-    langSel.appendChild(o);
-  });
-}
-
-/* =========================
-   APPLY LANGUAGE (labels + placeholders)
-========================= */
-function applyLanguage(lang){
-  const t = I18N[lang] || I18N.en;
-
-  document.body.setAttribute("dir", RTL.has(lang) ? "rtl" : "ltr");
-
-  elTitle.textContent = t.title;
-  elSubtitle.textContent = t.subtitle;
-  elNotice.textContent = t.notice;
-
-  btnOpenAll.textContent = t.openAll;
-  btnCloseAll.textContent = t.closeAll;
-  btnPrint.textContent = t.print;
-
-  personalTitle.textContent = t.personal;
-  executorTitle.textContent = t.executors;
-  executorHelp.textContent = t.execHelp;
-  childrenTitle.textContent = t.children;
-  childrenHelp.textContent = t.childrenHelp;
-  assetsTitle.textContent = t.assets;
-  assetsHelp.textContent = t.assetsHelp;
-  funeralTitle.textContent = t.funeral;
-  firstTitle.textContent = t.first;
-
-  // Update repeat placeholders in existing cards
-  updateRepeatPlaceholders("executorsWrap", (card)=>{
-    card.querySelector('[data-field="name"]').placeholder = t.exec_name;
-    card.querySelector('[data-field="rel"]').placeholder = t.exec_rel;
-    card.querySelector('[data-field="contact"]').placeholder = t.exec_contact;
-    card.querySelector('[data-field="notes"]').placeholder = t.exec_notes;
-  });
-  updateRepeatPlaceholders("childrenWrap", (card)=>{
-    card.querySelector('[data-field="name"]').placeholder = t.child_name;
-    card.querySelector('[data-field="dob"]').placeholder = t.child_dob;
-    card.querySelector('[data-field="notes"]').placeholder = t.child_notes;
-  });
-  updateRepeatPlaceholders("assetsWrap", (card)=>{
-    card.querySelector('[data-field="type"]').placeholder = t.asset_type;
-    card.querySelector('[data-field="where"]').placeholder = t.asset_where;
-    card.querySelector('[data-field="owner"]').placeholder = t.asset_owner;
-    card.querySelector('[data-field="notes"]').placeholder = t.asset_notes;
-  });
-}
-
-function updateRepeatPlaceholders(wrapId, fn){
-  const wrap = document.getElementById(wrapId);
-  wrap.querySelectorAll(".repeat-card").forEach(fn);
-}
-
-/* =========================
-   REPEATABLE BLOCKS (HORIZONTAL COLUMNS)
-========================= */
-function makeRemoveButton(){
-  const b = document.createElement("button");
-  b.type = "button";
-  b.className = "removeBtn";
-  b.textContent = "Remove";
-  b.onclick = (e)=>{
-    const card = e.target.closest(".repeat-card");
-    if(card) card.remove();
-    saveAll();
-  };
-  return b;
-}
-
-function wireInputsToSave(card){
-  card.querySelectorAll("input,textarea").forEach(inp=>{
-    inp.addEventListener("input", saveAll);
-  });
-}
-
-function makeExecutorCard(data={}, lang="en"){
-  const t = I18N[lang] || I18N.en;
-
-  const card = document.createElement("div");
-  card.className = "repeat-card";
-
-  const grid = document.createElement("div");
-  grid.className = "repeat-grid";
-
-  const name = document.createElement("input");
-  name.dataset.field = "name";
-  name.placeholder = t.exec_name;
-  name.value = data.name || "";
-
-  const rel = document.createElement("input");
-  rel.dataset.field = "rel";
-  rel.placeholder = t.exec_rel;
-  rel.value = data.rel || "";
-
-  const contact = document.createElement("input");
-  contact.dataset.field = "contact";
-  contact.placeholder = t.exec_contact;
-  contact.value = data.contact || "";
-
-  const remove = makeRemoveButton();
-
-  const notes = document.createElement("textarea");
-  notes.dataset.field = "notes";
-  notes.placeholder = t.exec_notes;
-  notes.value = data.notes || "";
-
-  grid.appendChild(name);
-  grid.appendChild(rel);
-  grid.appendChild(contact);
   grid.appendChild(remove);
-
   card.appendChild(grid);
+
+  const notes=document.createElement("textarea");
+  notes.placeholder="Notes";
   card.appendChild(notes);
 
-  wireInputsToSave(card);
-  return card;
-}
-
-function makeChildCard(data={}, lang="en"){
-  const t = I18N[lang] || I18N.en;
-
-  const card = document.createElement("div");
-  card.className = "repeat-card";
-
-  const grid = document.createElement("div");
-  grid.className = "repeat-grid";
-
-  const name = document.createElement("input");
-  name.dataset.field = "name";
-  name.placeholder = t.child_name;
-  name.value = data.name || "";
-
-  const dob = document.createElement("input");
-  dob.dataset.field = "dob";
-  dob.placeholder = t.child_dob;
-  dob.value = data.dob || "";
-
-  const notesSmall = document.createElement("input");
-  notesSmall.dataset.field = "notesSmall";
-  notesSmall.placeholder = t.child_notes;
-  notesSmall.value = data.notesSmall || "";
-
-  const remove = makeRemoveButton();
-
-  const notes = document.createElement("textarea");
-  notes.dataset.field = "notes";
-  notes.placeholder = t.child_notes;
-  notes.value = data.notes || "";
-
-  grid.appendChild(name);
-  grid.appendChild(dob);
-  grid.appendChild(notesSmall);
-  grid.appendChild(remove);
-
-  card.appendChild(grid);
-  card.appendChild(notes);
-
-  wireInputsToSave(card);
-  return card;
-}
-
-function makeAssetCard(data={}, lang="en"){
-  const t = I18N[lang] || I18N.en;
-
-  const card = document.createElement("div");
-  card.className = "repeat-card";
-
-  const grid = document.createElement("div");
-  grid.className = "repeat-grid";
-
-  const type = document.createElement("input");
-  type.dataset.field = "type";
-  type.placeholder = t.asset_type;
-  type.value = data.type || "";
-
-  const where = document.createElement("input");
-  where.dataset.field = "where";
-  where.placeholder = t.asset_where;
-  where.value = data.where || "";
-
-  const owner = document.createElement("input");
-  owner.dataset.field = "owner";
-  owner.placeholder = t.asset_owner;
-  owner.value = data.owner || "";
-
-  const remove = makeRemoveButton();
-
-  const notes = document.createElement("textarea");
-  notes.dataset.field = "notes";
-  notes.placeholder = t.asset_notes;
-  notes.value = data.notes || "";
-
-  grid.appendChild(type);
-  grid.appendChild(where);
-  grid.appendChild(owner);
-  grid.appendChild(remove);
-
-  card.appendChild(grid);
-  card.appendChild(notes);
-
-  wireInputsToSave(card);
-  return card;
-}
-
-/* Collect and set repeat blocks */
-function collectRepeat(wrapId){
-  const wrap = document.getElementById(wrapId);
-  const rows = [];
-  wrap.querySelectorAll(".repeat-card").forEach(card=>{
-    const obj = {};
-    card.querySelectorAll("[data-field]").forEach(inp=>{
-      obj[inp.dataset.field] = inp.value || "";
-    });
-    // keep only if any value typed
-    const any = Object.values(obj).some(v => String(v).trim() !== "");
-    if(any) rows.push(obj);
-  });
-  return rows;
-}
-
-function setRepeat(wrapId, rows, maker){
-  const wrap = document.getElementById(wrapId);
-  wrap.innerHTML = "";
-  const lang = langSel.value || "en";
-  const safe = Array.isArray(rows) && rows.length ? rows : [{}];
-  safe.forEach(r=>{
-    wrap.appendChild(maker(r, lang));
-  });
-}
-
-/* Buttons */
-function addExecutor(){
-  document.getElementById("executorsWrap").appendChild(makeExecutorCard({}, langSel.value || "en"));
-  saveAll();
-}
-function addChild(){
-  document.getElementById("childrenWrap").appendChild(makeChildCard({}, langSel.value || "en"));
-  saveAll();
-}
-function addAsset(){
-  document.getElementById("assetsWrap").appendChild(makeAssetCard({}, langSel.value || "en"));
-  saveAll();
-}
-
-/* =========================
-   EVENTS: country + language
-========================= */
-countrySel.addEventListener("change", ()=>{
-  const country = countrySel.value;
-  const lang = COUNTRY_LANG[country] || "en";
-  langSel.value = lang;
-  applyLanguage(lang);
-  saveAll();
-});
-
-langSel.addEventListener("change", ()=>{
-  applyLanguage(langSel.value || "en");
-  saveAll();
-});
-
-/* Save on normal fields */
-document.querySelectorAll("[data-key]").forEach(inp=>{
-  inp.addEventListener("input", saveAll);
-});
-
-/* =========================
-   INIT
-========================= */
-initCountries();
-initLanguages();
-
-if(!loadAll()){
-  countrySel.value = "Canada";
-  langSel.value = "en";
-  applyLanguage("en");
-
-  // seed one empty card each
-  addExecutor();
-  addChild();
-  addAsset();
-
-  saveAll();
-} else {
-  // ensure cards exist if loaded empty
-  if(document.getElementById("executorsWrap").children.length === 0) addExecutor();
-  if(document.getElementById("childrenWrap").children.length === 0) addChild();
-  if(document.getElementById("assetsWrap").children.length === 0) addAsset();
+  wrap.appendChild(card);
 }
 </script>
+
+<!-- EXECUTORS -->
+<section>
+  <div class="section-header" onclick="toggle(this)">Executors <span>▸</span></div>
+  <div class="section-content">
+    <div id="executors"></div>
+    <button class="addBtn" onclick="addRow('executors',['Name','Relationship','Contact'])">➕ Add Another Executor</button>
+  </div>
+</section>
+
+<!-- CHILDREN -->
+<section>
+  <div class="section-header" onclick="toggle(this)">Children <span>▸</span></div>
+  <div class="section-content">
+    <div id="children"></div>
+    <button class="addBtn" onclick="addRow('children',['Name','DOB','Relationship'])">➕ Add Another Child</button>
+  </div>
+</section>
+
+<!-- ASSETS -->
+<section>
+  <div class="section-header" onclick="toggle(this)">Assets <span>▸</span></div>
+  <div class="section-content">
+    <div id="assets"></div>
+    <button class="addBtn" onclick="addRow('assets',['Type','Location','Owner'])">➕ Add Another Asset</button>
+  </div>
+</section>
+
+<!-- FUNERAL -->
+<section>
+  <div class="section-header" onclick="toggle(this)">Funeral Wishes <span>▸</span></div>
+  <div class="section-content">
+    <div id="funeral"></div>
+    <button class="addBtn" onclick="addRow('funeral',['Burial/Cremation','Organ Donation','Service'])">➕ Add Another Wish</button>
+  </div>
+</section>
+
+<!-- TAX -->
+<section>
+  <div class="section-header" onclick="toggle(this)">Tax / Residency <span>▸</span></div>
+  <div class="section-content">
+    <div id="tax"></div>
+    <button class="addBtn" onclick="addRow('tax',['Primary Residence','Secondary Residence','Foreign Assets'])">➕ Add Another Entry</button>
+  </div>
+</section>
+
+<!-- PETS -->
+<section>
+  <div class="section-header" onclick="toggle(this)">Pets <span>▸</span></div>
+  <div class="section-content">
+    <div id="pets"></div>
+    <button class="addBtn" onclick="addRow('pets',['Pet Name','Caregiver','Funds Set Aside'])">➕ Add Another Pet</button>
+  </div>
+</section>
+
+<!-- DEBTS -->
+<section>
+  <div class="section-header" onclick="toggle(this)">Debts <span>▸</span></div>
+  <div class="section-content">
+    <div id="debts"></div>
+    <button class="addBtn" onclick="addRow('debts',['Creditor','Amount','Due'])">➕ Add Another Debt</button>
+  </div>
+</section>
+
+<!-- DIGITAL -->
+<section>
+  <div class="section-header" onclick="toggle(this)">Digital Assets <span>▸</span></div>
+  <div class="section-content">
+    <div id="digital"></div>
+    <button class="addBtn" onclick="addRow('digital',['Account','Username','Action'])">➕ Add Another Account</button>
+  </div>
+</section>
+
+</div>
 </body>
 </html>
