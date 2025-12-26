@@ -12,29 +12,26 @@ body{
   background:radial-gradient(circle at top,#4a1f26,#2b1417);
 }
 .container{
-  max-width:900px;
+  max-width:1200px;
   margin:40px auto;
   padding:40px;
   background:#fff;
   border-radius:18px;
 }
-h1{text-align:center;margin-bottom:5px}
+h1{text-align:center}
 .subtitle{text-align:center;color:#555;margin-bottom:20px}
 
 .topbar,.toolbar{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
+  display:block;
   margin-bottom:15px;
 }
-
 select,input,textarea,button{
+  width:100%;
   padding:12px;
+  margin-bottom:10px;
   border-radius:8px;
   border:1px solid #ccc;
   font-family:inherit;
-  font-size:16px;
-  width:100%;
 }
 button{cursor:pointer}
 
@@ -54,7 +51,6 @@ section{
   padding:14px;
   background:#f3f4f6;
   cursor:pointer;
-  font-weight:bold;
 }
 .section-content{
   padding:14px;
@@ -62,19 +58,27 @@ section{
 }
 section.open .section-content{display:block}
 
-.row{
-  border:1px solid #ccc;
+.help{
+  font-size:14px;
+  background:#f9fafb;
+  padding:10px;
+  border-left:4px solid #999;
+  margin-bottom:10px;
+}
+
+.row-block{
+  border:1px solid #ddd;
   padding:12px;
   border-radius:8px;
   margin-bottom:10px;
 }
 
-.add-btn{
-  background:#eee;
-}
+textarea{min-height:140px}
+.large{min-height:260px}
 
 @media print{
   .toolbar,.topbar{display:none}
+  section{page-break-inside:avoid}
 }
 </style>
 </head>
@@ -82,244 +86,177 @@ section.open .section-content{display:block}
 <body>
 <div class="container">
 
-<h1 id="ui_title"></h1>
-<div class="subtitle" id="ui_subtitle"></div>
+<h1 id="title">My Estate Plan</h1>
+<div class="subtitle" id="subtitle">Personal planning record · Not a legal document</div>
 
-<!-- TOP BAR -->
 <div class="topbar">
   <select id="country">
     <option value="Canada">Canada</option>
     <option value="United States">United States</option>
     <option value="France">France</option>
-    <option value="Spain">Spain</option>
     <option value="Germany">Germany</option>
-    <option value="Portugal">Portugal</option>
-    <option value="Brazil">Brazil</option>
+    <option value="Italy">Italy</option>
+    <option value="Spain">Spain</option>
+    <option value="China">China</option>
+    <option value="Japan">Japan</option>
+    <option value="South Korea">South Korea</option>
   </select>
 
   <select id="language">
-    <option value="en">English</option>
-    <option value="fr">Français</option>
-    <option value="es">Español</option>
-    <option value="de">Deutsch</option>
-    <option value="pt">Português</option>
+    <option value="EN">English</option>
+    <option value="FR">Français</option>
+    <option value="ES">Español</option>
+    <option value="DE">Deutsch</option>
+    <option value="IT">Italiano</option>
+    <option value="PT">Português</option>
+    <option value="ZH">中文</option>
+    <option value="JA">日本語</option>
+    <option value="KO">한국어</option>
   </select>
-
-  <input value="Version 1.0" disabled>
 </div>
 
-<!-- TOOLBAR -->
 <div class="toolbar">
-  <button onclick="openAll()" id="btnOpen"></button>
-  <button onclick="closeAll()" id="btnClose"></button>
-  <button onclick="window.print()" id="btnPrint"></button>
+  <button onclick="openAll()">Open All</button>
+  <button onclick="closeAll()">Close All</button>
+  <button onclick="window.print()">Print / Save PDF</button>
 </div>
 
-<div class="notice" id="ui_notice"></div>
+<div class="notice" id="notice">
+  Information is stored only in your browser.
+</div>
 
 <!-- PERSONAL -->
 <section class="open">
-  <div class="section-header" onclick="toggle(this)" id="h_personal"></div>
+  <div class="section-header" onclick="toggle(this)" id="personalHeader">Personal Information</div>
   <div class="section-content">
-    <input id="p_name">
-    <input id="p_dob">
-    <input id="p_address">
-    <input id="p_phone">
-    <input id="p_email">
+    <input id="p_name" placeholder="Full legal name">
+    <input id="p_dob" placeholder="Date of birth">
+    <input id="p_address" placeholder="Address">
+    <input id="p_phone" placeholder="Phone">
+    <input id="p_email" placeholder="Email">
   </div>
 </section>
 
 <!-- EXECUTORS -->
 <section>
-  <div class="section-header" onclick="toggle(this)" id="h_executors"></div>
+  <div class="section-header" onclick="toggle(this)" id="executorHeader">Executors</div>
   <div class="section-content">
+    <div class="help" id="executorHelp">People responsible for carrying out your estate.</div>
     <div id="executors"></div>
-    <button class="add-btn" onclick="addRow('executors')" id="btnAddExecutor"></button>
+    <button onclick="addExecutor()">➕ Add Another Executor</button>
   </div>
 </section>
 
 <!-- CHILDREN -->
 <section>
-  <div class="section-header" onclick="toggle(this)" id="h_children"></div>
+  <div class="section-header" onclick="toggle(this)" id="childrenHeader">Children</div>
   <div class="section-content">
     <div id="children"></div>
-    <button class="add-btn" onclick="addRow('children')" id="btnAddChild"></button>
+    <button onclick="addChild()">➕ Add Another Child</button>
   </div>
 </section>
 
 <!-- ASSETS -->
 <section>
-  <div class="section-header" onclick="toggle(this)" id="h_assets"></div>
+  <div class="section-header" onclick="toggle(this)" id="assetsHeader">Assets</div>
   <div class="section-content">
     <div id="assets"></div>
-    <button class="add-btn" onclick="addRow('assets')" id="btnAddAsset"></button>
+    <button onclick="addAsset()">➕ Add Another Asset</button>
+  </div>
+</section>
+
+<!-- FIRST STEPS -->
+<section>
+  <div class="section-header" onclick="toggle(this)" id="firstHeader">What To Do First</div>
+  <div class="section-content">
+    <textarea class="large" id="firstSteps" placeholder="Immediate instructions for family"></textarea>
   </div>
 </section>
 
 </div>
 
 <script>
-/* ===== TEXT ===== */
-const TEXT={
-en:{
- title:"My Estate Plan",
- subtitle:"Personal planning record · Not a legal document",
- notice:"Information is stored only in your browser.",
- open:"Open All", close:"Close All", print:"Print / Save PDF",
- personal:"Personal Information",
- executors:"Executors",
- children:"Children",
- assets:"Assets",
- addExecutor:"➕ Add Executor",
- addChild:"➕ Add Child",
- addAsset:"➕ Add Asset",
- p_name:"Full legal name",
- p_dob:"Date of birth",
- p_address:"Address",
- p_phone:"Phone",
- p_email:"Email",
- row:"Details"
-},
-fr:{
- title:"Mon plan successoral",
- subtitle:"Dossier personnel · Non juridique",
- notice:"Les données sont stockées uniquement dans votre navigateur.",
- open:"Tout ouvrir", close:"Tout fermer", print:"Imprimer / PDF",
- personal:"Informations personnelles",
- executors:"Exécuteurs",
- children:"Enfants",
- assets:"Biens",
- addExecutor:"➕ Ajouter un exécuteur",
- addChild:"➕ Ajouter un enfant",
- addAsset:"➕ Ajouter un bien",
- p_name:"Nom légal complet",
- p_dob:"Date de naissance",
- p_address:"Adresse",
- p_phone:"Téléphone",
- p_email:"Courriel",
- row:"Détails"
-},
-es:{
- title:"Mi plan patrimonial",
- subtitle:"Registro personal · No legal",
- notice:"Los datos se guardan solo en el navegador.",
- open:"Abrir todo", close:"Cerrar todo", print:"Imprimir / PDF",
- personal:"Información personal",
- executors:"Ejecutores",
- children:"Hijos",
- assets:"Activos",
- addExecutor:"➕ Agregar ejecutor",
- addChild:"➕ Agregar hijo",
- addAsset:"➕ Agregar activo",
- p_name:"Nombre legal completo",
- p_dob:"Fecha de nacimiento",
- p_address:"Dirección",
- p_phone:"Teléfono",
- p_email:"Correo electrónico",
- row:"Detalles"
-},
-de:{
- title:"Mein Nachlassplan",
- subtitle:"Persönlicher Plan · Kein Rechtsdokument",
- notice:"Daten werden nur lokal im Browser gespeichert.",
- open:"Alles öffnen", close:"Alles schließen", print:"Drucken / PDF",
- personal:"Persönliche Angaben",
- executors:"Testamentsvollstrecker",
- children:"Kinder",
- assets:"Vermögen",
- addExecutor:"➕ Vollstrecker hinzufügen",
- addChild:"➕ Kind hinzufügen",
- addAsset:"➕ Vermögen hinzufügen",
- p_name:"Vollständiger Name",
- p_dob:"Geburtsdatum",
- p_address:"Adresse",
- p_phone:"Telefon",
- p_email:"E-Mail",
- row:"Details"
-},
-pt:{
- title:"Meu plano sucessório",
- subtitle:"Registro pessoal · Não legal",
- notice:"Os dados são salvos apenas no navegador.",
- open:"Abrir tudo", close:"Fechar tudo", print:"Imprimir / PDF",
- personal:"Informações pessoais",
- executors:"Executores",
- children:"Filhos",
- assets:"Ativos",
- addExecutor:"➕ Adicionar executor",
- addChild:"➕ Adicionar filho",
- addAsset:"➕ Adicionar ativo",
- p_name:"Nome legal completo",
- p_dob:"Data de nascimento",
- p_address:"Endereço",
- p_phone:"Telefone",
- p_email:"Email",
- row:"Detalhes"
-}
-};
-
-/* ===== LANGUAGE ===== */
-function applyLanguage(lang){
- const t=TEXT[lang];
- document.getElementById("ui_title").textContent=t.title;
- document.getElementById("ui_subtitle").textContent=t.subtitle;
- document.getElementById("ui_notice").textContent=t.notice;
- document.getElementById("btnOpen").textContent=t.open;
- document.getElementById("btnClose").textContent=t.close;
- document.getElementById("btnPrint").textContent=t.print;
- document.getElementById("h_personal").textContent=t.personal;
- document.getElementById("h_executors").textContent=t.executors;
- document.getElementById("h_children").textContent=t.children;
- document.getElementById("h_assets").textContent=t.assets;
- document.getElementById("btnAddExecutor").textContent=t.addExecutor;
- document.getElementById("btnAddChild").textContent=t.addChild;
- document.getElementById("btnAddAsset").textContent=t.addAsset;
-
- document.getElementById("p_name").placeholder=t.p_name;
- document.getElementById("p_dob").placeholder=t.p_dob;
- document.getElementById("p_address").placeholder=t.p_address;
- document.getElementById("p_phone").placeholder=t.p_phone;
- document.getElementById("p_email").placeholder=t.p_email;
-
- document.querySelectorAll(".row textarea").forEach(txa=>txa.placeholder=t.row);
-}
-
-/* ===== COUNTRY → LANGUAGE ===== */
-const countryLang={
- "Canada":"en","United States":"en",
- "France":"fr","Spain":"es",
- "Germany":"de","Portugal":"pt","Brazil":"pt"
-};
-
-document.getElementById("country").onchange=e=>{
- const lang=countryLang[e.target.value]||"en";
- document.getElementById("language").value=lang;
- applyLanguage(lang);
-};
-
-document.getElementById("language").onchange=e=>{
- applyLanguage(e.target.value);
-};
-
-/* ===== ROWS ===== */
-function addRow(id){
- const div=document.createElement("div");
- div.className="row";
- div.innerHTML="<textarea></textarea>";
- document.getElementById(id).appendChild(div);
- applyLanguage(document.getElementById("language").value);
-}
-
-/* ===== TOGGLES ===== */
+/* TOGGLE */
 function toggle(h){h.parentElement.classList.toggle("open")}
 function openAll(){document.querySelectorAll("section").forEach(s=>s.classList.add("open"))}
 function closeAll(){document.querySelectorAll("section").forEach(s=>s.classList.remove("open"))}
 
+/* ADD ROWS */
+function addExecutor(){
+  document.getElementById("executors").insertAdjacentHTML("beforeend",`
+    <div class="row-block">
+      <input placeholder="Executor name">
+      <input placeholder="Relationship">
+      <input placeholder="Contact information">
+      <textarea placeholder="Compensation preference"></textarea>
+    </div>
+  `);
+}
+function addChild(){
+  document.getElementById("children").insertAdjacentHTML("beforeend",`
+    <div class="row-block">
+      <input placeholder="Child full name">
+      <input placeholder="Date of birth">
+      <input placeholder="Notes / relationship">
+    </div>
+  `);
+}
+function addAsset(){
+  document.getElementById("assets").insertAdjacentHTML("beforeend",`
+    <div class="row-block">
+      <input placeholder="Asset name">
+      <input placeholder="Location / account number">
+      <textarea placeholder="Notes"></textarea>
+    </div>
+  `);
+}
+
+/* LANGUAGE DATA */
+const TEXT={
+EN:{title:"My Estate Plan",personal:"Personal Information",executors:"Executors",children:"Children",assets:"Assets",first:"What To Do First"},
+FR:{title:"Plan successoral",personal:"Informations personnelles",executors:"Exécuteurs",children:"Enfants",assets:"Actifs",first:"Que faire en premier"},
+ES:{title:"Plan patrimonial",personal:"Información personal",executors:"Albaceas",children:"Hijos",assets:"Activos",first:"Qué hacer primero"},
+DE:{title:"Nachlassplan",personal:"Persönliche Daten",executors:"Testamentsvollstrecker",children:"Kinder",assets:"Vermögen",first:"Was zuerst zu tun ist"},
+IT:{title:"Piano patrimoniale",personal:"Dati personali",executors:"Esecutori",children:"Figli",assets:"Beni",first:"Cosa fare prima"},
+PT:{title:"Plano patrimonial",personal:"Dados pessoais",executors:"Executores",children:"Filhos",assets:"Bens",first:"O que fazer primeiro"},
+ZH:{title:"遗产规划",personal:"个人信息",executors:"执行人",children:"子女",assets:"资产",first:"首先要做的事"},
+JA:{title:"遺産計画",personal:"個人情報",executors:"遺言執行者",children:"子供",assets:"資産",first:"最初に行うこと"},
+KO:{title:"유산 계획",personal:"개인 정보",executors:"집행자",children:"자녀",assets:"자산",first:"가장 먼저 할 일"}
+};
+
+/* APPLY LANGUAGE */
+function applyLanguage(lang){
+  const t=TEXT[lang];
+  document.getElementById("title").textContent=t.title;
+  document.getElementById("personalHeader").textContent=t.personal;
+  document.getElementById("executorHeader").textContent=t.executors;
+  document.getElementById("childrenHeader").textContent=t.children;
+  document.getElementById("assetsHeader").textContent=t.assets;
+  document.getElementById("firstHeader").textContent=t.first;
+}
+
+/* COUNTRY → LANGUAGE */
+document.getElementById("country").addEventListener("change",e=>{
+  const map={
+    Canada:"EN","United States":"EN",
+    France:"FR",Germany:"DE",Italy:"IT",Spain:"ES",
+    China:"ZH",Japan:"JA","South Korea":"KO"
+  };
+  const lang=map[e.target.value]||"EN";
+  document.getElementById("language").value=lang;
+  applyLanguage(lang);
+});
+
+/* MANUAL LANGUAGE */
+document.getElementById("language").addEventListener("change",e=>{
+  applyLanguage(e.target.value);
+});
+
 /* INIT */
-addRow("executors");
-addRow("children");
-addRow("assets");
-applyLanguage("en");
+addExecutor();
+addChild();
+addAsset();
+applyLanguage("EN");
 </script>
 
 </body>
