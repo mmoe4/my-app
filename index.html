@@ -12,68 +12,101 @@ body{
   background:radial-gradient(circle at top,#4a1f26,#2b1417);
 }
 .container{
-  max-width:1100px;
+  max-width:1200px;
   margin:40px auto;
   padding:40px;
   background:#fff;
   border-radius:18px;
 }
+
 h1{text-align:center;margin:0}
 .subtitle{text-align:center;color:#555;margin-bottom:20px}
 
 .topbar,.toolbar{
   display:grid;
-  gap:10px;
+  gap:12px;
   margin-bottom:14px;
 }
 .topbar{grid-template-columns:2fr 1fr 1fr}
-.toolbar{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+.toolbar{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
 
 select,input,textarea,button{
-  padding:12px;
-  border-radius:8px;
+  width:100%;
+  padding:14px;
+  border-radius:10px;
   border:1px solid #ccc;
   font-family:inherit;
-  font-size:15px;
+  font-size:16px;
 }
-textarea{min-height:140px}
+
+textarea{
+  min-height:140px;
+  resize:vertical;
+}
+
 .large{min-height:260px}
-button{cursor:pointer}
+
+button{
+  cursor:pointer;
+  background:#f3f4f6;
+}
+button:hover{background:#e5e7eb}
 
 .notice{
   background:#f9fafb;
   padding:12px;
   border-radius:8px;
   font-size:14px;
+  margin-bottom:16px;
 }
 
 section{
   border:1px solid #ddd;
   border-radius:12px;
-  margin-top:18px;
+  margin-top:20px;
 }
 .section-header{
-  padding:14px;
+  padding:16px;
   background:#f3f4f6;
   font-weight:bold;
   cursor:pointer;
 }
 .section-content{
-  padding:14px;
+  padding:16px;
   display:none;
 }
 section.open .section-content{display:block}
 
-.card{
-  border:1px solid #ddd;
-  border-radius:10px;
+.help{
+  font-size:14px;
+  background:#f9fafb;
   padding:12px;
+  border-left:4px solid #999;
+  margin-bottom:12px;
+}
+
+.repeat-card{
+  border:1px solid #e5e7eb;
+  border-radius:12px;
+  padding:16px;
+  margin-bottom:16px;
+}
+
+.row{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:12px;
   margin-bottom:12px;
 }
 
 .add-btn{
-  background:#eef4ff;
-  border:1px solid #8aa8ff;
+  margin-top:10px;
+  font-weight:bold;
+}
+
+.remove-btn{
+  background:#fee2e2;
+  border-color:#fca5a5;
 }
 
 @media print{
@@ -86,192 +119,172 @@ section.open .section-content{display:block}
 <body>
 <div class="container">
 
-<h1 id="title"></h1>
-<div class="subtitle" id="subtitle"></div>
+<h1 id="title">My Estate Plan</h1>
+<div class="subtitle" id="subtitle">Personal planning record · Not a legal document</div>
 
 <div class="topbar">
-  <select id="countrySelect"></select>
-  <select id="languageSelect"></select>
+  <select id="country"></select>
+  <select id="language" disabled></select>
   <input value="Version 1.0" disabled>
 </div>
 
 <div class="toolbar">
-  <button id="openBtn" onclick="openAll()"></button>
-  <button id="closeBtn" onclick="closeAll()"></button>
-  <button id="printBtn" onclick="window.print()"></button>
+  <button onclick="openAll()">Open All</button>
+  <button onclick="closeAll()">Close All</button>
+  <button onclick="window.print()">Print / Save PDF</button>
 </div>
 
-<div class="notice" id="notice"></div>
+<div class="notice">Information is stored only in your browser.</div>
 
 <!-- PERSONAL -->
 <section class="open">
-<div class="section-header" id="personalHeader" onclick="toggle(this)"></div>
-<div class="section-content">
-<input id="nameInput">
-<input id="dobInput">
-<input id="addressInput">
-<input id="phoneInput">
-<input id="emailInput">
-</div>
+  <div class="section-header" onclick="toggle(this)">Personal Information</div>
+  <div class="section-content">
+    <input placeholder="Full legal name">
+    <input placeholder="Date of birth">
+    <input placeholder="Address">
+    <input placeholder="Phone">
+    <input placeholder="Email">
+  </div>
 </section>
 
 <!-- EXECUTORS -->
 <section>
-<div class="section-header" id="executorsHeader" onclick="toggle(this)"></div>
-<div class="section-content">
-<div id="executors"></div>
-<button class="add-btn" onclick="addRow('executors')">➕ Add</button>
-</div>
+  <div class="section-header" onclick="toggle(this)">Executors</div>
+  <div class="section-content">
+    <div id="executors"></div>
+    <button class="add-btn" onclick="addExecutor()">➕ Add Another Executor</button>
+  </div>
 </section>
 
 <!-- CHILDREN -->
 <section>
-<div class="section-header" id="childrenHeader" onclick="toggle(this)"></div>
-<div class="section-content">
-<div id="children"></div>
-<button class="add-btn" onclick="addRow('children')">➕ Add</button>
-</div>
+  <div class="section-header" onclick="toggle(this)">Children</div>
+  <div class="section-content">
+    <div id="children"></div>
+    <button class="add-btn" onclick="addChild()">➕ Add Another Child</button>
+  </div>
 </section>
 
 <!-- ASSETS -->
 <section>
-<div class="section-header" id="assetsHeader" onclick="toggle(this)"></div>
-<div class="section-content">
-<div id="assets"></div>
-<button class="add-btn" onclick="addRow('assets')">➕ Add</button>
-</div>
+  <div class="section-header" onclick="toggle(this)">Assets</div>
+  <div class="section-content">
+    <div id="assets"></div>
+    <button class="add-btn" onclick="addAsset()">➕ Add Another Asset</button>
+  </div>
 </section>
 
 <!-- FUNERAL -->
 <section>
-<div class="section-header" id="funeralHeader" onclick="toggle(this)"></div>
-<div class="section-content">
-<textarea class="large" id="funeralInput"></textarea>
-</div>
+  <div class="section-header" onclick="toggle(this)">Funeral Wishes</div>
+  <div class="section-content">
+    <div class="repeat-card">
+      <textarea class="large" placeholder="Burial or cremation"></textarea>
+      <textarea class="large" placeholder="Organ donation"></textarea>
+      <textarea class="large" placeholder="Service wishes"></textarea>
+    </div>
+  </div>
 </section>
 
-<!-- FIRST -->
+<!-- WHAT TO DO FIRST -->
 <section>
-<div class="section-header" id="firstHeader" onclick="toggle(this)"></div>
-<div class="section-content">
-<textarea class="large" id="firstInput"></textarea>
-</div>
+  <div class="section-header" onclick="toggle(this)">What To Do First</div>
+  <div class="section-content">
+    <textarea class="large" placeholder="Immediate instructions for family"></textarea>
+  </div>
+</section>
+
+<!-- EXTRA NOTES -->
+<section>
+  <div class="section-header" onclick="toggle(this)">Additional Notes</div>
+  <div class="section-content">
+    <textarea class="large" placeholder="Any other important notes, explanations, or reminders"></textarea>
+  </div>
 </section>
 
 </div>
-
-<template id="rowTemplate">
-<div class="card">
-<input placeholder="Title / Name">
-<textarea placeholder="Details"></textarea>
-<button onclick="this.parentElement.remove()">Remove</button>
-</div>
-</template>
 
 <script>
 function toggle(h){h.parentElement.classList.toggle("open")}
 function openAll(){document.querySelectorAll("section").forEach(s=>s.classList.add("open"))}
 function closeAll(){document.querySelectorAll("section").forEach(s=>s.classList.remove("open"))}
-function addRow(id){
-  document.getElementById(id).appendChild(
-    document.getElementById("rowTemplate").content.cloneNode(true)
-  );
-}
 
-/* COUNTRY → LANGUAGE */
-const COUNTRY_LANG={
-  "Canada":"en","United States":"en","France":"fr","Germany":"de","Spain":"es",
-  "Russia":"ru","Ukraine":"uk",
-  "Japan":"ja","China (Simplified)":"zh-CN","China (Traditional)":"zh-TW","South Korea":"ko",
-  "India (Hindi)":"hi","India (Tamil)":"ta","India (Bengali)":"bn","India (Urdu)":"ur"
-};
-const RTL=["ur"];
-
-/* FULL TRANSLATIONS */
-const I18N={
-en:{
- title:"My Estate Plan",
- subtitle:"Personal planning record · Not a legal document",
- notice:"Information is stored only in your browser.",
- open:"Open All",close:"Close All",print:"Print / Save PDF",
- personal:"Personal Information",
- name:"Full legal name",dob:"Date of birth",addr:"Address",phone:"Phone",email:"Email",
- executors:"Executors",children:"Children",assets:"Assets",
- funeral:"Funeral Wishes",first:"What To Do First",
- funeralPH:"Burial, cremation, service wishes",
- firstPH:"Immediate instructions for family"
-},
-ja:{
- title:"相続計画",
- subtitle:"個人用記録 · 法的文書ではありません",
- notice:"情報はブラウザ内にのみ保存されます。",
- open:"すべて開く",close:"すべて閉じる",print:"印刷 / PDF保存",
- personal:"個人情報",
- name:"氏名",dob:"生年月日",addr:"住所",phone:"電話番号",email:"メール",
- executors:"遺言執行者",children:"子供",assets:"資産",
- funeral:"葬儀の希望",first:"最初に行うこと",
- funeralPH:"葬儀・火葬・式の希望",
- firstPH:"家族への最初の指示"
-},
-ur:{
- title:"وراثتی منصوبہ",
- subtitle:"ذاتی ریکارڈ · قانونی دستاویز نہیں",
- notice:"معلومات صرف براؤزر میں محفوظ ہوتی ہے۔",
- open:"سب کھولیں",close:"سب بند کریں",print:"پرنٹ / پی ڈی ایف",
- personal:"ذاتی معلومات",
- name:"پورا نام",dob:"تاریخ پیدائش",addr:"پتہ",phone:"فون",email:"ای میل",
- executors:"منتظمین",children:"بچے",assets:"اثاثے",
- funeral:"تدفین کی خواہشات",first:"سب سے پہلے کیا کریں",
- funeralPH:"تدفین یا رسومات",
- firstPH:"خاندان کے لیے فوری ہدایات"
-}
+/* ---------- COUNTRY → LANGUAGE ---------- */
+const MAP={
+  "Canada":"English",
+  "United States":"English",
+  "France":"Français",
+  "Germany":"Deutsch",
+  "Spain":"Español",
+  "Russia":"Русский",
+  "Ukraine":"Українська",
+  "Japan":"日本語",
+  "China (Simplified)":"中文 (简体)",
+  "China (Traditional)":"中文 (繁體)",
+  "South Korea":"한국어",
+  "India":"हिन्दी"
 };
 
-/* INIT SELECTS */
-const countrySel=document.getElementById("countrySelect");
-const langSel=document.getElementById("languageSelect");
+const country=document.getElementById("country");
+const language=document.getElementById("language");
 
-Object.keys(COUNTRY_LANG).forEach(c=>countrySel.add(new Option(c,c)));
-Object.keys(I18N).forEach(l=>langSel.add(new Option(l,l)));
+Object.keys(MAP).forEach(c=>{
+  country.add(new Option(c,c));
+});
 
-function applyLanguage(l){
-  const t=I18N[l];
-  document.body.dir=RTL.includes(l)?"rtl":"ltr";
+country.onchange=()=>{
+  language.innerHTML="";
+  language.add(new Option(MAP[country.value],MAP[country.value]));
+};
 
-  title.textContent=t.title;
-  subtitle.textContent=t.subtitle;
-  notice.textContent=t.notice;
-  openBtn.textContent=t.open;
-  closeBtn.textContent=t.close;
-  printBtn.textContent=t.print;
+country.value="Canada";
+country.onchange();
 
-  personalHeader.textContent=t.personal;
-  executorsHeader.textContent=t.executors;
-  childrenHeader.textContent=t.children;
-  assetsHeader.textContent=t.assets;
-  funeralHeader.textContent=t.funeral;
-  firstHeader.textContent=t.first;
-
-  nameInput.placeholder=t.name;
-  dobInput.placeholder=t.dob;
-  addressInput.placeholder=t.addr;
-  phoneInput.placeholder=t.phone;
-  emailInput.placeholder=t.email;
-  funeralInput.placeholder=t.funeralPH;
-  firstInput.placeholder=t.firstPH;
+/* ---------- REPEATABLE SECTIONS ---------- */
+function card(html){
+  const d=document.createElement("div");
+  d.className="repeat-card";
+  d.innerHTML=html+`<button class="remove-btn" onclick="this.parentElement.remove()">Remove</button>`;
+  return d;
 }
 
-countrySel.onchange=()=>{
-  const l=COUNTRY_LANG[countrySel.value];
-  langSel.value=l;
-  applyLanguage(l);
-};
-langSel.onchange=()=>applyLanguage(langSel.value);
+function addExecutor(){
+  document.getElementById("executors").appendChild(card(`
+    <div class="row">
+      <input placeholder="Executor name">
+      <input placeholder="Relationship">
+      <input placeholder="Contact info">
+    </div>
+    <textarea placeholder="Executor instructions"></textarea>
+  `));
+}
 
-/* DEFAULT */
-countrySel.value="Canada";
-langSel.value="en";
-applyLanguage("en");
+function addChild(){
+  document.getElementById("children").appendChild(card(`
+    <div class="row">
+      <input placeholder="Child name">
+      <input placeholder="Date of birth">
+      <input placeholder="Notes">
+    </div>
+  `));
+}
+
+function addAsset(){
+  document.getElementById("assets").appendChild(card(`
+    <div class="row">
+      <input placeholder="Asset type">
+      <input placeholder="Location / account">
+      <input placeholder="Ownership">
+    </div>
+    <textarea placeholder="Notes"></textarea>
+  `));
+}
+
+/* Defaults */
+addExecutor();
+addChild();
+addAsset();
 </script>
 
 </body>
