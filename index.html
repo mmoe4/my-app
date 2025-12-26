@@ -67,8 +67,12 @@ section.open .section-content{display:block}
 .card{
   border:1px solid #ddd;
   border-radius:10px;
-  padding:14px;
+  padding:12px;
   margin-bottom:12px;
+}
+.card button{
+  background:#ffecec;
+  border:1px solid #ff9a9a;
 }
 
 .add-btn{
@@ -76,14 +80,10 @@ section.open .section-content{display:block}
   border:1px solid #8aa8ff;
 }
 
-.remove-btn{
-  background:#fee2e2;
-  border:1px solid #fca5a5;
-}
-
 @media print{
   .toolbar,.topbar{display:none}
   body{background:#fff}
+  section{page-break-inside:avoid}
 }
 </style>
 </head>
@@ -91,8 +91,8 @@ section.open .section-content{display:block}
 <body>
 <div class="container">
 
-<h1 id="ui_title"></h1>
-<div class="subtitle" id="ui_subtitle"></div>
+<h1 id="title">My Estate Plan</h1>
+<div class="subtitle" id="subtitle">Personal planning record · Not a legal document</div>
 
 <div class="topbar">
   <select id="countrySelect"></select>
@@ -101,77 +101,105 @@ section.open .section-content{display:block}
 </div>
 
 <div class="toolbar">
-  <button id="btnOpen"></button>
-  <button id="btnClose"></button>
-  <button onclick="window.print()" id="btnPrint"></button>
+  <button onclick="openAll()">Open All</button>
+  <button onclick="closeAll()">Close All</button>
+  <button onclick="window.print()">Print / Save PDF</button>
 </div>
 
-<div class="notice" id="ui_notice"></div>
+<div class="notice">Information is stored only in your browser.</div>
 
 <!-- PERSONAL -->
 <section class="open">
-<div class="section-header" onclick="toggle(this)" id="h_personal"></div>
+<div class="section-header" onclick="toggle(this)">Personal Information</div>
 <div class="section-content">
-<input id="p_name">
-<input id="p_dob">
-<input id="p_address">
-<input id="p_phone">
-<input id="p_email">
+<input placeholder="Full legal name">
+<input placeholder="Date of birth">
+<input placeholder="Address">
+<input placeholder="Phone">
+<input placeholder="Email">
 </div>
 </section>
 
 <!-- EXECUTORS -->
 <section>
-<div class="section-header" onclick="toggle(this)" id="h_executors"></div>
+<div class="section-header" onclick="toggle(this)">Executors</div>
 <div class="section-content">
 <div id="executors"></div>
-<button class="add-btn" onclick="addRow('executors')">➕ Add</button>
+<button class="add-btn" onclick="addExecutor()">➕ Add Another Executor</button>
 </div>
 </section>
 
 <!-- CHILDREN -->
 <section>
-<div class="section-header" onclick="toggle(this)" id="h_children"></div>
+<div class="section-header" onclick="toggle(this)">Children</div>
 <div class="section-content">
 <div id="children"></div>
-<button class="add-btn" onclick="addRow('children')">➕ Add</button>
+<button class="add-btn" onclick="addChild()">➕ Add Another Child</button>
 </div>
 </section>
 
 <!-- ASSETS -->
 <section>
-<div class="section-header" onclick="toggle(this)" id="h_assets"></div>
+<div class="section-header" onclick="toggle(this)">Assets</div>
 <div class="section-content">
 <div id="assets"></div>
-<button class="add-btn" onclick="addRow('assets')">➕ Add</button>
+<button class="add-btn" onclick="addAsset()">➕ Add Another Asset</button>
+</div>
+</section>
+
+<!-- DEBTS -->
+<section>
+<div class="section-header" onclick="toggle(this)">Debts</div>
+<div class="section-content">
+<div id="debts"></div>
+<button class="add-btn" onclick="addDebt()">➕ Add Another Debt</button>
+</div>
+</section>
+
+<!-- DIGITAL -->
+<section>
+<div class="section-header" onclick="toggle(this)">Digital Accounts</div>
+<div class="section-content">
+<div id="digital"></div>
+<button class="add-btn" onclick="addDigital()">➕ Add Another Account</button>
 </div>
 </section>
 
 <!-- FUNERAL -->
 <section>
-<div class="section-header" onclick="toggle(this)" id="h_funeral"></div>
+<div class="section-header" onclick="toggle(this)">Funeral Wishes</div>
 <div class="section-content">
-<textarea class="large" id="funeral"></textarea>
+<div id="funeral"></div>
+<button class="add-btn" onclick="addFuneral()">➕ Add Another Wish</button>
 </div>
 </section>
 
-<!-- FIRST STEPS -->
+<!-- FIRST -->
 <section>
-<div class="section-header" onclick="toggle(this)" id="h_first"></div>
+<div class="section-header" onclick="toggle(this)">What To Do First</div>
 <div class="section-content">
-<textarea class="large" id="first"></textarea>
+<textarea class="large" placeholder="Immediate instructions for family"></textarea>
+</div>
+</section>
+
+<!-- NOTES -->
+<section>
+<div class="section-header" onclick="toggle(this)">Additional Notes</div>
+<div class="section-content">
+<div id="notes"></div>
+<button class="add-btn" onclick="addNote()">➕ Add Note</button>
 </div>
 </section>
 
 </div>
 
-<!-- ROW TEMPLATE -->
+<!-- TEMPLATES -->
 <template id="rowTemplate">
-  <div class="card">
-    <input class="row-title">
-    <textarea class="row-detail"></textarea>
-    <button class="remove-btn" onclick="this.parentElement.remove()">Remove</button>
-  </div>
+<div class="card">
+<input placeholder="Title / Name">
+<textarea placeholder="Details / Notes"></textarea>
+<button onclick="this.parentElement.remove()">Remove</button>
+</div>
 </template>
 
 <script>
@@ -180,108 +208,58 @@ function openAll(){document.querySelectorAll("section").forEach(s=>s.classList.a
 function closeAll(){document.querySelectorAll("section").forEach(s=>s.classList.remove("open"))}
 
 function addRow(id){
-  const t=document.getElementById("rowTemplate").content.cloneNode(true);
-  document.getElementById(id).appendChild(t);
-  applyLanguage(currentLang);
+  const t=document.getElementById("rowTemplate");
+  document.getElementById(id).appendChild(t.content.cloneNode(true));
 }
+const addExecutor=()=>addRow("executors");
+const addChild=()=>addRow("children");
+const addAsset=()=>addRow("assets");
+const addDebt=()=>addRow("debts");
+const addDigital=()=>addRow("digital");
+const addFuneral=()=>addRow("funeral");
+const addNote=()=>addRow("notes");
 
 /* COUNTRY → LANGUAGE */
 const COUNTRY_LANG={
-  "Canada":"en","United States":"en","France":"fr","Germany":"de","Spain":"es",
-  "Russia":"ru","Ukraine":"uk",
-  "Japan":"ja","China (Simplified)":"zh","South Korea":"ko",
-  "India (Hindi)":"hi","India (Urdu)":"ur"
+"Canada":"en","United States":"en","France":"fr","Germany":"de","Spain":"es",
+"Russia":"ru","Ukraine":"uk",
+"Japan":"ja","China (Simplified)":"zh-CN","China (Traditional)":"zh-TW","South Korea":"ko",
+"India (Hindi)":"hi","India (Tamil)":"ta","India (Bengali)":"bn","India (Urdu)":"ur"
 };
 const RTL=["ur"];
 
-const TEXT={
-en:{
- title:"My Estate Plan",sub:"Personal planning record · Not a legal document",
- notice:"Information is stored only in your browser.",
- open:"Open All",close:"Close All",print:"Print / Save PDF",
- personal:"Personal Information",executors:"Executors",children:"Children",assets:"Assets",
- funeral:"Funeral Wishes",first:"What To Do First",
- p_name:"Full legal name",p_dob:"Date of birth",p_address:"Address",p_phone:"Phone",p_email:"Email",
- rowTitle:"Name / Title",rowDetail:"Details",
- funeralPH:"Burial, cremation, service wishes",
- firstPH:"Immediate instructions for family"
-},
-ja:{
- title:"相続計画",sub:"個人記録 · 法的文書ではありません",
- notice:"情報はこのブラウザ内にのみ保存されます。",
- open:"すべて開く",close:"すべて閉じる",print:"印刷 / PDF保存",
- personal:"個人情報",executors:"遺言執行者",children:"子供",assets:"資産",
- funeral:"葬儀の希望",first:"最初に行うこと",
- p_name:"氏名",p_dob:"生年月日",p_address:"住所",p_phone:"電話",p_email:"メール",
- rowTitle:"名前",rowDetail:"詳細",
- funeralPH:"葬儀・火葬・式の希望",
- firstPH:"家族への最初の指示"
-},
-ur:{
- title:"وراثتی منصوبہ",sub:"ذاتی ریکارڈ · قانونی دستاویز نہیں",
- notice:"معلومات صرف اس براؤزر میں محفوظ ہوتی ہے۔",
- open:"سب کھولیں",close:"سب بند کریں",print:"پرنٹ / پی ڈی ایف",
- personal:"ذاتی معلومات",executors:"منتظمین",children:"بچے",assets:"اثاثے",
- funeral:"تدفین کی خواہشات",first:"سب سے پہلے کیا کریں",
- p_name:"پورا نام",p_dob:"تاریخ پیدائش",p_address:"پتہ",p_phone:"فون",p_email:"ای میل",
- rowTitle:"نام",rowDetail:"تفصیل",
- funeralPH:"تدفین یا رسومات",
- firstPH:"خاندان کے لیے فوری ہدایات"
-}
+const I18N={
+en:"My Estate Plan",fr:"Mon plan successoral",de:"Mein Nachlassplan",
+es:"Mi plan patrimonial",ru:"Мой план наследства",uk:"Мій спадковий план",
+ja:"相続計画","zh-CN":"遗产计划","zh-TW":"遺產計畫",ko:"유산 계획",
+hi:"वसीयत योजना",ta:"சொத்துத் திட்டம்",bn:"সম্পত্তি পরিকল্পনা",ur:"وراثتی منصوبہ"
 };
 
-let currentLang="en";
-
-/* APPLY LANGUAGE TO EVERYTHING */
-function applyLanguage(lang){
-  currentLang=lang;
-  const t=TEXT[lang]||TEXT.en;
-  document.body.dir=RTL.includes(lang)?"rtl":"ltr";
-
-  ui_title.textContent=t.title;
-  ui_subtitle.textContent=t.sub;
-  ui_notice.textContent=t.notice;
-  btnOpen.textContent=t.open;
-  btnClose.textContent=t.close;
-  btnPrint.textContent=t.print;
-
-  h_personal.textContent=t.personal;
-  h_executors.textContent=t.executors;
-  h_children.textContent=t.children;
-  h_assets.textContent=t.assets;
-  h_funeral.textContent=t.funeral;
-  h_first.textContent=t.first;
-
-  p_name.placeholder=t.p_name;
-  p_dob.placeholder=t.p_dob;
-  p_address.placeholder=t.p_address;
-  p_phone.placeholder=t.p_phone;
-  p_email.placeholder=t.p_email;
-
-  funeral.placeholder=t.funeralPH;
-  first.placeholder=t.firstPH;
-
-  document.querySelectorAll(".row-title").forEach(i=>i.placeholder=t.rowTitle);
-  document.querySelectorAll(".row-detail").forEach(i=>i.placeholder=t.rowDetail);
-}
-
-/* INIT */
 const countrySel=document.getElementById("countrySelect");
 const langSel=document.getElementById("languageSelect");
 
-Object.keys(COUNTRY_LANG).forEach(c=>countrySel.add(new Option(c,c)));
-Object.keys(TEXT).forEach(l=>langSel.add(new Option(l,l)));
+Object.keys(COUNTRY_LANG).forEach(c=>{
+  countrySel.appendChild(new Option(c,c));
+});
+Object.keys(I18N).forEach(l=>{
+  langSel.appendChild(new Option(l,l));
+});
+
+function setLanguage(l){
+  document.body.dir=RTL.includes(l)?"rtl":"ltr";
+  document.getElementById("title").textContent=I18N[l];
+}
 
 countrySel.onchange=()=>{
-  const l=COUNTRY_LANG[countrySel.value]||"en";
+  const l=COUNTRY_LANG[countrySel.value];
   langSel.value=l;
-  applyLanguage(l);
+  setLanguage(l);
 };
-langSel.onchange=()=>applyLanguage(langSel.value);
+langSel.onchange=()=>setLanguage(langSel.value);
 
 countrySel.value="Canada";
 langSel.value="en";
-applyLanguage("en");
+setLanguage("en");
 </script>
 
 </body>
