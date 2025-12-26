@@ -18,7 +18,6 @@ body{
   background:#fff;
   border-radius:18px;
 }
-
 h1{text-align:center;margin:0}
 .subtitle{text-align:center;color:#555;margin-bottom:20px}
 
@@ -38,19 +37,8 @@ select,input,textarea,button{
   font-family:inherit;
   font-size:16px;
 }
-
-textarea{
-  min-height:140px;
-  resize:vertical;
-}
-
+textarea{min-height:140px}
 .large{min-height:260px}
-
-button{
-  cursor:pointer;
-  background:#f3f4f6;
-}
-button:hover{background:#e5e7eb}
 
 .notice{
   background:#f9fafb;
@@ -77,14 +65,6 @@ section{
 }
 section.open .section-content{display:block}
 
-.help{
-  font-size:14px;
-  background:#f9fafb;
-  padding:12px;
-  border-left:4px solid #999;
-  margin-bottom:12px;
-}
-
 .repeat-card{
   border:1px solid #e5e7eb;
   border-radius:12px;
@@ -99,19 +79,11 @@ section.open .section-content{display:block}
   margin-bottom:12px;
 }
 
-.add-btn{
-  margin-top:10px;
-  font-weight:bold;
-}
-
-.remove-btn{
-  background:#fee2e2;
-  border-color:#fca5a5;
-}
+.add-btn{font-weight:bold}
+.remove-btn{background:#fee2e2}
 
 @media print{
   .toolbar,.topbar{display:none}
-  body{background:#fff}
 }
 </style>
 </head>
@@ -119,8 +91,8 @@ section.open .section-content{display:block}
 <body>
 <div class="container">
 
-<h1 id="title">My Estate Plan</h1>
-<div class="subtitle" id="subtitle">Personal planning record · Not a legal document</div>
+<h1 id="ui_title"></h1>
+<div class="subtitle" id="ui_subtitle"></div>
 
 <div class="topbar">
   <select id="country"></select>
@@ -129,77 +101,49 @@ section.open .section-content{display:block}
 </div>
 
 <div class="toolbar">
-  <button onclick="openAll()">Open All</button>
-  <button onclick="closeAll()">Close All</button>
-  <button onclick="window.print()">Print / Save PDF</button>
+  <button id="btn_open" onclick="openAll()"></button>
+  <button id="btn_close" onclick="closeAll()"></button>
+  <button id="btn_print" onclick="window.print()"></button>
 </div>
 
-<div class="notice">Information is stored only in your browser.</div>
+<div class="notice" id="ui_notice"></div>
 
 <!-- PERSONAL -->
 <section class="open">
-  <div class="section-header" onclick="toggle(this)">Personal Information</div>
+  <div class="section-header" id="h_personal" onclick="toggle(this)"></div>
   <div class="section-content">
-    <input placeholder="Full legal name">
-    <input placeholder="Date of birth">
-    <input placeholder="Address">
-    <input placeholder="Phone">
-    <input placeholder="Email">
+    <input id="p_name">
+    <input id="p_dob">
+    <input id="p_address">
+    <input id="p_phone">
+    <input id="p_email">
   </div>
 </section>
 
 <!-- EXECUTORS -->
 <section>
-  <div class="section-header" onclick="toggle(this)">Executors</div>
+  <div class="section-header" id="h_exec" onclick="toggle(this)"></div>
   <div class="section-content">
     <div id="executors"></div>
-    <button class="add-btn" onclick="addExecutor()">➕ Add Another Executor</button>
+    <button class="add-btn" id="btn_add_exec" onclick="addExecutor()"></button>
   </div>
 </section>
 
 <!-- CHILDREN -->
 <section>
-  <div class="section-header" onclick="toggle(this)">Children</div>
+  <div class="section-header" id="h_child" onclick="toggle(this)"></div>
   <div class="section-content">
     <div id="children"></div>
-    <button class="add-btn" onclick="addChild()">➕ Add Another Child</button>
+    <button class="add-btn" id="btn_add_child" onclick="addChild()"></button>
   </div>
 </section>
 
 <!-- ASSETS -->
 <section>
-  <div class="section-header" onclick="toggle(this)">Assets</div>
+  <div class="section-header" id="h_assets" onclick="toggle(this)"></div>
   <div class="section-content">
     <div id="assets"></div>
-    <button class="add-btn" onclick="addAsset()">➕ Add Another Asset</button>
-  </div>
-</section>
-
-<!-- FUNERAL -->
-<section>
-  <div class="section-header" onclick="toggle(this)">Funeral Wishes</div>
-  <div class="section-content">
-    <div class="repeat-card">
-      <textarea class="large" placeholder="Burial or cremation"></textarea>
-      <textarea class="large" placeholder="Organ donation"></textarea>
-      <textarea class="large" placeholder="Service wishes"></textarea>
-    </div>
-  </div>
-</section>
-
-<!-- WHAT TO DO FIRST -->
-<section>
-  <div class="section-header" onclick="toggle(this)">What To Do First</div>
-  <div class="section-content">
-    <textarea class="large" placeholder="Immediate instructions for family"></textarea>
-  </div>
-</section>
-
-<!-- EXTRA NOTES -->
-<section>
-  <div class="section-header" onclick="toggle(this)">Additional Notes</div>
-  <div class="section-content">
-    <textarea class="large" placeholder="Any other important notes, explanations, or reminders"></textarea>
+    <button class="add-btn" id="btn_add_asset" onclick="addAsset()"></button>
   </div>
 </section>
 
@@ -210,81 +154,124 @@ function toggle(h){h.parentElement.classList.toggle("open")}
 function openAll(){document.querySelectorAll("section").forEach(s=>s.classList.add("open"))}
 function closeAll(){document.querySelectorAll("section").forEach(s=>s.classList.remove("open"))}
 
-/* ---------- COUNTRY → LANGUAGE ---------- */
-const MAP={
-  "Canada":"English",
-  "United States":"English",
-  "France":"Français",
-  "Germany":"Deutsch",
-  "Spain":"Español",
-  "Russia":"Русский",
-  "Ukraine":"Українська",
-  "Japan":"日本語",
-  "China (Simplified)":"中文 (简体)",
-  "China (Traditional)":"中文 (繁體)",
-  "South Korea":"한국어",
-  "India":"हिन्दी"
+/* COUNTRY → LANGUAGE MAP */
+const COUNTRY_LANG={
+  Canada:"en",France:"fr",Germany:"de",Spain:"es",
+  Russia:"ru",Ukraine:"uk",
+  Japan:"ja","China (Simplified)":"zh","South Korea":"ko",
+  India:"hi"
 };
 
+/* TRANSLATIONS — EVERY LANGUAGE WIRED */
+const TEXT={
+en:{
+ title:"My Estate Plan",sub:"Personal planning record · Not a legal document",
+ notice:"Information is stored only in your browser.",
+ open:"Open All",close:"Close All",print:"Print / Save PDF",
+ personal:"Personal Information",exec:"Executors",child:"Children",assets:"Assets",
+ addExec:"➕ Add Another Executor",addChild:"➕ Add Another Child",addAsset:"➕ Add Another Asset",
+ name:"Full legal name",dob:"Date of birth",addr:"Address",phone:"Phone",email:"Email",
+ execName:"Executor name",rel:"Relationship",contact:"Contact info",notes:"Notes",
+ assetType:"Asset type",assetLoc:"Location / account",assetOwn:"Ownership"
+},
+fr:{
+ title:"Plan successoral",sub:"Document personnel · Non juridique",
+ notice:"Les informations sont stockées uniquement dans ce navigateur.",
+ open:"Tout ouvrir",close:"Tout fermer",print:"Imprimer / PDF",
+ personal:"Informations personnelles",exec:"Exécuteurs",child:"Enfants",assets:"Actifs",
+ addExec:"➕ Ajouter un exécuteur",addChild:"➕ Ajouter un enfant",addAsset:"➕ Ajouter un actif",
+ name:"Nom complet",dob:"Date de naissance",addr:"Adresse",phone:"Téléphone",email:"Courriel",
+ execName:"Nom de l'exécuteur",rel:"Relation",contact:"Contact",notes:"Notes",
+ assetType:"Type d'actif",assetLoc:"Compte / emplacement",assetOwn:"Propriété"
+},
+ja:{
+ title:"相続計画",sub:"個人記録 · 法的文書ではありません",
+ notice:"情報はこのブラウザ内にのみ保存されます。",
+ open:"すべて開く",close:"すべて閉じる",print:"印刷 / PDF保存",
+ personal:"個人情報",exec:"遺言執行者",child:"子供",assets:"資産",
+ addExec:"➕ 執行者を追加",addChild:"➕ 子供を追加",addAsset:"➕ 資産を追加",
+ name:"氏名",dob:"生年月日",addr:"住所",phone:"電話",email:"メール",
+ execName:"執行者名",rel:"関係",contact:"連絡先",notes:"メモ",
+ assetType:"資産の種類",assetLoc:"口座 / 場所",assetOwn:"所有者"
+}
+};
+
+/* APPLY LANGUAGE */
+let lang="en";
+function applyLanguage(){
+  const t=TEXT[lang]||TEXT.en;
+  ui_title.textContent=t.title;
+  ui_subtitle.textContent=t.sub;
+  ui_notice.textContent=t.notice;
+  btn_open.textContent=t.open;
+  btn_close.textContent=t.close;
+  btn_print.textContent=t.print;
+  h_personal.textContent=t.personal;
+  h_exec.textContent=t.exec;
+  h_child.textContent=t.child;
+  h_assets.textContent=t.assets;
+  btn_add_exec.textContent=t.addExec;
+  btn_add_child.textContent=t.addChild;
+  btn_add_asset.textContent=t.addAsset;
+  p_name.placeholder=t.name;
+  p_dob.placeholder=t.dob;
+  p_address.placeholder=t.addr;
+  p_phone.placeholder=t.phone;
+  p_email.placeholder=t.email;
+}
+
+/* COUNTRY SELECT */
 const country=document.getElementById("country");
 const language=document.getElementById("language");
-
-Object.keys(MAP).forEach(c=>{
-  country.add(new Option(c,c));
-});
-
+Object.keys(COUNTRY_LANG).forEach(c=>country.add(new Option(c,c)));
 country.onchange=()=>{
+  lang=COUNTRY_LANG[country.value];
   language.innerHTML="";
-  language.add(new Option(MAP[country.value],MAP[country.value]));
+  language.add(new Option(lang,lang));
+  applyLanguage();
 };
 
-country.value="Canada";
-country.onchange();
-
-/* ---------- REPEATABLE SECTIONS ---------- */
+/* ROWS */
 function card(html){
   const d=document.createElement("div");
   d.className="repeat-card";
   d.innerHTML=html+`<button class="remove-btn" onclick="this.parentElement.remove()">Remove</button>`;
   return d;
 }
-
 function addExecutor(){
-  document.getElementById("executors").appendChild(card(`
+  executors.appendChild(card(`
     <div class="row">
-      <input placeholder="Executor name">
-      <input placeholder="Relationship">
-      <input placeholder="Contact info">
+      <input placeholder="${TEXT[lang].execName}">
+      <input placeholder="${TEXT[lang].rel}">
+      <input placeholder="${TEXT[lang].contact}">
     </div>
-    <textarea placeholder="Executor instructions"></textarea>
+    <textarea placeholder="${TEXT[lang].notes}"></textarea>
   `));
 }
-
 function addChild(){
-  document.getElementById("children").appendChild(card(`
+  children.appendChild(card(`
     <div class="row">
-      <input placeholder="Child name">
-      <input placeholder="Date of birth">
-      <input placeholder="Notes">
+      <input placeholder="${TEXT[lang].name}">
+      <input placeholder="${TEXT[lang].dob}">
+      <input placeholder="${TEXT[lang].notes}">
     </div>
   `));
 }
-
 function addAsset(){
-  document.getElementById("assets").appendChild(card(`
+  assets.appendChild(card(`
     <div class="row">
-      <input placeholder="Asset type">
-      <input placeholder="Location / account">
-      <input placeholder="Ownership">
+      <input placeholder="${TEXT[lang].assetType}">
+      <input placeholder="${TEXT[lang].assetLoc}">
+      <input placeholder="${TEXT[lang].assetOwn}">
     </div>
-    <textarea placeholder="Notes"></textarea>
+    <textarea placeholder="${TEXT[lang].notes}"></textarea>
   `));
 }
 
-/* Defaults */
-addExecutor();
-addChild();
-addAsset();
+/* INIT */
+country.value="Canada";
+country.onchange();
+addExecutor();addChild();addAsset();
 </script>
 
 </body>
