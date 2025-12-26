@@ -11,110 +11,82 @@ body{
   font-family:"Times New Roman", Georgia, serif;
   background:radial-gradient(circle at top,#4a1f26,#2b1417);
 }
-
 .container{
-  max-width:1200px;
+  max-width:900px;
   margin:40px auto;
   padding:40px;
-  background:#ffffff;
+  background:#fff;
   border-radius:18px;
 }
+h1{text-align:center;margin-bottom:5px}
+.subtitle{text-align:center;color:#555;margin-bottom:20px}
 
-h1{
-  text-align:center;
-  margin:0;
-}
-.subtitle{
-  text-align:center;
-  color:#555;
-  margin:10px 0 25px;
-}
-
-/* Toolbar & Topbar */
-.topbar,.toolbar{
+.topbar, .toolbar{
   display:flex;
-  flex-wrap:wrap;
+  flex-direction:column;
   gap:10px;
   margin-bottom:15px;
 }
 
 select,input,textarea,button{
-  width:100%;
   padding:12px;
   border-radius:8px;
   border:1px solid #ccc;
   font-family:inherit;
-  box-sizing:border-box;
+  font-size:16px;
+  width:100%;
 }
-
-button{
-  cursor:pointer;
-  background:#f3f4f6;
-}
+button{cursor:pointer}
 
 .notice{
   background:#f9fafb;
   padding:12px;
   border-radius:8px;
   font-size:14px;
-  margin-bottom:20px;
 }
 
-/* Sections */
 section{
   border:1px solid #ddd;
   border-radius:12px;
   margin-top:20px;
 }
-
 .section-header{
   padding:14px;
   background:#f3f4f6;
   cursor:pointer;
   font-weight:bold;
 }
-
 .section-content{
-  padding:16px;
+  padding:14px;
   display:none;
 }
-
-section.open .section-content{
-  display:block;
-}
+section.open .section-content{display:block}
 
 .help{
   font-size:14px;
   background:#f9fafb;
   padding:10px;
   border-left:4px solid #999;
-  margin-bottom:12px;
+  margin-bottom:10px;
 }
 
-/* Rows */
-.row-block{
-  border:1px dashed #ccc;
+textarea{min-height:120px}
+.large{min-height:220px}
+
+.row{
+  border:1px solid #ccc;
   padding:12px;
   border-radius:8px;
-  margin-bottom:12px;
-}
-
-textarea{
-  min-height:120px;
-}
-.large{
-  min-height:220px;
+  margin-bottom:10px;
 }
 
 .add-btn{
   margin-top:10px;
-  background:#eef2f7;
+  background:#eee;
 }
 
-/* Print */
 @media print{
-  body{background:#fff}
-  .toolbar,.topbar,.notice{display:none}
+  .toolbar,.topbar{display:none}
   section{page-break-inside:avoid}
 }
 </style>
@@ -123,19 +95,24 @@ textarea{
 <body>
 <div class="container">
 
-<h1>My Estate Plan</h1>
-<div class="subtitle">Personal planning record · Not a legal document</div>
+<h1 id="title">My Estate Plan</h1>
+<div class="subtitle" id="subtitle">Personal planning record · Not a legal document</div>
 
 <!-- TOP BAR -->
 <div class="topbar">
-  <select>
-    <option>Canada</option>
-    <option>United States</option>
-    <option>United Kingdom</option>
+  <select id="country">
+    <option value="Canada">Canada</option>
+    <option value="United States">United States</option>
+    <option value="France">France</option>
+    <option value="Spain">Spain</option>
   </select>
-  <select>
-    <option>EN</option>
+
+  <select id="language">
+    <option value="EN">English</option>
+    <option value="FR">Français</option>
+    <option value="ES">Español</option>
   </select>
+
   <input value="Version 1.0" disabled>
 </div>
 
@@ -147,10 +124,10 @@ textarea{
 </div>
 
 <div class="notice">
-  Information is stored only in your browser. Print or back up your data.
+  Information is stored only in your browser.
 </div>
 
-<!-- PERSONAL INFORMATION -->
+<!-- PERSONAL -->
 <section class="open">
   <div class="section-header" onclick="toggle(this)">Personal Information</div>
   <div class="section-content">
@@ -166,9 +143,10 @@ textarea{
 <section>
   <div class="section-header" onclick="toggle(this)">Executors</div>
   <div class="section-content">
-    <div class="help">Who is legally responsible for carrying out your estate.</div>
     <div id="executors"></div>
-    <button class="add-btn" onclick="addExecutor()">➕ Add Another Executor</button>
+    <button class="add-btn" onclick="addRow('executors','Executor name, relationship, contact')">
+      ➕ Add Executor
+    </button>
   </div>
 </section>
 
@@ -177,7 +155,9 @@ textarea{
   <div class="section-header" onclick="toggle(this)">Children</div>
   <div class="section-content">
     <div id="children"></div>
-    <button class="add-btn" onclick="addChild()">➕ Add Another Child</button>
+    <button class="add-btn" onclick="addRow('children','Child name, DOB, relationship')">
+      ➕ Add Child
+    </button>
   </div>
 </section>
 
@@ -186,58 +166,24 @@ textarea{
   <div class="section-header" onclick="toggle(this)">Assets</div>
   <div class="section-content">
     <div id="assets"></div>
-    <button class="add-btn" onclick="addAsset()">➕ Add Another Asset</button>
+    <button class="add-btn" onclick="addRow('assets','Asset description, location, value')">
+      ➕ Add Asset
+    </button>
   </div>
 </section>
 
-<!-- DEBTS -->
-<section>
-  <div class="section-header" onclick="toggle(this)">Debts</div>
-  <div class="section-content">
-    <textarea class="large" placeholder="List debts and liabilities"></textarea>
-  </div>
-</section>
-
-<!-- DIGITAL ASSETS -->
-<section>
-  <div class="section-header" onclick="toggle(this)">Digital Assets</div>
-  <div class="section-content">
-    <textarea placeholder="Accounts and devices"></textarea>
-    <textarea placeholder="Delete / memorialize / transfer instructions"></textarea>
-  </div>
-</section>
-
-<!-- TAX -->
-<section>
-  <div class="section-header" onclick="toggle(this)">Tax & Residency</div>
-  <div class="section-content">
-    <textarea placeholder="Primary legal residence"></textarea>
-    <textarea placeholder="Secondary tax residency (if any)"></textarea>
-    <textarea placeholder="Foreign assets or accounts"></textarea>
-  </div>
-</section>
-
-<!-- FUNERAL -->
-<section>
-  <div class="section-header" onclick="toggle(this)">Funeral Wishes</div>
-  <div class="section-content">
-    <textarea placeholder="Burial or cremation preference"></textarea>
-    <textarea placeholder="Organ donation wishes"></textarea>
-    <textarea placeholder="Service or memorial wishes"></textarea>
-  </div>
-</section>
-
-<!-- FIRST STEPS -->
+<!-- WHAT TO DO FIRST -->
 <section>
   <div class="section-header" onclick="toggle(this)">What To Do First</div>
   <div class="section-content">
-    <textarea class="large" placeholder="Immediate instructions for family and executor"></textarea>
+    <textarea class="large" placeholder="Immediate instructions for family"></textarea>
   </div>
 </section>
 
 </div>
 
 <script>
+/* TOGGLE */
 function toggle(h){
   h.parentElement.classList.toggle("open");
 }
@@ -248,42 +194,59 @@ function closeAll(){
   document.querySelectorAll("section").forEach(s=>s.classList.remove("open"));
 }
 
-/* ADD ROW FUNCTIONS */
-function addExecutor(){
-  document.getElementById("executors").insertAdjacentHTML("beforeend",`
-    <div class="row-block">
-      <input placeholder="Executor full name">
-      <input placeholder="Relationship">
-      <input placeholder="Phone / Email">
-      <textarea placeholder="Compensation preference (standard / waive / other)"></textarea>
-    </div>
-  `);
+/* ADD ROWS */
+function addRow(containerId, placeholder){
+  const div=document.createElement("div");
+  div.className="row";
+  div.innerHTML=`<textarea placeholder="${placeholder}"></textarea>`;
+  document.getElementById(containerId).appendChild(div);
 }
 
-function addChild(){
-  document.getElementById("children").insertAdjacentHTML("beforeend",`
-    <div class="row-block">
-      <input placeholder="Child full legal name">
-      <input placeholder="Date of birth">
-      <input placeholder="Relationship / notes">
-    </div>
-  `);
+/* LANGUAGE TEXT */
+const TEXT={
+  EN:{
+    title:"My Estate Plan",
+    subtitle:"Personal planning record · Not a legal document"
+  },
+  FR:{
+    title:"Mon plan successoral",
+    subtitle:"Dossier personnel · Non juridique"
+  },
+  ES:{
+    title:"Mi plan patrimonial",
+    subtitle:"Registro personal · No legal"
+  }
+};
+
+/* APPLY LANGUAGE */
+function applyLanguage(lang){
+  document.getElementById("title").textContent=TEXT[lang].title;
+  document.getElementById("subtitle").textContent=TEXT[lang].subtitle;
 }
 
-function addAsset(){
-  document.getElementById("assets").insertAdjacentHTML("beforeend",`
-    <div class="row-block">
-      <input placeholder="Asset name">
-      <input placeholder="Location / account number">
-      <textarea placeholder="Additional notes"></textarea>
-    </div>
-  `);
-}
+/* COUNTRY → LANGUAGE */
+document.getElementById("country").addEventListener("change",e=>{
+  const map={
+    "Canada":"EN",
+    "United States":"EN",
+    "France":"FR",
+    "Spain":"ES"
+  };
+  const lang=map[e.target.value]||"EN";
+  document.getElementById("language").value=lang;
+  applyLanguage(lang);
+});
 
-/* Seed initial rows */
-addExecutor();
-addChild();
-addAsset();
+/* LANGUAGE DROPDOWN (THIS WAS MISSING BEFORE) */
+document.getElementById("language").addEventListener("change",e=>{
+  applyLanguage(e.target.value);
+});
+
+/* INIT */
+applyLanguage("EN");
+addRow("executors","Executor name, relationship, contact");
+addRow("children","Child name, DOB, relationship");
+addRow("assets","Asset description, location, value");
 </script>
 
 </body>
