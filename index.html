@@ -2,257 +2,417 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My Estate Plan</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
 :root{
-  --bg1:#4a1f26;
-  --bg2:#2b1417;
-  --border:#d1d5db;
-  --soft:#f9fafb;
+  --jam-dark:#2b1417;
+  --jam-mid:#4a1f26;
+  --paper:#ffffff;
+  --border:#d2d6da;
+  --heading:#2f4f4f;
+  --muted:#6b7280;
+  --soft:#f7f8fa;
 }
+
+/* ================= SCREEN ================= */
 body{
   margin:0;
   font-family:"Times New Roman", Georgia, serif;
-  background:radial-gradient(circle at top,var(--bg1),var(--bg2));
+  font-size:18px;
+  line-height:1.6;
+  background:radial-gradient(circle at top, var(--jam-mid), var(--jam-dark));
+  color:#1f2933;
 }
+
 .container{
-  max-width:1200px;
-  margin:40px auto;
-  background:#fff;
-  padding:40px;
+  max-width:1150px;
+  margin:50px auto;
+  padding:48px 36px 140px;
+  background:var(--paper);
   border-radius:18px;
+  box-shadow:0 22px 50px rgba(0,0,0,0.35);
 }
-h1{text-align:center;margin:0}
-.subtitle{text-align:center;color:#555;margin-bottom:20px}
 
-.topbar,.toolbar{
-  display:grid;
-  gap:10px;
-  margin-bottom:15px;
+h1{
+  text-align:center;
+  margin:0;
+  font-size:36px;
+  color:var(--heading);
 }
-.topbar{grid-template-columns:2fr 1fr 1fr}
-.toolbar{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
 
-select,input,textarea,button{
-  padding:12px;
+.subtitle{
+  text-align:center;
+  font-size:16px;
+  color:var(--muted);
+  margin-top:8px;
+}
+
+.toolbar{
+  display:flex;
+  gap:12px;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin:26px 0;
+}
+
+select,button,input,textarea{
+  font-family:inherit;
+  font-size:18px;
+}
+
+button{
+  padding:10px 16px;
   border-radius:8px;
   border:1px solid var(--border);
-  font-family:inherit;
-  width:100%;
-}
-button{cursor:pointer;background:#f3f4f6}
-
-.notice{
-  background:var(--soft);
-  padding:12px;
-  border-radius:8px;
-  font-size:14px;
-  margin-bottom:20px;
+  background:#f9fafb;
+  cursor:pointer;
 }
 
 section{
   border:1px solid var(--border);
   border-radius:12px;
-  margin-bottom:20px;
+  margin-bottom:22px;
+  background:#fff;
 }
+
 .section-header{
-  background:#f3f4f6;
+  padding:18px 22px;
+  border-bottom:1px solid var(--border);
+}
+
+.section-header h2{ margin:0; }
+
+.section-content{ padding:22px; }
+
+.grid-2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+}
+
+@media(max-width:900px){
+  .grid-2{ grid-template-columns:1fr; }
+}
+
+input,textarea{
+  width:100%;
   padding:14px;
-  cursor:pointer;
-  font-weight:bold;
-}
-.section-content{
-  padding:14px;
-  display:none;
-}
-section.open .section-content{display:block}
-
-.help{
-  background:var(--soft);
-  padding:10px;
-  font-size:14px;
-  border-left:4px solid #999;
-  margin-bottom:10px;
+  margin-bottom:14px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:#fafafa;
+  box-sizing:border-box;
 }
 
-.row{margin-bottom:10px}
-textarea{min-height:140px}
-.large{min-height:280px}
+.large-note{ min-height:420px; }
 
-.addBtn{
-  margin-top:8px;
-  background:#eef2f7;
-}
-
-.removeBtn{
-  background:#fee2e2;
-  margin-top:4px;
-}
-
-body[dir="rtl"]{
-  direction:rtl;
-}
-body[dir="rtl"] .help{
-  border-left:none;
-  border-right:4px solid #999;
-}
+/* ================= PRINT ================= */
+.print-only{ display:none; }
 
 @media print{
-  .topbar,.toolbar{display:none}
-  section{page-break-inside:avoid}
+  body{ background:#fff; }
+  .container{ display:none; }
+  .print-only{ display:block; }
+  textarea,input,button,select{ display:none; }
+  .print-block{
+    page-break-after:always;
+    padding:20mm;
+    font-size:14pt;
+    line-height:1.65;
+    white-space:pre-wrap;
+  }
+  footer{
+    position:fixed;
+    bottom:8mm;
+    width:100%;
+    text-align:center;
+    font-size:11pt;
+  }
+  footer:after{
+    content:"Page " counter(page);
+  }
 }
 </style>
 </head>
 
 <body>
-<div class="container">
 
-<h1 id="title">My Estate Plan</h1>
-<div class="subtitle" id="subtitle">Personal planning record · Not a legal document</div>
-
-<div class="topbar">
-  <select id="country"></select>
-  <select id="language"></select>
-  <input id="date">
+<!-- ================= PRINT PAGES ================= -->
+<div class="print-only print-block">
+  <h1 id="p_title"></h1>
+  <p id="p_sub"></p>
+  <p><b id="p_country"></b></p>
+  <p><b id="p_date"></b></p>
 </div>
 
-<div class="toolbar">
-  <button onclick="openAll()">Open All</button>
-  <button onclick="closeAll()">Close All</button>
-  <button onclick="window.print()">Print / Save PDF</button>
+<div class="print-only print-block">
+  <h2 id="p_toc"></h2>
+  <ol id="tocList"></ol>
 </div>
 
-<div class="notice" id="notice">
-  Information is stored only in your browser.
+<div class="print-only print-block">
+  <h2 id="p_first"></h2>
+  <div id="p_first_notes"></div>
 </div>
 
-<!-- PERSONAL -->
-<section class="open">
-<div class="section-header" onclick="toggle(this)">Personal Information</div>
-<div class="section-content">
-  <div class="row"><input placeholder="Full legal name"></div>
-  <div class="row"><input placeholder="Date of birth"></div>
-  <div class="row"><input placeholder="Address"></div>
-  <div class="row"><input placeholder="Phone"></div>
-  <div class="row"><input placeholder="Email"></div>
-</div>
-</section>
+<footer class="print-only"></footer>
 
-<!-- EXECUTORS -->
-<section>
-<div class="section-header" onclick="toggle(this)">Executors</div>
-<div class="section-content">
-  <div class="help">People legally responsible for carrying out your estate.</div>
-  <div id="executors"></div>
-  <button class="addBtn" onclick="addExecutor()">➕ Add Executor</button>
-</div>
-</section>
+<!-- ================= APP ================= -->
+<div class="container" id="app">
+  <h1 id="title"></h1>
+  <p class="subtitle" id="subtitle"></p>
 
-<!-- CHILDREN -->
-<section>
-<div class="section-header" onclick="toggle(this)">Children</div>
-<div class="section-content">
-  <div id="children"></div>
-  <button class="addBtn" onclick="addChild()">➕ Add Child</button>
-</div>
-</section>
+  <div class="toolbar">
+    <select id="country"></select>
+    <button onclick="window.print()">Print / PDF</button>
+    <button onclick="exportWord()">Word</button>
+    <button onclick="backup()">Backup</button>
+    <button onclick="restore()">Restore</button>
+  </div>
 
-<!-- ASSETS -->
-<section>
-<div class="section-header" onclick="toggle(this)">Assets</div>
-<div class="section-content">
-  <div id="assets"></div>
-  <button class="addBtn" onclick="addAsset()">➕ Add Asset</button>
-</div>
-</section>
+  <section>
+    <div class="section-header"><h2 id="s_personal"></h2></div>
+    <div class="section-content">
+      <input data-key="name" id="name">
+      <input data-key="dob" id="dob">
+      <input data-key="address" id="address">
+      <input data-key="phone" id="phone">
+      <input data-key="email" id="email">
+    </div>
+  </section>
 
-<!-- FUNERAL -->
-<section>
-<div class="section-header" onclick="toggle(this)">Funeral Wishes</div>
-<div class="section-content">
-  <div class="row"><textarea placeholder="Burial or cremation"></textarea></div>
-  <div class="row"><textarea placeholder="Organ donation"></textarea></div>
-  <div class="row"><textarea placeholder="Service wishes"></textarea></div>
-</div>
-</section>
+  <section>
+    <div class="section-header"><h2 id="s_executor"></h2></div>
+    <div class="section-content">
+      <input data-key="executor" id="executor">
+      <textarea class="large-note" data-key="executor_notes" id="executor_notes"></textarea>
+    </div>
+  </section>
 
-<!-- FIRST -->
-<section>
-<div class="section-header" onclick="toggle(this)">What To Do First</div>
-<div class="section-content">
-  <textarea class="large" placeholder="Immediate instructions for family"></textarea>
-</div>
-</section>
+  <section>
+    <div class="section-header"><h2 id="s_docs"></h2></div>
+    <div class="section-content">
+      <textarea class="large-note" data-key="documents" id="documents"></textarea>
+    </div>
+  </section>
 
+  <section>
+    <div class="section-header"><h2 id="s_assets"></h2></div>
+    <div class="section-content">
+      <textarea class="large-note" data-key="assets" id="assets"></textarea>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-header"><h2 id="s_wishes"></h2></div>
+    <div class="section-content">
+      <textarea class="large-note" data-key="wishes" id="wishes"></textarea>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-header"><h2 id="s_first"></h2></div>
+    <div class="section-content">
+      <textarea class="large-note" data-key="first_notes" id="first_notes"></textarea>
+    </div>
+  </section>
 </div>
 
 <script>
-const COUNTRY_LANG = {
-  "Japan":"ja","China":"zh","Taiwan":"zh-tw","South Korea":"ko",
-  "India":"hi","Pakistan":"ur","Bangladesh":"bn","Sri Lanka":"ta",
-  "Thailand":"th","Vietnam":"vi","Indonesia":"id","Malaysia":"ms",
-  "Philippines":"tl","Saudi Arabia":"ar","Israel":"he",
-  "Canada":"en","United States":"en","United Kingdom":"en"
+const STORE="estate_plan_full_v1";
+
+/* ================= TRANSLATIONS ================= */
+const LANG={
+  en:{
+    dir:"ltr",
+    title:"My Estate Plan",
+    sub:"Personal planning record · Not a legal document",
+    personal:"Personal Information",
+    executor:"Executor",
+    docs:"Important Documents",
+    assets:"Assets",
+    wishes:"Final Wishes",
+    first:"What To Do First",
+    name:"Full legal name",
+    dob:"Date of birth",
+    address:"Address",
+    phone:"Telephone",
+    email:"Email",
+    executor_ph:"Executor name",
+    executor_notes:"Executor instructions",
+    docs_ph:"Where documents are stored",
+    assets_ph:"List assets",
+    wishes_ph:"Final wishes",
+    first_ph:"Urgent family instructions"
+  },
+  fr:{
+    dir:"ltr",
+    title:"Mon plan successoral",
+    sub:"Document personnel · Non juridique",
+    personal:"Informations personnelles",
+    executor:"Exécuteur",
+    docs:"Documents importants",
+    assets:"Actifs",
+    wishes:"Dernières volontés",
+    first:"Que faire en premier",
+    name:"Nom légal complet",
+    dob:"Date de naissance",
+    address:"Adresse",
+    phone:"Téléphone",
+    email:"Courriel",
+    executor_ph:"Nom de l'exécuteur",
+    executor_notes:"Instructions",
+    docs_ph:"Où sont les documents",
+    assets_ph:"Liste des actifs",
+    wishes_ph:"Dernières volontés",
+    first_ph:"Instructions urgentes"
+  },
+  ar:{
+    dir:"rtl",
+    title:"خطة التركة",
+    sub:"وثيقة شخصية غير قانونية",
+    personal:"المعلومات الشخصية",
+    executor:"المنفذ",
+    docs:"المستندات المهمة",
+    assets:"الأصول",
+    wishes:"الوصايا",
+    first:"ما يجب فعله أولاً",
+    name:"الاسم الكامل",
+    dob:"تاريخ الميلاد",
+    address:"العنوان",
+    phone:"الهاتف",
+    email:"البريد الإلكتروني",
+    executor_ph:"اسم المنفذ",
+    executor_notes:"تعليمات",
+    docs_ph:"مكان المستندات",
+    assets_ph:"قائمة الأصول",
+    wishes_ph:"الوصايا",
+    first_ph:"تعليمات عاجلة"
+  }
 };
 
-const RTL = ["ar","ur","he"];
-
-const LANG_NAMES = {
-  en:"English", ja:"日本語", zh:"中文(简体)", "zh-tw":"中文(繁體)", ko:"한국어",
-  hi:"हिन्दी", ta:"தமிழ்", bn:"বাংলা", ur:"اردو",
-  th:"ไทย", vi:"Tiếng Việt", id:"Bahasa Indonesia", ms:"Bahasa Melayu", tl:"Tagalog",
-  ar:"العربية", he:"עברית"
+/* ================= COUNTRY MAP ================= */
+const COUNTRIES={
+  "United States":"en",
+  "Canada":"en",
+  "France":"fr",
+  "Morocco":"ar",
+  "Saudi Arabia":"ar"
 };
-
-function toggle(h){h.parentElement.classList.toggle("open")}
-function openAll(){document.querySelectorAll("section").forEach(s=>s.classList.add("open"))}
-function closeAll(){document.querySelectorAll("section").forEach(s=>s.classList.remove("open"))}
-
-function addRow(container, placeholders){
-  const d=document.createElement("div");
-  d.innerHTML=placeholders.map(p=>`<div class="row"><input placeholder="${p}"></div>`).join("")+
-    `<button class="removeBtn" onclick="this.parentElement.remove()">Remove</button>`;
-  container.appendChild(d);
-}
-
-function addExecutor(){
-  addRow(document.getElementById("executors"),["Executor name","Relationship","Contact info"]);
-}
-function addChild(){
-  addRow(document.getElementById("children"),["Child name","Date of birth","Relationship"]);
-}
-function addAsset(){
-  addRow(document.getElementById("assets"),["Asset description","Location","Notes"]);
-}
 
 const countrySel=document.getElementById("country");
-const langSel=document.getElementById("language");
-
-Object.keys(COUNTRY_LANG).forEach(c=>{
-  countrySel.add(new Option(c,c));
-});
-Object.entries(LANG_NAMES).forEach(([k,v])=>{
-  langSel.add(new Option(v,k));
+Object.keys(COUNTRIES).forEach(c=>{
+  const o=document.createElement("option");
+  o.value=c;
+  o.textContent=c;
+  countrySel.appendChild(o);
 });
 
-countrySel.onchange=()=>{
-  const lang=COUNTRY_LANG[countrySel.value]||"en";
-  langSel.value=lang;
-  applyLang(lang);
-};
-
-langSel.onchange=()=>applyLang(langSel.value);
-
-function applyLang(lang){
-  document.body.dir = RTL.includes(lang) ? "rtl":"ltr";
+/* ================= APPLY LANGUAGE ================= */
+function applyLang(code){
+  const t=LANG[code];
+  document.body.dir=t.dir;
+  title.textContent=t.title;
+  subtitle.textContent=t.sub;
+  s_personal.textContent=t.personal;
+  s_executor.textContent=t.executor;
+  s_docs.textContent=t.docs;
+  s_assets.textContent=t.assets;
+  s_wishes.textContent=t.wishes;
+  s_first.textContent=t.first;
+  name.placeholder=t.name;
+  dob.placeholder=t.dob;
+  address.placeholder=t.address;
+  phone.placeholder=t.phone;
+  email.placeholder=t.email;
+  executor.placeholder=t.executor_ph;
+  executor_notes.placeholder=t.executor_notes;
+  documents.placeholder=t.docs_ph;
+  assets.placeholder=t.assets_ph;
+  wishes.placeholder=t.wishes_ph;
+  first_notes.placeholder=t.first_ph;
 }
 
-document.getElementById("date").value=new Date().toLocaleDateString();
-countrySel.value="Canada";
-langSel.value="en";
-addExecutor(); addChild(); addAsset();
+/* ================= COUNTRY CHANGE ================= */
+countrySel.addEventListener("change",()=>{
+  const lang=COUNTRIES[countrySel.value];
+  applyLang(lang);
+});
+
+/* DEFAULT */
+countrySel.value="United States";
+applyLang("en");
+
+/* ================= SAVE ================= */
+const fields=[...document.querySelectorAll("[data-key]")];
+function save(){
+  const d={country:countrySel.value};
+  fields.forEach(f=>d[f.dataset.key]=f.value||"");
+  localStorage.setItem(STORE,JSON.stringify(d));
+}
+fields.forEach(f=>f.oninput=save);
+countrySel.onchange=save;
+
+function load(){
+  const r=localStorage.getItem(STORE);
+  if(!r) return;
+  const d=JSON.parse(r);
+  countrySel.value=d.country||"United States";
+  applyLang(COUNTRIES[countrySel.value]);
+  fields.forEach(f=>f.value=d[f.dataset.key]||"");
+}
+load();
+
+/* ================= PRINT ================= */
+window.addEventListener("beforeprint",()=>{
+  p_title.textContent=title.textContent;
+  p_sub.textContent=subtitle.textContent;
+  p_country.textContent=countrySel.value;
+  p_date.textContent=new Date().toLocaleDateString();
+  p_first_notes.textContent=first_notes.value||"—";
+  tocList.innerHTML="";
+  document.querySelectorAll(".section-header h2").forEach(h=>{
+    const li=document.createElement("li");
+    li.textContent=h.textContent;
+    tocList.appendChild(li);
+  });
+});
+
+/* ================= EXPORT ================= */
+function exportWord(){
+  const html=`<html><body style="font-family:Times New Roman">${document.body.innerText}</body></html>`;
+  const blob=new Blob(['\ufeff',html],{type:"application/msword"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="My_Estate_Plan.doc";
+  a.click();
+}
+
+function backup(){
+  const d={country:countrySel.value};
+  fields.forEach(f=>d[f.dataset.key]=f.value||"");
+  const blob=new Blob([JSON.stringify(d,null,2)],{type:"application/json"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="estate-plan-backup.json";
+  a.click();
+}
+
+function restore(){
+  const i=document.createElement("input");
+  i.type="file"; i.accept=".json";
+  i.onchange=async()=>{
+    const t=await i.files[0].text();
+    const d=JSON.parse(t);
+    countrySel.value=d.country||"United States";
+    applyLang(COUNTRIES[countrySel.value]);
+    fields.forEach(f=>f.value=d[f.dataset.key]||"");
+    save();
+  };
+  i.click();
+}
 </script>
 
 </body>
