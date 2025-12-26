@@ -2,248 +2,352 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My Estate Plan</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 body{
   margin:0;
   font-family:"Times New Roman", Georgia, serif;
   background:radial-gradient(circle at top,#4a1f26,#2b1417);
-  color:#1f2933;
 }
 .container{
-  max-width:1100px;
+  max-width:1200px;
   margin:40px auto;
-  padding:40px 30px 120px;
+  padding:40px;
   background:#fff;
-  border-radius:16px;
-  box-shadow:0 20px 45px rgba(0,0,0,.35);
+  border-radius:18px;
 }
-#watermark{
-  position:fixed;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%) rotate(-30deg);
-  font-size:110px;
-  color:rgba(0,0,0,.06);
-  pointer-events:none;
+h1{text-align:center;margin-bottom:5px}
+.subtitle{text-align:center;color:#555;margin-bottom:20px}
+
+.topbar{
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr;
+  gap:12px;
+  margin-bottom:15px;
 }
-h1{text-align:center;margin:0}
-.subtitle{text-align:center;color:#6b7280;margin-top:8px;font-size:14px}
-.meta{text-align:center;font-size:13px;color:#6b7280;margin-top:6px}
 
 .toolbar{
-  display:flex;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
   gap:10px;
-  justify-content:center;
-  flex-wrap:wrap;
-  margin:22px 0;
-}
-button,select{
-  padding:10px 14px;
-  border-radius:6px;
-  border:1px solid #d2d6da;
-  background:#f9fafb;
-  font-family:inherit;
-  cursor:pointer;
+  margin-bottom:15px;
 }
 
+select,input,textarea,button{
+  padding:12px;
+  border-radius:8px;
+  border:1px solid #ccc;
+  font-family:inherit;
+  font-size:15px;
+}
+textarea{min-height:120px}
+.large{min-height:260px}
+button{cursor:pointer}
+
 .notice{
-  background:#f7f8fa;
-  padding:14px;
+  background:#f9fafb;
+  padding:12px;
   border-radius:8px;
   font-size:14px;
-  margin-bottom:20px;
 }
 
 section{
-  border:1px solid #d2d6da;
-  border-radius:10px;
-  margin-bottom:18px;
+  border:1px solid #ddd;
+  border-radius:12px;
+  margin-top:18px;
 }
 .section-header{
-  padding:14px 18px;
-  border-bottom:1px solid #d2d6da;
+  padding:14px;
+  background:#f3f4f6;
+  font-weight:bold;
+  cursor:pointer;
 }
-.section-header h2{margin:0;font-size:17px}
-.section-content{padding:18px}
+.section-content{
+  padding:14px;
+  display:none;
+}
+section.open .section-content{display:block}
 
-.grid-2{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-}
-@media(max-width:800px){
-  .grid-2{grid-template-columns:1fr}
-}
-
-input,textarea{
-  width:100%;
-  padding:10px;
-  border-radius:6px;
-  border:1px solid #d2d6da;
-  background:#fafafa;
+.row{
   margin-bottom:12px;
-  font-family:inherit;
 }
-textarea.large{min-height:220px}
 
 @media print{
-  body{background:#fff}
-  button,select,input,textarea{display:none}
-  .container{box-shadow:none;margin:0}
+  .topbar,.toolbar{display:none}
+  section{page-break-inside:avoid}
 }
 </style>
 </head>
 
 <body>
-
-<div id="watermark">DRAFT</div>
-
 <div class="container">
 
-<h1 id="t_title">My Estate Plan</h1>
-<p class="subtitle" id="t_subtitle">
-Personal estate and care planning record for family and executors<br>
-Not a legal will or substitute for professional advice
-</p>
-<div class="meta">
-Version <span id="version">1.0</span>
+<h1 id="title">My Estate Plan</h1>
+<div class="subtitle" id="subtitle">
+Personal estate and care planning record · Not a legal document
 </div>
 
+<!-- TOP BAR -->
+<div class="topbar">
+  <select id="countrySelect" onchange="onCountryChange()">
+    <option>Canada</option>
+    <option>United States</option>
+    <option>United Kingdom</option>
+    <option>France</option>
+    <option>Germany</option>
+    <option>Spain</option>
+    <option>China</option>
+    <option>Japan</option>
+    <option>South Korea</option>
+    <option>India</option>
+  </select>
+
+  <select id="languageSelect" onchange="applyLanguage(this.value)">
+    <option value="en">EN</option>
+    <option value="fr">FR</option>
+    <option value="de">DE</option>
+    <option value="es">ES</option>
+    <option value="zh">中文</option>
+    <option value="ja">日本語</option>
+    <option value="ko">한국어</option>
+    <option value="hi">हिन्दी</option>
+  </select>
+
+  <input value="Version 1.0" disabled>
+</div>
+
+<!-- TOOLBAR -->
 <div class="toolbar">
-  <select id="country"></select>
-  <button onclick="toggleFinal()">Draft / Final</button>
+  <button onclick="openAll()">Open All</button>
+  <button onclick="closeAll()">Close All</button>
   <button onclick="window.print()">Print / Save PDF</button>
 </div>
 
-<div class="notice" id="t_notice">
+<div class="notice" id="notice">
 Information is stored locally in your browser.
 </div>
 
-<section>
-  <div class="section-header"><h2 id="t_personal">Personal Information</h2></div>
+<!-- PERSONAL INFO -->
+<section class="open">
+  <div class="section-header" data-i18n="personal">Personal Information</div>
   <div class="section-content">
-    <input placeholder="Full legal name">
-    <input placeholder="Date of birth">
-    <input placeholder="Address">
-    <input placeholder="Phone">
-    <input placeholder="Email">
+    <div class="row"><input data-i18n-ph="name" placeholder="Full legal name"></div>
+    <div class="row"><input data-i18n-ph="dob" placeholder="Date of birth"></div>
+    <div class="row"><input data-i18n-ph="address" placeholder="Address"></div>
+    <div class="row"><input data-i18n-ph="phone" placeholder="Phone"></div>
+    <div class="row"><input data-i18n-ph="email" placeholder="Email"></div>
   </div>
 </section>
 
+<!-- EXECUTOR -->
 <section>
-  <div class="section-header"><h2 id="t_children">Children</h2></div>
+  <div class="section-header" data-i18n="executor">Executor</div>
   <div class="section-content">
-    <textarea class="large" placeholder="List children and details"></textarea>
+    <div class="row"><input data-i18n-ph="executorPrimary" placeholder="Primary executor"></div>
+    <div class="row"><input data-i18n-ph="executorAlt" placeholder="Alternate executor"></div>
+    <div class="row"><textarea data-i18n-ph="executorNotes" placeholder="Executor instructions"></textarea></div>
   </div>
 </section>
 
+<!-- CHILDREN -->
 <section>
-  <div class="section-header"><h2 id="t_assets">Assets</h2></div>
+  <div class="section-header" data-i18n="children">Children</div>
   <div class="section-content">
-    <textarea class="large" placeholder="List assets"></textarea>
+    <textarea class="large" data-i18n-ph="childrenNotes" placeholder="List children, dates of birth, relationships"></textarea>
   </div>
 </section>
 
+<!-- ASSETS -->
 <section>
-  <div class="section-header"><h2 id="t_final">Final Wishes</h2></div>
+  <div class="section-header" data-i18n="assets">Assets</div>
   <div class="section-content">
-    <textarea class="large" placeholder="Final wishes"></textarea>
+    <textarea class="large" data-i18n-ph="assetsNotes" placeholder="List assets"></textarea>
+  </div>
+</section>
+
+<!-- FUNERAL -->
+<section>
+  <div class="section-header" data-i18n="funeral">Funeral Wishes</div>
+  <div class="section-content">
+    <textarea data-i18n-ph="funeralNotes" placeholder="Burial, cremation, service wishes"></textarea>
   </div>
 </section>
 
 </div>
 
 <script>
-/* =====================
-   FINAL MODE
-===================== */
-let finalMode=false;
-function toggleFinal(){
-  finalMode=!finalMode;
-  document.getElementById("watermark").textContent=finalMode?"FINAL":"DRAFT";
+/* COUNTRY → LANGUAGE DEFAULT */
+const countryLang = {
+  "Canada":"en",
+  "United States":"en",
+  "United Kingdom":"en",
+  "France":"fr",
+  "Germany":"de",
+  "Spain":"es",
+  "China":"zh",
+  "Japan":"ja",
+  "South Korea":"ko",
+  "India":"hi"
+};
+
+/* TRANSLATIONS */
+const t = {
+en:{
+ title:"My Estate Plan",
+ subtitle:"Personal estate and care planning record · Not a legal document",
+ notice:"Information is stored locally in your browser.",
+ personal:"Personal Information",
+ executor:"Executor",
+ children:"Children",
+ assets:"Assets",
+ funeral:"Funeral Wishes",
+ name:"Full legal name",
+ dob:"Date of birth",
+ address:"Address",
+ phone:"Phone",
+ email:"Email",
+ executorPrimary:"Primary executor",
+ executorAlt:"Alternate executor",
+ executorNotes:"Executor instructions",
+ childrenNotes:"List children, dates of birth, relationships",
+ assetsNotes:"List assets",
+ funeralNotes:"Burial, cremation, service wishes"
+},
+fr:{
+ title:"Mon plan successoral",
+ subtitle:"Dossier personnel · Document non juridique",
+ notice:"Les informations sont stockées localement.",
+ personal:"Informations personnelles",
+ executor:"Exécuteur",
+ children:"Enfants",
+ assets:"Actifs",
+ funeral:"Souhaits funéraires",
+ name:"Nom légal complet",
+ dob:"Date de naissance",
+ address:"Adresse",
+ phone:"Téléphone",
+ email:"Courriel",
+ executorPrimary:"Exécuteur principal",
+ executorAlt:"Exécuteur remplaçant",
+ executorNotes:"Instructions pour l’exécuteur",
+ childrenNotes:"Lister les enfants",
+ assetsNotes:"Lister les actifs",
+ funeralNotes:"Souhaits funéraires"
+},
+zh:{
+ title:"我的遗产规划",
+ subtitle:"个人规划文件 · 非法律文件",
+ notice:"信息仅存储在您的浏览器中。",
+ personal:"个人信息",
+ executor:"遗嘱执行人",
+ children:"子女",
+ assets:"资产",
+ funeral:"葬礼意愿",
+ name:"法定姓名",
+ dob:"出生日期",
+ address:"地址",
+ phone:"电话",
+ email:"电子邮件",
+ executorPrimary:"主要执行人",
+ executorAlt:"备用执行人",
+ executorNotes:"执行人说明",
+ childrenNotes:"列出子女信息",
+ assetsNotes:"列出资产",
+ funeralNotes:"葬礼或火化意愿"
+},
+ja:{
+ title:"私の相続計画",
+ subtitle:"個人用文書 · 法的文書ではありません",
+ notice:"情報はブラウザにのみ保存されます。",
+ personal:"個人情報",
+ executor:"遺言執行者",
+ children:"子供",
+ assets:"資産",
+ funeral:"葬儀の希望",
+ name:"氏名",
+ dob:"生年月日",
+ address:"住所",
+ phone:"電話番号",
+ email:"メール",
+ executorPrimary:"主執行者",
+ executorAlt:"予備執行者",
+ executorNotes:"指示",
+ childrenNotes:"子供の情報",
+ assetsNotes:"資産一覧",
+ funeralNotes:"葬儀の希望"
+},
+ko:{
+ title:"나의 상속 계획",
+ subtitle:"개인 기록 · 법적 문서 아님",
+ notice:"정보는 브라우저에만 저장됩니다.",
+ personal:"개인 정보",
+ executor:"집행자",
+ children:"자녀",
+ assets:"자산",
+ funeral:"장례 희망",
+ name:"법적 이름",
+ dob:"생년월일",
+ address:"주소",
+ phone:"전화",
+ email:"이메일",
+ executorPrimary:"주 집행자",
+ executorAlt:"대체 집행자",
+ executorNotes:"집행자 지침",
+ childrenNotes:"자녀 정보",
+ assetsNotes:"자산 목록",
+ funeralNotes:"장례 희망"
+},
+hi:{
+ title:"मेरी संपत्ति योजना",
+ subtitle:"व्यक्तिगत दस्तावेज़ · कानूनी नहीं",
+ notice:"जानकारी आपके ब्राउज़र में संग्रहीत है।",
+ personal:"व्यक्तिगत जानकारी",
+ executor:"निष्पादक",
+ children:"बच्चे",
+ assets:"संपत्तियाँ",
+ funeral:"अंतिम इच्छाएँ",
+ name:"पूरा कानूनी नाम",
+ dob:"जन्म तिथि",
+ address:"पता",
+ phone:"फ़ोन",
+ email:"ईमेल",
+ executorPrimary:"मुख्य निष्पादक",
+ executorAlt:"वैकल्पिक निष्पादक",
+ executorNotes:"निर्देश",
+ childrenNotes:"बच्चों की जानकारी",
+ assetsNotes:"संपत्ति सूची",
+ funeralNotes:"अंतिम संस्कार की इच्छा"
 }
-
-/* =====================
-   COUNTRY + LANGUAGE
-===================== */
-const COUNTRY_LANG={
-  "Canada":"en","United States":"en","United Kingdom":"en",
-  "France":"fr","Germany":"de","Spain":"es",
-  "Russia":"ru","Ukraine":"uk",
-  "Japan":"ja","China":"zh","South Korea":"ko","India":"hi"
 };
-
-const LANG={
-  en:{
-    t_title:"My Estate Plan",
-    t_subtitle:"Personal estate and care planning record for family and executors<br>Not a legal will or substitute for professional advice",
-    t_notice:"Information is stored locally in your browser.",
-    t_personal:"Personal Information",
-    t_children:"Children",
-    t_assets:"Assets",
-    t_final:"Final Wishes"
-  },
-  fr:{
-    t_title:"Mon plan successoral",
-    t_subtitle:"Dossier de planification successorale pour la famille<br>Ce document n’est pas un testament légal",
-    t_notice:"Les informations sont stockées localement dans votre navigateur.",
-    t_personal:"Informations personnelles",
-    t_children:"Enfants",
-    t_assets:"Actifs",
-    t_final:"Dernières volontés"
-  },
-  de:{
-    t_title:"Mein Nachlassplan",
-    t_subtitle:"Nachlass- und Vorsorgedokument für die Familie<br>Kein rechtsgültiges Testament",
-    t_notice:"Daten werden lokal im Browser gespeichert.",
-    t_personal:"Persönliche Informationen",
-    t_children:"Kinder",
-    t_assets:"Vermögen",
-    t_final:"Letzte Wünsche"
-  },
-  ru:{
-    t_title:"Мой план наследства",
-    t_subtitle:"План наследства для семьи<br>Не является юридическим завещанием",
-    t_notice:"Данные хранятся локально в браузере.",
-    t_personal:"Личная информация",
-    t_children:"Дети",
-    t_assets:"Активы",
-    t_final:"Последние желания"
-  },
-  ja:{
-    t_title:"相続計画",
-    t_subtitle:"家族向け相続計画書<br>法的遺言ではありません",
-    t_notice:"情報はブラウザにローカル保存されます。",
-    t_personal:"個人情報",
-    t_children:"子供",
-    t_assets:"資産",
-    t_final:"最終的な希望"
-  }
-};
-
-const country=document.getElementById("country");
-Object.keys(COUNTRY_LANG).forEach(c=>{
-  const o=document.createElement("option");
-  o.value=c;o.textContent=c;
-  country.appendChild(o);
-});
 
 function applyLanguage(lang){
-  const d=LANG[lang];
-  if(!d)return;
-  Object.keys(d).forEach(id=>{
-    const el=document.getElementById(id);
-    if(el)el.innerHTML=d[id];
+  document.documentElement.lang=lang;
+  document.getElementById("languageSelect").value=lang;
+  const d=t[lang]||t.en;
+
+  document.getElementById("title").textContent=d.title;
+  document.getElementById("subtitle").textContent=d.subtitle;
+  document.getElementById("notice").textContent=d.notice;
+
+  document.querySelectorAll("[data-i18n]").forEach(e=>{
+    e.textContent=d[e.dataset.i18n];
   });
-  document.documentElement.dir=["ar","ur","fa","he"].includes(lang)?"rtl":"ltr";
+  document.querySelectorAll("[data-i18n-ph]").forEach(e=>{
+    e.placeholder=d[e.dataset.i18nPh];
+  });
 }
 
-country.onchange=()=>applyLanguage(COUNTRY_LANG[country.value]||"en");
+function onCountryChange(){
+  const c=document.getElementById("countrySelect").value;
+  applyLanguage(countryLang[c]||"en");
+}
 
-country.value="Canada";
+function openAll(){document.querySelectorAll("section").forEach(s=>s.classList.add("open"))}
+function closeAll(){document.querySelectorAll("section").forEach(s=>s.classList.remove("open"))}
+
+/* INIT */
 applyLanguage("en");
 </script>
 
