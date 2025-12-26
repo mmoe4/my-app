@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My Estate Plan</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 body{
@@ -18,22 +18,25 @@ body{
   background:#fff;
   border-radius:18px;
 }
-h1{text-align:center}
+h1{text-align:center;margin-bottom:6px}
 .subtitle{text-align:center;color:#555;margin-bottom:20px}
 
-.topbar,.toolbar{
-  display:block;
-  margin-bottom:15px;
-}
 select,input,textarea,button{
   width:100%;
   padding:12px;
-  margin-bottom:10px;
   border-radius:8px;
   border:1px solid #ccc;
   font-family:inherit;
+  box-sizing:border-box;
 }
-button{cursor:pointer}
+
+button{cursor:pointer;margin-top:8px}
+
+.topbar,.toolbar{
+  display:grid;
+  gap:10px;
+  margin-bottom:15px;
+}
 
 .notice{
   background:#f9fafb;
@@ -51,6 +54,7 @@ section{
   padding:14px;
   background:#f3f4f6;
   cursor:pointer;
+  font-weight:bold;
 }
 .section-content{
   padding:14px;
@@ -66,18 +70,18 @@ section.open .section-content{display:block}
   margin-bottom:10px;
 }
 
-.row-block{
-  border:1px solid #ddd;
-  padding:12px;
-  border-radius:8px;
-  margin-bottom:10px;
-}
-
 textarea{min-height:140px}
 .large{min-height:260px}
 
+.row{
+  border:1px solid #e5e7eb;
+  padding:12px;
+  border-radius:10px;
+  margin-bottom:10px;
+}
+
 @media print{
-  .toolbar,.topbar{display:none}
+  .topbar,.toolbar{display:none}
   section{page-break-inside:avoid}
 }
 </style>
@@ -89,29 +93,14 @@ textarea{min-height:140px}
 <h1 id="title">My Estate Plan</h1>
 <div class="subtitle" id="subtitle">Personal planning record · Not a legal document</div>
 
+<!-- COUNTRY -->
 <div class="topbar">
   <select id="country">
-    <option value="Canada">Canada</option>
-    <option value="United States">United States</option>
-    <option value="France">France</option>
-    <option value="Germany">Germany</option>
-    <option value="Italy">Italy</option>
-    <option value="Spain">Spain</option>
-    <option value="China">China</option>
-    <option value="Japan">Japan</option>
-    <option value="South Korea">South Korea</option>
-  </select>
-
-  <select id="language">
-    <option value="EN">English</option>
-    <option value="FR">Français</option>
-    <option value="ES">Español</option>
-    <option value="DE">Deutsch</option>
-    <option value="IT">Italiano</option>
-    <option value="PT">Português</option>
-    <option value="ZH">中文</option>
-    <option value="JA">日本語</option>
-    <option value="KO">한국어</option>
+    <option value="EN">United States</option>
+    <option value="FR">France</option>
+    <option value="JA">Japan</option>
+    <option value="ZH">China</option>
+    <option value="KO">Korea</option>
   </select>
 </div>
 
@@ -127,137 +116,194 @@ textarea{min-height:140px}
 
 <!-- PERSONAL -->
 <section class="open">
-  <div class="section-header" onclick="toggle(this)" id="personalHeader">Personal Information</div>
+  <div class="section-header" id="personalHeader" onclick="toggle(this)">Personal Information</div>
   <div class="section-content">
-    <input id="p_name" placeholder="Full legal name">
-    <input id="p_dob" placeholder="Date of birth">
-    <input id="p_address" placeholder="Address">
-    <input id="p_phone" placeholder="Phone">
-    <input id="p_email" placeholder="Email">
+    <input id="p_name">
+    <input id="p_dob">
+    <input id="p_address">
+    <input id="p_phone">
+    <input id="p_email">
   </div>
 </section>
 
 <!-- EXECUTORS -->
 <section>
-  <div class="section-header" onclick="toggle(this)" id="executorHeader">Executors</div>
-  <div class="section-content">
-    <div class="help" id="executorHelp">People responsible for carrying out your estate.</div>
-    <div id="executors"></div>
-    <button onclick="addExecutor()">➕ Add Another Executor</button>
+  <div class="section-header" id="executorHeader" onclick="toggle(this)">Executors</div>
+  <div class="section-content" id="executors">
+    <div class="help" id="executorHelp"></div>
+    <button onclick="addExecutor()">➕ Add Executor</button>
   </div>
 </section>
 
 <!-- CHILDREN -->
 <section>
-  <div class="section-header" onclick="toggle(this)" id="childrenHeader">Children</div>
-  <div class="section-content">
-    <div id="children"></div>
-    <button onclick="addChild()">➕ Add Another Child</button>
+  <div class="section-header" id="childrenHeader" onclick="toggle(this)">Children</div>
+  <div class="section-content" id="children">
+    <button onclick="addChild()">➕ Add Child</button>
   </div>
 </section>
 
 <!-- ASSETS -->
 <section>
-  <div class="section-header" onclick="toggle(this)" id="assetsHeader">Assets</div>
-  <div class="section-content">
-    <div id="assets"></div>
-    <button onclick="addAsset()">➕ Add Another Asset</button>
+  <div class="section-header" id="assetsHeader" onclick="toggle(this)">Assets</div>
+  <div class="section-content" id="assets">
+    <button onclick="addAsset()">➕ Add Asset</button>
   </div>
 </section>
 
-<!-- FIRST STEPS -->
+<!-- FIRST -->
 <section>
-  <div class="section-header" onclick="toggle(this)" id="firstHeader">What To Do First</div>
+  <div class="section-header" id="firstHeader" onclick="toggle(this)">What To Do First</div>
   <div class="section-content">
-    <textarea class="large" id="firstSteps" placeholder="Immediate instructions for family"></textarea>
+    <textarea class="large" id="firstNotes"></textarea>
   </div>
 </section>
 
 </div>
 
 <script>
-/* TOGGLE */
+/* TEXT */
+const TEXT={
+EN:{
+ title:"My Estate Plan",
+ sub:"Personal planning record · Not a legal document",
+ notice:"Information is stored only in your browser.",
+ personal:"Personal Information",
+ executors:"Executors",
+ children:"Children",
+ assets:"Assets",
+ first:"What To Do First",
+ execHelp:"People responsible for carrying out your estate.",
+ addExec:"Executor name",
+ addRel:"Relationship",
+ addContact:"Contact information",
+ childName:"Child name",
+ childDOB:"Date of birth",
+ assetDesc:"Asset description"
+},
+FR:{
+ title:"Mon plan successoral",
+ sub:"Dossier personnel · Document non juridique",
+ notice:"Les informations sont stockées uniquement dans votre navigateur.",
+ personal:"Informations personnelles",
+ executors:"Exécuteurs",
+ children:"Enfants",
+ assets:"Actifs",
+ first:"Que faire en premier",
+ execHelp:"Personnes responsables de l’exécution de la succession.",
+ addExec:"Nom de l’exécuteur",
+ addRel:"Lien",
+ addContact:"Coordonnées",
+ childName:"Nom de l’enfant",
+ childDOB:"Date de naissance",
+ assetDesc:"Description de l’actif"
+},
+JA:{
+ title:"遺産計画",
+ sub:"個人用記録・法的文書ではありません",
+ notice:"情報はブラウザ内にのみ保存されます。",
+ personal:"個人情報",
+ executors:"遺言執行者",
+ children:"子供",
+ assets:"資産",
+ first:"最初に行うこと",
+ execHelp:"遺産を実行する責任者。",
+ addExec:"執行者氏名",
+ addRel:"続柄",
+ addContact:"連絡先",
+ childName:"子供の氏名",
+ childDOB:"生年月日",
+ assetDesc:"資産の内容"
+},
+ZH:{
+ title:"遗产规划",
+ sub:"个人记录 · 非法律文件",
+ notice:"信息仅保存在浏览器中。",
+ personal:"个人信息",
+ executors:"执行人",
+ children:"子女",
+ assets:"资产",
+ first:"首先要做的事",
+ execHelp:"负责执行遗产的人。",
+ addExec:"执行人姓名",
+ addRel:"关系",
+ addContact:"联系方式",
+ childName:"子女姓名",
+ childDOB:"出生日期",
+ assetDesc:"资产描述"
+},
+KO:{
+ title:"유산 계획",
+ sub:"개인 기록 · 법적 문서 아님",
+ notice:"정보는 브라우저에만 저장됩니다.",
+ personal:"개인 정보",
+ executors:"집행자",
+ children:"자녀",
+ assets:"자산",
+ first:"처음 할 일",
+ execHelp:"유산을 집행하는 책임자.",
+ addExec:"집행자 이름",
+ addRel:"관계",
+ addContact:"연락처",
+ childName:"자녀 이름",
+ childDOB:"생년월일",
+ assetDesc:"자산 설명"
+}
+};
+
+function applyLanguage(lang){
+ const t=TEXT[lang];
+ title.textContent=t.title;
+ subtitle.textContent=t.sub;
+ notice.textContent=t.notice;
+ personalHeader.textContent=t.personal;
+ executorHeader.textContent=t.executors;
+ childrenHeader.textContent=t.children;
+ assetsHeader.textContent=t.assets;
+ firstHeader.textContent=t.first;
+ executorHelp.textContent=t.execHelp;
+
+ p_name.placeholder=t.addExec.replace("Executor","Full legal name");
+ p_dob.placeholder="Date of birth";
+ p_address.placeholder="Address";
+ p_phone.placeholder="Phone";
+ p_email.placeholder="Email";
+}
+
+/* AUTO LANGUAGE */
+country.addEventListener("change",()=>applyLanguage(country.value));
+applyLanguage("EN");
+
+/* UI */
 function toggle(h){h.parentElement.classList.toggle("open")}
 function openAll(){document.querySelectorAll("section").forEach(s=>s.classList.add("open"))}
 function closeAll(){document.querySelectorAll("section").forEach(s=>s.classList.remove("open"))}
 
-/* ADD ROWS */
+/* ROWS */
 function addExecutor(){
-  document.getElementById("executors").insertAdjacentHTML("beforeend",`
-    <div class="row-block">
-      <input placeholder="Executor name">
-      <input placeholder="Relationship">
-      <input placeholder="Contact information">
-      <textarea placeholder="Compensation preference"></textarea>
-    </div>
-  `);
+ const t=TEXT[country.value];
+ executors.insertAdjacentHTML("beforeend",`
+  <div class="row">
+   <input placeholder="${t.addExec}">
+   <input placeholder="${t.addRel}">
+   <input placeholder="${t.addContact}">
+  </div>`);
 }
 function addChild(){
-  document.getElementById("children").insertAdjacentHTML("beforeend",`
-    <div class="row-block">
-      <input placeholder="Child full name">
-      <input placeholder="Date of birth">
-      <input placeholder="Notes / relationship">
-    </div>
-  `);
+ const t=TEXT[country.value];
+ children.insertAdjacentHTML("beforeend",`
+  <div class="row">
+   <input placeholder="${t.childName}">
+   <input placeholder="${t.childDOB}">
+  </div>`);
 }
 function addAsset(){
-  document.getElementById("assets").insertAdjacentHTML("beforeend",`
-    <div class="row-block">
-      <input placeholder="Asset name">
-      <input placeholder="Location / account number">
-      <textarea placeholder="Notes"></textarea>
-    </div>
-  `);
+ const t=TEXT[country.value];
+ assets.insertAdjacentHTML("beforeend",`
+  <div class="row">
+   <textarea placeholder="${t.assetDesc}"></textarea>
+  </div>`);
 }
-
-/* LANGUAGE DATA */
-const TEXT={
-EN:{title:"My Estate Plan",personal:"Personal Information",executors:"Executors",children:"Children",assets:"Assets",first:"What To Do First"},
-FR:{title:"Plan successoral",personal:"Informations personnelles",executors:"Exécuteurs",children:"Enfants",assets:"Actifs",first:"Que faire en premier"},
-ES:{title:"Plan patrimonial",personal:"Información personal",executors:"Albaceas",children:"Hijos",assets:"Activos",first:"Qué hacer primero"},
-DE:{title:"Nachlassplan",personal:"Persönliche Daten",executors:"Testamentsvollstrecker",children:"Kinder",assets:"Vermögen",first:"Was zuerst zu tun ist"},
-IT:{title:"Piano patrimoniale",personal:"Dati personali",executors:"Esecutori",children:"Figli",assets:"Beni",first:"Cosa fare prima"},
-PT:{title:"Plano patrimonial",personal:"Dados pessoais",executors:"Executores",children:"Filhos",assets:"Bens",first:"O que fazer primeiro"},
-ZH:{title:"遗产规划",personal:"个人信息",executors:"执行人",children:"子女",assets:"资产",first:"首先要做的事"},
-JA:{title:"遺産計画",personal:"個人情報",executors:"遺言執行者",children:"子供",assets:"資産",first:"最初に行うこと"},
-KO:{title:"유산 계획",personal:"개인 정보",executors:"집행자",children:"자녀",assets:"자산",first:"가장 먼저 할 일"}
-};
-
-/* APPLY LANGUAGE */
-function applyLanguage(lang){
-  const t=TEXT[lang];
-  document.getElementById("title").textContent=t.title;
-  document.getElementById("personalHeader").textContent=t.personal;
-  document.getElementById("executorHeader").textContent=t.executors;
-  document.getElementById("childrenHeader").textContent=t.children;
-  document.getElementById("assetsHeader").textContent=t.assets;
-  document.getElementById("firstHeader").textContent=t.first;
-}
-
-/* COUNTRY → LANGUAGE */
-document.getElementById("country").addEventListener("change",e=>{
-  const map={
-    Canada:"EN","United States":"EN",
-    France:"FR",Germany:"DE",Italy:"IT",Spain:"ES",
-    China:"ZH",Japan:"JA","South Korea":"KO"
-  };
-  const lang=map[e.target.value]||"EN";
-  document.getElementById("language").value=lang;
-  applyLanguage(lang);
-});
-
-/* MANUAL LANGUAGE */
-document.getElementById("language").addEventListener("change",e=>{
-  applyLanguage(e.target.value);
-});
-
-/* INIT */
-addExecutor();
-addChild();
-addAsset();
-applyLanguage("EN");
 </script>
-
 </body>
 </html>
