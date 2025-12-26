@@ -1,214 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My Estate Plan</title>
 
 <style>
-:root{
-  --jam-dark:#2b1417;
-  --jam-mid:#4a1f26;
-  --paper:#ffffff;
-  --border:#d2d6da;
-  --heading:#2f4f4f;
-  --muted:#6b7280;
-  --soft:#f7f8fa;
-}
-
 body{
   margin:0;
   font-family:"Times New Roman", Georgia, serif;
-  background:radial-gradient(circle at top, var(--jam-mid), var(--jam-dark));
+  background:radial-gradient(circle at top,#4a1f26,#2b1417);
   color:#1f2933;
 }
-
 .container{
   max-width:1100px;
-  margin:50px auto;
+  margin:40px auto;
   padding:40px 30px 120px;
-  background:var(--paper);
+  background:#fff;
   border-radius:16px;
-  box-shadow:0 20px 45px rgba(0,0,0,0.35);
-  position:relative;
+  box-shadow:0 20px 45px rgba(0,0,0,.35);
 }
-
 #watermark{
   position:fixed;
   top:50%;
   left:50%;
   transform:translate(-50%,-50%) rotate(-30deg);
   font-size:110px;
-  color:rgba(0,0,0,0.06);
+  color:rgba(0,0,0,.06);
   pointer-events:none;
-  user-select:none;
-  z-index:0;
 }
-
-h1{
-  text-align:center;
-  margin:0;
-  color:var(--heading);
-  letter-spacing:0.4px;
-}
-
-.subtitle{
-  text-align:center;
-  font-size:14px;
-  color:var(--muted);
-  margin:8px 0 0;
-  line-height:1.5;
-}
-
-.meta{
-  text-align:center;
-  font-size:13px;
-  color:var(--muted);
-  margin-top:10px;
-}
+h1{text-align:center;margin:0}
+.subtitle{text-align:center;color:#6b7280;margin-top:8px;font-size:14px}
+.meta{text-align:center;font-size:13px;color:#6b7280;margin-top:6px}
 
 .toolbar{
   display:flex;
-  justify-content:center;
   gap:10px;
-  margin:26px 0 18px;
+  justify-content:center;
   flex-wrap:wrap;
+  margin:22px 0;
 }
-
-button, select{
-  padding:9px 14px;
-  font-family:inherit;
-  font-size:14px;
+button,select{
+  padding:10px 14px;
   border-radius:6px;
-  border:1px solid var(--border);
+  border:1px solid #d2d6da;
   background:#f9fafb;
+  font-family:inherit;
   cursor:pointer;
 }
 
-button:hover{ background:#eef2f5; }
-
-.progress{
-  text-align:center;
-  font-size:14px;
-  color:var(--muted);
-  margin-bottom:26px;
-}
-
 .notice{
-  background:var(--soft);
-  border:1px solid var(--border);
-  border-radius:10px;
-  padding:14px 16px;
-  color:#3b4550;
+  background:#f7f8fa;
+  padding:14px;
+  border-radius:8px;
   font-size:14px;
-  line-height:1.6;
-  margin:18px 0 24px;
+  margin-bottom:20px;
 }
 
 section{
-  border:1px solid var(--border);
+  border:1px solid #d2d6da;
   border-radius:10px;
   margin-bottom:18px;
-  background:#fff;
 }
-
 .section-header{
-  padding:16px 20px;
-  border-bottom:1px solid var(--border);
-  background:#fff;
+  padding:14px 18px;
+  border-bottom:1px solid #d2d6da;
 }
-
-.section-header h2{
-  margin:0;
-  font-size:17px;
-  color:var(--heading);
-}
-
-.section-content{
-  padding:20px;
-}
-
-.help{
-  font-size:13.5px;
-  color:var(--muted);
-  line-height:1.6;
-  margin:0 0 14px;
-}
-
-h3{
-  margin:18px 0 10px;
-  font-size:15.5px;
-  color:#344b4b;
-}
+.section-header h2{margin:0;font-size:17px}
+.section-content{padding:18px}
 
 .grid-2{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:12px;
 }
-@media (max-width:820px){
-  .grid-2{ grid-template-columns:1fr; }
+@media(max-width:800px){
+  .grid-2{grid-template-columns:1fr}
 }
 
-input, textarea{
+input,textarea{
   width:100%;
   padding:10px;
-  margin-bottom:12px;
   border-radius:6px;
-  border:1px solid var(--border);
+  border:1px solid #d2d6da;
   background:#fafafa;
+  margin-bottom:12px;
   font-family:inherit;
-  font-size:14px;
-  box-sizing:border-box;
 }
-
-.large-note{ min-height:260px; }
-.medium-note{ min-height:160px; }
-
-.item{
-  border:1px solid var(--border);
-  background:#fcfcfd;
-  border-radius:8px;
-  padding:12px;
-  margin-bottom:12px;
-}
-
-.item-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  margin-bottom:8px;
-}
-.item-title{
-  font-weight:700;
-  color:#374151;
-  font-size:14px;
-}
-.small-btn{
-  padding:6px 10px;
-  font-size:13px;
-  background:#fff;
-}
-
-hr{
-  border:none;
-  border-top:1px solid var(--border);
-  margin:18px 0;
-}
-
-.print-text{
-  white-space:pre-wrap;
-  font-size:12pt;
-  margin-bottom:12px;
-  color:#111827;
-}
+textarea.large{min-height:220px}
 
 @media print{
-  body{ background:#fff; }
-  .container{ box-shadow:none; margin:0; padding:0; border-radius:0; }
-  button, select{ display:none !important; }
-  input, textarea{ display:none !important; }
+  body{background:#fff}
+  button,select,input,textarea{display:none}
+  .container{box-shadow:none;margin:0}
 }
 </style>
 </head>
@@ -219,752 +103,148 @@ hr{
 
 <div class="container">
 
-<h1>My Estate Plan</h1>
-<p class="subtitle">
+<h1 id="t_title">My Estate Plan</h1>
+<p class="subtitle" id="t_subtitle">
 Personal estate and care planning record for family and executors<br>
-Not a legal will and not a substitute for professional advice
+Not a legal will or substitute for professional advice
 </p>
 <div class="meta">
-Version: <span id="version">1.0</span> · Last Updated: <span id="lastUpdated">—</span>
+Version <span id="version">1.0</span>
 </div>
 
 <div class="toolbar">
   <select id="country"></select>
   <button onclick="toggleFinal()">Draft / Final</button>
   <button onclick="window.print()">Print / Save PDF</button>
-  <button onclick="downloadBackup()">Download Backup</button>
-  <button onclick="importBackup()">Import Backup</button>
-  <button onclick="clearData()">Clear (Template)</button>
 </div>
 
-<div class="progress" id="progress">Completion Status: 0%</div>
-
-<div class="notice">
-<b>Privacy note:</b> This form saves information locally in your browser on this device.  
-For sharing with family/executors, use <b>Print / Save PDF</b> and/or <b>Download Backup</b>.  
-<b>FINAL</b> mode locks editing to reduce accidental changes.
+<div class="notice" id="t_notice">
+Information is stored locally in your browser.
 </div>
 
-<!-- INSTRUCTIONS -->
 <section>
-  <div class="section-header"><h2>Instructions for Family and Executors</h2></div>
+  <div class="section-header"><h2 id="t_personal">Personal Information</h2></div>
   <div class="section-content">
-    <p class="help">
-      This document is a planning record to help your family, executor, and advisors locate information and understand your wishes.
-      It does not replace a formal will, power of attorney, or medical directive.
-    </p>
-    <textarea class="medium-note" data-key="instructions"
-      placeholder="Optional: Write a short message to your family/executor and how you want this document used."></textarea>
+    <input placeholder="Full legal name">
+    <input placeholder="Date of birth">
+    <input placeholder="Address">
+    <input placeholder="Phone">
+    <input placeholder="Email">
   </div>
 </section>
 
-<!-- JURISDICTION -->
 <section>
-  <div class="section-header"><h2>Jurisdiction</h2></div>
+  <div class="section-header"><h2 id="t_children">Children</h2></div>
   <div class="section-content">
-    <p class="help" id="jurisdictionHelp">Select the country/jurisdiction this plan is intended for.</p>
-    <div class="grid-2">
-      <input data-key="jurisdiction_region" placeholder="Province / State / Region (optional)">
-      <input data-key="jurisdiction_city" placeholder="City (optional)">
-    </div>
+    <textarea class="large" placeholder="List children and details"></textarea>
   </div>
 </section>
 
-<!-- PERSONAL INFO -->
 <section>
-  <div class="section-header"><h2>Personal Information</h2></div>
+  <div class="section-header"><h2 id="t_assets">Assets</h2></div>
   <div class="section-content">
-    <div class="grid-2">
-      <input data-key="pi_name" placeholder="Full legal name">
-      <input data-key="pi_dob" placeholder="Date of birth (YYYY-MM-DD)">
-    </div>
-    <input data-key="pi_address" placeholder="Primary residence address">
-    <div class="grid-2">
-      <input data-key="pi_phone" placeholder="Telephone number">
-      <input data-key="pi_email" placeholder="Email address">
-    </div>
-    <div class="grid-2">
-      <input data-key="pi_sin_ssn" placeholder="National ID / SIN / SSN (optional)">
-      <input data-key="pi_passport" placeholder="Passport number (optional)">
-    </div>
+    <textarea class="large" placeholder="List assets"></textarea>
   </div>
 </section>
 
-<!-- SPOUSE / PARTNER -->
 <section>
-  <div class="section-header"><h2>Spouse / Partner</h2></div>
+  <div class="section-header"><h2 id="t_final">Final Wishes</h2></div>
   <div class="section-content">
-    <p class="help">Record spouse/partner details and any agreements that may affect the estate.</p>
-    <div class="grid-2">
-      <input data-key="sp_name" placeholder="Full legal name">
-      <input data-key="sp_relation" placeholder="Relationship (spouse, partner, common-law)">
-    </div>
-    <div class="grid-2">
-      <input data-key="sp_dob" placeholder="Date of birth (YYYY-MM-DD)">
-      <input data-key="sp_phone" placeholder="Telephone number">
-    </div>
-    <input data-key="sp_address" placeholder="Address (if different)">
-    <textarea class="medium-note" data-key="sp_notes"
-      placeholder="Marriage agreement, separation details, special considerations (optional)"></textarea>
-  </div>
-</section>
-
-<!-- CHILDREN (repeatable) -->
-<section>
-  <div class="section-header"><h2>Children</h2></div>
-  <div class="section-content">
-    <p class="help">Add each child (biological, adopted, step-child). Include guardianship notes if relevant.</p>
-    <div id="childrenList"></div>
-    <button onclick="addItem('children')">Add Child</button>
-  </div>
-</section>
-
-<!-- OTHER DEPENDANTS (repeatable) -->
-<section>
-  <div class="section-header"><h2>Other Dependants</h2></div>
-  <div class="section-content">
-    <p class="help">Add anyone financially or care-dependent on you (e.g., parent, disabled adult, supported relative).</p>
-    <div id="dependantsList"></div>
-    <button onclick="addItem('dependants')">Add Dependant</button>
-  </div>
-</section>
-
-<!-- EMERGENCY CONTACTS (repeatable) -->
-<section>
-  <div class="section-header"><h2>Emergency Contacts</h2></div>
-  <div class="section-content">
-    <p class="help">People to contact first if something happens.</p>
-    <div id="contactsList"></div>
-    <button onclick="addItem('contacts')">Add Contact</button>
-  </div>
-</section>
-
-<!-- EXECUTOR -->
-<section>
-  <div class="section-header"><h2>Executor / Estate Administrator</h2></div>
-  <div class="section-content">
-    <p class="help">The executor (estate administrator / personal representative) manages and distributes the estate under local law.</p>
-
-    <h3>Primary Executor</h3>
-    <div class="grid-2">
-      <input data-key="ex_primary_name" placeholder="Full legal name">
-      <input data-key="ex_primary_relation" placeholder="Relationship to you">
-    </div>
-    <div class="grid-2">
-      <input data-key="ex_primary_phone" placeholder="Telephone number">
-      <input data-key="ex_primary_email" placeholder="Email address">
-    </div>
-    <input data-key="ex_primary_address" placeholder="Address">
-
-    <h3>Alternate / Backup Executor</h3>
-    <div class="grid-2">
-      <input data-key="ex_alt_name" placeholder="Full legal name">
-      <input data-key="ex_alt_relation" placeholder="Relationship to you">
-    </div>
-    <div class="grid-2">
-      <input data-key="ex_alt_phone" placeholder="Telephone number">
-      <input data-key="ex_alt_email" placeholder="Email address">
-    </div>
-    <input data-key="ex_alt_address" placeholder="Address">
-
-    <h3>Executor Instructions</h3>
-    <textarea class="large-note" data-key="ex_instructions"
-      placeholder="Authority, guidance, compensation expectations, and special instructions."></textarea>
-  </div>
-</section>
-
-<!-- ADVISORS (repeatable) -->
-<section>
-  <div class="section-header"><h2>Professional Advisors</h2></div>
-  <div class="section-content">
-    <p class="help">Add lawyers, accountants, financial advisors, insurance brokers, or key contacts.</p>
-    <div id="advisorsList"></div>
-    <button onclick="addItem('advisors')">Add Advisor</button>
-  </div>
-</section>
-
-<!-- GUARDIANSHIP -->
-<section>
-  <div class="section-header"><h2>Guardianship</h2></div>
-  <div class="section-content">
-    <p class="help">If applicable, record guardian preferences for minor children or dependants.</p>
-    <div class="grid-2">
-      <input data-key="guard_primary" placeholder="Preferred guardian">
-      <input data-key="guard_alternate" placeholder="Alternate guardian">
-    </div>
-    <textarea class="large-note" data-key="guard_notes"
-      placeholder="Guardianship instructions, reasoning, and any special care needs."></textarea>
-  </div>
-</section>
-
-<!-- HEALTH -->
-<section>
-  <div class="section-header"><h2>Health & Care Preferences</h2></div>
-  <div class="section-content">
-    <p class="help">Record decision-makers and wishes for medical care. Local legal documents may be required.</p>
-    <div class="grid-2">
-      <input data-key="health_primary_dm" placeholder="Primary medical decision-maker">
-      <input data-key="health_alt_dm" placeholder="Alternate decision-maker">
-    </div>
-    <textarea class="medium-note" data-key="health_life_support" placeholder="Life-sustaining treatment preferences"></textarea>
-    <textarea class="medium-note" data-key="health_dnr" placeholder="Resuscitation preferences (DNR/CPR)"></textarea>
-    <textarea class="large-note" data-key="health_comfort" placeholder="Comfort care, pain management, and palliative wishes"></textarea>
-  </div>
-</section>
-
-<!-- BENEFICIARIES (repeatable) -->
-<section>
-  <div class="section-header"><h2>Beneficiaries</h2></div>
-  <div class="section-content">
-    <p class="help">List intended beneficiaries and notes (specific gifts, percentages, contingencies).</p>
-    <div id="beneficiariesList"></div>
-    <button onclick="addItem('beneficiaries')">Add Beneficiary</button>
-  </div>
-</section>
-
-<!-- ASSETS (repeatable) -->
-<section>
-  <div class="section-header"><h2>Assets</h2></div>
-  <div class="section-content">
-    <p class="help">Add assets (property, bank accounts, investments, vehicles, business interests, valuables). Avoid passwords here.</p>
-    <div id="assetsList"></div>
-    <button onclick="addItem('assets')">Add Asset</button>
-  </div>
-</section>
-
-<!-- DEBTS (repeatable) -->
-<section>
-  <div class="section-header"><h2>Debts & Liabilities</h2></div>
-  <div class="section-content">
-    <p class="help">Add mortgages, loans, credit cards, lines of credit, tax debts, or obligations.</p>
-    <div id="debtsList"></div>
-    <button onclick="addItem('debts')">Add Debt</button>
-  </div>
-</section>
-
-<!-- IMPORTANT DOCUMENTS -->
-<section>
-  <div class="section-header"><h2>Location of Important Documents</h2></div>
-  <div class="section-content">
-    <p class="help">Where family/executor can find originals and key records.</p>
-    <textarea class="large-note" data-key="docs_locations"
-      placeholder="Where are the will, insurance policies, titles, deeds, tax returns, pension statements, etc.?"></textarea>
-  </div>
-</section>
-
-<!-- DIGITAL ASSETS -->
-<section>
-  <div class="section-header"><h2>Digital Assets</h2></div>
-  <div class="section-content">
-    <p class="help">List accounts/devices and where access information is stored (do not put passwords directly in this public template).</p>
-    <textarea class="large-note" data-key="digital_assets"
-      placeholder="Devices, key accounts, and where your password manager / access instructions are stored."></textarea>
-  </div>
-</section>
-
-<!-- FINAL WISHES -->
-<section>
-  <div class="section-header"><h2>Final Wishes</h2></div>
-  <div class="section-content">
-    <textarea class="large-note" data-key="final_wishes"
-      placeholder="Funeral / burial / cremation preferences, memorial details, and instructions."></textarea>
-    <textarea class="large-note" data-key="final_notes"
-      placeholder="Additional wishes, personal messages, and notes."></textarea>
-  </div>
-</section>
-
-<!-- ADDITIONAL NOTES / APPENDIX (END) -->
-<section>
-  <div class="section-header"><h2>Additional Notes / Appendix</h2></div>
-  <div class="section-content">
-    <p class="help">Use this for extra pages of notes that don’t fit elsewhere.</p>
-    <div id="appendixList"></div>
-    <button onclick="addAppendixPage()">Add Another Notes Page</button>
+    <textarea class="large" placeholder="Final wishes"></textarea>
   </div>
 </section>
 
 </div>
 
 <script>
-/* =======================
-   SETTINGS
-======================= */
-const VERSION = "1.0";
+/* =====================
+   FINAL MODE
+===================== */
+let finalMode=false;
+function toggleFinal(){
+  finalMode=!finalMode;
+  document.getElementById("watermark").textContent=finalMode?"FINAL":"DRAFT";
+}
 
-/* Template mode: add ?template=true to avoid saving personal data */
-const isTemplateMode = new URLSearchParams(location.search).get("template") === "true";
-
-/* Storage prefix (lets you copy this template and not collide with other projects) */
-const STORE_KEY = "myEstatePlan_v1";
-
-/* =======================
-   COUNTRIES (FULL LIST)
-======================= */
-const countries = [
-"Select country",
-"Afghanistan","Albania","Algeria","Andorra","Angola","Antigua and Barbuda","Argentina","Armenia",
-"Australia","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium",
-"Belize","Benin","Bhutan","Bolivia","Bosnia and Herzegovina","Botswana","Brazil","Brunei","Bulgaria",
-"Burkina Faso","Burundi","Cambodia","Cameroon","Cape Verde","Central African Republic","Chad","Chile",
-"China","Colombia","Comoros","Congo","Costa Rica","Croatia","Cuba","Cyprus","Czech Republic",
-"Denmark","Djibouti","Dominica","Dominican Republic","Ecuador","Egypt","El Salvador","Estonia",
-"Eswatini","Ethiopia","Fiji","Finland","France","Gabon","Gambia","Georgia","Germany","Ghana","Greece",
-"Grenada","Guatemala","Guinea","Guinea-Bissau","Guyana","Haiti","Honduras","Hungary","Iceland","India",
-"Indonesia","Iran","Iraq","Ireland","Israel","Italy","Jamaica","Japan","Jordan","Kazakhstan","Kenya",
-"Kiribati","Kuwait","Kyrgyzstan","Laos","Latvia","Lebanon","Lesotho","Liberia","Libya","Liechtenstein",
-"Lithuania","Luxembourg","Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Marshall Islands",
-"Mauritania","Mauritius","Mexico","Micronesia","Moldova","Monaco","Mongolia","Montenegro","Morocco",
-"Mozambique","Myanmar","Namibia","Nauru","Nepal","Netherlands","New Zealand","Nicaragua","Niger",
-"Nigeria","North Macedonia","Norway","Oman","Pakistan","Palau","Panama","Papua New Guinea","Paraguay",
-"Peru","Philippines","Poland","Portugal","Qatar","Romania","Russia","Rwanda","Saint Kitts and Nevis",
-"Saint Lucia","Saint Vincent and the Grenadines","Samoa","San Marino","Sao Tome and Principe",
-"Saudi Arabia","Senegal","Serbia","Seychelles","Sierra Leone","Singapore","Slovakia","Slovenia",
-"Solomon Islands","Somalia","South Africa","South Korea","South Sudan","Spain","Sri Lanka","Sudan",
-"Suriname","Sweden","Switzerland","Syria","Taiwan","Tajikistan","Tanzania","Thailand","Timor-Leste",
-"Togo","Tonga","Trinidad and Tobago","Tunisia","Turkey","Turkmenistan","Tuvalu","Uganda","Ukraine",
-"United Arab Emirates","United Kingdom","United States","Uruguay","Uzbekistan","Vanuatu",
-"Vatican City","Venezuela","Vietnam","Yemen","Zambia","Zimbabwe"
-];
-
-const countrySelect = document.getElementById("country");
-countries.forEach(c=>{
-  const opt=document.createElement("option");
-  opt.value=c; opt.textContent=c;
-  countrySelect.appendChild(opt);
-});
-
-/* =======================
-   DATA MODEL
-======================= */
-const data = {
-  simple: {},
-
-  children: [],
-  dependants: [],
-  contacts: [],
-  advisors: [],
-  beneficiaries: [],
-  assets: [],
-  debts: [],
-  appendix: []
+/* =====================
+   COUNTRY + LANGUAGE
+===================== */
+const COUNTRY_LANG={
+  "Canada":"en","United States":"en","United Kingdom":"en",
+  "France":"fr","Germany":"de","Spain":"es",
+  "Russia":"ru","Ukraine":"uk",
+  "Japan":"ja","China":"zh","South Korea":"ko","India":"hi"
 };
 
-let finalMode = false;
-
-/* =======================
-   HELPERS
-======================= */
-function nowISO(){
-  const d = new Date();
-  const pad = n => String(n).padStart(2,"0");
-  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-}
-
-function setLastUpdated(){
-  document.getElementById("lastUpdated").textContent = nowISO();
-}
-
-function save(){
-  if(isTemplateMode) return;
-  localStorage.setItem(STORE_KEY, JSON.stringify({ data, finalMode, country: countrySelect.value, updated: nowISO(), version: VERSION }));
-  setLastUpdated();
-  updateProgress();
-}
-
-function load(){
-  document.getElementById("version").textContent = VERSION;
-
-  if(isTemplateMode){
-    document.getElementById("lastUpdated").textContent = "Template mode";
-    updateProgress();
-    renderAll();
-    return;
+const LANG={
+  en:{
+    t_title:"My Estate Plan",
+    t_subtitle:"Personal estate and care planning record for family and executors<br>Not a legal will or substitute for professional advice",
+    t_notice:"Information is stored locally in your browser.",
+    t_personal:"Personal Information",
+    t_children:"Children",
+    t_assets:"Assets",
+    t_final:"Final Wishes"
+  },
+  fr:{
+    t_title:"Mon plan successoral",
+    t_subtitle:"Dossier de planification successorale pour la famille<br>Ce document n’est pas un testament légal",
+    t_notice:"Les informations sont stockées localement dans votre navigateur.",
+    t_personal:"Informations personnelles",
+    t_children:"Enfants",
+    t_assets:"Actifs",
+    t_final:"Dernières volontés"
+  },
+  de:{
+    t_title:"Mein Nachlassplan",
+    t_subtitle:"Nachlass- und Vorsorgedokument für die Familie<br>Kein rechtsgültiges Testament",
+    t_notice:"Daten werden lokal im Browser gespeichert.",
+    t_personal:"Persönliche Informationen",
+    t_children:"Kinder",
+    t_assets:"Vermögen",
+    t_final:"Letzte Wünsche"
+  },
+  ru:{
+    t_title:"Мой план наследства",
+    t_subtitle:"План наследства для семьи<br>Не является юридическим завещанием",
+    t_notice:"Данные хранятся локально в браузере.",
+    t_personal:"Личная информация",
+    t_children:"Дети",
+    t_assets:"Активы",
+    t_final:"Последние желания"
+  },
+  ja:{
+    t_title:"相続計画",
+    t_subtitle:"家族向け相続計画書<br>法的遺言ではありません",
+    t_notice:"情報はブラウザにローカル保存されます。",
+    t_personal:"個人情報",
+    t_children:"子供",
+    t_assets:"資産",
+    t_final:"最終的な希望"
   }
+};
 
-  const raw = localStorage.getItem(STORE_KEY);
-  if(!raw){
-    document.getElementById("lastUpdated").textContent = "—";
-    updateProgress();
-    renderAll();
-    return;
-  }
+const country=document.getElementById("country");
+Object.keys(COUNTRY_LANG).forEach(c=>{
+  const o=document.createElement("option");
+  o.value=c;o.textContent=c;
+  country.appendChild(o);
+});
 
-  try{
-    const parsed = JSON.parse(raw);
-    if(parsed?.data) Object.assign(data, parsed.data);
-    if(typeof parsed?.finalMode === "boolean") finalMode = parsed.finalMode;
-    if(parsed?.country) countrySelect.value = parsed.country;
-    document.getElementById("lastUpdated").textContent = parsed.updated || "—";
-  }catch(e){
-    document.getElementById("lastUpdated").textContent = "—";
-  }
-
-  applyFinalMode();
-  hydrateSimpleFields();
-  renderAll();
-  updateProgress();
-}
-
-function hydrateSimpleFields(){
-  document.querySelectorAll("[data-key]").forEach(el=>{
-    const k = el.getAttribute("data-key");
-    el.value = data.simple[k] || "";
+function applyLanguage(lang){
+  const d=LANG[lang];
+  if(!d)return;
+  Object.keys(d).forEach(id=>{
+    const el=document.getElementById(id);
+    if(el)el.innerHTML=d[id];
   });
+  document.documentElement.dir=["ar","ur","fa","he"].includes(lang)?"rtl":"ltr";
 }
 
-function wireSimpleFields(){
-  document.querySelectorAll("[data-key]").forEach(el=>{
-    el.addEventListener("input", ()=>{
-      const k = el.getAttribute("data-key");
-      data.simple[k] = el.value;
-      save();
-    });
-  });
+country.onchange=()=>applyLanguage(COUNTRY_LANG[country.value]||"en");
 
-  countrySelect.addEventListener("change", ()=>{
-    document.getElementById("jurisdictionHelp").textContent =
-      countrySelect.value === "Select country"
-        ? "Select the country/jurisdiction this plan is intended for."
-        : `This plan is intended for use in ${countrySelect.value}. Laws vary by jurisdiction.`;
-    save();
-  });
-}
-
-function updateProgress(){
-  // simple fields count
-  const keys = Array.from(document.querySelectorAll("[data-key]")).map(el=>el.getAttribute("data-key"));
-  const total = keys.length;
-  let filled = 0;
-  keys.forEach(k=>{ if((data.simple[k]||"").trim().length>0) filled++; });
-
-  // add some credit for lists
-  const listTotal = 8; // children, dependants, contacts, advisors, beneficiaries, assets, debts, appendix
-  let listFilled = 0;
-  if(data.children.length) listFilled++;
-  if(data.dependants.length) listFilled++;
-  if(data.contacts.length) listFilled++;
-  if(data.advisors.length) listFilled++;
-  if(data.beneficiaries.length) listFilled++;
-  if(data.assets.length) listFilled++;
-  if(data.debts.length) listFilled++;
-  if(data.appendix.length) listFilled++;
-
-  const pctA = total ? (filled/total) : 0;
-  const pctB = listFilled / listTotal;
-  const pct = Math.round((pctA*0.75 + pctB*0.25)*100);
-
-  document.getElementById("progress").textContent = `Completion Status: ${pct}%`;
-}
-
-/* =======================
-   FINAL MODE
-======================= */
-function toggleFinal(){
-  finalMode = !finalMode;
-  applyFinalMode();
-  save();
-}
-
-function applyFinalMode(){
-  document.getElementById("watermark").textContent = finalMode ? "FINAL" : "DRAFT";
-  document.querySelectorAll("input,textarea,select").forEach(el=>{
-    // allow country selection only in draft
-    if(el === countrySelect){
-      el.disabled = finalMode;
-      return;
-    }
-    el.disabled = finalMode;
-  });
-
-  // disable add/remove buttons when FINAL
-  document.querySelectorAll("button").forEach(btn=>{
-    const text = (btn.textContent||"").toLowerCase();
-    const isToolbar = btn.onclick && (btn.onclick.name === "toggleFinal" || btn.onclick.name === "downloadBackup" || btn.onclick.name === "importBackup" || btn.onclick.name === "clearData");
-    const isPrint = btn.getAttribute("onclick")==="window.print()";
-    // allow toolbar buttons always
-    if(isToolbar || isPrint){
-      btn.disabled = false;
-      return;
-    }
-    // block “add” and “remove” in FINAL
-    if(text.includes("add") || text.includes("remove")) btn.disabled = finalMode;
-  });
-}
-
-/* =======================
-   REPEATABLE LISTS
-======================= */
-function addItem(kind){
-  const templates = {
-    children: { title:"Child", fields:[
-      ["name","Child full name"],["dob","Date of birth"],["relationship","Relationship (biological/adopted/step)"],
-      ["guardian","Current guardian / living arrangement"],["notes","Notes (special needs, etc.)"]
-    ]},
-    dependants: { title:"Dependant", fields:[
-      ["name","Full name"],["relationship","Relationship"],["dependency","Nature of dependency (financial/care)"],["notes","Notes/instructions"]
-    ]},
-    contacts: { title:"Contact", fields:[
-      ["name","Full name"],["relationship","Relationship"],["phone","Telephone number"],["email","Email address"],["notes","Priority / availability notes"]
-    ]},
-    advisors: { title:"Advisor", fields:[
-      ["type","Role (lawyer/accountant/financial)"],["name","Name"],["phone","Telephone"],["email","Email"],["address","Address"],["notes","Notes"]
-    ]},
-    beneficiaries: { title:"Beneficiary", fields:[
-      ["name","Name"],["relationship","Relationship"],["share","Share / gift details"],["backup","Contingency (if they predecease)"],["notes","Notes"]
-    ]},
-    assets: { title:"Asset", fields:[
-      ["category","Category (property/bank/investment/vehicle/other)"],["description","Description/identifying details"],
-      ["location","Location (where kept / account # last 4)"],["value","Approx value (optional)"],["notes","Notes / who gets it"]
-    ]},
-    debts: { title:"Debt", fields:[
-      ["creditor","Creditor"],["type","Type (mortgage/loan/credit card)"],["balance","Approx balance"],["payment","Payment info (optional)"],["notes","Notes"]
-    ]}
-  };
-
-  const t = templates[kind];
-  if(!t) return;
-
-  data[kind].push({ id: crypto.randomUUID(), ...Object.fromEntries(t.fields.map(([k])=>[k,""])) });
-  renderAll();
-  save();
-}
-
-function removeItem(kind, id){
-  data[kind] = data[kind].filter(x=>x.id!==id);
-  renderAll();
-  save();
-}
-
-function renderList(kind, containerId, title, fields){
-  const wrap = document.getElementById(containerId);
-  wrap.innerHTML = "";
-
-  if(!data[kind].length){
-    const p = document.createElement("div");
-    p.className="help";
-    p.textContent = "No entries yet.";
-    wrap.appendChild(p);
-    return;
-  }
-
-  data[kind].forEach((row, idx)=>{
-    const card = document.createElement("div");
-    card.className="item";
-
-    const head = document.createElement("div");
-    head.className="item-head";
-
-    const t = document.createElement("div");
-    t.className="item-title";
-    t.textContent = `${title} ${idx+1}`;
-    head.appendChild(t);
-
-    const rm = document.createElement("button");
-    rm.className="small-btn";
-    rm.textContent = "Remove";
-    rm.onclick = ()=>removeItem(kind, row.id);
-    head.appendChild(rm);
-
-    card.appendChild(head);
-
-    fields.forEach(([k, ph])=>{
-      const el = document.createElement(k==="notes" || k==="description" ? "textarea" : "input");
-      el.placeholder = ph;
-      el.value = row[k] || "";
-      if(el.tagName==="TEXTAREA"){
-        el.className = "medium-note";
-        el.style.minHeight = "140px";
-      }
-      el.addEventListener("input", ()=>{
-        row[k] = el.value;
-        save();
-      });
-      card.appendChild(el);
-    });
-
-    wrap.appendChild(card);
-  });
-}
-
-function renderAppendix(){
-  const wrap = document.getElementById("appendixList");
-  wrap.innerHTML = "";
-
-  if(!data.appendix.length){
-    const p = document.createElement("div");
-    p.className="help";
-    p.textContent = "No appendix pages yet. Click “Add Another Notes Page”.";
-    wrap.appendChild(p);
-    return;
-  }
-
-  data.appendix.forEach((page, idx)=>{
-    const card = document.createElement("div");
-    card.className="item";
-
-    const head = document.createElement("div");
-    head.className="item-head";
-
-    const t = document.createElement("div");
-    t.className="item-title";
-    t.textContent = `Notes Page ${idx+1}`;
-    head.appendChild(t);
-
-    const rm = document.createElement("button");
-    rm.className="small-btn";
-    rm.textContent = "Remove";
-    rm.onclick = ()=>{
-      data.appendix = data.appendix.filter(p=>p.id!==page.id);
-      renderAll();
-      save();
-    };
-    head.appendChild(rm);
-
-    card.appendChild(head);
-
-    const ta = document.createElement("textarea");
-    ta.className = "large-note";
-    ta.placeholder = "Write additional notes here…";
-    ta.value = page.text || "";
-    ta.addEventListener("input", ()=>{
-      page.text = ta.value;
-      save();
-    });
-
-    card.appendChild(ta);
-    wrap.appendChild(card);
-  });
-}
-
-function addAppendixPage(){
-  data.appendix.push({ id: crypto.randomUUID(), text:"" });
-  renderAll();
-  save();
-}
-
-/* =======================
-   RENDER ALL
-======================= */
-function renderAll(){
-  renderList("children","childrenList","Child",[
-    ["name","Child full name"],["dob","Date of birth"],["relationship","Relationship (biological/adopted/step)"],
-    ["guardian","Current guardian / living arrangement"],["notes","Notes (special needs, etc.)"]
-  ]);
-
-  renderList("dependants","dependantsList","Dependant",[
-    ["name","Full name"],["relationship","Relationship"],["dependency","Nature of dependency (financial/care)"],["notes","Notes/instructions"]
-  ]);
-
-  renderList("contacts","contactsList","Contact",[
-    ["name","Full name"],["relationship","Relationship"],["phone","Telephone number"],["email","Email address"],["notes","Priority / availability notes"]
-  ]);
-
-  renderList("advisors","advisorsList","Advisor",[
-    ["type","Role (lawyer/accountant/financial)"],["name","Name"],["phone","Telephone"],["email","Email"],["address","Address"],["notes","Notes"]
-  ]);
-
-  renderList("beneficiaries","beneficiariesList","Beneficiary",[
-    ["name","Name"],["relationship","Relationship"],["share","Share / gift details"],["backup","Contingency (if they predecease)"],["notes","Notes"]
-  ]);
-
-  renderList("assets","assetsList","Asset",[
-    ["category","Category (property/bank/investment/vehicle/other)"],["description","Description/identifying details"],
-    ["location","Location (where kept / account # last 4)"],["value","Approx value (optional)"],["notes","Notes / who gets it"]
-  ]);
-
-  renderList("debts","debtsList","Debt",[
-    ["creditor","Creditor"],["type","Type (mortgage/loan/credit card)"],["balance","Approx balance"],["payment","Payment info (optional)"],["notes","Notes"]
-  ]);
-
-  renderAppendix();
-  applyFinalMode();
-  updateProgress();
-}
-
-/* =======================
-   BACKUP / IMPORT / CLEAR
-======================= */
-function downloadBackup(){
-  const payload = { version: VERSION, exported: new Date().toISOString(), country: countrySelect.value, finalMode, data };
-  const blob = new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "my-estate-plan-backup.json";
-  a.click();
-}
-
-function importBackup(){
-  const input = document.createElement("input");
-  input.type="file";
-  input.accept=".json,application/json";
-  input.onchange = async ()=>{
-    const file = input.files?.[0];
-    if(!file) return;
-    const text = await file.text();
-    try{
-      const parsed = JSON.parse(text);
-      if(parsed?.data){
-        // overwrite in-memory
-        Object.assign(data, parsed.data);
-        finalMode = !!parsed.finalMode;
-        if(parsed.country) countrySelect.value = parsed.country;
-        hydrateSimpleFields();
-        renderAll();
-        save();
-        alert("Import complete.");
-      }else{
-        alert("This file does not look like a valid backup.");
-      }
-    }catch(e){
-      alert("Could not read that file as JSON.");
-    }
-  };
-  input.click();
-}
-
-function clearData(){
-  if(!confirm("Clear all saved data and reset to a blank template?")) return;
-  localStorage.removeItem(STORE_KEY);
-  location.reload();
-}
-
-/* =======================
-   PRINT FIX (NO CLIPPING)
-======================= */
-function prepareForPrint(){
-  // Convert each input/textarea into plain flowing text
-  document.querySelectorAll("input,textarea,select").forEach(f=>{
-    // hide buttons/select already hidden by print CSS; convert only inputs/textareas (and country selection)
-    if(f.tagName==="SELECT"){
-      // show selected country as printed text near the select
-      const div = document.createElement("div");
-      div.className = "print-text";
-      div.textContent = `Country/Jurisdiction: ${f.value || ""}`;
-      div.dataset.print="1";
-      f.parentNode.insertBefore(div,f);
-      return;
-    }
-
-    const div = document.createElement("div");
-    div.className = "print-text";
-    div.textContent = f.value || "";
-    div.dataset.print="1";
-    f.parentNode.insertBefore(div,f);
-  });
-}
-
-function restoreAfterPrint(){
-  document.querySelectorAll("[data-print]").forEach(d=>d.remove());
-}
-
-window.addEventListener("beforeprint", prepareForPrint);
-window.addEventListener("afterprint", restoreAfterPrint);
-
-/* =======================
-   INIT
-======================= */
-wireSimpleFields();
-load();
+country.value="Canada";
+applyLanguage("en");
 </script>
 
 </body>
