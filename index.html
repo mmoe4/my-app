@@ -6,6 +6,39 @@
 <title>My Estate Plan</title>
 
 <style>
+  /* INSTRUCTIONS OVERLAY */
+#instructionsOverlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  z-index:9999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.instructions-box{
+  background:#fff;
+  max-width:700px;
+  max-height:85vh;
+  overflow:auto;
+  padding:30px;
+  border-radius:14px;
+  box-shadow:0 20px 40px rgba(0,0,0,0.3);
+  font-size:16px;
+  line-height:1.6;
+}
+
+.instructions-box h2{
+  margin-top:0;
+}
+
+.instructions-box button{
+  margin-top:20px;
+}
+@media print{
+  #instructionsOverlay{display:none!important;}
+}
   body{
     margin:0;
     font-family:"Times New Roman", Georgia, serif;
@@ -96,6 +129,42 @@
   }
 </style>
 </head>
+  
+<!-- INSTRUCTIONS OVERLAY -->
+<div id="instructionsOverlay" style="display:none;">
+  <div class="instructions-box">
+    <h2>How to Use This Estate Plan</h2>
+
+    <p>
+      This document is a <strong>personal estate and care planning record</strong>.
+      It is <strong>not a legal will</strong>, but it helps your family and executor
+      understand your wishes clearly.
+    </p>
+
+    <h3>How to complete this document</h3>
+    <ul>
+      <li>Fill out sections gradually — you do not need to finish in one sitting.</li>
+      <li>Use the “Add Another” buttons to list multiple people or assets.</li>
+      <li>Be clear and specific where possible.</li>
+    </ul>
+
+    <h3>For your family</h3>
+    <ul>
+      <li>Read the “What To Do First” section immediately.</li>
+      <li>Contact the executor listed.</li>
+      <li>Do not distribute assets without legal guidance.</li>
+    </ul>
+
+    <h3>Privacy</h3>
+    <p>
+      All information is stored <strong>only in this browser</strong>.
+      Nothing is uploaded or shared.
+      Always print or back up a copy.
+    </p>
+
+    <button onclick="closeInstructions()">Close</button>
+  </div>
+</div>
 
 <body>
 <div class="container">
@@ -138,6 +207,7 @@
     <button onclick="openAll()">Open All</button>
     <button onclick="closeAll()">Close All</button>
     <button onclick="window.print()">Print / Save PDF</button>
+    <button onclick="openInstructions()">Instructions</button>
   </div>
 
   <div class="notice" id="notice">
@@ -213,6 +283,12 @@
   function toggle(h){ h.parentElement.classList.toggle("open"); }
   function openAll(){ document.querySelectorAll("section").forEach(s=>s.classList.add("open")); }
   function closeAll(){ document.querySelectorAll("section").forEach(s=>s.classList.remove("open")); }
+function openInstructions(){
+  document.getElementById("instructionsOverlay").style.display="flex";
+}
+function closeInstructions(){
+  document.getElementById("instructionsOverlay").style.display="none";
+}
 
   /* COUNTRY → LANGUAGE */
   const countryLang = {
