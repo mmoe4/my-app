@@ -6,413 +6,224 @@
 <title>My Estate Plan</title>
 
 <style>
-:root{
-  --jam-dark:#2b1417;
-  --jam-mid:#4a1f26;
-  --paper:#ffffff;
-  --border:#d2d6da;
-  --heading:#2f4f4f;
-  --muted:#6b7280;
-  --soft:#f7f8fa;
-}
-
-/* ================= SCREEN ================= */
 body{
   margin:0;
   font-family:"Times New Roman", Georgia, serif;
-  font-size:18px;
-  line-height:1.6;
-  background:radial-gradient(circle at top, var(--jam-mid), var(--jam-dark));
-  color:#1f2933;
+  background:radial-gradient(circle at top,#4a1f26,#2b1417);
 }
-
 .container{
-  max-width:1150px;
-  margin:50px auto;
-  padding:48px 36px 140px;
-  background:var(--paper);
+  max-width:1100px;
+  margin:40px auto;
+  padding:40px;
+  background:#fff;
   border-radius:18px;
-  box-shadow:0 22px 50px rgba(0,0,0,0.35);
 }
+h1{text-align:center;margin:0}
+.subtitle{text-align:center;color:#555;margin-bottom:20px}
 
-h1{
-  text-align:center;
-  margin:0;
-  font-size:36px;
-  color:var(--heading);
+.topbar,.toolbar{
+  display:grid;
+  gap:10px;
+  margin-bottom:14px;
 }
+.topbar{grid-template-columns:2fr 1fr 1fr}
+.toolbar{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
 
-.subtitle{
-  text-align:center;
-  font-size:16px;
-  color:var(--muted);
-  margin-top:8px;
-}
-
-.toolbar{
-  display:flex;
-  gap:12px;
-  justify-content:center;
-  flex-wrap:wrap;
-  margin:26px 0;
-}
-
-select,button,input,textarea{
-  font-family:inherit;
-  font-size:18px;
-}
-
-button{
-  padding:10px 16px;
+select,input,textarea,button{
+  padding:12px;
   border-radius:8px;
-  border:1px solid var(--border);
+  border:1px solid #ccc;
+  font-family:inherit;
+  font-size:15px;
+}
+textarea{min-height:120px}
+.large{min-height:220px}
+button{cursor:pointer}
+
+.notice{
   background:#f9fafb;
-  cursor:pointer;
+  padding:12px;
+  border-radius:8px;
+  font-size:14px;
 }
 
 section{
-  border:1px solid var(--border);
+  border:1px solid #ddd;
   border-radius:12px;
-  margin-bottom:22px;
-  background:#fff;
+  margin-top:18px;
 }
-
 .section-header{
-  padding:18px 22px;
-  border-bottom:1px solid var(--border);
-}
-
-.section-header h2{ margin:0; }
-
-.section-content{ padding:22px; }
-
-.grid-2{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:16px;
-}
-
-@media(max-width:900px){
-  .grid-2{ grid-template-columns:1fr; }
-}
-
-input,textarea{
-  width:100%;
   padding:14px;
-  margin-bottom:14px;
-  border-radius:10px;
-  border:1px solid var(--border);
-  background:#fafafa;
-  box-sizing:border-box;
+  background:#f3f4f6;
+  font-weight:bold;
+  cursor:pointer;
 }
+.section-content{
+  padding:14px;
+  display:none;
+}
+section.open .section-content{display:block}
 
-.large-note{ min-height:420px; }
-
-/* ================= PRINT ================= */
-.print-only{ display:none; }
+.help{
+  font-size:14px;
+  background:#f9fafb;
+  padding:10px;
+  border-left:4px solid #999;
+  margin-bottom:10px;
+}
 
 @media print{
-  body{ background:#fff; }
-  .container{ display:none; }
-  .print-only{ display:block; }
-  textarea,input,button,select{ display:none; }
-  .print-block{
-    page-break-after:always;
-    padding:20mm;
-    font-size:14pt;
-    line-height:1.65;
-    white-space:pre-wrap;
-  }
-  footer{
-    position:fixed;
-    bottom:8mm;
-    width:100%;
-    text-align:center;
-    font-size:11pt;
-  }
-  footer:after{
-    content:"Page " counter(page);
-  }
+  .toolbar,.topbar{display:none}
+  body{background:#fff}
 }
 </style>
 </head>
 
 <body>
+<div class="container">
 
-<!-- ================= PRINT PAGES ================= -->
-<div class="print-only print-block">
-  <h1 id="p_title"></h1>
-  <p id="p_sub"></p>
-  <p><b id="p_country"></b></p>
-  <p><b id="p_date"></b></p>
+<h1 id="title">My Estate Plan</h1>
+<div class="subtitle" id="subtitle">Personal planning record · Not a legal document</div>
+
+<div class="topbar">
+  <select id="countrySelect"></select>
+  <select id="languageSelect"></select>
+  <input id="version" value="1.0" disabled>
 </div>
 
-<div class="print-only print-block">
-  <h2 id="p_toc"></h2>
-  <ol id="tocList"></ol>
+<div class="toolbar">
+  <button onclick="openAll()">Open All</button>
+  <button onclick="closeAll()">Close All</button>
+  <button onclick="window.print()">Print / Save PDF</button>
 </div>
 
-<div class="print-only print-block">
-  <h2 id="p_first"></h2>
-  <div id="p_first_notes"></div>
+<div class="notice" id="notice">
+  Information is stored only in your browser.
 </div>
 
-<footer class="print-only"></footer>
-
-<!-- ================= APP ================= -->
-<div class="container" id="app">
-  <h1 id="title"></h1>
-  <p class="subtitle" id="subtitle"></p>
-
-  <div class="toolbar">
-    <select id="country"></select>
-    <button onclick="window.print()">Print / PDF</button>
-    <button onclick="exportWord()">Word</button>
-    <button onclick="backup()">Backup</button>
-    <button onclick="restore()">Restore</button>
+<section class="open">
+  <div class="section-header" onclick="toggle(this)" id="personalTitle">Personal Information</div>
+  <div class="section-content">
+    <input id="fullname" placeholder="Full legal name">
+    <input id="dob" placeholder="Date of birth">
+    <input id="address" placeholder="Address">
+    <input id="phone" placeholder="Phone">
+    <input id="email" placeholder="Email">
   </div>
+</section>
 
-  <section>
-    <div class="section-header"><h2 id="s_personal"></h2></div>
-    <div class="section-content">
-      <input data-key="name" id="name">
-      <input data-key="dob" id="dob">
-      <input data-key="address" id="address">
-      <input data-key="phone" id="phone">
-      <input data-key="email" id="email">
-    </div>
-  </section>
+<section>
+  <div class="section-header" onclick="toggle(this)" id="executorTitle">Executors</div>
+  <div class="section-content">
+    <div class="help" id="executorHelp">People responsible for carrying out your estate.</div>
+    <input placeholder="Executor name">
+    <input placeholder="Relationship">
+    <input placeholder="Contact information">
+    <textarea placeholder="Executor instructions"></textarea>
+  </div>
+</section>
 
-  <section>
-    <div class="section-header"><h2 id="s_executor"></h2></div>
-    <div class="section-content">
-      <input data-key="executor" id="executor">
-      <textarea class="large-note" data-key="executor_notes" id="executor_notes"></textarea>
-    </div>
-  </section>
+<section>
+  <div class="section-header" onclick="toggle(this)" id="childrenTitle">Children</div>
+  <div class="section-content">
+    <textarea class="large" placeholder="List children: names, DOBs, notes"></textarea>
+  </div>
+</section>
 
-  <section>
-    <div class="section-header"><h2 id="s_docs"></h2></div>
-    <div class="section-content">
-      <textarea class="large-note" data-key="documents" id="documents"></textarea>
-    </div>
-  </section>
+<section>
+  <div class="section-header" onclick="toggle(this)" id="assetsTitle">Assets</div>
+  <div class="section-content">
+    <textarea class="large" placeholder="List assets"></textarea>
+  </div>
+</section>
 
-  <section>
-    <div class="section-header"><h2 id="s_assets"></h2></div>
-    <div class="section-content">
-      <textarea class="large-note" data-key="assets" id="assets"></textarea>
-    </div>
-  </section>
+<section>
+  <div class="section-header" onclick="toggle(this)" id="funeralTitle">Funeral Wishes</div>
+  <div class="section-content">
+    <textarea placeholder="Burial or cremation"></textarea>
+    <textarea placeholder="Organ donation"></textarea>
+    <textarea placeholder="Service wishes"></textarea>
+  </div>
+</section>
 
-  <section>
-    <div class="section-header"><h2 id="s_wishes"></h2></div>
-    <div class="section-content">
-      <textarea class="large-note" data-key="wishes" id="wishes"></textarea>
-    </div>
-  </section>
+<section>
+  <div class="section-header" onclick="toggle(this)" id="firstTitle">What To Do First</div>
+  <div class="section-content">
+    <textarea class="large" placeholder="Immediate instructions for family"></textarea>
+  </div>
+</section>
 
-  <section>
-    <div class="section-header"><h2 id="s_first"></h2></div>
-    <div class="section-content">
-      <textarea class="large-note" data-key="first_notes" id="first_notes"></textarea>
-    </div>
-  </section>
 </div>
 
 <script>
-const STORE="estate_plan_full_v1";
+function toggle(h){h.parentElement.classList.toggle("open")}
+function openAll(){document.querySelectorAll("section").forEach(s=>s.classList.add("open"))}
+function closeAll(){document.querySelectorAll("section").forEach(s=>s.classList.remove("open"))}
 
-/* ================= TRANSLATIONS ================= */
-const LANG={
-  en:{
-    dir:"ltr",
-    title:"My Estate Plan",
-    sub:"Personal planning record · Not a legal document",
-    personal:"Personal Information",
-    executor:"Executor",
-    docs:"Important Documents",
-    assets:"Assets",
-    wishes:"Final Wishes",
-    first:"What To Do First",
-    name:"Full legal name",
-    dob:"Date of birth",
-    address:"Address",
-    phone:"Telephone",
-    email:"Email",
-    executor_ph:"Executor name",
-    executor_notes:"Executor instructions",
-    docs_ph:"Where documents are stored",
-    assets_ph:"List assets",
-    wishes_ph:"Final wishes",
-    first_ph:"Urgent family instructions"
-  },
-  fr:{
-    dir:"ltr",
-    title:"Mon plan successoral",
-    sub:"Document personnel · Non juridique",
-    personal:"Informations personnelles",
-    executor:"Exécuteur",
-    docs:"Documents importants",
-    assets:"Actifs",
-    wishes:"Dernières volontés",
-    first:"Que faire en premier",
-    name:"Nom légal complet",
-    dob:"Date de naissance",
-    address:"Adresse",
-    phone:"Téléphone",
-    email:"Courriel",
-    executor_ph:"Nom de l'exécuteur",
-    executor_notes:"Instructions",
-    docs_ph:"Où sont les documents",
-    assets_ph:"Liste des actifs",
-    wishes_ph:"Dernières volontés",
-    first_ph:"Instructions urgentes"
-  },
-  ar:{
-    dir:"rtl",
-    title:"خطة التركة",
-    sub:"وثيقة شخصية غير قانونية",
-    personal:"المعلومات الشخصية",
-    executor:"المنفذ",
-    docs:"المستندات المهمة",
-    assets:"الأصول",
-    wishes:"الوصايا",
-    first:"ما يجب فعله أولاً",
-    name:"الاسم الكامل",
-    dob:"تاريخ الميلاد",
-    address:"العنوان",
-    phone:"الهاتف",
-    email:"البريد الإلكتروني",
-    executor_ph:"اسم المنفذ",
-    executor_notes:"تعليمات",
-    docs_ph:"مكان المستندات",
-    assets_ph:"قائمة الأصول",
-    wishes_ph:"الوصايا",
-    first_ph:"تعليمات عاجلة"
-  }
+const COUNTRY_LANG={
+  "Canada":"en","United States":"en","France":"fr","Germany":"de","Spain":"es",
+  "Russia":"ru","Ukraine":"uk",
+  "Japan":"ja","China (Simplified)":"zh-CN","China (Traditional)":"zh-TW","South Korea":"ko",
+  "India (Hindi)":"hi","India (Tamil)":"ta","India (Bengali)":"bn","India (Urdu)":"ur"
 };
 
-/* ================= COUNTRY MAP ================= */
-const COUNTRIES={
-  "United States":"en",
-  "Canada":"en",
-  "France":"fr",
-  "Morocco":"ar",
-  "Saudi Arabia":"ar"
+const RTL=["ur"];
+
+const I18N={
+en:{title:"My Estate Plan",personal:"Personal Information",executors:"Executors",children:"Children",assets:"Assets",funeral:"Funeral Wishes",first:"What To Do First"},
+fr:{title:"Mon plan successoral",personal:"Informations personnelles",executors:"Exécuteurs",children:"Enfants",assets:"Actifs",funeral:"Souhaits funéraires",first:"Que faire en premier"},
+de:{title:"Mein Nachlassplan",personal:"Persönliche Informationen",executors:"Testamentsvollstrecker",children:"Kinder",assets:"Vermögen",funeral:"Bestattungswünsche",first:"Erste Schritte"},
+es:{title:"Mi plan patrimonial",personal:"Información personal",executors:"Albaceas",children:"Hijos",assets:"Activos",funeral:"Deseos funerarios",first:"Qué hacer primero"},
+ru:{title:"Мой план наследства",personal:"Личная информация",executors:"Исполнители",children:"Дети",assets:"Активы",funeral:"Похоронные пожелания",first:"Что делать сначала"},
+uk:{title:"Мій спадковий план",personal:"Особиста інформація",executors:"Виконавці",children:"Діти",assets:"Активи",funeral:"Побажання щодо похорону",first:"Що зробити спочатку"},
+ja:{title:"相続計画",personal:"個人情報",executors:"遺言執行者",children:"子供",assets:"資産",funeral:"葬儀の希望",first:"最初に行うこと"},
+"zh-CN":{title:"遗产计划",personal:"个人信息",executors:"执行人",children:"子女",assets:"资产",funeral:"葬礼意愿",first:"首先要做的事"},
+"zh-TW":{title:"遺產計畫",personal:"個人資訊",executors:"執行人",children:"子女",assets:"資產",funeral:"葬禮意願",first:"首先要做的事"},
+ko:{title:"유산 계획",personal:"개인 정보",executors:"집행자",children:"자녀",assets:"자산",funeral:"장례 희망",first:"먼저 할 일"},
+hi:{title:"वसीयत योजना",personal:"व्यक्तिगत जानकारी",executors:"कार्यपालक",children:"बच्चे",assets:"संपत्ति",funeral:"अंतिम इच्छाएँ",first:"सबसे पहले क्या करें"},
+ta:{title:"சொத்துத் திட்டம்",personal:"தனிப்பட்ட தகவல்",executors:"நிர்வாகிகள்",children:"குழந்தைகள்",assets:"சொத்துகள்",funeral:"இறுதி விருப்பங்கள்",first:"முதலில் செய்யவேண்டியது"},
+bn:{title:"সম্পত্তি পরিকল্পনা",personal:"ব্যক্তিগত তথ্য",executors:"কার্যনির্বাহী",children:"সন্তান",assets:"সম্পদ",funeral:"শেষকৃত্যের ইচ্ছা",first:"প্রথমে কী করবেন"},
+ur:{title:"وراثتی منصوبہ",personal:"ذاتی معلومات",executors:"منتظمین",children:"بچے",assets:"اثاثے",funeral:"تدفین کی خواہشات",first:"سب سے پہلے کیا کریں"}
 };
 
-const countrySel=document.getElementById("country");
-Object.keys(COUNTRIES).forEach(c=>{
-  const o=document.createElement("option");
-  o.value=c;
-  o.textContent=c;
+const countrySel=document.getElementById("countrySelect");
+const langSel=document.getElementById("languageSelect");
+
+Object.keys(COUNTRY_LANG).forEach(c=>{
+  let o=document.createElement("option");
+  o.value=c;o.textContent=c;
   countrySel.appendChild(o);
 });
 
-/* ================= APPLY LANGUAGE ================= */
-function applyLang(code){
-  const t=LANG[code];
-  document.body.dir=t.dir;
-  title.textContent=t.title;
-  subtitle.textContent=t.sub;
-  s_personal.textContent=t.personal;
-  s_executor.textContent=t.executor;
-  s_docs.textContent=t.docs;
-  s_assets.textContent=t.assets;
-  s_wishes.textContent=t.wishes;
-  s_first.textContent=t.first;
-  name.placeholder=t.name;
-  dob.placeholder=t.dob;
-  address.placeholder=t.address;
-  phone.placeholder=t.phone;
-  email.placeholder=t.email;
-  executor.placeholder=t.executor_ph;
-  executor_notes.placeholder=t.executor_notes;
-  documents.placeholder=t.docs_ph;
-  assets.placeholder=t.assets_ph;
-  wishes.placeholder=t.wishes_ph;
-  first_notes.placeholder=t.first_ph;
+function setLanguage(l){
+  document.body.dir=RTL.includes(l)?"rtl":"ltr";
+  const t=I18N[l];
+  document.getElementById("title").textContent=t.title;
+  personalTitle.textContent=t.personal;
+  executorTitle.textContent=t.executors;
+  childrenTitle.textContent=t.children;
+  assetsTitle.textContent=t.assets;
+  funeralTitle.textContent=t.funeral;
+  firstTitle.textContent=t.first;
 }
 
-/* ================= COUNTRY CHANGE ================= */
-countrySel.addEventListener("change",()=>{
-  const lang=COUNTRIES[countrySel.value];
-  applyLang(lang);
+countrySel.onchange=()=>{
+  const l=COUNTRY_LANG[countrySel.value];
+  langSel.value=l;
+  setLanguage(l);
+};
+
+Object.keys(I18N).forEach(l=>{
+  let o=document.createElement("option");
+  o.value=l;o.textContent=l;
+  langSel.appendChild(o);
 });
 
-/* DEFAULT */
-countrySel.value="United States";
-applyLang("en");
+langSel.onchange=()=>setLanguage(langSel.value);
 
-/* ================= SAVE ================= */
-const fields=[...document.querySelectorAll("[data-key]")];
-function save(){
-  const d={country:countrySel.value};
-  fields.forEach(f=>d[f.dataset.key]=f.value||"");
-  localStorage.setItem(STORE,JSON.stringify(d));
-}
-fields.forEach(f=>f.oninput=save);
-countrySel.onchange=save;
-
-function load(){
-  const r=localStorage.getItem(STORE);
-  if(!r) return;
-  const d=JSON.parse(r);
-  countrySel.value=d.country||"United States";
-  applyLang(COUNTRIES[countrySel.value]);
-  fields.forEach(f=>f.value=d[f.dataset.key]||"");
-}
-load();
-
-/* ================= PRINT ================= */
-window.addEventListener("beforeprint",()=>{
-  p_title.textContent=title.textContent;
-  p_sub.textContent=subtitle.textContent;
-  p_country.textContent=countrySel.value;
-  p_date.textContent=new Date().toLocaleDateString();
-  p_first_notes.textContent=first_notes.value||"—";
-  tocList.innerHTML="";
-  document.querySelectorAll(".section-header h2").forEach(h=>{
-    const li=document.createElement("li");
-    li.textContent=h.textContent;
-    tocList.appendChild(li);
-  });
-});
-
-/* ================= EXPORT ================= */
-function exportWord(){
-  const html=`<html><body style="font-family:Times New Roman">${document.body.innerText}</body></html>`;
-  const blob=new Blob(['\ufeff',html],{type:"application/msword"});
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
-  a.download="My_Estate_Plan.doc";
-  a.click();
-}
-
-function backup(){
-  const d={country:countrySel.value};
-  fields.forEach(f=>d[f.dataset.key]=f.value||"");
-  const blob=new Blob([JSON.stringify(d,null,2)],{type:"application/json"});
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
-  a.download="estate-plan-backup.json";
-  a.click();
-}
-
-function restore(){
-  const i=document.createElement("input");
-  i.type="file"; i.accept=".json";
-  i.onchange=async()=>{
-    const t=await i.files[0].text();
-    const d=JSON.parse(t);
-    countrySel.value=d.country||"United States";
-    applyLang(COUNTRIES[countrySel.value]);
-    fields.forEach(f=>f.value=d[f.dataset.key]||"");
-    save();
-  };
-  i.click();
-}
+countrySel.value="Canada";
+langSel.value="en";
+setLanguage("en");
 </script>
 
 </body>
