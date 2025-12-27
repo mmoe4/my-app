@@ -1,4 +1,18 @@
 <!DOCTYPE html>
+<section>
+  <div class="section-header">Professional Advisors</div>
+  <div class="section-content" id="advisors">
+
+    <div class="repeat">
+      <input data-i18n-ph="advisorName" placeholder="Advisor name">
+      <input data-i18n-ph="advisorRole" placeholder="Role (lawyer, accountant)">
+      <input data-i18n-ph="advisorContact" placeholder="Contact details">
+    </div>
+
+    <button onclick="addAdvisor(this)">➕ Add Another Advisor</button>
+  </div>
+</section>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -333,6 +347,10 @@ function closeInstructions(){
       assetValue:"Estimated value",
       assetNotes:"Notes / beneficiary",
       funeralNotes:"Burial, cremation, service wishes"
+      advisorName: "Advisor name",
+advisorRole: "Role",
+advisorContact: "Contact details",
+
     },
     fr:{
       title:"Mon plan successoral",
@@ -585,6 +603,17 @@ function closeInstructions(){
     btn.parentElement.insertBefore(d, btn);
     applyLanguage(document.getElementById("languageSelect").value);
   }
+function addAdvisor(btn){
+  const d = document.createElement("div");
+  d.className = "repeat";
+  d.innerHTML = `
+    <input data-i18n-ph="advisorName" placeholder="Advisor name">
+    <input data-i18n-ph="advisorRole" placeholder="Role (lawyer, accountant)">
+    <input data-i18n-ph="advisorContact" placeholder="Contact details">
+  `;
+  btn.parentElement.insertBefore(d, btn);
+  applyLanguage(document.getElementById("languageSelect").value);
+}
 
   function addAsset(btn){
     const d = document.createElement("div");
