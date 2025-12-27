@@ -21,7 +21,7 @@ body{
 h1{text-align:center}
 .subtitle{text-align:center;color:#555;margin-bottom:20px}
 
-.topbar,.toolbar{
+.topbar, .toolbar{
   display:grid;
   gap:10px;
   margin-bottom:15px;
@@ -40,8 +40,21 @@ select,input,textarea,button{
 textarea{min-height:120px}
 .large{min-height:220px}
 
-button{cursor:pointer;background:#f3f4f6}
-.add-btn{background:#eef2ff;border:1px dashed #777}
+button{
+  cursor:pointer;
+  background:#f3f4f6;
+}
+.add-btn{
+  background:#eef2ff;
+  border:1px dashed #777;
+}
+
+.notice{
+  background:#f9fafb;
+  padding:12px;
+  border-radius:8px;
+  font-size:14px;
+}
 
 section{
   border:1px solid #ddd;
@@ -54,7 +67,10 @@ section{
   cursor:pointer;
   font-weight:bold;
 }
-.section-content{padding:14px;display:none}
+.section-content{
+  padding:14px;
+  display:none;
+}
 section.open .section-content{display:block}
 
 .repeat{
@@ -63,14 +79,19 @@ section.open .section-content{display:block}
   border-radius:8px;
   margin-bottom:12px;
 }
+
+@media print{
+  .toolbar,.topbar{display:none}
+  section{page-break-inside:avoid}
+}
 </style>
 </head>
 
 <body>
 <div class="container">
 
-<h1 id="title" data-i18n="title">My Estate Plan</h1>
-<div class="subtitle" id="subtitle" data-i18n="subtitle">
+<h1 id="title">My Estate Plan</h1>
+<div class="subtitle" id="subtitle">
 Personal estate and care planning record · Not a legal document
 </div>
 
@@ -78,12 +99,14 @@ Personal estate and care planning record · Not a legal document
   <select id="countrySelect" onchange="onCountryChange()">
     <option>Canada</option>
     <option>United States</option>
+    <option>United Kingdom</option>
     <option>France</option>
     <option>Germany</option>
     <option>Spain</option>
     <option>China</option>
     <option>Japan</option>
     <option>South Korea</option>
+    <option>India</option>
   </select>
 
   <select id="languageSelect" onchange="applyLanguage(this.value)">
@@ -102,11 +125,16 @@ Personal estate and care planning record · Not a legal document
 <div class="toolbar">
   <button onclick="openAll()">Open All</button>
   <button onclick="closeAll()">Close All</button>
+  <button onclick="window.print()">Print / Save PDF</button>
+</div>
+
+<div class="notice" id="notice">
+Information is stored locally in your browser.
 </div>
 
 <!-- PERSONAL -->
 <section class="open">
-  <div class="section-header" data-i18n="personal" onclick="toggle(this)">Personal Information</div>
+  <div class="section-header" data-i18n="personal">Personal Information</div>
   <div class="section-content">
     <input data-i18n-ph="name" placeholder="Full legal name">
     <input data-i18n-ph="dob" placeholder="Date of birth">
@@ -118,7 +146,7 @@ Personal estate and care planning record · Not a legal document
 
 <!-- EXECUTORS -->
 <section>
-  <div class="section-header" data-i18n="executor" onclick="toggle(this)">Executors</div>
+  <div class="section-header" data-i18n="executor">Executors</div>
   <div class="section-content" id="executors">
     <div class="repeat">
       <input data-i18n-ph="executorName" placeholder="Executor name">
@@ -131,7 +159,7 @@ Personal estate and care planning record · Not a legal document
 
 <!-- CHILDREN -->
 <section>
-  <div class="section-header" data-i18n="children" onclick="toggle(this)">Children</div>
+  <div class="section-header" data-i18n="children">Children</div>
   <div class="section-content" id="children">
     <div class="repeat">
       <input data-i18n-ph="childName" placeholder="Child name">
@@ -141,45 +169,83 @@ Personal estate and care planning record · Not a legal document
   </div>
 </section>
 
+<!-- ASSETS -->
+<section>
+  <div class="section-header" data-i18n="assets">Assets</div>
+  <div class="section-content" id="assets">
+    <div class="repeat">
+      <input data-i18n-ph="assetDesc" placeholder="Asset description">
+      <input data-i18n-ph="assetValue" placeholder="Estimated value">
+      <textarea data-i18n-ph="assetNotes" placeholder="Notes / beneficiary"></textarea>
+    </div>
+    <button class="add-btn" onclick="addAsset(this)">+ Add Another Asset</button>
+  </div>
+</section>
+
+<!-- FUNERAL -->
+<section>
+  <div class="section-header" data-i18n="funeral">Funeral Wishes</div>
+  <div class="section-content">
+    <textarea class="large" data-i18n-ph="funeralNotes"
+      placeholder="Burial, cremation, service wishes"></textarea>
+  </div>
+</section>
+
+</div>
+
 <script>
 /* COUNTRY → LANGUAGE */
 const countryLang={
-  "Canada":"en","United States":"en",
+  "Canada":"en","United States":"en","United Kingdom":"en",
   "France":"fr","Germany":"de","Spain":"es",
-  "China":"zh","Japan":"ja","South Korea":"ko"
+  "China":"zh","Japan":"ja","South Korea":"ko","India":"en"
 };
 
-/* TRANSLATIONS */
+/* TRANSLATIONS (EN BASE = REQUIRED) */
 const t={
   en:{
     title:"My Estate Plan",
     subtitle:"Personal estate and care planning record · Not a legal document",
+    notice:"Information is stored locally in your browser.",
     personal:"Personal Information",
     executor:"Executors",
     children:"Children",
-    name:"Full legal name",dob:"Date of birth",address:"Address",
-    phone:"Phone",email:"Email",
-    executorName:"Executor name",executorRel:"Relationship / Contact",
+    assets:"Assets",
+    funeral:"Funeral Wishes",
+    name:"Full legal name",
+    dob:"Date of birth",
+    address:"Address",
+    phone:"Phone",
+    email:"Email",
+    executorName:"Executor name",
+    executorRel:"Relationship / Contact",
     executorNotes:"Instructions",
-    childName:"Child name",notes:"Notes"
+    childName:"Child name",
+    notes:"Notes",
+    assetDesc:"Asset description",
+    assetValue:"Estimated value",
+    assetNotes:"Notes / beneficiary",
+    funeralNotes:"Burial, cremation, service wishes"
   },
-  fr:{ title:"Mon plan successoral", personal:"Informations personnelles", children:"Enfants" },
-  de:{ title:"Mein Nachlassplan", children:"Kinder" },
-  es:{ title:"Mi plan patrimonial", children:"Hijos" },
-  zh:{ title:"我的遗产计划", children:"子女" },
-  ja:{ title:"私の遺産計画", children:"子供" },
-  ko:{ title:"나의 유산 계획", children:"자녀" }
+  fr:{ title:"Mon plan successoral", personal:"Informations personnelles" },
+  de:{ title:"Mein Nachlassplan" },
+  es:{ title:"Mi plan patrimonial" },
+  zh:{ title:"我的遗产计划" },
+  ja:{ title:"私の遺産計画" },
+  ko:{ title:"나의 유산 계획" }
 };
 
 function applyLanguage(lang){
   document.getElementById("languageSelect").value=lang;
   const d=t[lang]||t.en;
+  document.getElementById("title").textContent=d.title||t.en.title;
+  document.getElementById("subtitle").textContent=d.subtitle||t.en.subtitle;
+  document.getElementById("notice").textContent=d.notice||t.en.notice;
 
   document.querySelectorAll("[data-i18n]").forEach(el=>{
     const k=el.dataset.i18n;
     el.textContent=d[k]||t.en[k];
   });
-
   document.querySelectorAll("[data-i18n-ph]").forEach(el=>{
     const k=el.dataset.i18nPh;
     el.placeholder=d[k]||t.en[k];
@@ -196,24 +262,35 @@ function addExecutor(btn){
   const d=document.createElement("div");
   d.className="repeat";
   d.innerHTML=`
-    <input data-i18n-ph="executorName">
-    <input data-i18n-ph="executorRel">
-    <textarea data-i18n-ph="executorNotes"></textarea>`;
+    <input data-i18n-ph="executorName" placeholder="Executor name">
+    <input data-i18n-ph="executorRel" placeholder="Relationship / Contact">
+    <textarea data-i18n-ph="executorNotes" placeholder="Instructions"></textarea>
+  `;
   btn.parentElement.insertBefore(d,btn);
   applyLanguage(document.getElementById("languageSelect").value);
 }
-
 function addChild(btn){
   const d=document.createElement("div");
   d.className="repeat";
   d.innerHTML=`
-    <input data-i18n-ph="childName">
-    <textarea data-i18n-ph="notes"></textarea>`;
+    <input data-i18n-ph="childName" placeholder="Child name">
+    <textarea data-i18n-ph="notes" placeholder="Notes"></textarea>
+  `;
+  btn.parentElement.insertBefore(d,btn);
+  applyLanguage(document.getElementById("languageSelect").value);
+}
+function addAsset(btn){
+  const d=document.createElement("div");
+  d.className="repeat";
+  d.innerHTML=`
+    <input data-i18n-ph="assetDesc" placeholder="Asset description">
+    <input data-i18n-ph="assetValue" placeholder="Estimated value">
+    <textarea data-i18n-ph="assetNotes" placeholder="Notes / beneficiary"></textarea>
+  `;
   btn.parentElement.insertBefore(d,btn);
   applyLanguage(document.getElementById("languageSelect").value);
 }
 
-function toggle(h){h.parentElement.classList.toggle("open")}
 function openAll(){document.querySelectorAll("section").forEach(s=>s.classList.add("open"))}
 function closeAll(){document.querySelectorAll("section").forEach(s=>s.classList.remove("open"))}
 
