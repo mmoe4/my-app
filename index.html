@@ -224,6 +224,24 @@ select,input,textarea,button{
   </section>
 
 </div>
+<!-- ADDITIONAL NOTES -->
+<section>
+  <div class="section-header" data-i18n="additionalNotes" onclick="toggle(this)">
+    Additional Notes
+  </div>
+  <div class="section-content">
+    <div class="help" data-i18n="additionalNotesHelp">
+      Use this section for any information not covered elsewhere, clarifications,
+      or messages you wish to leave for family, executors, or advisors.
+    </div>
+
+    <textarea
+      class="large"
+      data-i18n-ph="additionalNotesPlaceholder"
+      placeholder="Enter any additional notes, explanations, or reminders here.">
+    </textarea>
+  </div>
+</section>
 
 <script>
   function toggle(h){ h.parentElement.classList.toggle("open"); }
