@@ -11,15 +11,12 @@
     font-family:"Times New Roman", Georgia, serif;
     background:radial-gradient(circle at top,#4a1f26,#2b1417);
   }
- .container{
-  width:95vw;              /* fills almost full screen */
-  max-width:1600px;        /* MUCH wider than before */
-  margin:24px auto;
-  padding:64px;            /* more breathing room */
-  background:#fff;
-  border-radius:22px;
-}
-
+  .container{
+    max-width:1200px;
+    margin:40px auto;
+    padding:40px;
+    background:#fff;
+    border-radius:18px;
   }
   h1{text-align:center;margin:0 0 6px 0}
   .subtitle{text-align:center;color:#555;margin-bottom:20px}
@@ -83,7 +80,6 @@
   textarea{min-height:140px}
   .large{min-height:260px}
 
-  /* ROW layout (stacked) */
   .repeat{
     border:1px dashed #ccc;
     padding:12px;
@@ -122,7 +118,6 @@
       <option>India</option>
     </select>
 
-    <!-- KEEP language selector -->
     <select id="languageSelect" onchange="applyLanguage(this.value)">
       <option value="en">EN</option>
       <option value="fr">FR</option>
@@ -162,7 +157,7 @@
   <!-- EXECUTORS -->
   <section>
     <div class="section-header" data-i18n="executor" onclick="toggle(this)">Executors</div>
-    <div class="section-content" id="executors">
+    <div class="section-content">
       <div class="help" data-i18n="executorHelp">Who is legally responsible for carrying out your estate.</div>
 
       <div class="repeat">
@@ -178,7 +173,7 @@
   <!-- CHILDREN -->
   <section>
     <div class="section-header" data-i18n="children" onclick="toggle(this)">Children</div>
-    <div class="section-content" id="children">
+    <div class="section-content">
       <div class="repeat">
         <input data-i18n-ph="childName" placeholder="Child name">
         <textarea data-i18n-ph="notes" placeholder="Notes"></textarea>
@@ -191,7 +186,7 @@
   <!-- ASSETS -->
   <section>
     <div class="section-header" data-i18n="assets" onclick="toggle(this)">Assets</div>
-    <div class="section-content" id="assets">
+    <div class="section-content">
       <div class="repeat">
         <input data-i18n-ph="assetDesc" placeholder="Asset description">
         <input data-i18n-ph="assetValue" placeholder="Estimated value">
@@ -202,33 +197,22 @@
     </div>
   </section>
 
-<!-- FUNERAL -->
-<section>
-  ...
-</section>
+  <!-- FUNERAL -->
+  <section>
+    <div class="section-header" data-i18n="funeral" onclick="toggle(this)">Funeral Wishes</div>
+    <div class="section-content">
+      <textarea class="large" data-i18n-ph="funeralNotes" placeholder="Burial, cremation, service wishes"></textarea>
+    </div>
+  </section>
 
-<!-- ADDITIONAL NOTES (PASTE HERE) -->
-<section>
-  <div class="section-header">Additional Notes</div>
-  <div class="section-content">
-    <textarea class="large" placeholder="Any extra information..."></textarea>
-  </div>
-</section>
-
-</div>  <!-- ← container closes AFTER notes -->
-
-<!-- ADDITIONAL NOTES -->
-<section>
-  <div class="section-header" onclick="toggle(this)">
-    Additional Notes
-  </div>
-  <div class="section-content">
-    <textarea
-      style="min-height:120px"
-      placeholder="Additional information, clarifications, passwords, or instructions not covered above.">
-    </textarea>
-  </div>
-</section>
+  <!-- ADDITIONAL NOTES (INSIDE CARD – FINAL) -->
+  <section>
+    <div class="section-header" data-i18n="additionalNotes" onclick="toggle(this)">Additional Notes</div>
+    <div class="section-content">
+      <textarea class="large" data-i18n-ph="additionalNotesPh"
+        placeholder="Any additional information, clarifications, or messages you wish to leave."></textarea>
+    </div>
+  </section>
 
 </div>
 
@@ -237,22 +221,13 @@
   function openAll(){ document.querySelectorAll("section").forEach(s=>s.classList.add("open")); }
   function closeAll(){ document.querySelectorAll("section").forEach(s=>s.classList.remove("open")); }
 
-  /* COUNTRY → LANGUAGE */
-  const countryLang = {
-    "Canada":"en",
-    "United States":"en",
-    "United Kingdom":"en",
-    "France":"fr",
-    "Germany":"de",
-    "Spain":"es",
-    "China":"zh",
-    "Japan":"ja",
-    "South Korea":"ko",
-    "India":"hi"
+  const countryLang={
+    "Canada":"en","United States":"en","United Kingdom":"en",
+    "France":"fr","Germany":"de","Spain":"es",
+    "China":"zh","Japan":"ja","South Korea":"ko","India":"hi"
   };
 
-  /* TRANSLATIONS */
-  const t = {
+  const t={
     en:{
       title:"My Estate Plan",
       subtitle:"Personal estate and care planning record · Not a legal document",
@@ -263,6 +238,7 @@
       children:"Children",
       assets:"Assets",
       funeral:"Funeral Wishes",
+      additionalNotes:"Additional Notes",
       addExecutor:"➕ Add Another Executor",
       addChild:"➕ Add Another Child",
       addAsset:"➕ Add Another Asset",
@@ -279,273 +255,58 @@
       assetDesc:"Asset description",
       assetValue:"Estimated value",
       assetNotes:"Notes / beneficiary",
-      funeralNotes:"Burial, cremation, service wishes"
-    },
-    fr:{
-      title:"Mon plan successoral",
-      subtitle:"Dossier personnel · Document non juridique",
-      notice:"Les informations sont stockées localement dans votre navigateur.",
-      personal:"Informations personnelles",
-      executor:"Exécuteurs",
-      executorHelp:"Personne légalement responsable d’exécuter votre succession.",
-      children:"Enfants",
-      assets:"Biens",
-      funeral:"Volontés funéraires",
-      addExecutor:"➕ Ajouter un autre exécuteur",
-      addChild:"➕ Ajouter un autre enfant",
-      addAsset:"➕ Ajouter un autre bien",
-      name:"Nom légal complet",
-      dob:"Date de naissance",
-      address:"Adresse",
-      phone:"Téléphone",
-      email:"Courriel",
-      executorName:"Nom de l’exécuteur",
-      executorRel:"Relation / Contact",
-      executorNotes:"Instructions",
-      childName:"Nom de l’enfant",
-      notes:"Notes",
-      assetDesc:"Description du bien",
-      assetValue:"Valeur estimée",
-      assetNotes:"Notes / bénéficiaire",
-      funeralNotes:"Inhumation, crémation, cérémonie"
-    },
-    de:{
-      title:"Mein Nachlassplan",
-      subtitle:"Persönliche Planung · Kein Rechtsdokument",
-      notice:"Informationen werden lokal in Ihrem Browser gespeichert.",
-      personal:"Persönliche Angaben",
-      executor:"Testamentsvollstrecker",
-      executorHelp:"Wer ist rechtlich für die Abwicklung Ihres Nachlasses verantwortlich?",
-      children:"Kinder",
-      assets:"Vermögen",
-      funeral:"Bestattungswünsche",
-      addExecutor:"➕ Weiteren Vollstrecker hinzufügen",
-      addChild:"➕ Weiteres Kind hinzufügen",
-      addAsset:"➕ Weiteres Vermögen hinzufügen",
-      name:"Vollständiger legaler Name",
-      dob:"Geburtsdatum",
-      address:"Adresse",
-      phone:"Telefon",
-      email:"E-Mail",
-      executorName:"Name des Vollstreckers",
-      executorRel:"Beziehung / Kontakt",
-      executorNotes:"Anweisungen",
-      childName:"Name des Kindes",
-      notes:"Notizen",
-      assetDesc:"Beschreibung des Vermögens",
-      assetValue:"Geschätzter Wert",
-      assetNotes:"Notizen / Begünstigter",
-      funeralNotes:"Beerdigung, Einäscherung, Zeremonie"
-    },
-    es:{
-      title:"Mi plan patrimonial",
-      subtitle:"Registro personal · No es un documento legal",
-      notice:"La información se guarda localmente en su navegador.",
-      personal:"Información personal",
-      executor:"Albaceas",
-      executorHelp:"Quién es legalmente responsable de ejecutar su patrimonio.",
-      children:"Hijos",
-      assets:"Activos",
-      funeral:"Deseos funerarios",
-      addExecutor:"➕ Agregar otro albacea",
-      addChild:"➕ Agregar otro hijo",
-      addAsset:"➕ Agregar otro activo",
-      name:"Nombre legal completo",
-      dob:"Fecha de nacimiento",
-      address:"Dirección",
-      phone:"Teléfono",
-      email:"Correo electrónico",
-      executorName:"Nombre del albacea",
-      executorRel:"Relación / Contacto",
-      executorNotes:"Instrucciones",
-      childName:"Nombre del hijo",
-      notes:"Notas",
-      assetDesc:"Descripción del activo",
-      assetValue:"Valor estimado",
-      assetNotes:"Notas / beneficiario",
-      funeralNotes:"Entierro, cremación, ceremonia"
-    },
-    ja:{
-      title:"遺産計画",
-      subtitle:"個人用の記録 · 法的文書ではありません",
-      notice:"情報はブラウザ内に保存されます。",
-      personal:"個人情報",
-      executor:"遺言執行者",
-      executorHelp:"遺産手続きを法的に担当する人。",
-      children:"子ども",
-      assets:"資産",
-      funeral:"葬儀の希望",
-      addExecutor:"➕ 執行者を追加",
-      addChild:"➕ 子どもを追加",
-      addAsset:"➕ 資産を追加",
-      name:"法的氏名",
-      dob:"生年月日",
-      address:"住所",
-      phone:"電話",
-      email:"メール",
-      executorName:"執行者の氏名",
-      executorRel:"関係 / 連絡先",
-      executorNotes:"指示",
-      childName:"子どもの氏名",
-      notes:"メモ",
-      assetDesc:"資産の説明",
-      assetValue:"推定価値",
-      assetNotes:"メモ / 受取人",
-      funeralNotes:"埋葬、火葬、式の希望"
-    },
-    ko:{
-      title:"상속 계획",
-      subtitle:"개인 기록 · 법적 문서 아님",
-      notice:"정보는 브라우저에 로컬로 저장됩니다.",
-      personal:"개인 정보",
-      executor:"집행자",
-      executorHelp:"상속 절차를 법적으로 수행할 책임자.",
-      children:"자녀",
-      assets:"자산",
-      funeral:"장례 희망",
-      addExecutor:"➕ 집행자 추가",
-      addChild:"➕ 자녀 추가",
-      addAsset:"➕ 자산 추가",
-      name:"법적 성명",
-      dob:"생년월일",
-      address:"주소",
-      phone:"전화",
-      email:"이메일",
-      executorName:"집행자 이름",
-      executorRel:"관계 / 연락처",
-      executorNotes:"지침",
-      childName:"자녀 이름",
-      notes:"메모",
-      assetDesc:"자산 설명",
-      assetValue:"추정 가치",
-      assetNotes:"메모 / 수익자",
-      funeralNotes:"매장, 화장, 예식 희망"
-    },
-    hi:{
-      title:"मेरा एस्टेट प्लान",
-      subtitle:"व्यक्तिगत रिकॉर्ड · कानूनी दस्तावेज़ नहीं",
-      notice:"जानकारी आपके ब्राउज़र में स्थानीय रूप से संग्रहीत है।",
-      personal:"व्यक्तिगत जानकारी",
-      executor:"कार्यपालक",
-      executorHelp:"आपकी संपत्ति को लागू/निपटाने के लिए कानूनी रूप से जिम्मेदार व्यक्ति।",
-      children:"बच्चे",
-      assets:"संपत्तियाँ",
-      funeral:"अंतिम संस्कार इच्छाएँ",
-      addExecutor:"➕ एक और कार्यपालक जोड़ें",
-      addChild:"➕ एक और बच्चा जोड़ें",
-      addAsset:"➕ एक और संपत्ति जोड़ें",
-      name:"पूरा कानूनी नाम",
-      dob:"जन्म तिथि",
-      address:"पता",
-      phone:"फोन",
-      email:"ईमेल",
-      executorName:"कार्यपालक का नाम",
-      executorRel:"रिश्ता / संपर्क",
-      executorNotes:"निर्देश",
-      childName:"बच्चे का नाम",
-      notes:"नोट्स",
-      assetDesc:"संपत्ति विवरण",
-      assetValue:"अनुमानित मूल्य",
-      assetNotes:"नोट्स / लाभार्थी",
-      funeralNotes:"दफन, दाह-संस्कार, सेवा इच्छाएँ"
-    },
-    zh:{
-      title:"遗产规划",
-      subtitle:"个人规划文件 · 非法律文件",
-      notice:"信息仅保存在您的浏览器中。",
-      personal:"个人信息",
-      executor:"执行人",
-      executorHelp:"依法负责处理遗产的人。",
-      children:"子女",
-      assets:"资产",
-      funeral:"葬礼意愿",
-      addExecutor:"➕ 添加执行人",
-      addChild:"➕ 添加子女",
-      addAsset:"➕ 添加资产",
-      name:"法定全名",
-      dob:"出生日期",
-      address:"地址",
-      phone:"电话",
-      email:"电子邮件",
-      executorName:"执行人姓名",
-      executorRel:"关系 / 联系方式",
-      executorNotes:"说明",
-      childName:"子女姓名",
-      notes:"备注",
-      assetDesc:"资产描述",
-      assetValue:"估计价值",
-      assetNotes:"备注 / 受益人",
-      funeralNotes:"安葬、火化、仪式安排"
+      funeralNotes:"Burial, cremation, service wishes",
+      additionalNotesPh:"Any additional information, clarifications, or messages you wish to leave."
     }
   };
 
   function applyLanguage(lang){
-    if(!t[lang]) lang = "en";
+    if(!t[lang]) lang="en";
+    document.getElementById("languageSelect").value=lang;
+    const d=t[lang];
+    document.getElementById("title").textContent=d.title;
+    document.getElementById("subtitle").textContent=d.subtitle;
+    document.getElementById("notice").textContent=d.notice;
 
-    // keep selector visible + synced
-    const ls = document.getElementById("languageSelect");
-    if(ls) ls.value = lang;
-
-    const d = t[lang];
-
-    document.getElementById("title").textContent = d.title;
-    document.getElementById("subtitle").textContent = d.subtitle;
-    document.getElementById("notice").textContent = d.notice;
-
-    document.querySelectorAll("[data-i18n]").forEach(el=>{
-      const k = el.dataset.i18n;
-      if(d[k]) el.textContent = d[k];
+    document.querySelectorAll("[data-i18n]").forEach(e=>{
+      if(d[e.dataset.i18n]) e.textContent=d[e.dataset.i18n];
     });
-
-    document.querySelectorAll("[data-i18n-ph]").forEach(el=>{
-      const k = el.dataset.i18nPh;
-      if(d[k]) el.placeholder = d[k];
+    document.querySelectorAll("[data-i18n-ph]").forEach(e=>{
+      if(d[e.dataset.i18nPh]) e.placeholder=d[e.dataset.i18nPh];
     });
   }
 
   function onCountryChange(){
-    const c = document.getElementById("countrySelect").value;
-    const lang = countryLang[c] || "en";
-    applyLanguage(lang);
+    applyLanguage(countryLang[countrySelect.value]||"en");
   }
 
-  /* ADD ROWS (button passed in, no broken event) */
-  function addExecutor(btn){
-    const d = document.createElement("div");
-    d.className = "repeat";
-    d.innerHTML = `
-      <input data-i18n-ph="executorName" placeholder="Executor name">
-      <input data-i18n-ph="executorRel" placeholder="Relationship / Contact">
-      <textarea data-i18n-ph="executorNotes" placeholder="Instructions"></textarea>
-    `;
-    btn.parentElement.insertBefore(d, btn);
-    applyLanguage(document.getElementById("languageSelect").value);
+  function addExecutor(b){
+    const d=document.createElement("div");
+    d.className="repeat";
+    d.innerHTML=`
+      <input data-i18n-ph="executorName">
+      <input data-i18n-ph="executorRel">
+      <textarea data-i18n-ph="executorNotes"></textarea>`;
+    b.before(d); applyLanguage(languageSelect.value);
+  }
+  function addChild(b){
+    const d=document.createElement("div");
+    d.className="repeat";
+    d.innerHTML=`
+      <input data-i18n-ph="childName">
+      <textarea data-i18n-ph="notes"></textarea>`;
+    b.before(d); applyLanguage(languageSelect.value);
+  }
+  function addAsset(b){
+    const d=document.createElement("div");
+    d.className="repeat";
+    d.innerHTML=`
+      <input data-i18n-ph="assetDesc">
+      <input data-i18n-ph="assetValue">
+      <textarea data-i18n-ph="assetNotes"></textarea>`;
+    b.before(d); applyLanguage(languageSelect.value);
   }
 
-  function addChild(btn){
-    const d = document.createElement("div");
-    d.className = "repeat";
-    d.innerHTML = `
-      <input data-i18n-ph="childName" placeholder="Child name">
-      <textarea data-i18n-ph="notes" placeholder="Notes"></textarea>
-    `;
-    btn.parentElement.insertBefore(d, btn);
-    applyLanguage(document.getElementById("languageSelect").value);
-  }
-
-  function addAsset(btn){
-    const d = document.createElement("div");
-    d.className = "repeat";
-    d.innerHTML = `
-      <input data-i18n-ph="assetDesc" placeholder="Asset description">
-      <input data-i18n-ph="assetValue" placeholder="Estimated value">
-      <textarea data-i18n-ph="assetNotes" placeholder="Notes / beneficiary"></textarea>
-    `;
-    btn.parentElement.insertBefore(d, btn);
-    applyLanguage(document.getElementById("languageSelect").value);
-  }
-
-  /* INIT */
   applyLanguage("en");
 </script>
 
