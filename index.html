@@ -33,11 +33,12 @@ select,input,textarea,button{
   padding:12px;
   border-radius:8px;
   border:1px solid #ccc;
-  font-family:inherit;
   width:100%;
+  font-family:inherit;
   box-sizing:border-box;
 }
-button{background:#f3f4f6;cursor:pointer}
+
+button{cursor:pointer;background:#f3f4f6}
 button:hover{background:#e5e7eb}
 
 .notice{
@@ -56,10 +57,13 @@ section{
 .section-header{
   padding:14px;
   background:#f3f4f6;
-  cursor:pointer;
   font-weight:bold;
+  cursor:pointer;
 }
-.section-content{padding:14px;display:none}
+.section-content{
+  padding:14px;
+  display:none;
+}
 section.open .section-content{display:block}
 
 .repeat{
@@ -76,7 +80,6 @@ textarea{min-height:140px}
 
 @media print{
   .topbar,.toolbar{display:none}
-  section{page-break-inside:avoid}
 }
 </style>
 </head>
@@ -88,7 +91,7 @@ textarea{min-height:140px}
 <div class="subtitle" id="subtitle"></div>
 
 <div class="topbar">
-  <select id="countrySelect">
+  <select id="countrySelect" onchange="onCountryChange()">
     <option>Canada</option>
     <option>United States</option>
     <option>United Kingdom</option>
@@ -101,7 +104,7 @@ textarea{min-height:140px}
     <option>India</option>
   </select>
 
-  <select id="languageSelect">
+  <select id="languageSelect" onchange="applyLanguage(this.value)">
     <option value="en">EN</option>
     <option value="fr">FR</option>
     <option value="de">DE</option>
@@ -136,7 +139,7 @@ textarea{min-height:140px}
 
 <section>
   <div class="section-header" data-i18n="executor" onclick="toggle(this)"></div>
-  <div class="section-content" id="executors">
+  <div class="section-content">
     <div class="repeat">
       <input data-i18n-ph="executorName">
       <input data-i18n-ph="executorRel">
@@ -148,7 +151,7 @@ textarea{min-height:140px}
 
 <section>
   <div class="section-header" data-i18n="children" onclick="toggle(this)"></div>
-  <div class="section-content" id="children">
+  <div class="section-content">
     <div class="repeat">
       <input data-i18n-ph="childName">
       <textarea data-i18n-ph="notes"></textarea>
@@ -159,7 +162,7 @@ textarea{min-height:140px}
 
 <section>
   <div class="section-header" data-i18n="assets" onclick="toggle(this)"></div>
-  <div class="section-content" id="assets">
+  <div class="section-content">
     <div class="repeat">
       <input data-i18n-ph="assetDesc">
       <input data-i18n-ph="assetValue">
@@ -176,133 +179,91 @@ textarea{min-height:140px}
   </div>
 </section>
 
+<section>
+  <div class="section-header" data-i18n="additionalNotes" onclick="toggle(this)"></div>
+  <div class="section-content">
+    <textarea class="large" data-i18n-ph="additionalNotesPh"></textarea>
+  </div>
+</section>
+
 </div>
 
 <script>
-/* ---------------- BASIC UI ---------------- */
+const countryLang={
+  "Canada":"en","United States":"en","United Kingdom":"en",
+  "France":"fr","Germany":"de","Spain":"es",
+  "Japan":"ja","China":"zh","South Korea":"ko","India":"hi"
+};
+
+const translations={
+en:{
+ title:"My Estate Plan",
+ subtitle:"Personal estate and care planning record · Not a legal document",
+ notice:"Information is stored locally in your browser.",
+ personal:"Personal Information",
+ executor:"Executors",
+ children:"Children",
+ assets:"Assets",
+ funeral:"Funeral Wishes",
+ additionalNotes:"Additional Notes",
+ addExecutor:"➕ Add Another Executor",
+ addChild:"➕ Add Another Child",
+ addAsset:"➕ Add Another Asset",
+ name:"Full legal name",
+ dob:"Date of birth",
+ address:"Address",
+ phone:"Phone",
+ email:"Email",
+ executorName:"Executor name",
+ executorRel:"Relationship / Contact",
+ executorNotes:"Instructions",
+ childName:"Child name",
+ notes:"Notes",
+ assetDesc:"Asset description",
+ assetValue:"Estimated value",
+ assetNotes:"Notes / beneficiary",
+ funeralNotes:"Burial, cremation, service wishes",
+ additionalNotesPh:"Any extra information, reminders, or clarifications"
+},
+fr:{personal:"Informations personnelles",children:"Enfants",assets:"Biens",executor:"Exécuteurs",funeral:"Volontés funéraires",additionalNotes:"Notes supplémentaires"},
+de:{personal:"Persönliche Angaben",children:"Kinder",assets:"Vermögen",executor:"Testamentsvollstrecker",funeral:"Bestattungswünsche",additionalNotes:"Zusätzliche Notizen"},
+es:{personal:"Información personal",children:"Hijos",assets:"Activos",executor:"Albaceas",funeral:"Deseos funerarios",additionalNotes:"Notas adicionales"},
+ja:{personal:"個人情報",children:"子ども",assets:"資産",executor:"遺言執行者",funeral:"葬儀の希望",additionalNotes:"追加メモ"},
+zh:{personal:"个人信息",children:"子女",assets:"资产",executor:"执行人",funeral:"葬礼意愿",additionalNotes:"附加说明"},
+ko:{personal:"개인 정보",children:"자녀",assets:"자산",executor:"집행자",funeral:"장례 희망",additionalNotes:"추가 메모"},
+hi:{personal:"व्यक्तिगत जानकारी",children:"बच्चे",assets:"संपत्तियाँ",executor:"कार्यपालक",funeral:"अंतिम संस्कार इच्छाएँ",additionalNotes:"अतिरिक्त नोट्स"}
+};
+
+function applyLanguage(lang){
+ if(!translations[lang]) lang="en";
+ document.getElementById("languageSelect").value=lang;
+ const d=translations[lang];
+
+ document.getElementById("title").textContent=d.title||translations.en.title;
+ document.getElementById("subtitle").textContent=d.subtitle||translations.en.subtitle;
+ document.getElementById("notice").textContent=d.notice||translations.en.notice;
+
+ document.querySelectorAll("[data-i18n]").forEach(el=>{
+   el.textContent=d[el.dataset.i18n]||translations.en[el.dataset.i18n];
+ });
+ document.querySelectorAll("[data-i18n-ph]").forEach(el=>{
+   el.placeholder=d[el.dataset.i18nPh]||translations.en[el.dataset.i18nPh];
+ });
+}
+
+function onCountryChange(){
+ applyLanguage(countryLang[countrySelect.value]||"en");
+}
+
 function toggle(h){h.parentElement.classList.toggle("open")}
 function openAll(){document.querySelectorAll("section").forEach(s=>s.classList.add("open"))}
 function closeAll(){document.querySelectorAll("section").forEach(s=>s.classList.remove("open"))}
 
-/* ---------------- TRANSLATIONS ---------------- */
-const translations = {
-  en:{
-    title:"My Estate Plan",
-    subtitle:"Personal estate and care planning record · Not a legal document",
-    notice:"Information is stored locally in your browser.",
-    personal:"Personal Information",
-    executor:"Executors",
-    children:"Children",
-    assets:"Assets",
-    funeral:"Funeral Wishes",
-    addExecutor:"➕ Add Another Executor",
-    addChild:"➕ Add Another Child",
-    addAsset:"➕ Add Another Asset",
-    name:"Full legal name",
-    dob:"Date of birth",
-    address:"Address",
-    phone:"Phone",
-    email:"Email",
-    executorName:"Executor name",
-    executorRel:"Relationship / Contact",
-    executorNotes:"Instructions",
-    childName:"Child name",
-    notes:"Notes",
-    assetDesc:"Asset description",
-    assetValue:"Estimated value",
-    assetNotes:"Notes / beneficiary",
-    funeralNotes:"Burial, cremation, service wishes"
-  },
-  fr:{
-    title:"Mon plan successoral",
-    subtitle:"Dossier personnel · Document non juridique",
-    notice:"Les informations sont stockées localement.",
-    personal:"Informations personnelles",
-    executor:"Exécuteurs",
-    children:"Enfants",
-    assets:"Biens",
-    funeral:"Volontés funéraires",
-    addExecutor:"➕ Ajouter un exécuteur",
-    addChild:"➕ Ajouter un enfant",
-    addAsset:"➕ Ajouter un bien",
-    name:"Nom légal complet",
-    dob:"Date de naissance",
-    address:"Adresse",
-    phone:"Téléphone",
-    email:"Courriel",
-    executorName:"Nom de l’exécuteur",
-    executorRel:"Relation / Contact",
-    executorNotes:"Instructions",
-    childName:"Nom de l’enfant",
-    notes:"Notes",
-    assetDesc:"Description du bien",
-    assetValue:"Valeur estimée",
-    assetNotes:"Notes / bénéficiaire",
-    funeralNotes:"Inhumation, crémation, cérémonie"
-  }
-  // (other languages can be added safely later)
-};
+function addExecutor(b){b.before(b.previousElementSibling.cloneNode(true));applyLanguage(languageSelect.value)}
+function addChild(b){b.before(b.previousElementSibling.cloneNode(true));applyLanguage(languageSelect.value)}
+function addAsset(b){b.before(b.previousElementSibling.cloneNode(true));applyLanguage(languageSelect.value)}
 
-/* ---------------- APPLY LANGUAGE ---------------- */
-function applyLanguage(lang){
-  if(!translations[lang]) lang="en";
-  const t = translations[lang];
-
-  document.getElementById("title").textContent = t.title;
-  document.getElementById("subtitle").textContent = t.subtitle;
-  document.getElementById("notice").textContent = t.notice;
-
-  document.querySelectorAll("[data-i18n]").forEach(el=>{
-    el.textContent = t[el.dataset.i18n] || el.textContent;
-  });
-
-  document.querySelectorAll("[data-i18n-ph]").forEach(el=>{
-    el.placeholder = t[el.dataset.i18nPh] || el.placeholder;
-  });
-}
-
-/* ---------------- REPEATABLE ROWS ---------------- */
-function addExecutor(btn){
-  const d = btn.previousElementSibling.cloneNode(true);
-  btn.before(d);
-  applyLanguage(languageSelect.value);
-}
-function addChild(btn){
-  const d = btn.previousElementSibling.cloneNode(true);
-  btn.before(d);
-  applyLanguage(languageSelect.value);
-}
-function addAsset(btn){
-  const d = btn.previousElementSibling.cloneNode(true);
-  btn.before(d);
-  applyLanguage(languageSelect.value);
-}
-
-/* ---------------- AUTOSAVE ---------------- */
-const KEY="estatePlan";
-function save(){
-  const data={};
-  document.querySelectorAll("input,textarea,select").forEach(e=>{
-    if(e.id)data[e.id]=e.value;
-  });
-  localStorage.setItem(KEY,JSON.stringify(data));
-}
-function load(){
-  const s=localStorage.getItem(KEY);
-  if(!s)return;
-  const d=JSON.parse(s);
-  document.querySelectorAll("input,textarea,select").forEach(e=>{
-    if(e.id&&d[e.id])e.value=d[e.id];
-  });
-}
-document.addEventListener("input",save);
-document.addEventListener("change",save);
-
-/* ---------------- INIT (THIS IS CRITICAL) ---------------- */
-load();
-const languageSelect = document.getElementById("languageSelect");
-applyLanguage(languageSelect.value);
-languageSelect.addEventListener("change",()=>applyLanguage(languageSelect.value));
+applyLanguage("en");
 </script>
 
 </body>
