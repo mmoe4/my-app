@@ -235,8 +235,39 @@ function onCountryChange(){
 function addExecutor(b){const d=b.previousElementSibling.cloneNode(true);b.before(d);applyLanguage(languageSelect.value)}
 function addChild(b){const d=b.previousElementSibling.cloneNode(true);b.before(d);applyLanguage(languageSelect.value)}
 function addAsset(b){const d=b.previousElementSibling.cloneNode(true);b.before(d);applyLanguage(languageSelect.value)}
+<script>
+/* ========= AUTOSAVE ========= */
+const STORAGE_KEY = "estatePlanData";
 
+function saveData(){
+  const data = {};
+  document.querySelectorAll("input, textarea, select").forEach(el=>{
+    if(el.id) data[el.id] = el.value;
+    else if(el.name) data[el.name] = el.value;
+  });
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function loadData(){
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if(!saved) return;
+  const data = JSON.parse(saved);
+  document.querySelectorAll("input, textarea, select").forEach(el=>{
+    const key = el.id || el.name;
+    if(key && data[key] !== undefined){
+      el.value = data[key];
+    }
+  });
+}
+
+/* Listen for changes */
+document.addEventListener("input", saveData);
+document.addEventListener("change", saveData);
+</script>
+
+loadData();
 applyLanguage("en");
+
 </script>
 </body>
 </html>
