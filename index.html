@@ -6,309 +6,237 @@
 <title>My Estate Plan</title>
 
 <style>
-  body{
-    margin:0;
-    font-family:"Times New Roman", Georgia, serif;
-    background:radial-gradient(circle at top,#4a1f26,#2b1417);
-  }
-  .container{
-    max-width:1200px;
-    margin:40px auto;
-    padding:40px;
-    background:#fff;
-    border-radius:18px;
-  }
-  h1{text-align:center;margin:0 0 6px 0}
-  .subtitle{text-align:center;color:#555;margin-bottom:20px}
+body{
+  margin:0;
+  font-family:"Times New Roman", Georgia, serif;
+  background:radial-gradient(circle at top,#4a1f26,#2b1417);
+}
+.container{
+  max-width:1200px;
+  margin:40px auto;
+  padding:40px;
+  background:#fff;
+  border-radius:18px;
+}
+h1{text-align:center;margin:0 0 6px}
+.subtitle{text-align:center;color:#555;margin-bottom:20px}
 
-  .topbar, .toolbar{
-    display:grid;
-    gap:10px;
-    margin-bottom:15px;
-  }
-  .topbar{grid-template-columns:2fr 1fr 1fr}
-  .toolbar{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
+.topbar,.toolbar{
+  display:grid;
+  gap:10px;
+  margin-bottom:15px;
+}
+.topbar{grid-template-columns:2fr 1fr 1fr}
+.toolbar{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
 
-  select,input,textarea,button{
-    padding:12px;
-    border-radius:8px;
-    border:1px solid #ccc;
-    font-family:inherit;
-    width:100%;
-    box-sizing:border-box;
-  }
+select,input,textarea,button{
+  padding:12px;
+  border-radius:8px;
+  border:1px solid #ccc;
+  font-family:inherit;
+  width:100%;
+  box-sizing:border-box;
+}
 
-  button{
-    cursor:pointer;
-    background:#f3f4f6;
-  }
-  button:hover{background:#e5e7eb}
+button{cursor:pointer;background:#f3f4f6}
+button:hover{background:#e5e7eb}
 
-  .notice{
-    background:#f9fafb;
-    padding:12px;
-    border-radius:8px;
-    font-size:14px;
-  }
+.notice{
+  background:#f9fafb;
+  padding:12px;
+  border-radius:8px;
+  font-size:14px;
+}
 
-  section{
-    border:1px solid #ddd;
-    border-radius:12px;
-    margin-top:20px;
-    overflow:hidden;
-  }
-  .section-header{
-    padding:14px;
-    background:#f3f4f6;
-    cursor:pointer;
-    font-weight:bold;
-  }
-  .section-content{
-    padding:14px;
-    display:none;
-  }
-  section.open .section-content{display:block}
+section{
+  border:1px solid #ddd;
+  border-radius:12px;
+  margin-top:20px;
+  overflow:hidden;
+}
+.section-header{
+  padding:14px;
+  background:#f3f4f6;
+  cursor:pointer;
+  font-weight:bold;
+}
+.section-content{padding:14px;display:none}
+section.open .section-content{display:block}
 
-  .help{
-    font-size:14px;
-    background:#f9fafb;
-    padding:10px;
-    border-left:4px solid #999;
-    margin-bottom:10px;
-  }
+.help{
+  font-size:14px;
+  background:#f9fafb;
+  padding:10px;
+  border-left:4px solid #999;
+  margin-bottom:10px;
+}
 
-  textarea{min-height:140px}
-  .large{min-height:260px}
+textarea{min-height:140px}
+.large{min-height:260px}
 
-  .repeat{
-    border:1px dashed #ccc;
-    padding:12px;
-    border-radius:8px;
-    margin-bottom:12px;
-  }
-  .repeat > *{margin-top:10px}
-  .repeat > *:first-child{margin-top:0}
+.repeat{
+  border:1px dashed #ccc;
+  padding:12px;
+  border-radius:8px;
+  margin-bottom:12px;
+}
+.repeat>*{margin-top:10px}
+.repeat>*:first-child{margin-top:0}
 
-  @media print{
-    .toolbar,.topbar{display:none}
-    section{page-break-inside:avoid}
-  }
+@media print{
+  .toolbar,.topbar{display:none}
+  section{page-break-inside:avoid}
+}
 </style>
 </head>
 
 <body>
 <div class="container">
 
-  <h1 id="title">My Estate Plan</h1>
-  <div class="subtitle" id="subtitle">
-    Personal estate and care planning record · Not a legal document
+<h1 id="title">My Estate Plan</h1>
+<div class="subtitle" id="subtitle">Personal estate and care planning record · Not a legal document</div>
+
+<div class="topbar">
+  <select id="countrySelect" onchange="onCountryChange()">
+    <option>Canada</option>
+    <option>United States</option>
+    <option>United Kingdom</option>
+    <option>France</option>
+    <option>Germany</option>
+    <option>Spain</option>
+    <option>China</option>
+    <option>Japan</option>
+    <option>South Korea</option>
+    <option>India</option>
+  </select>
+
+  <select id="languageSelect" onchange="applyLanguage(this.value)">
+    <option value="en">EN</option>
+    <option value="fr">FR</option>
+    <option value="de">DE</option>
+    <option value="es">ES</option>
+    <option value="ja">JA</option>
+    <option value="ko">KO</option>
+    <option value="hi">HI</option>
+    <option value="zh">中文</option>
+  </select>
+
+  <input value="Version 1.0" disabled />
+</div>
+
+<div class="toolbar">
+  <button onclick="openAll()">Open All</button>
+  <button onclick="closeAll()">Close All</button>
+  <button onclick="window.print()">Print / Save PDF</button>
+</div>
+
+<div class="notice" id="notice">Information is stored locally in your browser.</div>
+
+<section class="open">
+  <div class="section-header" data-i18n="personal" onclick="toggle(this)">Personal Information</div>
+  <div class="section-content">
+    <input data-i18n-ph="name" placeholder="Full legal name">
+    <input data-i18n-ph="dob" placeholder="Date of birth">
+    <input data-i18n-ph="address" placeholder="Address">
+    <input data-i18n-ph="phone" placeholder="Phone">
+    <input data-i18n-ph="email" placeholder="Email">
   </div>
+</section>
 
-  <div class="topbar">
-    <select id="countrySelect" onchange="onCountryChange()">
-      <option>Canada</option>
-      <option>United States</option>
-      <option>United Kingdom</option>
-      <option>France</option>
-      <option>Germany</option>
-      <option>Spain</option>
-      <option>China</option>
-      <option>Japan</option>
-      <option>South Korea</option>
-      <option>India</option>
-    </select>
-
-    <select id="languageSelect" onchange="applyLanguage(this.value)">
-      <option value="en">EN</option>
-      <option value="fr">FR</option>
-      <option value="de">DE</option>
-      <option value="es">ES</option>
-      <option value="ja">JA</option>
-      <option value="ko">KO</option>
-      <option value="hi">HI</option>
-      <option value="zh">中文</option>
-    </select>
-
-    <input value="Version 1.0" disabled />
+<section>
+  <div class="section-header" data-i18n="executor" onclick="toggle(this)">Executors</div>
+  <div class="section-content" id="executors">
+    <div class="help" data-i18n="executorHelp"></div>
+    <div class="repeat">
+      <input data-i18n-ph="executorName">
+      <input data-i18n-ph="executorRel">
+      <textarea data-i18n-ph="executorNotes"></textarea>
+    </div>
+    <button onclick="addExecutor(this)" data-i18n="addExecutor"></button>
   </div>
+</section>
 
-  <div class="toolbar">
-    <button onclick="openAll()">Open All</button>
-    <button onclick="closeAll()">Close All</button>
-    <button onclick="window.print()">Print / Save PDF</button>
+<section>
+  <div class="section-header" data-i18n="children" onclick="toggle(this)">Children</div>
+  <div class="section-content" id="children">
+    <div class="repeat">
+      <input data-i18n-ph="childName">
+      <textarea data-i18n-ph="notes"></textarea>
+    </div>
+    <button onclick="addChild(this)" data-i18n="addChild"></button>
   </div>
+</section>
 
-  <div class="notice" id="notice">
-    Information is stored locally in your browser.
+<section>
+  <div class="section-header" data-i18n="assets" onclick="toggle(this)">Assets</div>
+  <div class="section-content" id="assets">
+    <div class="repeat">
+      <input data-i18n-ph="assetDesc">
+      <input data-i18n-ph="assetValue">
+      <textarea data-i18n-ph="assetNotes"></textarea>
+    </div>
+    <button onclick="addAsset(this)" data-i18n="addAsset"></button>
   </div>
+</section>
 
-  <!-- PERSONAL -->
-  <section class="open">
-    <div class="section-header" data-i18n="personal" onclick="toggle(this)">Personal Information</div>
-    <div class="section-content">
-      <input data-i18n-ph="name" placeholder="Full legal name">
-      <input data-i18n-ph="dob" placeholder="Date of birth">
-      <input data-i18n-ph="address" placeholder="Address">
-      <input data-i18n-ph="phone" placeholder="Phone">
-      <input data-i18n-ph="email" placeholder="Email">
-    </div>
-  </section>
+<section>
+  <div class="section-header" data-i18n="funeral" onclick="toggle(this)">Funeral Wishes</div>
+  <div class="section-content">
+    <textarea class="large" data-i18n-ph="funeralNotes"></textarea>
+  </div>
+</section>
 
-  <!-- EXECUTORS -->
-  <section>
-    <div class="section-header" data-i18n="executor" onclick="toggle(this)">Executors</div>
-    <div class="section-content">
-      <div class="help" data-i18n="executorHelp">Who is legally responsible for carrying out your estate.</div>
-
-      <div class="repeat">
-        <input data-i18n-ph="executorName" placeholder="Executor name">
-        <input data-i18n-ph="executorRel" placeholder="Relationship / Contact">
-        <textarea data-i18n-ph="executorNotes" placeholder="Instructions"></textarea>
-      </div>
-
-      <button type="button" data-i18n="addExecutor" onclick="addExecutor(this)">➕ Add Another Executor</button>
-    </div>
-  </section>
-
-  <!-- CHILDREN -->
-  <section>
-    <div class="section-header" data-i18n="children" onclick="toggle(this)">Children</div>
-    <div class="section-content">
-      <div class="repeat">
-        <input data-i18n-ph="childName" placeholder="Child name">
-        <textarea data-i18n-ph="notes" placeholder="Notes"></textarea>
-      </div>
-
-      <button type="button" data-i18n="addChild" onclick="addChild(this)">➕ Add Another Child</button>
-    </div>
-  </section>
-
-  <!-- ASSETS -->
-  <section>
-    <div class="section-header" data-i18n="assets" onclick="toggle(this)">Assets</div>
-    <div class="section-content">
-      <div class="repeat">
-        <input data-i18n-ph="assetDesc" placeholder="Asset description">
-        <input data-i18n-ph="assetValue" placeholder="Estimated value">
-        <textarea data-i18n-ph="assetNotes" placeholder="Notes / beneficiary"></textarea>
-      </div>
-
-      <button type="button" data-i18n="addAsset" onclick="addAsset(this)">➕ Add Another Asset</button>
-    </div>
-  </section>
-
-  <!-- FUNERAL -->
-  <section>
-    <div class="section-header" data-i18n="funeral" onclick="toggle(this)">Funeral Wishes</div>
-    <div class="section-content">
-      <textarea class="large" data-i18n-ph="funeralNotes" placeholder="Burial, cremation, service wishes"></textarea>
-    </div>
-  </section>
-
-  <!-- ADDITIONAL NOTES (INSIDE CARD – FINAL) -->
-  <section>
-    <div class="section-header" data-i18n="additionalNotes" onclick="toggle(this)">Additional Notes</div>
-    <div class="section-content">
-      <textarea class="large" data-i18n-ph="additionalNotesPh"
-        placeholder="Any additional information, clarifications, or messages you wish to leave."></textarea>
-    </div>
-  </section>
+<section>
+  <div class="section-header" data-i18n="additionalNotes" onclick="toggle(this)">Additional Notes</div>
+  <div class="section-content">
+    <textarea class="large" data-i18n-ph="additionalNotesPh"></textarea>
+  </div>
+</section>
 
 </div>
 
 <script>
-  function toggle(h){ h.parentElement.classList.toggle("open"); }
-  function openAll(){ document.querySelectorAll("section").forEach(s=>s.classList.add("open")); }
-  function closeAll(){ document.querySelectorAll("section").forEach(s=>s.classList.remove("open")); }
+function toggle(h){h.parentElement.classList.toggle("open")}
+function openAll(){document.querySelectorAll("section").forEach(s=>s.classList.add("open"))}
+function closeAll(){document.querySelectorAll("section").forEach(s=>s.classList.remove("open"))}
 
-  const countryLang={
-    "Canada":"en","United States":"en","United Kingdom":"en",
-    "France":"fr","Germany":"de","Spain":"es",
-    "China":"zh","Japan":"ja","South Korea":"ko","India":"hi"
-  };
+const countryLang={
+  "Canada":"en","United States":"en","United Kingdom":"en",
+  "France":"fr","Germany":"de","Spain":"es",
+  "China":"zh","Japan":"ja","South Korea":"ko","India":"hi"
+};
 
-  const t={
-    en:{
-      title:"My Estate Plan",
-      subtitle:"Personal estate and care planning record · Not a legal document",
-      notice:"Information is stored locally in your browser.",
-      personal:"Personal Information",
-      executor:"Executors",
-      executorHelp:"Who is legally responsible for carrying out your estate.",
-      children:"Children",
-      assets:"Assets",
-      funeral:"Funeral Wishes",
-      additionalNotes:"Additional Notes",
-      addExecutor:"➕ Add Another Executor",
-      addChild:"➕ Add Another Child",
-      addAsset:"➕ Add Another Asset",
-      name:"Full legal name",
-      dob:"Date of birth",
-      address:"Address",
-      phone:"Phone",
-      email:"Email",
-      executorName:"Executor name",
-      executorRel:"Relationship / Contact",
-      executorNotes:"Instructions",
-      childName:"Child name",
-      notes:"Notes",
-      assetDesc:"Asset description",
-      assetValue:"Estimated value",
-      assetNotes:"Notes / beneficiary",
-      funeralNotes:"Burial, cremation, service wishes",
-      additionalNotesPh:"Any additional information, clarifications, or messages you wish to leave."
-    }
-  };
+const t = {
+en:{title:"My Estate Plan",subtitle:"Personal estate and care planning record · Not a legal document",notice:"Information is stored locally in your browser.",personal:"Personal Information",executor:"Executors",executorHelp:"Who is legally responsible for carrying out your estate.",children:"Children",assets:"Assets",funeral:"Funeral Wishes",additionalNotes:"Additional Notes",addExecutor:"➕ Add Another Executor",addChild:"➕ Add Another Child",addAsset:"➕ Add Another Asset",name:"Full legal name",dob:"Date of birth",address:"Address",phone:"Phone",email:"Email",executorName:"Executor name",executorRel:"Relationship / Contact",executorNotes:"Instructions",childName:"Child name",notes:"Notes",assetDesc:"Asset description",assetValue:"Estimated value",assetNotes:"Notes / beneficiary",funeralNotes:"Burial, cremation, service wishes",additionalNotesPh:"Any extra information…"},
+fr:{title:"Mon plan successoral",subtitle:"Dossier personnel · Document non juridique",notice:"Les informations sont stockées localement.",personal:"Informations personnelles",executor:"Exécuteurs",executorHelp:"Responsable légal de la succession.",children:"Enfants",assets:"Biens",funeral:"Volontés funéraires",additionalNotes:"Notes supplémentaires",addExecutor:"➕ Ajouter un exécuteur",addChild:"➕ Ajouter un enfant",addAsset:"➕ Ajouter un bien",name:"Nom complet",dob:"Date de naissance",address:"Adresse",phone:"Téléphone",email:"Courriel",executorName:"Nom de l’exécuteur",executorRel:"Relation / Contact",executorNotes:"Instructions",childName:"Nom de l’enfant",notes:"Notes",assetDesc:"Description du bien",assetValue:"Valeur estimée",assetNotes:"Notes / bénéficiaire",funeralNotes:"Inhumation, crémation, cérémonie",additionalNotesPh:"Informations supplémentaires…"},
+de:{title:"Mein Nachlassplan",subtitle:"Persönliche Planung · Kein Rechtsdokument",notice:"Informationen werden lokal gespeichert.",personal:"Persönliche Angaben",executor:"Testamentsvollstrecker",executorHelp:"Rechtlich verantwortlich für den Nachlass.",children:"Kinder",assets:"Vermögen",funeral:"Bestattungswünsche",additionalNotes:"Zusätzliche Notizen",addExecutor:"➕ Vollstrecker hinzufügen",addChild:"➕ Kind hinzufügen",addAsset:"➕ Vermögen hinzufügen",name:"Vollständiger Name",dob:"Geburtsdatum",address:"Adresse",phone:"Telefon",email:"E-Mail",executorName:"Name",executorRel:"Beziehung",executorNotes:"Anweisungen",childName:"Name des Kindes",notes:"Notizen",assetDesc:"Beschreibung",assetValue:"Wert",assetNotes:"Notizen / Begünstigter",funeralNotes:"Beerdigung, Einäscherung",additionalNotesPh:"Zusätzliche Informationen…"},
+es:{title:"Mi plan patrimonial",subtitle:"Registro personal · No es legal",notice:"La información se guarda localmente.",personal:"Información personal",executor:"Albaceas",executorHelp:"Responsable legal de ejecutar el patrimonio.",children:"Hijos",assets:"Activos",funeral:"Deseos funerarios",additionalNotes:"Notas adicionales",addExecutor:"➕ Agregar albacea",addChild:"➕ Agregar hijo",addAsset:"➕ Agregar activo",name:"Nombre completo",dob:"Fecha de nacimiento",address:"Dirección",phone:"Teléfono",email:"Correo",executorName:"Nombre",executorRel:"Relación",executorNotes:"Instrucciones",childName:"Nombre del hijo",notes:"Notas",assetDesc:"Descripción",assetValue:"Valor",assetNotes:"Notas / beneficiario",funeralNotes:"Entierro, cremación",additionalNotesPh:"Información adicional…"},
+ja:{title:"遺産計画",subtitle:"個人記録 · 法的文書ではありません",notice:"情報はブラウザに保存されます。",personal:"個人情報",executor:"遺言執行者",executorHelp:"遺産を法的に管理する人。",children:"子ども",assets:"資産",funeral:"葬儀の希望",additionalNotes:"追加メモ",addExecutor:"➕ 執行者を追加",addChild:"➕ 子どもを追加",addAsset:"➕ 資産を追加",name:"氏名",dob:"生年月日",address:"住所",phone:"電話",email:"メール",executorName:"氏名",executorRel:"関係",executorNotes:"指示",childName:"子どもの名前",notes:"メモ",assetDesc:"資産説明",assetValue:"価値",assetNotes:"受取人",funeralNotes:"埋葬・火葬",additionalNotesPh:"追加情報…"},
+ko:{title:"상속 계획",subtitle:"개인 기록 · 법적 문서 아님",notice:"정보는 브라우저에 저장됩니다.",personal:"개인 정보",executor:"집행자",executorHelp:"상속을 법적으로 수행하는 사람.",children:"자녀",assets:"자산",funeral:"장례 희망",additionalNotes:"추가 메모",addExecutor:"➕ 집행자 추가",addChild:"➕ 자녀 추가",addAsset:"➕ 자산 추가",name:"이름",dob:"생년월일",address:"주소",phone:"전화",email:"이메일",executorName:"이름",executorRel:"관계",executorNotes:"지침",childName:"자녀 이름",notes:"메모",assetDesc:"자산 설명",assetValue:"가치",assetNotes:"수익자",funeralNotes:"매장·화장",additionalNotesPh:"추가 정보…"},
+hi:{title:"मेरा एस्टेट प्लान",subtitle:"व्यक्तिगत रिकॉर्ड · कानूनी नहीं",notice:"जानकारी ब्राउज़र में संग्रहीत है।",personal:"व्यक्तिगत जानकारी",executor:"कार्यपालक",executorHelp:"कानूनी रूप से जिम्मेदार व्यक्ति।",children:"बच्चे",assets:"संपत्तियाँ",funeral:"अंतिम संस्कार",additionalNotes:"अतिरिक्त नोट्स",addExecutor:"➕ कार्यपालक जोड़ें",addChild:"➕ बच्चा जोड़ें",addAsset:"➕ संपत्ति जोड़ें",name:"पूरा नाम",dob:"जन्म तिथि",address:"पता",phone:"फोन",email:"ईमेल",executorName:"नाम",executorRel:"संबंध",executorNotes:"निर्देश",childName:"बच्चे का नाम",notes:"नोट्स",assetDesc:"विवरण",assetValue:"मूल्य",assetNotes:"लाभार्थी",funeralNotes:"दफन / दाह",additionalNotesPh:"अतिरिक्त जानकारी…"},
+zh:{title:"遗产规划",subtitle:"个人记录 · 非法律文件",notice:"信息保存在浏览器中。",personal:"个人信息",executor:"执行人",executorHelp:"依法管理遗产的人。",children:"子女",assets:"资产",funeral:"葬礼意愿",additionalNotes:"附加说明",addExecutor:"➕ 添加执行人",addChild:"➕ 添加子女",addAsset:"➕ 添加资产",name:"姓名",dob:"出生日期",address:"地址",phone:"电话",email:"邮箱",executorName:"姓名",executorRel:"关系",executorNotes:"说明",childName:"子女姓名",notes:"备注",assetDesc:"资产描述",assetValue:"价值",assetNotes:"受益人",funeralNotes:"安葬 / 火化",additionalNotesPh:"其他信息…"}
+};
 
-  function applyLanguage(lang){
-    if(!t[lang]) lang="en";
-    document.getElementById("languageSelect").value=lang;
-    const d=t[lang];
-    document.getElementById("title").textContent=d.title;
-    document.getElementById("subtitle").textContent=d.subtitle;
-    document.getElementById("notice").textContent=d.notice;
+function applyLanguage(lang){
+  if(!t[lang]) lang="en";
+  languageSelect.value=lang;
+  const d=t[lang];
+  title.textContent=d.title;
+  subtitle.textContent=d.subtitle;
+  notice.textContent=d.notice;
+  document.querySelectorAll("[data-i18n]").forEach(e=>e.textContent=d[e.dataset.i18n]);
+  document.querySelectorAll("[data-i18n-ph]").forEach(e=>e.placeholder=d[e.dataset.i18nPh]);
+}
 
-    document.querySelectorAll("[data-i18n]").forEach(e=>{
-      if(d[e.dataset.i18n]) e.textContent=d[e.dataset.i18n];
-    });
-    document.querySelectorAll("[data-i18n-ph]").forEach(e=>{
-      if(d[e.dataset.i18nPh]) e.placeholder=d[e.dataset.i18nPh];
-    });
-  }
+function onCountryChange(){
+  applyLanguage(countryLang[countrySelect.value]||"en");
+}
 
-  function onCountryChange(){
-    applyLanguage(countryLang[countrySelect.value]||"en");
-  }
+function addExecutor(b){const d=b.previousElementSibling.cloneNode(true);b.before(d);applyLanguage(languageSelect.value)}
+function addChild(b){const d=b.previousElementSibling.cloneNode(true);b.before(d);applyLanguage(languageSelect.value)}
+function addAsset(b){const d=b.previousElementSibling.cloneNode(true);b.before(d);applyLanguage(languageSelect.value)}
 
-  function addExecutor(b){
-    const d=document.createElement("div");
-    d.className="repeat";
-    d.innerHTML=`
-      <input data-i18n-ph="executorName">
-      <input data-i18n-ph="executorRel">
-      <textarea data-i18n-ph="executorNotes"></textarea>`;
-    b.before(d); applyLanguage(languageSelect.value);
-  }
-  function addChild(b){
-    const d=document.createElement("div");
-    d.className="repeat";
-    d.innerHTML=`
-      <input data-i18n-ph="childName">
-      <textarea data-i18n-ph="notes"></textarea>`;
-    b.before(d); applyLanguage(languageSelect.value);
-  }
-  function addAsset(b){
-    const d=document.createElement("div");
-    d.className="repeat";
-    d.innerHTML=`
-      <input data-i18n-ph="assetDesc">
-      <input data-i18n-ph="assetValue">
-      <textarea data-i18n-ph="assetNotes"></textarea>`;
-    b.before(d); applyLanguage(languageSelect.value);
-  }
-
-  applyLanguage("en");
+applyLanguage("en");
 </script>
-
 </body>
 </html>
