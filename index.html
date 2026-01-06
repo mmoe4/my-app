@@ -757,4 +757,246 @@ executorNotes:"具体指示",
 childName:"子女姓名与出生日期",
 notes:"监护人偏好、特殊需求",
 assetDesc:"资产描述",
-assetValue:"估
+assetValue:"估计价值",
+assetNotes:"受益人、账号",
+funeralNotes:"土葬或火化、仪式偏好",
+additionalNotes:"医疗指示、密码、宠物照料"
+},
+ko:{
+title:"나의 상속 계획",
+subtitle:"개인 상속 계획 기록 · 법적 문서 아님",
+notice:"정보를 입력하세요. 내보내기로 백업 파일을 저장합니다.",
+personal:"개인 정보",
+executors:"유언 집행자",
+children:"자녀/부양가족",
+assets:"자산 및 재산",
+funeral:"장례 희망사항",
+additionalNotes:"추가 메모",
+addExecutor:"➕ 집행자 추가",
+addChild:"➕ 자녀 추가",
+addAsset:"➕ 자산 추가",
+exportBtn:"📥 JSON 내보내기",
+importBtn:"📤 JSON 가져오기",
+clearBtn:"🗑️ 모두 지우기",
+name:"법적 성명",
+dob:"생년월일",
+address:"전체 주소",
+phone:"전화번호",
+email:"이메일 주소",
+executorName:"집행자 이름",
+executorRel:"관계 및 연락처",
+executorNotes:"구체적인 지시사항",
+childName:"자녀 이름 및 생년월일",
+notes:"후견인 선호, 특별 요구사항",
+assetDesc:"자산 설명",
+assetValue:"추정 가치",
+assetNotes:"수혜자, 계좌번호",
+funeralNotes:"매장 또는 화장, 장례식 선호",
+additionalNotes:"의료 지시, 비밀번호, 반려동물 돌봄"
+},
+hi:{
+title:"मेरी एस्टेट योजना",
+subtitle:"व्यक्तिगत संपत्ति योजना रिकॉर्ड · कानूनी दस्तावेज़ नहीं",
+notice:"अपनी जानकारी भरें। बैकअप के लिए निर्यात का उपयोग करें।",
+personal:"व्यक्तिगत जानकारी",
+executors:"निष्पादक",
+children:"बच्चे/आश्रित",
+assets:"संपत्तियाँ और सम्पदा",
+funeral:"अंतिम संस्कार इच्छाएँ",
+additionalNotes:"अतिरिक्त नोट्स",
+addExecutor:"➕ निष्पादक जोड़ें",
+addChild:"➕ बच्चा जोड़ें",
+addAsset:"➕ संपत्ति जोड़ें",
+exportBtn:"📥 JSON निर्यात",
+importBtn:"📤 JSON आयात",
+clearBtn:"🗑️ सब मिटाएं",
+name:"पूरा कानूनी नाम",
+dob:"जन्म तिथि",
+address:"पूरा पता",
+phone:"फ़ोन नंबर",
+email:"ईमेल पता",
+executorName:"निष्पादक का नाम",
+executorRel:"संबंध और संपर्क",
+executorNotes:"विशिष्ट निर्देश",
+childName:"बच्चे का नाम और जन्म तिथि",
+notes:"अभिभावक वरीयता, विशेष आवश्यकताएं",
+assetDesc:"संपत्ति विवरण",
+assetValue:"अनुमानित मूल्य",
+assetNotes:"लाभार्थी, खाता संख्या",
+funeralNotes:"दफन या दाह संस्कार, सेवा वरीयताएँ",
+additionalNotes:"चिकित्सा निर्देश, पासवर्ड, पालतू जानवरों की देखभाल"
+}
+};
+
+/* ---------- CORE ENGINE ---------- */
+let currentLang="en";
+
+function applyLanguage(lang){
+  currentLang = T[lang] ? lang : "en";
+  language.value = currentLang;
+
+  document.querySelectorAll("[data-t]").forEach(el=>{
+    const k=el.dataset.t;
+    el.textContent = T[currentLang][k] || T.en[k] || "";
+  });
+
+  document.querySelectorAll("[data-ph]").forEach(el=>{
+    const k=el.dataset.ph;
+    el.placeholder = T[currentLang][k] || T.en[k] || "";
+  });
+}
+
+/* ---------- COUNTRY AUTO ---------- */
+const countryLang={
+"Canada":"en","United States":"en","France":"fr","Germany":"de",
+"Spain":"es","Japan":"ja","China":"zh","South Korea":"ko","India":"hi"
+};
+
+country.onchange=()=>applyLanguage(countryLang[country.value]||"en");
+language.onchange=()=>applyLanguage(language.value);
+
+/* ---------- ROWS ---------- */
+function addRow(id){
+  const c=document.getElementById(id);
+  const row=c.querySelector(".repeat").cloneNode(true);
+  row.querySelectorAll("input,textarea").forEach(i=>i.value="");
+  c.insertBefore(row,c.lastElementChild);
+  applyLanguage(currentLang);
+}
+
+/* ---------- UI ---------- */
+function toggle(h){h.parentElement.classList.toggle("open")}
+function openAll(){document.querySelectorAll("section").forEach(s=>s.classList.add("open"))}
+function closeAll(){document.querySelectorAll("section").forEach(s=>s.classList.remove("open"))}
+
+/* ---------- INIT ---------- */
+applyLanguage("en");
+
+/* ---------- DATA EXPORT/IMPORT ---------- */
+function exportData() {
+  try {
+    // Collect current form data directly
+    const data = {
+      country: country.value,
+      language: language.value,
+      exportDate: new Date().toISOString(),
+      fields: {}
+    };
+    
+    document.querySelectorAll('input:not([type="file"]):not([disabled]), textarea').forEach(el => {
+      if (el.value) {
+        const section = el.closest('section');
+        const id = section ? section.querySelector('.section-header')?.dataset.t : 'misc';
+        if (!data.fields[id]) data.fields[id] = [];
+        data.fields[id].push({
+          placeholder: el.dataset.ph || el.placeholder,
+          value: el.value
+        });
+      }
+    });
+    
+    // Check if there's any data
+    if (Object.keys(data.fields).length === 0) {
+      alert('No data to export. Please fill in at least one field first.');
+      return;
+    }
+    
+    // Create JSON string
+    const jsonString = JSON.stringify(data, null, 2);
+    
+    // Create blob and download
+    const blob = new Blob([jsonString], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    
+    const timestamp = new Date().toISOString().split('T')[0];
+    const filename = `estate-plan-${timestamp}.json`;
+    
+    const a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = url;
+    a.download = filename;
+    
+    document.body.appendChild(a);
+    a.click();
+    
+    setTimeout(() => {
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 500);
+    
+    alert('✓ Export successful! Check your downloads folder for: ' + filename);
+    
+  } catch (err) {
+    console.error('Export error:', err);
+    alert('Export failed: ' + err.message);
+  }
+}
+
+function handleImport(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const content = e.target.result;
+      const data = JSON.parse(content);
+      
+      // Set country and language
+      if (data.country) country.value = data.country;
+      if (data.language) applyLanguage(data.language);
+      
+      // Clear all existing inputs first
+      document.querySelectorAll('input:not([type="file"]):not([disabled]), textarea').forEach(el => {
+        el.value = '';
+      });
+      
+      // Load data into sections
+      if (data.fields) {
+        Object.keys(data.fields).forEach(sectionKey => {
+          const section = document.querySelector(`[data-t="${sectionKey}"]`)?.parentElement;
+          if (!section) return;
+          
+          const container = section.querySelector('.section-content');
+          const items = data.fields[sectionKey];
+          
+          items.forEach((item, idx) => {
+            let input = container.querySelectorAll(`[data-ph="${item.placeholder}"]`)[idx];
+            if (!input && idx > 0) {
+              const containerId = container.id;
+              if (containerId) addRow(containerId);
+              input = container.querySelectorAll(`[data-ph="${item.placeholder}"]`)[idx];
+            }
+            if (input) input.value = item.value;
+          });
+        });
+      }
+      
+      alert('✓ Import successful! Your estate plan has been loaded.');
+      
+    } catch (err) {
+      console.error('Import error:', err);
+      alert('Import failed: Invalid JSON file. Please select a valid estate plan export.');
+    }
+  };
+  
+  reader.onerror = () => {
+    alert('Failed to read file');
+  };
+  
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+function clearData() {
+  if (confirm('⚠️ WARNING: This will permanently delete all your entered data.\n\nAre you absolutely sure you want to clear everything?\n\nConsider exporting a backup first!')) {
+    document.querySelectorAll('input:not([type="file"]):not([disabled]), textarea').forEach(el => {
+      el.value = '';
+    });
+    alert('All data cleared.');
+  }
+}
+</script>
+
+</body>
+</html>
