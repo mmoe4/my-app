@@ -811,41 +811,72 @@ function loadData() {
 }
 
 function exportData() {
-  saveData();
-  const data = localStorage.getItem('estatePlanData');
-  if (!data) {
-    alert('No data to export');
-    return;
+  try {
+    saveData();
+    const data = localStorage.getItem('estatePlanData');
+    if (!data || data === '{}' || data === 'null') {
+      alert('No data to export. Please enter some information first.');
+      return;
+    }
+    
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `estate-plan-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    console.log('✓ Data exported successfully');
+  } catch (err) {
+    alert('Export failed: ' + err.message);
+    console.error('Export error:', err);
   }
-  
-  const blob = new Blob([data], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `estate-plan-${new Date().toISOString().split('T')[0]}.json`;
-  a.click();
-  URL.revokeObjectURL(url);
 }
 
 function importData() {
-  fileInput.click();
+  try {
+    const input = document.getElementById('fileInput');
+    if (input) {
+      input.click();
+    } else {
+      alert('File input not found');
+    }
+  } catch (err) {
+    alert('Import button error: ' + err.message);
+    console.error('Import error:', err);
+  }
 }
 
 function handleImport(event) {
   const file = event.target.files[0];
-  if (!file) return;
+  if (!file) {
+    console.log('No file selected');
+    return;
+  }
   
+  console.log('Importing file:', file.name);
   const reader = new FileReader();
   reader.onload = (e) => {
     try {
       const data = JSON.parse(e.target.result);
       localStorage.setItem('estatePlanData', JSON.stringify(data));
+      alert('Import successful! Page will reload to show your data.');
       location.reload();
     } catch (err) {
-      alert('Import failed: Invalid file format');
+      alert('Import failed: Invalid file format. Please select a valid JSON file.');
+      console.error('Import parse error:', err);
     }
   };
+  reader.onerror = (e) => {
+    alert('Failed to read file');
+    console.error('File read error:', e);
+  };
   reader.readAsText(file);
+  
+  // Reset the input so the same file can be imported again if needed
+  event.target.value = '';
 }
 
 function clearData() {
