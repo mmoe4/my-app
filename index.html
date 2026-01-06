@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -310,7 +309,6 @@ textarea{min-height:140px}
 <div class="notice" data-t="notice"></div>
 
 <div class="toolbar">
-  <button onclick="saveData()" data-t="saveBtn"></button>
   <button onclick="exportData()" data-t="exportBtn"></button>
   <button onclick="document.getElementById('fileInput').click()" data-t="importBtn"></button>
   <button onclick="clearData()" data-t="clearBtn"></button>
@@ -491,7 +489,7 @@ const T = {
 en:{
 title:"My Estate Plan",
 subtitle:"Personal estate planning record · Not a legal document",
-notice:"Auto-saves as you type. Data stored securely in your browser only.",
+notice:"Fill in your information below. Use Export to save a backup file.",
 personal:"Personal Information",
 executors:"Executors",
 children:"Children / Dependents",
@@ -518,7 +516,6 @@ addDebt:"➕ Add Another Debt",
 addProfessional:"➕ Add Another Contact",
 addPet:"➕ Add Another Pet",
 addCharity:"➕ Add Another Charity",
-saveBtn:"💾 Save Now",
 exportBtn:"📥 Export JSON",
 importBtn:"📤 Import JSON",
 clearBtn:"🗑️ Clear All",
@@ -566,7 +563,7 @@ additionalNotes:"Any other important information, safe combinations, hidden valu
 fr:{
 title:"Mon Plan Successoral",
 subtitle:"Document personnel de planification successorale · Non juridique",
-notice:"Sauvegarde automatique. Données stockées localement dans votre navigateur.",
+notice:"Remplissez vos informations. Utilisez Exporter pour sauvegarder.",
 personal:"Informations Personnelles",
 executors:"Exécuteurs Testamentaires",
 children:"Enfants / Personnes à Charge",
@@ -593,7 +590,6 @@ addDebt:"➕ Ajouter une Dette",
 addProfessional:"➕ Ajouter un Contact",
 addPet:"➕ Ajouter un Animal",
 addCharity:"➕ Ajouter un Organisme",
-saveBtn:"💾 Sauvegarder",
 exportBtn:"📥 Exporter JSON",
 importBtn:"📤 Importer JSON",
 clearBtn:"🗑️ Tout Effacer",
@@ -641,7 +637,7 @@ additionalNotes:"Autres informations importantes, combinaisons de coffre"
 de:{
 title:"Mein Nachlassplan",
 subtitle:"Persönlicher Nachlassplanungsdokument · Kein Rechtsdokument",
-notice:"Auto-Speicherung beim Tippen. Daten lokal im Browser gespeichert.",
+notice:"Füllen Sie Ihre Informationen aus. Verwenden Sie Export zum Speichern.",
 personal:"Persönliche Angaben",
 executors:"Testamentsvollstrecker",
 children:"Kinder / Angehörige",
@@ -651,7 +647,6 @@ additionalNotes:"Zusätzliche Notizen",
 addExecutor:"➕ Vollstrecker Hinzufügen",
 addChild:"➕ Kind Hinzufügen",
 addAsset:"➕ Vermögen Hinzufügen",
-saveBtn:"💾 Jetzt Speichern",
 exportBtn:"📥 JSON Exportieren",
 importBtn:"📤 JSON Importieren",
 clearBtn:"🗑️ Alles Löschen",
@@ -674,7 +669,7 @@ additionalNotes:"Medizinische Verfügungen, Passwörter, Tierpflege"
 es:{
 title:"Mi Plan Patrimonial",
 subtitle:"Documento personal de planificación patrimonial · No es documento legal",
-notice:"Guardado automático. Datos almacenados localmente en su navegador.",
+notice:"Complete su información. Use Exportar para guardar una copia.",
 personal:"Información Personal",
 executors:"Albaceas",
 children:"Hijos / Dependientes",
@@ -684,7 +679,6 @@ additionalNotes:"Notas Adicionales",
 addExecutor:"➕ Añadir Albacea",
 addChild:"➕ Añadir Hijo",
 addAsset:"➕ Añadir Activo",
-saveBtn:"💾 Guardar Ahora",
 exportBtn:"📥 Exportar JSON",
 importBtn:"📤 Importar JSON",
 clearBtn:"🗑️ Borrar Todo",
@@ -707,7 +701,7 @@ additionalNotes:"Directivas médicas, contraseñas, cuidado de mascotas"
 ja:{
 title:"私の遺産計画",
 subtitle:"個人の遺産計画記録 · 法的文書ではありません",
-notice:"自動保存。データはブラウザにローカル保存されます。",
+notice:"情報を入力してください。エクスポートでバックアップを保存します。",
 personal:"個人情報",
 executors:"遺言執行者",
 children:"子供・扶養家族",
@@ -717,7 +711,6 @@ additionalNotes:"追加メモ",
 addExecutor:"➕ 執行者を追加",
 addChild:"➕ 子供を追加",
 addAsset:"➕ 資産を追加",
-saveBtn:"💾 今すぐ保存",
 exportBtn:"📥 JSON出力",
 importBtn:"📤 JSON入力",
 clearBtn:"🗑️ 全削除",
@@ -740,7 +733,7 @@ additionalNotes:"医療指示、パスワード、ペットの世話"
 zh:{
 title:"我的遗产规划",
 subtitle:"个人遗产规划记录 · 非法律文件",
-notice:"自动保存。数据仅存储在您的浏览器中。",
+notice:"填写您的信息。使用导出来保存备份文件。",
 personal:"个人信息",
 executors:"遗嘱执行人",
 children:"子女/受抚养人",
@@ -750,7 +743,6 @@ additionalNotes:"附加说明",
 addExecutor:"➕ 添加执行人",
 addChild:"➕ 添加子女",
 addAsset:"➕ 添加资产",
-saveBtn:"💾 立即保存",
 exportBtn:"📥 导出JSON",
 importBtn:"📤 导入JSON",
 clearBtn:"🗑️ 清除全部",
@@ -765,326 +757,4 @@ executorNotes:"具体指示",
 childName:"子女姓名与出生日期",
 notes:"监护人偏好、特殊需求",
 assetDesc:"资产描述",
-assetValue:"估计价值",
-assetNotes:"受益人、账号",
-funeralNotes:"土葬或火化、仪式偏好",
-additionalNotes:"医疗指示、密码、宠物照料"
-},
-ko:{
-title:"나의 상속 계획",
-subtitle:"개인 상속 계획 기록 · 법적 문서 아님",
-notice:"자동 저장. 데이터는 브라우저에 로컬 저장됩니다.",
-personal:"개인 정보",
-executors:"유언 집행자",
-children:"자녀/부양가족",
-assets:"자산 및 재산",
-funeral:"장례 희망사항",
-additionalNotes:"추가 메모",
-addExecutor:"➕ 집행자 추가",
-addChild:"➕ 자녀 추가",
-addAsset:"➕ 자산 추가",
-saveBtn:"💾 지금 저장",
-exportBtn:"📥 JSON 내보내기",
-importBtn:"📤 JSON 가져오기",
-clearBtn:"🗑️ 모두 지우기",
-name:"법적 성명",
-dob:"생년월일",
-address:"전체 주소",
-phone:"전화번호",
-email:"이메일 주소",
-executorName:"집행자 이름",
-executorRel:"관계 및 연락처",
-executorNotes:"구체적인 지시사항",
-childName:"자녀 이름 및 생년월일",
-notes:"후견인 선호, 특별 요구사항",
-assetDesc:"자산 설명",
-assetValue:"추정 가치",
-assetNotes:"수혜자, 계좌번호",
-funeralNotes:"매장 또는 화장, 장례식 선호",
-additionalNotes:"의료 지시, 비밀번호, 반려동물 돌봄"
-},
-hi:{
-title:"मेरी एस्टेट योजना",
-subtitle:"व्यक्तिगत संपत्ति योजना रिकॉर्ड · कानूनी दस्तावेज़ नहीं",
-notice:"स्वचालित सहेजना। डेटा आपके ब्राउज़र में स्थानीय रूप से संग्रहीत।",
-personal:"व्यक्तिगत जानकारी",
-executors:"निष्पादक",
-children:"बच्चे/आश्रित",
-assets:"संपत्तियाँ और सम्पदा",
-funeral:"अंतिम संस्कार इच्छाएँ",
-additionalNotes:"अतिरिक्त नोट्स",
-addExecutor:"➕ निष्पादक जोड़ें",
-addChild:"➕ बच्चा जोड़ें",
-addAsset:"➕ संपत्ति जोड़ें",
-saveBtn:"💾 अभी सहेजें",
-exportBtn:"📥 JSON निर्यात",
-importBtn:"📤 JSON आयात",
-clearBtn:"🗑️ सब मिटाएं",
-name:"पूरा कानूनी नाम",
-dob:"जन्म तिथि",
-address:"पूरा पता",
-phone:"फ़ोन नंबर",
-email:"ईमेल पता",
-executorName:"निष्पादक का नाम",
-executorRel:"संबंध और संपर्क",
-executorNotes:"विशिष्ट निर्देश",
-childName:"बच्चे का नाम और जन्म तिथि",
-notes:"अभिभावक वरीयता, विशेष आवश्यकताएं",
-assetDesc:"संपत्ति विवरण",
-assetValue:"अनुमानित मूल्य",
-assetNotes:"लाभार्थी, खाता संख्या",
-funeralNotes:"दफन या दाह संस्कार, सेवा वरीयताएँ",
-additionalNotes:"चिकित्सा निर्देश, पासवर्ड, पालतू जानवरों की देखभाल"
-}
-};
-
-/* ---------- CORE ENGINE ---------- */
-let currentLang="en";
-
-function applyLanguage(lang){
-  currentLang = T[lang] ? lang : "en";
-  language.value = currentLang;
-
-  document.querySelectorAll("[data-t]").forEach(el=>{
-    const k=el.dataset.t;
-    el.textContent = T[currentLang][k] || T.en[k] || "";
-  });
-
-  document.querySelectorAll("[data-ph]").forEach(el=>{
-    const k=el.dataset.ph;
-    el.placeholder = T[currentLang][k] || T.en[k] || "";
-  });
-}
-
-/* ---------- COUNTRY AUTO ---------- */
-const countryLang={
-"Canada":"en","United States":"en","France":"fr","Germany":"de",
-"Spain":"es","Japan":"ja","China":"zh","South Korea":"ko","India":"hi"
-};
-
-country.onchange=()=>applyLanguage(countryLang[country.value]||"en");
-language.onchange=()=>applyLanguage(language.value);
-
-/* ---------- ROWS ---------- */
-function addRow(id){
-  const c=document.getElementById(id);
-  const row=c.querySelector(".repeat").cloneNode(true);
-  row.querySelectorAll("input,textarea").forEach(i=>i.value="");
-  c.insertBefore(row,c.lastElementChild);
-  applyLanguage(currentLang);
-}
-
-/* ---------- UI ---------- */
-function toggle(h){h.parentElement.classList.toggle("open")}
-function openAll(){document.querySelectorAll("section").forEach(s=>s.classList.add("open"))}
-function closeAll(){document.querySelectorAll("section").forEach(s=>s.classList.remove("open"))}
-
-/* ---------- INIT ---------- */
-applyLanguage("en");
-loadData();
-
-// Auto-save on input
-document.addEventListener('input', debounce(saveData, 1000));
-
-function debounce(fn, delay) {
-  let timer;
-  return function(...args) {
-    clearTimeout(timer);
-    timer = setTimeout(() => fn.apply(this, args), delay);
-  };
-}
-
-/* ---------- DATA PERSISTENCE ---------- */
-function saveData() {
-  const data = {
-    country: country.value,
-    language: language.value,
-    fields: {}
-  };
-  
-  document.querySelectorAll('input:not([type="file"]):not([disabled]), textarea').forEach(el => {
-    if (el.value) {
-      const section = el.closest('section');
-      const id = section ? section.querySelector('.section-header')?.dataset.t : 'misc';
-      if (!data.fields[id]) data.fields[id] = [];
-      data.fields[id].push({
-        placeholder: el.dataset.ph || el.placeholder,
-        value: el.value
-      });
-    }
-  });
-  
-  try {
-    localStorage.setItem('estatePlanData', JSON.stringify(data));
-    console.log('✓ Data saved successfully');
-    return true;
-  } catch (e) {
-    console.error('Save failed:', e);
-    alert('Save failed: ' + e.message);
-    return false;
-  }
-}
-
-function loadData() {
-  try {
-    const saved = localStorage.getItem('estatePlanData');
-    if (!saved) {
-      console.log('No saved data found');
-      return;
-    }
-    
-    const data = JSON.parse(saved);
-    console.log('Loading data:', data);
-    
-    if (data.country) country.value = data.country;
-    if (data.language) applyLanguage(data.language);
-    
-    if (data.fields) {
-      Object.keys(data.fields).forEach(sectionKey => {
-        const section = document.querySelector(`[data-t="${sectionKey}"]`)?.parentElement;
-        if (!section) return;
-        
-        const container = section.querySelector('.section-content');
-        const items = data.fields[sectionKey];
-        
-        items.forEach((item, idx) => {
-          let input = container.querySelectorAll(`[data-ph="${item.placeholder}"]`)[idx];
-          if (!input && idx > 0) {
-            const containerId = container.id;
-            if (containerId) addRow(containerId);
-            input = container.querySelectorAll(`[data-ph="${item.placeholder}"]`)[idx];
-          }
-          if (input) input.value = item.value;
-        });
-      });
-    }
-    console.log('✓ Data loaded successfully');
-  } catch (e) {
-    console.error('Load failed:', e);
-  }
-}
-
-function exportData() {
-  console.log('=== EXPORT STARTED ===');
-  
-  try {
-    // Step 1: Save current data
-    console.log('Step 1: Saving data...');
-    saveData();
-    
-    // Step 2: Get data from localStorage
-    console.log('Step 2: Getting data from localStorage...');
-    const data = localStorage.getItem('estatePlanData');
-    console.log('Data retrieved:', data ? 'YES' : 'NO');
-    console.log('Data length:', data ? data.length : 0);
-    
-    if (!data) {
-      console.error('No data in localStorage');
-      alert('No data found. Please enter some information first, then click "Save Now" before exporting.');
-      return;
-    }
-    
-    if (data === '{}' || data === 'null' || data.length < 10) {
-      console.error('Data is empty or invalid');
-      alert('No meaningful data to export. Please fill in at least one field.');
-      return;
-    }
-    
-    // Step 3: Create blob
-    console.log('Step 3: Creating blob...');
-    const blob = new Blob([data], { type: 'application/json' });
-    console.log('Blob created, size:', blob.size);
-    
-    // Step 4: Create download link
-    console.log('Step 4: Creating download link...');
-    const url = URL.createObjectURL(blob);
-    console.log('URL created:', url);
-    
-    // Step 5: Create anchor and trigger download
-    console.log('Step 5: Triggering download...');
-    const timestamp = new Date().toISOString().split('T')[0];
-    const filename = `estate-plan-${timestamp}.json`;
-    console.log('Filename:', filename);
-    
-    const a = document.createElement('a');
-    a.style.display = 'none';
-    a.href = url;
-    a.download = filename;
-    
-    document.body.appendChild(a);
-    console.log('Link appended to body');
-    
-    a.click();
-    console.log('Click triggered');
-    
-    // Step 6: Cleanup
-    setTimeout(() => {
-      console.log('Cleaning up...');
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      console.log('=== EXPORT COMPLETED ===');
-    }, 500);
-    
-    alert('✓ Export successful! Check your downloads folder for: ' + filename);
-    
-  } catch (err) {
-    console.error('=== EXPORT FAILED ===');
-    console.error('Error:', err);
-    console.error('Error message:', err.message);
-    console.error('Error stack:', err.stack);
-    alert('Export failed: ' + err.message + '\n\nPlease check the browser console (F12) for details.');
-  }
-}
-
-function handleImport(event) {
-  const file = event.target.files[0];
-  if (!file) {
-    console.log('No file selected');
-    return;
-  }
-  
-  console.log('Importing file:', file.name);
-  
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    try {
-      const content = e.target.result;
-      console.log('File content:', content);
-      
-      // Validate JSON
-      const data = JSON.parse(content);
-      console.log('Parsed data:', data);
-      
-      // Save to localStorage
-      localStorage.setItem('estatePlanData', JSON.stringify(data));
-      
-      alert('Import successful! Page will reload to display your data.');
-      location.reload();
-    } catch (err) {
-      console.error('Import parse error:', err);
-      alert('Import failed: Invalid JSON file. Please select a valid estate plan export.');
-    }
-  };
-  
-  reader.onerror = (e) => {
-    console.error('File read error:', e);
-    alert('Failed to read file');
-  };
-  
-  reader.readAsText(file);
-  
-  // Reset input
-  event.target.value = '';
-}
-
-function clearData() {
-  if (confirm('⚠️ WARNING: This will permanently delete all your estate planning data.\n\nAre you absolutely sure you want to clear everything?\n\nConsider exporting a backup first!')) {
-    localStorage.removeItem('estatePlanData');
-    alert('All data cleared. Page will reload.');
-    location.reload();
-  }
-}
-</script>
-
-</body>
-</html>
+assetValue:"估
