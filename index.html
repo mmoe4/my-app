@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -965,42 +964,74 @@ function loadData() {
 }
 
 function exportData() {
+  console.log('=== EXPORT STARTED ===');
+  
   try {
-    console.log('Export button clicked');
+    // Step 1: Save current data
+    console.log('Step 1: Saving data...');
+    saveData();
     
-    // Force save first
-    if (!saveData()) {
-      return;
-    }
-    
+    // Step 2: Get data from localStorage
+    console.log('Step 2: Getting data from localStorage...');
     const data = localStorage.getItem('estatePlanData');
-    console.log('Data to export:', data);
+    console.log('Data retrieved:', data ? 'YES' : 'NO');
+    console.log('Data length:', data ? data.length : 0);
     
-    if (!data || data === '{}' || data === 'null') {
-      alert('No data to export. Please fill in some information first.');
+    if (!data) {
+      console.error('No data in localStorage');
+      alert('No data found. Please enter some information first, then click "Save Now" before exporting.');
       return;
     }
     
-    // Create and download file
-    const blob = new Blob([data], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `estate-plan-${new Date().toISOString().split('T')[0]}.json`;
-    document.body.appendChild(a);
-    a.click();
+    if (data === '{}' || data === 'null' || data.length < 10) {
+      console.error('Data is empty or invalid');
+      alert('No meaningful data to export. Please fill in at least one field.');
+      return;
+    }
     
-    // Cleanup
+    // Step 3: Create blob
+    console.log('Step 3: Creating blob...');
+    const blob = new Blob([data], { type: 'application/json' });
+    console.log('Blob created, size:', blob.size);
+    
+    // Step 4: Create download link
+    console.log('Step 4: Creating download link...');
+    const url = URL.createObjectURL(blob);
+    console.log('URL created:', url);
+    
+    // Step 5: Create anchor and trigger download
+    console.log('Step 5: Triggering download...');
+    const timestamp = new Date().toISOString().split('T')[0];
+    const filename = `estate-plan-${timestamp}.json`;
+    console.log('Filename:', filename);
+    
+    const a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = url;
+    a.download = filename;
+    
+    document.body.appendChild(a);
+    console.log('Link appended to body');
+    
+    a.click();
+    console.log('Click triggered');
+    
+    // Step 6: Cleanup
     setTimeout(() => {
+      console.log('Cleaning up...');
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-    }, 100);
+      console.log('=== EXPORT COMPLETED ===');
+    }, 500);
     
-    console.log('✓ Export completed');
-    alert('Estate plan exported successfully!');
+    alert('✓ Export successful! Check your downloads folder for: ' + filename);
+    
   } catch (err) {
-    console.error('Export error:', err);
-    alert('Export failed: ' + err.message);
+    console.error('=== EXPORT FAILED ===');
+    console.error('Error:', err);
+    console.error('Error message:', err.message);
+    console.error('Error stack:', err.stack);
+    alert('Export failed: ' + err.message + '\n\nPlease check the browser console (F12) for details.');
   }
 }
 
