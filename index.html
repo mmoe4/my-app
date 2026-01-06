@@ -309,7 +309,6 @@ textarea{min-height:140px}
 <div class="notice" data-t="notice"></div>
 
 <div class="toolbar">
-  <button onclick="exportData()" data-t="exportBtn"></button>
   <button onclick="document.getElementById('fileInput').click()" data-t="importBtn"></button>
   <button onclick="clearData()" data-t="clearBtn"></button>
 </div>
@@ -872,66 +871,7 @@ function closeAll(){document.querySelectorAll("section").forEach(s=>s.classList.
 /* ---------- INIT ---------- */
 applyLanguage("en");
 
-/* ---------- DATA EXPORT/IMPORT ---------- */
-function exportData() {
-  try {
-    // Collect current form data directly
-    const data = {
-      country: country.value,
-      language: language.value,
-      exportDate: new Date().toISOString(),
-      fields: {}
-    };
-    
-    document.querySelectorAll('input:not([type="file"]):not([disabled]), textarea').forEach(el => {
-      if (el.value) {
-        const section = el.closest('section');
-        const id = section ? section.querySelector('.section-header')?.dataset.t : 'misc';
-        if (!data.fields[id]) data.fields[id] = [];
-        data.fields[id].push({
-          placeholder: el.dataset.ph || el.placeholder,
-          value: el.value
-        });
-      }
-    });
-    
-    // Check if there's any data
-    if (Object.keys(data.fields).length === 0) {
-      alert('No data to export. Please fill in at least one field first.');
-      return;
-    }
-    
-    // Create JSON string
-    const jsonString = JSON.stringify(data, null, 2);
-    
-    // Create blob and download
-    const blob = new Blob([jsonString], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    
-    const timestamp = new Date().toISOString().split('T')[0];
-    const filename = `estate-plan-${timestamp}.json`;
-    
-    const a = document.createElement('a');
-    a.style.display = 'none';
-    a.href = url;
-    a.download = filename;
-    
-    document.body.appendChild(a);
-    a.click();
-    
-    setTimeout(() => {
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    }, 500);
-    
-    alert('✓ Export successful! Check your downloads folder for: ' + filename);
-    
-  } catch (err) {
-    console.error('Export error:', err);
-    alert('Export failed: ' + err.message);
-  }
-}
-
+/* ---------- DATA IMPORT ---------- */
 function handleImport(event) {
   const file = event.target.files[0];
   if (!file) return;
