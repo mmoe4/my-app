@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -76,6 +77,52 @@ body::after{
   top:50%;
   right:10%;
   animation-delay:-14s;
+}
+
+/* Background text watermarks */
+.bg-text{
+  position:fixed;
+  font-size:120px;
+  font-weight:700;
+  color:rgba(59, 130, 246, 0.02);
+  z-index:-1;
+  pointer-events:none;
+  user-select:none;
+  font-family:"Times New Roman", Georgia, serif;
+  letter-spacing:-2px;
+  line-height:1.2;
+}
+.bg-text.large{
+  font-size:180px;
+  opacity:0.4;
+}
+.bg-text:nth-child(4){
+  top:15%;
+  left:5%;
+  transform:rotate(-5deg);
+}
+.bg-text:nth-child(5){
+  bottom:20%;
+  right:5%;
+  transform:rotate(3deg);
+}
+.bg-text:nth-child(6){
+  top:45%;
+  left:50%;
+  transform:translate(-50%, -50%) rotate(-2deg);
+  font-size:200px;
+}
+.bg-text:nth-child(7){
+  top:5%;
+  right:10%;
+  font-size:90px;
+  color:rgba(99, 102, 241, 0.025);
+}
+.bg-text:nth-child(8){
+  bottom:10%;
+  left:15%;
+  font-size:85px;
+  color:rgba(139, 92, 246, 0.02);
 }
 
 @keyframes gradientShift{
@@ -212,6 +259,12 @@ textarea{min-height:140px}
 <div class="bg-orb"></div>
 <div class="bg-orb"></div>
 <div class="bg-orb"></div>
+
+<div class="bg-text">LEGACY</div>
+<div class="bg-text">PLANNING</div>
+<div class="bg-text large">ESTATE</div>
+<div class="bg-text">SECURE</div>
+<div class="bg-text">FUTURE</div>
 
 <div class="container">
 
