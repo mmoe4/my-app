@@ -9,10 +9,13 @@
 body{
   margin:0;
   font-family:"Times New Roman", Georgia, serif;
-  background:#0f1419;
+  background:#0a0e1a;
   position:relative;
   overflow-x:hidden;
+  min-height:100vh;
 }
+
+/* Animated gradient base */
 body::before{
   content:'';
   position:fixed;
@@ -21,9 +24,12 @@ body::before{
   right:0;
   bottom:0;
   background:
-    linear-gradient(135deg, #1a2332 0%, #0f1419 50%, #1e2936 100%);
-  z-index:-1;
+    linear-gradient(135deg, #0f1419 0%, #1a1f2e 25%, #0f1824 50%, #1e2433 75%, #0a0e1a 100%);
+  animation:gradientShift 15s ease infinite;
+  z-index:-3;
 }
+
+/* Subtle grid pattern */
 body::after{
   content:'';
   position:fixed;
@@ -31,24 +37,72 @@ body::after{
   left:0;
   right:0;
   bottom:0;
-  background:
-    radial-gradient(circle at 15% 20%, rgba(59, 130, 246, 0.05) 0%, transparent 40%),
-    radial-gradient(circle at 85% 80%, rgba(99, 102, 241, 0.05) 0%, transparent 40%);
+  background-image:
+    linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  z-index:-2;
+}
+
+/* Floating orbs */
+.bg-orb{
+  position:fixed;
+  border-radius:50%;
+  filter:blur(80px);
+  opacity:0.15;
   z-index:-1;
+  animation:float 20s ease-in-out infinite;
+}
+.bg-orb:nth-child(1){
+  width:400px;
+  height:400px;
+  background:radial-gradient(circle, #3b82f6, transparent);
+  top:10%;
+  left:15%;
+  animation-delay:0s;
+}
+.bg-orb:nth-child(2){
+  width:350px;
+  height:350px;
+  background:radial-gradient(circle, #6366f1, transparent);
+  bottom:15%;
+  right:20%;
+  animation-delay:-7s;
+}
+.bg-orb:nth-child(3){
+  width:300px;
+  height:300px;
+  background:radial-gradient(circle, #8b5cf6, transparent);
+  top:50%;
+  right:10%;
+  animation-delay:-14s;
+}
+
+@keyframes gradientShift{
+  0%, 100%{opacity:1}
+  50%{opacity:0.8}
+}
+
+@keyframes float{
+  0%, 100%{transform:translate(0, 0) scale(1)}
+  33%{transform:translate(30px, -30px) scale(1.1)}
+  66%{transform:translate(-20px, 20px) scale(0.9)}
 }
 
 .container{
   max-width:1200px;
   margin:40px auto;
   padding:40px;
-  background:#ffffff;
+  background:rgba(255,255,255,0.97);
+  backdrop-filter:blur(10px);
   border-radius:12px;
   box-shadow:
     0 4px 6px rgba(0,0,0,0.1),
-    0 10px 25px rgba(0,0,0,0.15),
-    0 1px 3px rgba(0,0,0,0.08);
+    0 10px 25px rgba(0,0,0,0.2),
+    0 20px 40px rgba(0,0,0,0.15),
+    inset 0 1px 0 rgba(255,255,255,0.9);
   position:relative;
-  border:1px solid rgba(226, 232, 240, 0.8);
+  border:1px solid rgba(226, 232, 240, 0.5);
 }
 .container::before{
   display:none;
@@ -154,6 +208,11 @@ textarea{min-height:140px}
 </head>
 
 <body>
+
+<div class="bg-orb"></div>
+<div class="bg-orb"></div>
+<div class="bg-orb"></div>
+
 <div class="container">
 
 <h1 data-t="title"></h1>
