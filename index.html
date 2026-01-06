@@ -9,7 +9,7 @@
 body{
   margin:0;
   font-family:"Times New Roman", Georgia, serif;
-  background:#1a0a0f;
+  background:#0f1419;
   position:relative;
   overflow-x:hidden;
 }
@@ -21,50 +21,52 @@ body::before{
   right:0;
   bottom:0;
   background:
-    radial-gradient(circle at 20% 30%, rgba(139,69,19,0.3) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(178,34,34,0.25) 0%, transparent 50%),
-    radial-gradient(circle at 40% 70%, rgba(85,26,26,0.3) 0%, transparent 50%),
-    radial-gradient(circle at 90% 80%, rgba(101,67,33,0.2) 0%, transparent 50%),
-    linear-gradient(135deg, #2b1417 0%, #1a0a0f 50%, #3d1f1f 100%);
-  animation:bgShift 20s ease infinite;
+    linear-gradient(135deg, #1a2332 0%, #0f1419 50%, #1e2936 100%);
   z-index:-1;
 }
-@keyframes bgShift{
-  0%, 100%{opacity:1; transform:scale(1) rotate(0deg)}
-  50%{opacity:0.85; transform:scale(1.1) rotate(2deg)}
+body::after{
+  content:'';
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(59, 130, 246, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 85% 80%, rgba(99, 102, 241, 0.05) 0%, transparent 40%);
+  z-index:-1;
 }
 
 .container{
   max-width:1200px;
   margin:40px auto;
   padding:40px;
-  background:rgba(255,255,255,0.98);
-  border-radius:18px;
+  background:#ffffff;
+  border-radius:12px;
   box-shadow:
-    0 20px 60px rgba(0,0,0,0.5),
-    0 0 100px rgba(139,69,19,0.15),
-    inset 0 1px 0 rgba(255,255,255,0.6);
+    0 4px 6px rgba(0,0,0,0.1),
+    0 10px 25px rgba(0,0,0,0.15),
+    0 1px 3px rgba(0,0,0,0.08);
   position:relative;
+  border:1px solid rgba(226, 232, 240, 0.8);
 }
 .container::before{
-  content:'';
-  position:absolute;
-  top:-2px;
-  left:-2px;
-  right:-2px;
-  bottom:-2px;
-  background:linear-gradient(135deg, rgba(178,34,34,0.3), rgba(139,69,19,0.3), rgba(101,67,33,0.3));
-  border-radius:18px;
-  z-index:-1;
-  animation:borderGlow 4s ease infinite;
-}
-@keyframes borderGlow{
-  0%, 100%{opacity:0.5}
-  50%{opacity:0.8}
+  display:none;
 }
 
-h1{text-align:center;margin:0}
-.subtitle{text-align:center;color:#555;margin-bottom:20px}
+h1{
+  text-align:center;
+  margin:0;
+  color:#1e293b;
+  font-size:2.5em;
+  font-weight:600;
+}
+.subtitle{
+  text-align:center;
+  color:#64748b;
+  margin-bottom:20px;
+  font-size:0.95em;
+}
 
 .topbar,.toolbar{
   display:grid;
@@ -76,44 +78,72 @@ h1{text-align:center;margin:0}
 
 select,input,textarea,button{
   padding:12px;
-  border-radius:8px;
-  border:1px solid #ccc;
+  border-radius:6px;
+  border:1px solid #e2e8f0;
   width:100%;
   box-sizing:border-box;
   font-family:inherit;
+  font-size:14px;
+  transition:all 0.2s ease;
 }
-button{cursor:pointer;background:#f3f4f6}
-button:hover{background:#e5e7eb}
+select:focus,input:focus,textarea:focus{
+  outline:none;
+  border-color:#3b82f6;
+  box-shadow:0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+button{
+  cursor:pointer;
+  background:#f8fafc;
+  color:#334155;
+  font-weight:500;
+  border:1px solid #e2e8f0;
+}
+button:hover{
+  background:#f1f5f9;
+  border-color:#cbd5e1;
+}
 
 .notice{
-  background:#f9fafb;
-  padding:12px;
-  border-radius:8px;
+  background:#eff6ff;
+  padding:12px 16px;
+  border-radius:6px;
   font-size:14px;
+  color:#1e40af;
+  border-left:3px solid #3b82f6;
 }
 
 section{
-  border:1px solid #ddd;
-  border-radius:12px;
+  border:1px solid #e2e8f0;
+  border-radius:8px;
   margin-top:20px;
+  overflow:hidden;
+  background:#ffffff;
 }
 .section-header{
-  padding:14px;
-  background:#f3f4f6;
-  font-weight:bold;
+  padding:16px;
+  background:#f8fafc;
+  font-weight:600;
   cursor:pointer;
+  color:#1e293b;
+  border-bottom:1px solid #e2e8f0;
+  transition:background 0.2s ease;
+}
+.section-header:hover{
+  background:#f1f5f9;
 }
 .section-content{
-  padding:14px;
+  padding:16px;
   display:none;
+  background:#ffffff;
 }
 section.open .section-content{display:block}
 
 .repeat{
-  border:1px dashed #ccc;
-  padding:12px;
-  border-radius:8px;
+  border:1px solid #e2e8f0;
+  padding:16px;
+  border-radius:6px;
   margin-bottom:12px;
+  background:#f8fafc;
 }
 .repeat>*{margin-top:10px}
 .repeat>*:first-child{margin-top:0}
