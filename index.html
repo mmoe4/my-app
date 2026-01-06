@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -99,17 +100,17 @@ body::after{
 .bg-text:nth-child(4){
   top:15%;
   left:5%;
-  transform:rotate(-5deg);
+  transform:rotate(-15deg);
 }
 .bg-text:nth-child(5){
   bottom:20%;
   right:5%;
-  transform:rotate(3deg);
+  transform:rotate(12deg);
 }
 .bg-text:nth-child(6){
   top:45%;
   left:50%;
-  transform:translate(-50%, -50%) rotate(-2deg);
+  transform:translate(-50%, -50%) rotate(-8deg);
   font-size:200px;
 }
 .bg-text:nth-child(7){
@@ -117,12 +118,14 @@ body::after{
   right:10%;
   font-size:90px;
   color:rgba(99, 102, 241, 0.09);
+  transform:rotate(18deg);
 }
 .bg-text:nth-child(8){
   bottom:10%;
   left:15%;
   font-size:85px;
   color:rgba(139, 92, 246, 0.08);
+  transform:rotate(-12deg);
 }
 
 @keyframes gradientShift{
@@ -309,7 +312,7 @@ textarea{min-height:140px}
 <div class="toolbar">
   <button onclick="saveData()" data-t="saveBtn"></button>
   <button onclick="exportData()" data-t="exportBtn"></button>
-  <button onclick="importData()" data-t="importBtn"></button>
+  <button onclick="document.getElementById('fileInput').click()" data-t="importBtn"></button>
   <button onclick="clearData()" data-t="clearBtn"></button>
 </div>
 <input type="file" id="fileInput" accept=".json" style="display:none" onchange="handleImport(event)">
@@ -901,7 +904,8 @@ function saveData() {
   
   document.querySelectorAll('input:not([type="file"]):not([disabled]), textarea').forEach(el => {
     if (el.value) {
-      const id = el.closest('section')?.querySelector('.section-header')?.dataset.t || 'misc';
+      const section = el.closest('section');
+      const id = section ? section.querySelector('.section-header')?.dataset.t : 'misc';
       if (!data.fields[id]) data.fields[id] = [];
       data.fields[id].push({
         placeholder: el.dataset.ph || el.placeholder,
@@ -912,18 +916,26 @@ function saveData() {
   
   try {
     localStorage.setItem('estatePlanData', JSON.stringify(data));
-    console.log('✓ Data saved');
+    console.log('✓ Data saved successfully');
+    return true;
   } catch (e) {
+    console.error('Save failed:', e);
     alert('Save failed: ' + e.message);
+    return false;
   }
 }
 
 function loadData() {
   try {
     const saved = localStorage.getItem('estatePlanData');
-    if (!saved) return;
+    if (!saved) {
+      console.log('No saved data found');
+      return;
+    }
     
     const data = JSON.parse(saved);
+    console.log('Loading data:', data);
+    
     if (data.country) country.value = data.country;
     if (data.language) applyLanguage(data.language);
     
@@ -946,7 +958,7 @@ function loadData() {
         });
       });
     }
-    console.log('✓ Data loaded');
+    console.log('✓ Data loaded successfully');
   } catch (e) {
     console.error('Load failed:', e);
   }
@@ -954,13 +966,22 @@ function loadData() {
 
 function exportData() {
   try {
-    saveData();
-    const data = localStorage.getItem('estatePlanData');
-    if (!data || data === '{}' || data === 'null') {
-      alert('No data to export. Please enter some information first.');
+    console.log('Export button clicked');
+    
+    // Force save first
+    if (!saveData()) {
       return;
     }
     
+    const data = localStorage.getItem('estatePlanData');
+    console.log('Data to export:', data);
+    
+    if (!data || data === '{}' || data === 'null') {
+      alert('No data to export. Please fill in some information first.');
+      return;
+    }
+    
+    // Create and download file
     const blob = new Blob([data], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -968,26 +989,18 @@ function exportData() {
     a.download = `estate-plan-${new Date().toISOString().split('T')[0]}.json`;
     document.body.appendChild(a);
     a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    console.log('✓ Data exported successfully');
+    
+    // Cleanup
+    setTimeout(() => {
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 100);
+    
+    console.log('✓ Export completed');
+    alert('Estate plan exported successfully!');
   } catch (err) {
-    alert('Export failed: ' + err.message);
     console.error('Export error:', err);
-  }
-}
-
-function importData() {
-  try {
-    const input = document.getElementById('fileInput');
-    if (input) {
-      input.click();
-    } else {
-      alert('File input not found');
-    }
-  } catch (err) {
-    alert('Import button error: ' + err.message);
-    console.error('Import error:', err);
+    alert('Export failed: ' + err.message);
   }
 }
 
@@ -999,31 +1012,43 @@ function handleImport(event) {
   }
   
   console.log('Importing file:', file.name);
+  
   const reader = new FileReader();
   reader.onload = (e) => {
     try {
-      const data = JSON.parse(e.target.result);
+      const content = e.target.result;
+      console.log('File content:', content);
+      
+      // Validate JSON
+      const data = JSON.parse(content);
+      console.log('Parsed data:', data);
+      
+      // Save to localStorage
       localStorage.setItem('estatePlanData', JSON.stringify(data));
-      alert('Import successful! Page will reload to show your data.');
+      
+      alert('Import successful! Page will reload to display your data.');
       location.reload();
     } catch (err) {
-      alert('Import failed: Invalid file format. Please select a valid JSON file.');
       console.error('Import parse error:', err);
+      alert('Import failed: Invalid JSON file. Please select a valid estate plan export.');
     }
   };
+  
   reader.onerror = (e) => {
-    alert('Failed to read file');
     console.error('File read error:', e);
+    alert('Failed to read file');
   };
+  
   reader.readAsText(file);
   
-  // Reset the input so the same file can be imported again if needed
+  // Reset input
   event.target.value = '';
 }
 
 function clearData() {
-  if (confirm('Are you sure you want to clear all data? This cannot be undone.')) {
+  if (confirm('⚠️ WARNING: This will permanently delete all your estate planning data.\n\nAre you absolutely sure you want to clear everything?\n\nConsider exporting a backup first!')) {
     localStorage.removeItem('estatePlanData');
+    alert('All data cleared. Page will reload.');
     location.reload();
   }
 }
