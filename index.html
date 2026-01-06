@@ -9,15 +9,60 @@
 body{
   margin:0;
   font-family:"Times New Roman", Georgia, serif;
-  background:radial-gradient(circle at top,#4a1f26,#2b1417);
+  background:#1a0a0f;
+  position:relative;
+  overflow-x:hidden;
 }
+body::before{
+  content:'';
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(139,69,19,0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(178,34,34,0.25) 0%, transparent 50%),
+    radial-gradient(circle at 40% 70%, rgba(85,26,26,0.3) 0%, transparent 50%),
+    radial-gradient(circle at 90% 80%, rgba(101,67,33,0.2) 0%, transparent 50%),
+    linear-gradient(135deg, #2b1417 0%, #1a0a0f 50%, #3d1f1f 100%);
+  animation:bgShift 20s ease infinite;
+  z-index:-1;
+}
+@keyframes bgShift{
+  0%, 100%{opacity:1; transform:scale(1) rotate(0deg)}
+  50%{opacity:0.85; transform:scale(1.1) rotate(2deg)}
+}
+
 .container{
   max-width:1200px;
   margin:40px auto;
   padding:40px;
-  background:#fff;
+  background:rgba(255,255,255,0.98);
   border-radius:18px;
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.5),
+    0 0 100px rgba(139,69,19,0.15),
+    inset 0 1px 0 rgba(255,255,255,0.6);
+  position:relative;
 }
+.container::before{
+  content:'';
+  position:absolute;
+  top:-2px;
+  left:-2px;
+  right:-2px;
+  bottom:-2px;
+  background:linear-gradient(135deg, rgba(178,34,34,0.3), rgba(139,69,19,0.3), rgba(101,67,33,0.3));
+  border-radius:18px;
+  z-index:-1;
+  animation:borderGlow 4s ease infinite;
+}
+@keyframes borderGlow{
+  0%, 100%{opacity:0.5}
+  50%{opacity:0.8}
+}
+
 h1{text-align:center;margin:0}
 .subtitle{text-align:center;color:#555;margin-bottom:20px}
 
@@ -27,7 +72,7 @@ h1{text-align:center;margin:0}
   margin-bottom:15px;
 }
 .topbar{grid-template-columns:2fr 1fr 1fr}
-.toolbar{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
+.toolbar{grid-template-columns:repeat(auto-fit,minmax(120px,1fr))}
 
 select,input,textarea,button{
   padding:12px;
@@ -119,6 +164,14 @@ textarea{min-height:140px}
 
 <div class="notice" data-t="notice"></div>
 
+<div class="toolbar">
+  <button onclick="saveData()" data-t="saveBtn"></button>
+  <button onclick="exportData()" data-t="exportBtn"></button>
+  <button onclick="importData()" data-t="importBtn"></button>
+  <button onclick="clearData()" data-t="clearBtn"></button>
+</div>
+<input type="file" id="fileInput" accept=".json" style="display:none" onchange="handleImport(event)">
+
 <section class="open">
   <div class="section-header" data-t="personal" onclick="toggle(this)"></div>
   <div class="section-content">
@@ -173,6 +226,112 @@ textarea{min-height:140px}
 </section>
 
 <section>
+  <div class="section-header" data-t="beneficiaries" onclick="toggle(this)"></div>
+  <div class="section-content" id="beneficiaries">
+    <div class="repeat">
+      <input data-ph="beneficiaryName">
+      <input data-ph="beneficiaryRel">
+      <textarea data-ph="beneficiaryDetails"></textarea>
+    </div>
+    <button data-t="addBeneficiary" onclick="addRow('beneficiaries')"></button>
+  </div>
+</section>
+
+<section>
+  <div class="section-header" data-t="digital" onclick="toggle(this)"></div>
+  <div class="section-content" id="digital">
+    <div class="repeat">
+      <input data-ph="digitalType">
+      <input data-ph="digitalAccount">
+      <textarea data-ph="digitalAccess"></textarea>
+    </div>
+    <button data-t="addDigital" onclick="addRow('digital')"></button>
+  </div>
+</section>
+
+<section>
+  <div class="section-header" data-t="insurance" onclick="toggle(this)"></div>
+  <div class="section-content" id="insurance">
+    <div class="repeat">
+      <input data-ph="insuranceType">
+      <input data-ph="insuranceCompany">
+      <input data-ph="insurancePolicy">
+      <textarea data-ph="insuranceNotes"></textarea>
+    </div>
+    <button data-t="addInsurance" onclick="addRow('insurance')"></button>
+  </div>
+</section>
+
+<section>
+  <div class="section-header" data-t="debts" onclick="toggle(this)"></div>
+  <div class="section-content" id="debts">
+    <div class="repeat">
+      <input data-ph="debtType">
+      <input data-ph="debtAmount">
+      <textarea data-ph="debtDetails"></textarea>
+    </div>
+    <button data-t="addDebt" onclick="addRow('debts')"></button>
+  </div>
+</section>
+
+<section>
+  <div class="section-header" data-t="healthcare" onclick="toggle(this)"></div>
+  <div class="section-content">
+    <textarea class="large" data-ph="healthcareDirectives"></textarea>
+  </div>
+</section>
+
+<section>
+  <div class="section-header" data-t="professionals" onclick="toggle(this)"></div>
+  <div class="section-content" id="professionals">
+    <div class="repeat">
+      <input data-ph="professionalType">
+      <input data-ph="professionalName">
+      <textarea data-ph="professionalContact"></textarea>
+    </div>
+    <button data-t="addProfessional" onclick="addRow('professionals')"></button>
+  </div>
+</section>
+
+<section>
+  <div class="section-header" data-t="business" onclick="toggle(this)"></div>
+  <div class="section-content">
+    <textarea class="large" data-ph="businessInterests"></textarea>
+  </div>
+</section>
+
+<section>
+  <div class="section-header" data-t="pets" onclick="toggle(this)"></div>
+  <div class="section-content" id="pets">
+    <div class="repeat">
+      <input data-ph="petName">
+      <input data-ph="petType">
+      <textarea data-ph="petCare"></textarea>
+    </div>
+    <button data-t="addPet" onclick="addRow('pets')"></button>
+  </div>
+</section>
+
+<section>
+  <div class="section-header" data-t="charitable" onclick="toggle(this)"></div>
+  <div class="section-content" id="charitable">
+    <div class="repeat">
+      <input data-ph="charityName">
+      <input data-ph="charityAmount">
+      <textarea data-ph="charityNotes"></textarea>
+    </div>
+    <button data-t="addCharity" onclick="addRow('charitable')"></button>
+  </div>
+</section>
+
+<section>
+  <div class="section-header" data-t="messages" onclick="toggle(this)"></div>
+  <div class="section-content">
+    <textarea class="large" data-ph="personalMessages"></textarea>
+  </div>
+</section>
+
+<section>
   <div class="section-header" data-t="additionalNotes" onclick="toggle(this)"></div>
   <div class="section-content">
     <textarea class="large" data-ph="additionalNotes"></textarea>
@@ -187,39 +346,351 @@ const T = {
 en:{
 title:"My Estate Plan",
 subtitle:"Personal estate planning record · Not a legal document",
-notice:"Information is stored locally in your browser.",
+notice:"Auto-saves as you type. Data stored securely in your browser only.",
 personal:"Personal Information",
 executors:"Executors",
-children:"Children",
-assets:"Assets",
+children:"Children / Dependents",
+assets:"Assets & Property",
+beneficiaries:"Beneficiaries & Inheritances",
+digital:"Digital Assets & Accounts",
+insurance:"Insurance Policies",
+debts:"Debts & Liabilities",
+healthcare:"Healthcare Directives",
+professionals:"Professional Contacts",
+business:"Business Interests",
+pets:"Pet Care Instructions",
+charitable:"Charitable Giving",
+messages:"Personal Messages & Legacy",
 funeral:"Funeral Wishes",
 additionalNotes:"Additional Notes",
 addExecutor:"➕ Add Another Executor",
 addChild:"➕ Add Another Child",
 addAsset:"➕ Add Another Asset",
+addBeneficiary:"➕ Add Another Beneficiary",
+addDigital:"➕ Add Another Account",
+addInsurance:"➕ Add Another Policy",
+addDebt:"➕ Add Another Debt",
+addProfessional:"➕ Add Another Contact",
+addPet:"➕ Add Another Pet",
+addCharity:"➕ Add Another Charity",
+saveBtn:"💾 Save Now",
+exportBtn:"📥 Export JSON",
+importBtn:"📤 Import JSON",
+clearBtn:"🗑️ Clear All",
 name:"Full legal name",
-dob:"Date of birth",
-address:"Address",
-phone:"Phone",
-email:"Email",
-executorName:"Executor name",
-executorRel:"Relationship / Contact",
-executorNotes:"Instructions",
-childName:"Child name",
-notes:"Notes",
-assetDesc:"Asset description",
-assetValue:"Estimated value",
-assetNotes:"Notes / beneficiary",
-funeralNotes:"Burial, cremation, service wishes",
-additionalNotes:"Additional notes or reminders"
+dob:"Date of birth (e.g., Jan 15, 1980)",
+address:"Full residential address",
+phone:"Phone number",
+email:"Email address",
+executorName:"Executor full name",
+executorRel:"Relationship & contact info",
+executorNotes:"Specific instructions or duties",
+childName:"Child's full name & date of birth",
+notes:"Guardian preferences, special needs, etc.",
+assetDesc:"Asset description (property, accounts, investments)",
+assetValue:"Estimated value (e.g., $250,000)",
+assetNotes:"Beneficiary instructions, account numbers, location",
+beneficiaryName:"Beneficiary full name",
+beneficiaryRel:"Relationship to you",
+beneficiaryDetails:"What they inherit (specific items, percentages, conditions)",
+digitalType:"Type (Email, Social Media, Crypto, Cloud Storage, etc.)",
+digitalAccount:"Account name or username",
+digitalAccess:"Access instructions, passwords location, 2FA info",
+insuranceType:"Type (Life, Health, Property, Vehicle, etc.)",
+insuranceCompany:"Insurance company name",
+insurancePolicy:"Policy number & beneficiaries",
+insuranceNotes:"Coverage details, contact info, premium amount",
+debtType:"Type (Mortgage, Car Loan, Credit Card, Personal Loan, etc.)",
+debtAmount:"Outstanding amount",
+debtDetails:"Creditor name, account number, payment instructions",
+healthcareDirectives:"Living will, DNR wishes, organ donation, healthcare power of attorney, medical preferences, preferred hospitals",
+professionalType:"Type (Attorney, Accountant, Financial Advisor, Doctor, etc.)",
+professionalName:"Name & firm",
+professionalContact:"Phone, email, address, account numbers",
+businessInterests:"Business ownership details, partnership agreements, succession plans, buy-sell agreements, business contacts",
+petName:"Pet name",
+petType:"Type & breed",
+petCare:"Vet info, preferred caregiver, care instructions, funds allocated",
+charityName:"Charity or organization name",
+charityAmount:"Amount or percentage to donate",
+charityNotes:"Purpose, contact info, memorial gift preferences",
+personalMessages:"Letters to loved ones, ethical will, values and life lessons, family history to preserve",
+funeralNotes:"Burial vs cremation, service preferences, memorial wishes, organ donation",
+additionalNotes:"Any other important information, safe combinations, hidden valuables"
 },
-fr:{title:"Plan successoral",personal:"Informations personnelles",children:"Enfants",assets:"Biens",funeral:"Volontés funéraires",additionalNotes:"Notes supplémentaires"},
-de:{title:"Nachlassplan",personal:"Persönliche Angaben",children:"Kinder",assets:"Vermögen",funeral:"Bestattungswünsche",additionalNotes:"Zusätzliche Notizen"},
-es:{title:"Plan patrimonial",personal:"Información personal",children:"Hijos",assets:"Activos",funeral:"Deseos funerarios",additionalNotes:"Notas adicionales"},
-ja:{title:"遺産計画",personal:"個人情報",children:"子ども",assets:"資産",funeral:"葬儀の希望",additionalNotes:"追加メモ"},
-zh:{title:"遗产规划",personal:"个人信息",children:"子女",assets:"资产",funeral:"葬礼意愿",additionalNotes:"附加说明"},
-ko:{title:"상속 계획",personal:"개인 정보",children:"자녀",assets:"자산",funeral:"장례 희망",additionalNotes:"추가 메모"},
-hi:{title:"एस्टेट प्लान",personal:"व्यक्तिगत जानकारी",children:"बच्चे",assets:"संपत्तियाँ",funeral:"अंतिम संस्कार इच्छाएँ",additionalNotes:"अतिरिक्त नोट्स"}
+fr:{
+title:"Mon Plan Successoral",
+subtitle:"Document personnel de planification successorale · Non juridique",
+notice:"Sauvegarde automatique. Données stockées localement dans votre navigateur.",
+personal:"Informations Personnelles",
+executors:"Exécuteurs Testamentaires",
+children:"Enfants / Personnes à Charge",
+assets:"Biens et Propriétés",
+beneficiaries:"Bénéficiaires et Héritages",
+digital:"Actifs et Comptes Numériques",
+insurance:"Polices d'Assurance",
+debts:"Dettes et Passifs",
+healthcare:"Directives de Santé",
+professionals:"Contacts Professionnels",
+business:"Intérêts Commerciaux",
+pets:"Instructions pour Animaux",
+charitable:"Dons Caritatifs",
+messages:"Messages Personnels et Héritage",
+funeral:"Volontés Funéraires",
+additionalNotes:"Notes Supplémentaires",
+addExecutor:"➕ Ajouter un Exécuteur",
+addChild:"➕ Ajouter un Enfant",
+addAsset:"➕ Ajouter un Bien",
+addBeneficiary:"➕ Ajouter un Bénéficiaire",
+addDigital:"➕ Ajouter un Compte",
+addInsurance:"➕ Ajouter une Police",
+addDebt:"➕ Ajouter une Dette",
+addProfessional:"➕ Ajouter un Contact",
+addPet:"➕ Ajouter un Animal",
+addCharity:"➕ Ajouter un Organisme",
+saveBtn:"💾 Sauvegarder",
+exportBtn:"📥 Exporter JSON",
+importBtn:"📤 Importer JSON",
+clearBtn:"🗑️ Tout Effacer",
+name:"Nom légal complet",
+dob:"Date de naissance",
+address:"Adresse complète",
+phone:"Téléphone",
+email:"Courriel",
+executorName:"Nom de l'exécuteur",
+executorRel:"Relation et contact",
+executorNotes:"Instructions spécifiques",
+childName:"Nom complet et date de naissance",
+notes:"Tuteur préféré, besoins spéciaux",
+assetDesc:"Description du bien",
+assetValue:"Valeur estimée",
+assetNotes:"Bénéficiaire, numéros de compte",
+beneficiaryName:"Nom du bénéficiaire",
+beneficiaryRel:"Relation avec vous",
+beneficiaryDetails:"Ce qu'ils héritent (articles, pourcentages, conditions)",
+digitalType:"Type (Email, Réseaux Sociaux, Crypto, Cloud, etc.)",
+digitalAccount:"Nom du compte ou identifiant",
+digitalAccess:"Instructions d'accès, emplacement des mots de passe",
+insuranceType:"Type (Vie, Santé, Propriété, Véhicule, etc.)",
+insuranceCompany:"Nom de la compagnie",
+insurancePolicy:"Numéro de police et bénéficiaires",
+insuranceNotes:"Détails de couverture, contact, montant de prime",
+debtType:"Type (Hypothèque, Prêt Auto, Carte de Crédit, etc.)",
+debtAmount:"Montant dû",
+debtDetails:"Nom du créancier, numéro de compte, instructions",
+healthcareDirectives:"Testament de vie, DNR, don d'organes, procuration médicale",
+professionalType:"Type (Avocat, Comptable, Conseiller Financier, etc.)",
+professionalName:"Nom et cabinet",
+professionalContact:"Téléphone, email, adresse, numéros de compte",
+businessInterests:"Détails de propriété d'entreprise, accords, succession",
+petName:"Nom de l'animal",
+petType:"Type et race",
+petCare:"Info vétérinaire, soignant préféré, instructions, fonds",
+charityName:"Nom de l'organisme caritatif",
+charityAmount:"Montant ou pourcentage à donner",
+charityNotes:"Objectif, contact, préférences de don commémoratif",
+personalMessages:"Lettres aux proches, testament éthique, valeurs",
+funeralNotes:"Inhumation ou crémation, préférences de service",
+additionalNotes:"Autres informations importantes, combinaisons de coffre"
+},
+de:{
+title:"Mein Nachlassplan",
+subtitle:"Persönlicher Nachlassplanungsdokument · Kein Rechtsdokument",
+notice:"Auto-Speicherung beim Tippen. Daten lokal im Browser gespeichert.",
+personal:"Persönliche Angaben",
+executors:"Testamentsvollstrecker",
+children:"Kinder / Angehörige",
+assets:"Vermögen und Eigentum",
+funeral:"Bestattungswünsche",
+additionalNotes:"Zusätzliche Notizen",
+addExecutor:"➕ Vollstrecker Hinzufügen",
+addChild:"➕ Kind Hinzufügen",
+addAsset:"➕ Vermögen Hinzufügen",
+saveBtn:"💾 Jetzt Speichern",
+exportBtn:"📥 JSON Exportieren",
+importBtn:"📤 JSON Importieren",
+clearBtn:"🗑️ Alles Löschen",
+name:"Vollständiger Name",
+dob:"Geburtsdatum",
+address:"Vollständige Adresse",
+phone:"Telefonnummer",
+email:"E-Mail-Adresse",
+executorName:"Name des Vollstreckers",
+executorRel:"Beziehung und Kontakt",
+executorNotes:"Spezifische Anweisungen",
+childName:"Name und Geburtsdatum des Kindes",
+notes:"Vormund-Präferenzen, besondere Bedürfnisse",
+assetDesc:"Vermögensbeschreibung",
+assetValue:"Geschätzter Wert",
+assetNotes:"Begünstigter, Kontonummern",
+funeralNotes:"Beerdigung oder Einäscherung, Gottesdienst-Wünsche",
+additionalNotes:"Medizinische Verfügungen, Passwörter, Tierpflege"
+},
+es:{
+title:"Mi Plan Patrimonial",
+subtitle:"Documento personal de planificación patrimonial · No es documento legal",
+notice:"Guardado automático. Datos almacenados localmente en su navegador.",
+personal:"Información Personal",
+executors:"Albaceas",
+children:"Hijos / Dependientes",
+assets:"Activos y Propiedades",
+funeral:"Deseos Funerarios",
+additionalNotes:"Notas Adicionales",
+addExecutor:"➕ Añadir Albacea",
+addChild:"➕ Añadir Hijo",
+addAsset:"➕ Añadir Activo",
+saveBtn:"💾 Guardar Ahora",
+exportBtn:"📥 Exportar JSON",
+importBtn:"📤 Importar JSON",
+clearBtn:"🗑️ Borrar Todo",
+name:"Nombre legal completo",
+dob:"Fecha de nacimiento",
+address:"Dirección completa",
+phone:"Teléfono",
+email:"Correo electrónico",
+executorName:"Nombre del albacea",
+executorRel:"Relación y contacto",
+executorNotes:"Instrucciones específicas",
+childName:"Nombre completo y fecha de nacimiento",
+notes:"Preferencias de tutor, necesidades especiales",
+assetDesc:"Descripción del activo",
+assetValue:"Valor estimado",
+assetNotes:"Beneficiario, números de cuenta",
+funeralNotes:"Entierro o cremación, preferencias de servicio",
+additionalNotes:"Directivas médicas, contraseñas, cuidado de mascotas"
+},
+ja:{
+title:"私の遺産計画",
+subtitle:"個人の遺産計画記録 · 法的文書ではありません",
+notice:"自動保存。データはブラウザにローカル保存されます。",
+personal:"個人情報",
+executors:"遺言執行者",
+children:"子供・扶養家族",
+assets:"資産・財産",
+funeral:"葬儀の希望",
+additionalNotes:"追加メモ",
+addExecutor:"➕ 執行者を追加",
+addChild:"➕ 子供を追加",
+addAsset:"➕ 資産を追加",
+saveBtn:"💾 今すぐ保存",
+exportBtn:"📥 JSON出力",
+importBtn:"📤 JSON入力",
+clearBtn:"🗑️ 全削除",
+name:"正式氏名",
+dob:"生年月日",
+address:"住所",
+phone:"電話番号",
+email:"メールアドレス",
+executorName:"執行者氏名",
+executorRel:"続柄・連絡先",
+executorNotes:"具体的な指示",
+childName:"子供の氏名と生年月日",
+notes:"後見人の希望、特別な配慮事項",
+assetDesc:"資産の説明",
+assetValue:"推定価値",
+assetNotes:"受取人、口座番号",
+funeralNotes:"埋葬または火葬、葬儀の希望",
+additionalNotes:"医療指示、パスワード、ペットの世話"
+},
+zh:{
+title:"我的遗产规划",
+subtitle:"个人遗产规划记录 · 非法律文件",
+notice:"自动保存。数据仅存储在您的浏览器中。",
+personal:"个人信息",
+executors:"遗嘱执行人",
+children:"子女/受抚养人",
+assets:"资产与财产",
+funeral:"葬礼意愿",
+additionalNotes:"附加说明",
+addExecutor:"➕ 添加执行人",
+addChild:"➕ 添加子女",
+addAsset:"➕ 添加资产",
+saveBtn:"💾 立即保存",
+exportBtn:"📥 导出JSON",
+importBtn:"📤 导入JSON",
+clearBtn:"🗑️ 清除全部",
+name:"法定全名",
+dob:"出生日期",
+address:"完整地址",
+phone:"电话号码",
+email:"电子邮箱",
+executorName:"执行人姓名",
+executorRel:"关系与联系方式",
+executorNotes:"具体指示",
+childName:"子女姓名与出生日期",
+notes:"监护人偏好、特殊需求",
+assetDesc:"资产描述",
+assetValue:"估计价值",
+assetNotes:"受益人、账号",
+funeralNotes:"土葬或火化、仪式偏好",
+additionalNotes:"医疗指示、密码、宠物照料"
+},
+ko:{
+title:"나의 상속 계획",
+subtitle:"개인 상속 계획 기록 · 법적 문서 아님",
+notice:"자동 저장. 데이터는 브라우저에 로컬 저장됩니다.",
+personal:"개인 정보",
+executors:"유언 집행자",
+children:"자녀/부양가족",
+assets:"자산 및 재산",
+funeral:"장례 희망사항",
+additionalNotes:"추가 메모",
+addExecutor:"➕ 집행자 추가",
+addChild:"➕ 자녀 추가",
+addAsset:"➕ 자산 추가",
+saveBtn:"💾 지금 저장",
+exportBtn:"📥 JSON 내보내기",
+importBtn:"📤 JSON 가져오기",
+clearBtn:"🗑️ 모두 지우기",
+name:"법적 성명",
+dob:"생년월일",
+address:"전체 주소",
+phone:"전화번호",
+email:"이메일 주소",
+executorName:"집행자 이름",
+executorRel:"관계 및 연락처",
+executorNotes:"구체적인 지시사항",
+childName:"자녀 이름 및 생년월일",
+notes:"후견인 선호, 특별 요구사항",
+assetDesc:"자산 설명",
+assetValue:"추정 가치",
+assetNotes:"수혜자, 계좌번호",
+funeralNotes:"매장 또는 화장, 장례식 선호",
+additionalNotes:"의료 지시, 비밀번호, 반려동물 돌봄"
+},
+hi:{
+title:"मेरी एस्टेट योजना",
+subtitle:"व्यक्तिगत संपत्ति योजना रिकॉर्ड · कानूनी दस्तावेज़ नहीं",
+notice:"स्वचालित सहेजना। डेटा आपके ब्राउज़र में स्थानीय रूप से संग्रहीत।",
+personal:"व्यक्तिगत जानकारी",
+executors:"निष्पादक",
+children:"बच्चे/आश्रित",
+assets:"संपत्तियाँ और सम्पदा",
+funeral:"अंतिम संस्कार इच्छाएँ",
+additionalNotes:"अतिरिक्त नोट्स",
+addExecutor:"➕ निष्पादक जोड़ें",
+addChild:"➕ बच्चा जोड़ें",
+addAsset:"➕ संपत्ति जोड़ें",
+saveBtn:"💾 अभी सहेजें",
+exportBtn:"📥 JSON निर्यात",
+importBtn:"📤 JSON आयात",
+clearBtn:"🗑️ सब मिटाएं",
+name:"पूरा कानूनी नाम",
+dob:"जन्म तिथि",
+address:"पूरा पता",
+phone:"फ़ोन नंबर",
+email:"ईमेल पता",
+executorName:"निष्पादक का नाम",
+executorRel:"संबंध और संपर्क",
+executorNotes:"विशिष्ट निर्देश",
+childName:"बच्चे का नाम और जन्म तिथि",
+notes:"अभिभावक वरीयता, विशेष आवश्यकताएं",
+assetDesc:"संपत्ति विवरण",
+assetValue:"अनुमानित मूल्य",
+assetNotes:"लाभार्थी, खाता संख्या",
+funeralNotes:"दफन या दाह संस्कार, सेवा वरीयताएँ",
+additionalNotes:"चिकित्सा निर्देश, पासवर्ड, पालतू जानवरों की देखभाल"
+}
 };
 
 /* ---------- CORE ENGINE ---------- */
@@ -265,6 +736,124 @@ function closeAll(){document.querySelectorAll("section").forEach(s=>s.classList.
 
 /* ---------- INIT ---------- */
 applyLanguage("en");
+loadData();
+
+// Auto-save on input
+document.addEventListener('input', debounce(saveData, 1000));
+
+function debounce(fn, delay) {
+  let timer;
+  return function(...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn.apply(this, args), delay);
+  };
+}
+
+/* ---------- DATA PERSISTENCE ---------- */
+function saveData() {
+  const data = {
+    country: country.value,
+    language: language.value,
+    fields: {}
+  };
+  
+  document.querySelectorAll('input:not([type="file"]):not([disabled]), textarea').forEach(el => {
+    if (el.value) {
+      const id = el.closest('section')?.querySelector('.section-header')?.dataset.t || 'misc';
+      if (!data.fields[id]) data.fields[id] = [];
+      data.fields[id].push({
+        placeholder: el.dataset.ph || el.placeholder,
+        value: el.value
+      });
+    }
+  });
+  
+  try {
+    localStorage.setItem('estatePlanData', JSON.stringify(data));
+    console.log('✓ Data saved');
+  } catch (e) {
+    alert('Save failed: ' + e.message);
+  }
+}
+
+function loadData() {
+  try {
+    const saved = localStorage.getItem('estatePlanData');
+    if (!saved) return;
+    
+    const data = JSON.parse(saved);
+    if (data.country) country.value = data.country;
+    if (data.language) applyLanguage(data.language);
+    
+    if (data.fields) {
+      Object.keys(data.fields).forEach(sectionKey => {
+        const section = document.querySelector(`[data-t="${sectionKey}"]`)?.parentElement;
+        if (!section) return;
+        
+        const container = section.querySelector('.section-content');
+        const items = data.fields[sectionKey];
+        
+        items.forEach((item, idx) => {
+          let input = container.querySelectorAll(`[data-ph="${item.placeholder}"]`)[idx];
+          if (!input && idx > 0) {
+            const containerId = container.id;
+            if (containerId) addRow(containerId);
+            input = container.querySelectorAll(`[data-ph="${item.placeholder}"]`)[idx];
+          }
+          if (input) input.value = item.value;
+        });
+      });
+    }
+    console.log('✓ Data loaded');
+  } catch (e) {
+    console.error('Load failed:', e);
+  }
+}
+
+function exportData() {
+  saveData();
+  const data = localStorage.getItem('estatePlanData');
+  if (!data) {
+    alert('No data to export');
+    return;
+  }
+  
+  const blob = new Blob([data], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `estate-plan-${new Date().toISOString().split('T')[0]}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importData() {
+  fileInput.click();
+}
+
+function handleImport(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const data = JSON.parse(e.target.result);
+      localStorage.setItem('estatePlanData', JSON.stringify(data));
+      location.reload();
+    } catch (err) {
+      alert('Import failed: Invalid file format');
+    }
+  };
+  reader.readAsText(file);
+}
+
+function clearData() {
+  if (confirm('Are you sure you want to clear all data? This cannot be undone.')) {
+    localStorage.removeItem('estatePlanData');
+    location.reload();
+  }
+}
 </script>
 
 </body>
