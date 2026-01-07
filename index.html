@@ -247,9 +247,29 @@ section.open .section-content{display:block}
   border-radius:6px;
   margin-bottom:12px;
   background:#f8fafc;
+  position:relative;
 }
 .repeat>*{margin-top:10px}
 .repeat>*:first-child{margin-top:0}
+
+.delete-btn{
+  position:absolute;
+  top:8px;
+  right:8px;
+  background:#fee2e2;
+  color:#dc2626;
+  border:1px solid #fecaca;
+  padding:6px 12px;
+  border-radius:4px;
+  cursor:pointer;
+  font-size:12px;
+  font-weight:600;
+  transition:all 0.2s ease;
+}
+.delete-btn:hover{
+  background:#fecaca;
+  border-color:#dc2626;
+}
 
 textarea{min-height:140px}
 .large{min-height:260px}
@@ -330,6 +350,7 @@ textarea{min-height:140px}
   <div class="section-header" data-t="executors" onclick="toggle(this)"></div>
   <div class="section-content" id="exec">
     <div class="repeat">
+      <button class="delete-btn" onclick="deleteRow(this)" data-t="deleteBtn"></button>
       <input data-ph="executorName">
       <input data-ph="executorRel">
       <textarea data-ph="executorNotes"></textarea>
@@ -342,6 +363,7 @@ textarea{min-height:140px}
   <div class="section-header" data-t="children" onclick="toggle(this)"></div>
   <div class="section-content" id="kids">
     <div class="repeat">
+      <button class="delete-btn" onclick="deleteRow(this)" data-t="deleteBtn"></button>
       <input data-ph="childName">
       <textarea data-ph="notes"></textarea>
     </div>
@@ -353,6 +375,7 @@ textarea{min-height:140px}
   <div class="section-header" data-t="assets" onclick="toggle(this)"></div>
   <div class="section-content" id="assets">
     <div class="repeat">
+      <button class="delete-btn" onclick="deleteRow(this)" data-t="deleteBtn"></button>
       <input data-ph="assetDesc">
       <input data-ph="assetValue">
       <textarea data-ph="assetNotes"></textarea>
@@ -372,6 +395,7 @@ textarea{min-height:140px}
   <div class="section-header" data-t="beneficiaries" onclick="toggle(this)"></div>
   <div class="section-content" id="beneficiaries">
     <div class="repeat">
+      <button class="delete-btn" onclick="deleteRow(this)" data-t="deleteBtn"></button>
       <input data-ph="beneficiaryName">
       <input data-ph="beneficiaryRel">
       <textarea data-ph="beneficiaryDetails"></textarea>
@@ -384,6 +408,7 @@ textarea{min-height:140px}
   <div class="section-header" data-t="digital" onclick="toggle(this)"></div>
   <div class="section-content" id="digital">
     <div class="repeat">
+      <button class="delete-btn" onclick="deleteRow(this)" data-t="deleteBtn"></button>
       <input data-ph="digitalType">
       <input data-ph="digitalAccount">
       <textarea data-ph="digitalAccess"></textarea>
@@ -396,6 +421,7 @@ textarea{min-height:140px}
   <div class="section-header" data-t="insurance" onclick="toggle(this)"></div>
   <div class="section-content" id="insurance">
     <div class="repeat">
+      <button class="delete-btn" onclick="deleteRow(this)" data-t="deleteBtn"></button>
       <input data-ph="insuranceType">
       <input data-ph="insuranceCompany">
       <input data-ph="insurancePolicy">
@@ -409,6 +435,7 @@ textarea{min-height:140px}
   <div class="section-header" data-t="debts" onclick="toggle(this)"></div>
   <div class="section-content" id="debts">
     <div class="repeat">
+      <button class="delete-btn" onclick="deleteRow(this)" data-t="deleteBtn"></button>
       <input data-ph="debtType">
       <input data-ph="debtAmount">
       <textarea data-ph="debtDetails"></textarea>
@@ -428,6 +455,7 @@ textarea{min-height:140px}
   <div class="section-header" data-t="professionals" onclick="toggle(this)"></div>
   <div class="section-content" id="professionals">
     <div class="repeat">
+      <button class="delete-btn" onclick="deleteRow(this)" data-t="deleteBtn"></button>
       <input data-ph="professionalType">
       <input data-ph="professionalName">
       <textarea data-ph="professionalContact"></textarea>
@@ -447,6 +475,7 @@ textarea{min-height:140px}
   <div class="section-header" data-t="pets" onclick="toggle(this)"></div>
   <div class="section-content" id="pets">
     <div class="repeat">
+      <button class="delete-btn" onclick="deleteRow(this)" data-t="deleteBtn"></button>
       <input data-ph="petName">
       <input data-ph="petType">
       <textarea data-ph="petCare"></textarea>
@@ -459,6 +488,7 @@ textarea{min-height:140px}
   <div class="section-header" data-t="charitable" onclick="toggle(this)"></div>
   <div class="section-content" id="charitable">
     <div class="repeat">
+      <button class="delete-btn" onclick="deleteRow(this)" data-t="deleteBtn"></button>
       <input data-ph="charityName">
       <input data-ph="charityAmount">
       <textarea data-ph="charityNotes"></textarea>
@@ -862,6 +892,18 @@ function addRow(id){
   row.querySelectorAll("input,textarea").forEach(i=>i.value="");
   c.insertBefore(row,c.lastElementChild);
   applyLanguage(currentLang);
+}
+
+function deleteRow(btn){
+  const container = btn.closest('.section-content');
+  const repeats = container.querySelectorAll('.repeat');
+  
+  // Only delete if there's more than one item
+  if(repeats.length > 1){
+    btn.closest('.repeat').remove();
+  } else {
+    alert('Cannot delete the last item. At least one entry is required.');
+  }
 }
 
 /* ---------- UI ---------- */
