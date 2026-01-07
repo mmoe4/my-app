@@ -310,6 +310,7 @@ textarea{min-height:140px}
 
 <div class="toolbar">
   <button onclick="document.getElementById('fileInput').click()" data-t="importBtn"></button>
+  <button onclick="window.print()" data-t="printBtn"></button>
   <button onclick="clearData()" data-t="clearBtn"></button>
 </div>
 <input type="file" id="fileInput" accept=".json" style="display:none" onchange="handleImport(event)">
