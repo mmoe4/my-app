@@ -1577,7 +1577,8 @@ languageSelect.addEventListener('change', function() {
   
   // Initialize with English
   console.log('Initializing with English...');
-  applyLanguage("en");
+  applyLanguage(countryLang[countrySelect.value] || "en");
+
 });
 </script>
 
