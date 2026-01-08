@@ -1387,6 +1387,7 @@ document.getElementById('upgradeModal').addEventListener('click', function(e){
 
 /* ---------- LANGUAGE SYSTEM ---------- */
 let currentLang = "en";
+let userSelectedLanguage = false;
 
 // Country to language mapping
 const countryLang = {
@@ -1557,27 +1558,19 @@ document.addEventListener('DOMContentLoaded', function() {
   const countrySelect = document.getElementById('country');
   const languageSelect = document.getElementById('language');
   
-  if (countrySelect) {
-    console.log('Country select found, adding listener');
-    countrySelect.addEventListener('change', function() {
-      console.log('Country changed to:', this.value);
-      const selectedCountry = this.value;
-      const newLang = countryLang[selectedCountry] || "en";
-      console.log('Mapped to language:', newLang);
-      applyLanguage(newLang);
-      autoSave();
-    });
-  } else {
-    console.error('Country select NOT found!');
-  }
-  
-  if (languageSelect) {
-    console.log('Language select found, adding listener');
-    languageSelect.addEventListener('change', function() {
-      console.log('Language manually changed to:', this.value);
-      applyLanguage(this.value);
-      autoSave();
-    });
+countrySelect.addEventListener('change', function() {
+  userSelectedLanguage = false;
+  const newLang = countryLang[this.value] || "en";
+  applyLanguage(newLang);
+  autoSave();
+});
+
+languageSelect.addEventListener('change', function() {
+  userSelectedLanguage = true;
+  applyLanguage(this.value);
+  autoSave();
+});
+
   } else {
     console.error('Language select NOT found!');
   }
