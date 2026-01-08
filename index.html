@@ -1,23 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Estate Planner Pro</title>
 
 <style>
-/* === STYLES UNCHANGED === */
-/* (Your full original CSS is preserved exactly as-is) */
-body{margin:0;font-family:"Times New Roman",Georgia,serif;background:#1a202c;min-height:100vh}
-.container{max-width:1200px;margin:40px auto;padding:40px;background:#fff;border-radius:12px}
-.section-header{cursor:pointer;font-weight:600}
-section{border:1px solid #e2e8f0;border-radius:8px;margin-top:20px}
+body{
+  margin:0;
+  font-family:"Times New Roman", Georgia, serif;
+  background:#1a202c;
+  min-height:100vh;
+}
+.container{
+  max-width:1100px;
+  margin:40px auto;
+  background:#fff;
+  padding:40px;
+  border-radius:12px;
+}
+h1{margin-top:0}
+.subtitle{color:#555;margin-bottom:10px}
+.topbar, .toolbar{
+  display:flex;
+  gap:10px;
+  margin-bottom:10px;
+  flex-wrap:wrap;
+}
+select,input,textarea,button{
+  padding:6px;
+  font-family:inherit;
+}
+button{cursor:pointer}
+section{
+  border:1px solid #ddd;
+  border-radius:6px;
+  margin-top:14px;
+}
+.section-header{
+  padding:10px;
+  background:#f5f5f5;
+  cursor:pointer;
+  font-weight:600;
+}
+.section-content{
+  display:none;
+  padding:12px;
+}
 section.open .section-content{display:block}
-.section-content{display:none;padding:16px}
-.repeat{border:1px solid #e2e8f0;padding:16px;border-radius:6px;margin-bottom:12px}
-.delete-btn{position:absolute;right:8px;top:8px}
-.progress-bar{height:4px;background:#e2e8f0;margin:20px 0}
-.progress-fill{height:100%;background:#3b82f6;width:0%}
+.repeat{
+  border:1px solid #ccc;
+  padding:10px;
+  border-radius:6px;
+  margin-bottom:10px;
+}
+.progress-bar{
+  height:6px;
+  background:#ddd;
+  border-radius:3px;
+  margin-top:15px;
+}
+.progress-fill{
+  height:100%;
+  background:#3b82f6;
+  width:0%;
+  border-radius:3px;
+}
+.progress-text{
+  font-size:13px;
+  margin-top:5px;
+}
+.upgrade-notice{
+  background:#fff7cc;
+  padding:10px;
+  border-radius:6px;
+  margin-top:10px;
+  font-size:14px;
+}
 </style>
 </head>
 
@@ -25,8 +84,10 @@ section.open .section-content{display:block}
 
 <div class="container">
 
-<h1>Estate Planner Pro</h1>
-<div class="subtitle">Professional estate planning tool • Secure your legacy</div>
+<h1 id="title">Estate Planner Pro</h1>
+<div class="subtitle" id="subtitle">
+Professional estate planning tool • Secure your legacy
+</div>
 
 <div class="topbar">
   <select id="country">
@@ -52,7 +113,7 @@ section.open .section-content{display:block}
     <option value="hi">HI</option>
   </select>
 
-  <input value="Version 2.0 Pro" disabled />
+  <input value="Version 2.0.1 LANG FIX" disabled>
 </div>
 
 <div class="toolbar">
@@ -70,14 +131,16 @@ section.open .section-content{display:block}
 </div>
 <div class="progress-text" id="progressText">0% Complete</div>
 
+<!-- SECTIONS -->
+
 <section class="open">
   <div class="section-header" data-translate="personalInfo" onclick="toggle(this)">
     📋 Personal Information
   </div>
   <div class="section-content">
-    <input placeholder="Full legal name">
-    <input placeholder="Date of birth">
-    <input placeholder="Address">
+    <input placeholder="Full legal name" oninput="updateProgress()"><br><br>
+    <input placeholder="Date of birth" oninput="updateProgress()"><br><br>
+    <input placeholder="Address" oninput="updateProgress()">
   </div>
 </section>
 
@@ -87,8 +150,8 @@ section.open .section-content{display:block}
   </div>
   <div class="section-content">
     <div class="repeat">
-      <input placeholder="Executor name">
-      <textarea placeholder="Instructions"></textarea>
+      <input placeholder="Executor name" oninput="updateProgress()"><br><br>
+      <textarea placeholder="Instructions" oninput="updateProgress()"></textarea>
     </div>
   </div>
 </section>
@@ -96,101 +159,111 @@ section.open .section-content{display:block}
 </div>
 
 <script>
-/* ===================== LANGUAGE SYSTEM ===================== */
+/* ===== VERSION MARKER ===== */
+console.log("Estate Planner Pro v2.0.1 LANG FIX LOADED");
 
+/* ===== LANGUAGE SYSTEM ===== */
 let currentLang = "en";
 let userSelectedLanguage = false;
 
 const countryLang = {
-  Canada: "en",
-  "United States": "en",
-  France: "fr",
-  Germany: "de",
-  Spain: "es",
-  Japan: "ja",
-  China: "zh",
-  "South Korea": "ko",
-  India: "hi"
+  Canada:"en",
+  "United States":"en",
+  France:"fr",
+  Germany:"de",
+  Spain:"es",
+  Japan:"ja",
+  China:"zh",
+  "South Korea":"ko",
+  India:"hi"
 };
 
 const T = {
-  en: {
-    title: "Estate Planner Pro",
-    subtitle: "Professional estate planning tool • Secure your legacy",
-    upgradeNotice: "⭐ FREE TRIAL: You have 7 basic sections. Start your free trial!",
-    openAll: "📂 Open All",
-    closeAll: "📁 Close All",
-    print: "🖨️ Print / PDF",
-    personalInfo: "📋 Personal Information",
-    executors: "⚖️ Executors",
-    complete: "Complete",
-    fields: "fields"
+  en:{
+    title:"Estate Planner Pro",
+    subtitle:"Professional estate planning tool • Secure your legacy",
+    upgradeNotice:"⭐ FREE TRIAL: You have 7 basic sections. Start your free trial!",
+    openAll:"📂 Open All",
+    closeAll:"📁 Close All",
+    print:"🖨️ Print / PDF",
+    personalInfo:"📋 Personal Information",
+    executors:"⚖️ Executors",
+    complete:"Complete",
+    fields:"fields"
   },
-  fr: {
-    title: "Planificateur Successoral Pro",
-    subtitle: "Outil professionnel de planification successorale",
-    upgradeNotice: "⭐ ESSAI GRATUIT : Débloquez toutes les sections premium",
-    openAll: "📂 Tout Ouvrir",
-    closeAll: "📁 Tout Fermer",
-    print: "🖨️ Imprimer / PDF",
-    personalInfo: "📋 Informations Personnelles",
-    executors: "⚖️ Exécuteurs",
-    complete: "Terminé",
-    fields: "champs"
+  fr:{
+    title:"Planificateur Successoral Pro",
+    subtitle:"Outil professionnel de planification successorale",
+    upgradeNotice:"⭐ ESSAI GRATUIT : Débloquez toutes les sections premium",
+    openAll:"📂 Tout Ouvrir",
+    closeAll:"📁 Tout Fermer",
+    print:"🖨️ Imprimer / PDF",
+    personalInfo:"📋 Informations personnelles",
+    executors:"⚖️ Exécuteurs testamentaires",
+    complete:"Terminé",
+    fields:"champs"
   },
-  de: {
-    title: "Nachlassplaner Pro",
-    subtitle: "Professionelles Nachlassplanungstool",
-    upgradeNotice: "⭐ KOSTENLOSE TESTVERSION",
-    openAll: "📂 Alle Öffnen",
-    closeAll: "📁 Alle Schließen",
-    print: "🖨️ Drucken / PDF",
-    personalInfo: "📋 Persönliche Informationen",
-    executors: "⚖️ Testamentsvollstrecker",
-    complete: "Fertig",
-    fields: "Felder"
+  de:{
+    title:"Nachlassplaner Pro",
+    subtitle:"Professionelles Nachlassplanungstool",
+    upgradeNotice:"⭐ KOSTENLOSE TESTVERSION",
+    openAll:"📂 Alle Öffnen",
+    closeAll:"📁 Alle Schließen",
+    print:"🖨️ Drucken / PDF",
+    personalInfo:"📋 Persönliche Informationen",
+    executors:"⚖️ Testamentsvollstrecker",
+    complete:"Fertig",
+    fields:"Felder"
   }
 };
 
-function applyLanguage(lang) {
+function applyLanguage(lang){
   currentLang = T[lang] ? lang : "en";
   document.getElementById("language").value = currentLang;
-
   const tr = T[currentLang];
 
-  document.querySelector("h1").textContent = tr.title;
-  document.querySelector(".subtitle").textContent = tr.subtitle;
-  document.querySelector(".upgrade-notice").textContent = tr.upgradeNotice;
+  document.getElementById("title").textContent = tr.title;
+  document.getElementById("subtitle").textContent = tr.subtitle;
 
-  document.querySelectorAll("[data-translate]").forEach(el => {
+  document.querySelectorAll("[data-translate]").forEach(el=>{
     const key = el.dataset.translate;
-    if (tr[key]) el.textContent = tr[key];
+    if(tr[key]) el.textContent = tr[key];
+  });
+
+  document.querySelectorAll(".section-header[data-translate]").forEach(h=>{
+    const key = h.dataset.translate;
+    if(tr[key]) h.textContent = tr[key];
   });
 
   updateProgress();
 }
 
-function updateProgress() {
-  const inputs = document.querySelectorAll("input, textarea");
-  const filled = [...inputs].filter(i => i.value.trim()).length;
-  const percent = Math.round((filled / inputs.length) * 100);
-  document.getElementById("progressFill").style.width = percent + "%";
+/* ===== PROGRESS ===== */
+function updateProgress(){
+  const inputs = document.querySelectorAll("input:not([disabled]), textarea");
+  const filled = [...inputs].filter(i=>i.value.trim()).length;
+  const total = inputs.length;
+  const percent = total ? Math.round((filled/total)*100) : 0;
+
+  document.getElementById("progressFill").style.width = percent+"%";
   document.getElementById("progressText").textContent =
-    `${percent}% ${T[currentLang].complete} (${filled}/${inputs.length} ${T[currentLang].fields})`;
+    `${percent}% ${T[currentLang].complete} (${filled}/${total} ${T[currentLang].fields})`;
 }
 
+/* ===== UI ===== */
 function toggle(h){h.parentElement.classList.toggle("open")}
 function openAll(){document.querySelectorAll("section").forEach(s=>s.classList.add("open"))}
 function closeAll(){document.querySelectorAll("section").forEach(s=>s.classList.remove("open"))}
 
-document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("language").addEventListener("change", e => {
+/* ===== INIT ===== */
+document.addEventListener("DOMContentLoaded",()=>{
+  document.getElementById("language").addEventListener("change",e=>{
     userSelectedLanguage = true;
     applyLanguage(e.target.value);
   });
 
-  document.getElementById("country").addEventListener("change", e => {
-    if (userSelectedLanguage) return;
+  document.getElementById("country").addEventListener("change",e=>{
+    if(userSelectedLanguage) return;
     applyLanguage(countryLang[e.target.value] || "en");
   });
 
