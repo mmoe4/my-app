@@ -1386,7 +1386,6 @@ document.getElementById('upgradeModal').addEventListener('click', function(e){
 });
 
 /* ---------- LANGUAGE SYSTEM ---------- */
-let currentLang = "en";
 
 // Country to language mapping
 const countryLang = {
@@ -1581,10 +1580,10 @@ document.addEventListener('DOMContentLoaded', function() {
   } else {
     console.error('Language select NOT found!');
   }
-  
+  let userSelectedLanguage = false;
+
   // Initialize with English
   console.log('Initializing with English...');
-  applyLanguage("en");
 });
 </script>
 
